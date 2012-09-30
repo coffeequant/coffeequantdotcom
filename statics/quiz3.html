@@ -1,0 +1,243 @@
+<!DOCTYPE HTML> 
+<html lang="en"> 
+	<head> 
+	<style type="text/css">
+
+html,body
+{
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+}
+
+	</style>
+        <style type="text/css">
+            @import "dojor/dijit/themes/soria/soria.css";
+            @import "dojor/dojox/form/resources/CheckedMultiSelect.css";
+body {
+  background-image: url("images/background.png");
+}
+
+
+
+        </style>
+		<meta charset="utf-8"> 
+		<title>Coffee Quant</title> 
+ 
+		<!-- load dojo and provide config via data attribute --> 
+		<script src="dojo.xd.js"> 
+		</script> 
+		<script> 
+	
+	
+	function formatGrid(value)
+	{
+		if(dojo.number.format(value) == null)
+			return value;
+		var a = parseFloat(eval(value));
+		return a.toFixed(4);
+
+	}
+
+	function pressed(){
+    
+
+String.prototype.trim = function() {
+    return this.replace(/^\s+|\s+$/g, "");
+};
+
+
+var df = dijit.byId("q1opt");
+
+    var nstring="";
+    for(var i=1;i<11;i++)
+    {
+        var idg = "q"+i+"opt";
+        var objq = dijit.byId(idg);
+        dojo.forEach(objq.options,function(option){
+            if(option.selected)
+            {
+                nstring = nstring+"q"+i+"="+ option.label+"|";
+            }
+        });
+        nstring = nstring+"*";
+       
+//       nstring = nstring+"q"+i+"="+dijit.byId(idg).get("value")+"!";
+    }
+    
+	            //The parameters to pass to xhrPost, the message, and the url to send it to
+                    //Also, how to handle the return and callbacks.
+                    var xhrArgs = {
+                        form: dojo.byId("pricer"),
+                        url: "/quizanswer3?answer="+nstring,
+                        handleAs: "text",
+                        load: function(datalis3t) {
+                        var answestring = datalis3t.split("*")[0];
+                        var count = datalis3t.split("*")[1]
+                        
+                        alert("You got " + count + " Correct Answers out of 10");
+                        //answerslist = answestring.split("|")
+                        dojo.byId("danswers").value = answestring;
+                        
+                    },     error: function(error) {
+                            //We'll 404 in the demo, but that's okay.  We don't have a 'postIt' service on the
+                            //docs server.
+                            alert(error);
+                        }
+
+                }
+                    //Call the asynchronous xhrPost
+                    var deferred = dojo.xhrPost(xhrArgs);
+
+	}
+	dojo.require("dijit.form.CheckBox");
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dojox.widget.Roller");	
+	dojo.require("dijit.form.Button");
+        dojo.require("dojo.data.ItemFileWriteStore");
+	dojo.require("dijit.layout.TabContainer");
+        dojo.require("dijit.layout.ContentPane");
+        dojo.require("dijit.form.CheckBox");
+        
+  dojo.require("dojox.form.CheckedMultiSelect");
+  dojo.require("dijit.form.Form");
+  dojo.require("dojo.data.ItemFileWriteStore");
+  var readStore = new Array();
+  
+  function loadquestions()
+  {
+
+
+  
+  }
+  
+  dojo.ready(function() {
+  
+
+                      var xhrArgs = {
+                        form: dojo.byId("pricer"),
+                        url: "/quiz3",
+                        handleAs: "text",
+                        load: function(datalis3t) {
+                        var mainarray = datalis3t.split("#");
+                    for(var m=0;m<mainarray.length-1;m++)
+                    {
+        var data = {
+			identifier: 'id',
+			label: 'label',
+			items: []
+        };
+
+                        var subarray = mainarray[m].split("|");
+
+                        var datalist = eval(subarray[1]);
+                        var rows = datalist.length;
+                        for(var i=0, l=datalist.length; i<rows; i++){
+                            data.items.push(dojo.mixin({ id: i }, datalist[i%l]));
+                        }
+
+                           readStore[m] = new dojo.data.ItemFileReadStore({data:dojo.clone(data)});
+                           var idgen = "q"+(m+1)+"desc";
+                           dojo.byId(idgen).value=subarray[0];
+
+                    }
+                               dojo.parser.parse();
+                           
+                    var myCp= parent.dojo.byId("treecontent");
+                    if(myCp)
+                        myCp.height = myCp.contentWindow.document.body.scrollHeight;
+
+
+                    },     error: function(error) {
+                            //We'll 404 in the demo, but that's okay.  We don't have a 'postIt' service on the
+                            //docs server.
+                            alert(error);
+                        },sync:"true"
+
+                }
+                    //Call the asynchronous xhrPost
+                    var deferred = dojo.xhrPost(xhrArgs);
+
+
+
+    
+
+  });
+  
+
+
+	</script> 
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34238806-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+	</head> 
+	<body class="soria">
+  <form action="/quiz3" id="pricer" method="post">
+  <blockquote>
+  <h1>Quiz - 3</h1>
+  
+        <textarea id="q1desc" locked="true"  readonly="true" name="desc" dojoType="dijit.form.Textarea" style="width:100%;font-size:14px;color:blue"></textarea><br/>
+      <select id="q1opt" multiple="true" size="0" name="ms4" store="readStore[0]" dojoType="dojox.form.CheckedMultiSelect">
+      </select><br/>
+      
+    <textarea id="q2desc" locked="true"  readonly="true" dojoType="dijit.form.Textarea" style="width:100%;font-size:14px;color:blue"></textarea><br/>
+      <select id="q2opt" multiple="true" size="0" store="readStore[1]" dojoType="dojox.form.CheckedMultiSelect">
+      </select><br/>
+      
+    <textarea id="q3desc" locked="true"  readonly="true" dojoType="dijit.form.Textarea" style="width:100%;font-size:14px;color:blue"></textarea><br/>
+      <select id="q3opt" multiple="true" size="0" store="readStore[2]" dojoType="dojox.form.CheckedMultiSelect">
+      </select><br/>
+
+    <textarea id="q4desc" locked="true"  readonly="true" dojoType="dijit.form.Textarea" style="width:100%;font-size:14px;color:blue"></textarea><br/>
+      <select id="q4opt" multiple="true" size="0" store="readStore[3]" dojoType="dojox.form.CheckedMultiSelect">
+      </select><br/>
+      
+    <textarea id="q5desc" locked="true"  readonly="true" dojoType="dijit.form.Textarea" style="width:100%;font-size:14px;color:blue"></textarea><br/>
+      <select id="q5opt" multiple="true" size="0" store="readStore[4]" dojoType="dojox.form.CheckedMultiSelect">
+      </select><br/>
+
+    <textarea id="q6desc" locked="true"  readonly="true" dojoType="dijit.form.Textarea" style="width:100%;font-size:14px;color:blue"></textarea><br/>
+      <select id="q6opt" multiple="true" size="0" store="readStore[5]" dojoType="dojox.form.CheckedMultiSelect">
+      </select><br/>
+
+    <textarea id="q7desc" locked="true"  readonly="true" dojoType="dijit.form.Textarea" style="width:100%;font-size:14px;color:blue"></textarea><br/>
+      <select id="q7opt" multiple="true" size="0" store="readStore[6]" dojoType="dojox.form.CheckedMultiSelect">
+      </select><br/>
+
+    <textarea id="q8desc" locked="true"  readonly="true" dojoType="dijit.form.Textarea" style="width:100%;font-size:14px;color:blue"></textarea><br/>
+      <select id="q8opt" multiple="true" size="0" store="readStore[7]" dojoType="dojox.form.CheckedMultiSelect">
+      </select><br/>
+
+    <textarea id="q9desc" locked="true"  readonly="true" dojoType="dijit.form.Textarea" style="width:100%;font-size:14px;color:blue"></textarea><br/>
+      <select id="q9opt" multiple="true" size="0" store="readStore[8]" dojoType="dojox.form.CheckedMultiSelect">
+      </select><br/>
+
+    <textarea id="q10desc" locked="true"  readonly="true" dojoType="dijit.form.Textarea" style="width:100%;font-size:14px;color:blue"></textarea><br/>
+      <select id="q10opt" multiple="true" size="0" store="readStore[9]" dojoType="dojox.form.CheckedMultiSelect">
+      </select><br/>
+
+      
+</blockquote>
+
+<br/>
+    <button dojoType="dijit.form.Button" onclick="pressed" Label="Submit Answers" timeout="1">
+            Hedge
+        </button>
+        
+      <textarea id="danswers" readonly="true" dojoType="dijit.form.Textarea" style="width:100%;font-size:14px;color:blue"></textarea><br/>
+
+
+  </form>
+
+	</body> 
+</html> 

@@ -1,0 +1,41 @@
+{
+	"name": "Tutorials",
+	"id": "tuts",
+	"children": [
+		{
+			"name": "Autocallable",
+			"id": "ach",
+			url: "/statics/Puzzles/Autocalls.html"
+		},
+		{
+			"name": "Quantos",
+			"id": "cps",
+			url: "/statics/Puzzles/Quantos.html"
+		},
+		{
+			"name": "Hedging",
+			"id": "hedges",
+			url: "/statics/Puzzles/Hedging.html"
+		},
+		{
+			"name": "Outperformance AutoCallables",
+			"id": "oach",
+			url: "/statics/Puzzles/OutPerformanceAutocalls.html"
+		},
+		{
+			"name": "Autocallable Hedges",
+			"id": "aherd",
+			url: "/statics/Puzzles/AutocallsHedges.html"
+		},
+		{
+			"name": "CrossGamma",
+			"id": "crossgamma",
+			url: "/statics/Puzzles/CrossGamma.html"
+		},
+		{
+			"name": "Stochastic Volatility",
+			"id": "svg",
+			url: "/statics/Puzzles/StochasticVolatility.html"
+		}
+	]
+}

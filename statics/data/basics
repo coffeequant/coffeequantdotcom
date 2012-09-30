@@ -1,0 +1,31 @@
+{
+	"name": "Basics",
+	"id": "basics",
+	"children": [
+		{
+			"name": "Risk Neutral Probability - Concepts",
+			"id": "riskneutral",
+			"url": "/statics/articles/RiskNeutral.html"
+		},
+		{
+			"name": "Dice Puzzle",
+			"id": "dcp",
+			"url": "/statics/Puzzles/Dices.html"
+		},
+		{
+			"name": "Liebniz & Taylors",
+			"id": "lbty",
+			"url": "/statics/articles/tylbz.html"		
+		},
+		{
+			"name": "Choices",
+			"id": "choice",
+			"url": "/statics/articles/SV.html"		
+		},
+		{
+			"name": "Long & Short Gamma",
+			"id": "gammas",
+			"url": "/statics/articles/Gammas.html"		
+		}
+	]
+}

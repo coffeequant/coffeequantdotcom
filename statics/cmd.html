@@ -1,0 +1,565 @@
+<!DOCTYPE HTML> 
+<html lang="en"> 
+	<head> 
+	    <meta http-equiv="Pragma" content="no-cache" /> 
+<meta http-equiv="Expires" content="-1" /> 
+<meta http-equiv="cache-control" content="no-store" /> 
+
+
+		<meta charset="utf-8"> 
+		<title>CoffeeQuant</title> 
+        		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dijit/themes/claro/claro.css" media="screen">
+
+        
+		<!-- load dojo and provide config via data attribute -->
+		<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js">
+		</script>
+<script type="text/javascript">
+
+function isNumber (o) {
+  return ! isNaN (o-0) && o != null;
+}
+var colsize = 300;
+
+dojo.require("dijit.form.SimpleTextarea");
+dojo.require("dojo.store.Memory");
+
+var rowsize = 5;
+
+var listcmds = "load _templatename_ ---> for loading of templates";
+listcmds = listcmds + "\n" + "load vanillas ---> for loading vanilla pricers";
+listcmds = listcmds + "\n" + "load barriers ---> for loading barrier pricers";
+listcmds = listcmds + "\n" + "barrier types can be upandoutcall, downandoutcall, upandincall, downandincall and similarly for put";
+listcmds = listcmds + "\n" + "showtemplates ---> for viewing available templates";
+listcmds = listcmds + "\n" + "By default vanilla pricers template is loaded";
+listcmds = listcmds + "\n" + "A simple expression calculator is available";
+listcmds = listcmds + "\n" + "Create variables as follows";
+listcmds = listcmds + "\n" + "store varname = _anydecimalvalue_";
+listcmds = listcmds + "\n" + "mystore = Displays the values you have stored in the user store";
+listcmds = listcmds + "\n" + "eval varname+varname3*2/3  --> evaluates the expression and prints the result";
+listcmds = listcmds + "\n" + "compute --> calculates the price for loaded parameters";
+listcmds = listcmds + "\n" + "view --> Shows the current parameters loaded";
+
+
+
+//global variables
+i = 0;
+count = 1;
+j = count;
+var commands = [{name:"coffee", commandtype:"new",command:"help"}];
+var commandStore;
+var cleancmd = "";
+var vanillaStore;
+var vanillaDefaults = [{name:"spot",value:"100",qtype:"vanilla"},{name:"strike",value:"100",qtype:"vanilla"},
+{name:"type",value:"call",qtype:"vanilla"},{name:"vol",value:"0.20",qtype:"vanilla"},{name:"rate",value:"0.05",qtype:"vanilla"},{name:"div",value:"0.0",qtype:"vanilla"},{name:"maturity",value:"1.0",qtype:"vanilla"}];
+
+var barrierStore;
+var barrierDefaults = [{name:"spot",value:"100",qtype:"barrier"},{name:"strike",value:"100",qtype:"barrier"},{name:"barrier",value:"120",qtype:"barrier"},
+{name:"type",value:"upandoutcall",qtype:"barrier"},{name:"vol",value:"0.20",qtype:"barrier"},{name:"rate",value:"0.05",qtype:"barrier"},{name:"div",value:"0.0",qtype:"barrier"},{name:"maturity",value:"1.0",qtype:"barrier"}];
+
+var userStore;
+var userDefaults = [{name:"Dummy",value:"Dummy",type:"all"}];
+
+
+
+var activetemplate = "vanillas";
+
+function updateCommands(n,cmdText)
+{
+        
+       
+       if(commandStore==null)
+            commandStore = new dojo.store.Memory({data:commands, idProperty: "name"});
+
+        commandStore.add({name:n,commandtype:"new",value:cmdText});
+        count = count + 1;
+        j = count-1;
+        dojo.byId('cmd').store = commandStore;
+}
+
+
+function showloading()
+{
+    dojo.byId("statustag").style.visibility="";
+}
+
+function hideloading()
+{
+    dojo.byId("statustag").style.visibility="hidden";
+}
+
+function guidGenerator() {
+    var S4 = function() {
+       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    };
+    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+}
+
+function loadtemplate(tmp)
+{
+    vanillaStore = new dojo.store.Memory({data:vanillaDefaults, idProperty: "name"});
+    barrierStore = new dojo.store.Memory({data:barrierDefaults, idProperty: "name"});
+    
+}
+
+function loadtemplatesnull()
+{
+    if(vanillaStore==null)
+    {
+        vanillaStore = new dojo.store.Memory({data:vanillaDefaults, idProperty: "name"});
+    }
+    if(barrierStore==null)
+    {
+        barrierStore = new dojo.store.Memory({data:barrierDefaults, idProperty: "name"});
+    }
+
+
+}
+function setvalues(tmpname)
+{
+    var cmdString = tmpname.replace("set","");
+    var newParam = dojo.trim(cmdString.split("=")[0]);
+    var newValue = dojo.trim(cmdString.split("=")[1]);
+    if(activetemplate == "vanillas")
+    {
+        var newParamValue = vanillaStore.get(newParam);
+        newParamValue.value = newValue;
+        vanillaStore.put(newParamValue);
+    }
+    if(activetemplate == "barriers")
+    {
+        var newParamValue = barrierStore.get(newParam);
+        newParamValue.value = newValue;
+        barrierStore.put(newParamValue);
+    }
+    
+
+    //send command
+}
+
+
+function viewtemplate(tmpname)
+{
+params = "";
+if(tmpname == "vanillas")
+{
+        vanillaStore.query({qtype:"vanilla"}).forEach(function(param){
+            // this is called for each employee in the sales department
+            params = params+param.name + "=" + param.value + "\r\n";
+        });
+}
+else if(tmpname == "barriers")
+{
+        barrierStore.query({qtype:"barrier"}).forEach(function(param){
+            // this is called for each employee in the sales department
+            params = params+param.name + "=" + param.value + "\r\n";
+        });
+
+}
+
+return params;
+}
+
+function formcommand(cleancmd)
+{
+    if(activetemplate == "vanillas")
+    {
+
+        vanillaStore.query({qtype:"vanilla"}).forEach(function(param){
+            // this is called for each employee in the sales department
+            cleancmd = cleancmd+param.name + "=" + param.value + "&";
+        });
+    }
+    if(activetemplate == "barriers")
+    {
+            barrierStore.query({qtype:"barrier"}).forEach(function(param){
+            // this is called for each employee in the sales department
+            cleancmd = cleancmd+param.name + "=" + param.value + "&";
+        });
+    }
+    
+    return cleancmd;
+
+}
+
+function attachtoHistory(textarea2)
+{
+    var hist =  dojo.byId('cmdhistory');
+    var brtag = document.createElement("br");
+    hist.insertBefore(brtag,hist.firstChild);
+    hist.insertBefore(textarea2.domNode,hist.firstChild);
+}
+
+
+function createTextArea(n,ans)
+{
+
+        var textarea2 = new dijit.form.SimpleTextarea({
+            name: n,
+            rows: rowsize,
+            cols: colsize,
+            style: "width:1200px;border:none"
+        });
+        textarea2.set("value", ans);
+        return textarea2;
+}
+
+function sendCommand(cmdText)
+{
+var ans;
+var n;
+
+cmdText = dojo.trim(cmdText);
+loadtemplatesnull();    
+if(cmdText.indexOf("list")>-1)
+{
+    rowsize = 15;
+
+    n = guidGenerator();
+    var textarea2 = createTextArea(n,"Command@CoffeeQuant>help"+"\n"+listcmds);       
+    attachtoHistory(textarea2);       
+    hideloading();
+    dojo.byId('cmd').value = '';
+    
+    rowsize = 5;
+
+    return;
+
+
+}
+else if(cmdText.indexOf("help")>-1)
+{
+    rowsize = 15;
+    n = guidGenerator();
+    var textarea2 = createTextArea(n,"Command@CoffeeQuant>help"+"\n"+listcmds);       
+    attachtoHistory(textarea2);       
+    hideloading();
+    dojo.byId('cmd').value = '';
+    
+    rowsize = 5;
+
+    return;
+
+}
+else if(cmdText.indexOf("load")>-1)
+{
+
+    cmdText = cmdText.replace("load","");
+    cmdText = dojo.trim(cmdText);
+    activetemplate = cmdText;
+    loadtemplate(activetemplate);
+    
+    n = guidGenerator();
+    var textarea2 = createTextArea(n,"Command@CoffeeQuant>load"+"\n"+"template loaded!");       
+    attachtoHistory(textarea2);       
+
+    
+    hideloading();
+    dojo.byId('cmd').value = '';
+    
+    return;
+}
+else if(cmdText.indexOf("showtemplates")>-1)
+{
+    n = guidGenerator();
+    var textarea2 = createTextArea(n,"Command@CoffeeQuant>showtemplates"+"\n"+"1. vanillas"+"\n"+"2. barriers");       
+    attachtoHistory(textarea2);       
+    hideloading();
+    dojo.byId('cmd').value = '';
+    
+    return;
+
+}
+else if(cmdText == "view")
+{
+var params = "Command@CoffeeQuant>view" + "\n";
+        
+        var params = viewtemplate(activetemplate);
+        n = guidGenerator();
+        updateCommands(n,cmdText);
+
+        var textarea2 = createTextArea(n,"Command@CoffeeQuant>view"+"\n"+params);       
+        attachtoHistory(textarea2);       
+        
+
+   dojo.byId('cmd').value = '';
+   hideloading();
+    return;
+}
+
+else if(cmdText.indexOf("set")>-1)
+{
+//setting params command
+    n = guidGenerator();
+
+    updateCommands(n,cmdText);
+
+    setvalues(cmdText);
+    dojo.byId('cmd').value = "";
+    hideloading();
+    
+    ans = "Command@CoffeeQuant>"+cmdText+ "\n"+"ok";
+    var textarea2 = createTextArea(n,ans);
+    attachtoHistory(textarea2);       
+
+    return;
+}
+else if(cmdText.indexOf("mystore")>-1)
+{
+        if(userStore==null)
+        {
+            userStore = new dojo.store.Memory({data:userDefaults, idProperty: "name"});
+        }
+
+        var params = "";
+        userStore.query({type:"all"}).forEach(function(param){
+            params = params+param.name + "=" + param.value + "\r\n";
+        });
+
+        n = guidGenerator();
+        updateCommands(n,cmdText);
+
+        var textarea2 = createTextArea(n,"Command@CoffeeQuant>mystore"+"\n"+params);       
+        attachtoHistory(textarea2);       
+        
+
+   dojo.byId('cmd').value = '';
+   hideloading();
+    return;
+
+}
+else if(cmdText.indexOf("store")>-1)
+{
+    n = guidGenerator();
+    updateCommands(n,cmdText);
+
+    if(userStore==null)
+    {
+        userStore = new dojo.store.Memory({data:userDefaults, idProperty: "name"});
+    }
+    //store the value
+    cmdText = cmdText.replace("store","");
+    cmdText = dojo.trim(cmdText);
+    var splitarray = cmdText.split("=");
+    var vname = dojo.trim(splitarray[0]);
+    var vvalue = dojo.trim(splitarray[1]);
+    
+    //add code for checking if the value exists or not....
+    
+    if((userStore.get(vname)==null))
+    {
+        userStore.add({name:vname,value:vvalue,type:"all"});
+    }
+    else
+    {
+        var tmp = userStore.get(vname);
+        tmp.value = vvalue;
+        userStore.put(tmp);
+    }
+    
+    dojo.byId('cmd').value = "";
+    hideloading();
+    ans = "Command@CoffeeQuant>"+cmdText+ "\n"+"ok";
+    var textarea2 = createTextArea(n,ans);
+    attachtoHistory(textarea2);       
+
+    return;
+}
+else if(cmdText.indexOf("eval")>-1)
+{
+    //evaluate the expression using names from userStore;
+    //create variable names found in the eval expression
+    n = guidGenerator();
+    updateCommands(n,cmdText);
+
+    cmdText = cmdText.replace("eval","");
+    cmdText = dojo.trim(cmdText);
+    
+    var expr = cmdText;
+    
+
+    var nn = expr.split(/\*|\+|\-|\(|\)|\//);
+for (i=0;i<nn.length;i++)
+{
+    if(dojo.trim(nn[i])!="")
+    {
+        if(!isNumber(nn[i]))
+        {
+            eval("var "+nn[i]+"="+userStore.get(nn[i]).value);
+        }
+    }
+}
+
+    dojo.byId('cmd').value = "";
+    hideloading();
+    ans = "Command@CoffeeQuant>"+cmdText+ "\n"+eval(expr);
+    var textarea2 = createTextArea(n,ans);
+    attachtoHistory(textarea2);       
+
+    return;
+
+}
+else if(cmdText.indexOf("compute")>-1)
+{
+    
+    cleancmd="cmd="+cmdText+"&"+"pricer="+activetemplate+"&";
+    cleancmd = formcommand(cleancmd);
+    //compute everything
+}
+else
+    {
+    alert("Invalid Command!");
+    hideloading();
+    dojo.byId('cmd').value = "";
+    return;
+    }
+
+    var xhrArgs = {
+            url: "/commandline?"+cleancmd,
+            form: dojo.byId("cmdline"),
+            handleAs: "text",
+            load: function(datalis3t) {
+                ans = "Command@CoffeeQuant>"+cmdText+ "\n"  + datalis3t;
+                n = guidGenerator();
+                updateCommands(n,cmdText);
+
+                    hideloading();
+                    var textarea2 = new dijit.form.SimpleTextarea({
+                            name: n,
+                            rows: "5",
+                            cols: "300",
+                            style: "width:1200px;border:none"
+                        });
+                        textarea2.set("value", ans);
+                                                
+            var hist =  dojo.byId('cmdhistory');
+            var brtag = document.createElement("br");
+            hist.insertBefore(brtag,hist.firstChild);
+            hist.insertBefore(textarea2.domNode,hist.firstChild);
+            
+            } ,error: function(error) {
+                //We'll 404 in the demo, but that's okay.  We don't have a 'postIt' service on the
+                //docs server.
+                alert(error);
+            },sync:"true"
+     };
+     //Call the asynchronous xhrPost
+     //alert(dojo.byId('cmd').value);
+    var deferred = dojo.xhrGet(xhrArgs);
+    dojo.byId('cmd').value = '';
+
+}
+//cmd.focus();
+
+    require([
+        "dojo/ready", "dojo/store/Memory", "dijit/form/ComboBox"
+    ], function(ready, Memory, ComboBox){
+
+    var commands = [{name:"coffee", commandtype:"new",value:"help"}];
+    commandStore = new Memory({data:commands, idProperty: "name"});
+
+    ready(function(){
+        var comboBox = new ComboBox({
+            id: "cmd",
+            name: "cmd",
+            value: "cls",
+            style: "border:none;width:300px;",
+            store: commandStore,
+            searchAttr: "value"
+        }, "cmd");
+        });
+    });
+    
+    function eventsconnect()
+    {
+
+        var node1 = dojo.byId('cmd');
+        dojo.connect(node1, "onkeydown", function(e){
+    var keynum;
+    if(window.event) // IE
+    {
+        keynum = e.keyCode;
+    }
+    else if(e.which) // Netscape/Firefox/Opera
+    {
+        keynum = e.which;
+    }
+    if(keynum==96)
+    {
+        dojo.byId('cmd').value='';
+        var cmds = commandStore.query({commandtype:"new"});
+        if(i>=count)
+            i = 0;
+        dojo.byId('cmd').value = cmds[i].value;
+        i = i + 1;
+        return false;
+    }
+
+    if(keynum==92)
+    {
+        dojo.byId('cmd').value='';
+        var cmds = commandStore.query({commandtype:"new"});
+        if(j==0)
+            j = count-1;
+        dojo.byId('cmd').value = cmds[j].value;
+        j = j - 1;
+        return false;
+    }
+if(keynum==13) 
+    {
+        showloading();
+        var hist =  dojo.byId('cmdhistory');
+        dojo.byId('cmd').focus();
+        var currentText = dojo.byId('cmd').value;
+        if(currentText=='cls')
+        {
+                var node = dojo.byId("cmdhistory");
+                while (node.hasChildNodes()) {
+                    node.removeChild(node.lastChild);
+                }
+        dojo.byId('cmd').value = '';
+        hideloading();
+        
+        n = guidGenerator();
+        updateCommands(n,"cls");
+
+        return;
+        }
+        var result = sendCommand(currentText);
+        dojo.stopEvent(e);
+    }
+    });
+    
+}
+</script> 
+
+
+
+	</head> 
+
+<body class="claro" OnLoad="document.cmdline.cmd.focus();eventsconnect();">
+Welcome to command line pricer! <br/>
+Type 'help' and press enter to begin<br/>
+cls to clear screen<br/>
+To execute any command press enter, a helpful video is available for crash course on this pricer - 
+<a href='http://www.youtube.com/watch?v=eYI54fv4hXw'>Video Link</a>
+<br/>
+<br/><br/><br/>
+
+
+
+<form name="cmdline" id="cmdline" method="get" action="" onsubmit="return false;">
+Command@CoffeeQuant&gt;<input id="cmd" style="width:400px;">
+
+<div id="statustag" style="visibility:hidden">Loading....</div>
+
+</form>
+
+<div style="width:100%;height:90%" name='cmdhistory' id='cmdhistory'>
+
+</div>
+
+
+</body>
+
+</html> 

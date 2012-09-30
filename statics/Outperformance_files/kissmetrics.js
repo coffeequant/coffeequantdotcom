@@ -1,0 +1,4 @@
+var _kmq=_kmq||[];function _kms(u){setTimeout(function(){var s=document.createElement('script');var f=document.getElementsByTagName('script')[0];s.type='text/javascript';s.async=true;s.src=u;f.parentNode.insertBefore(s,f);},1);}
+(function(){if(typeof window.kissmetrics!='undefined'&&typeof window.kissmetrics.api_key!='undefined'){_kms('//i.kissmetrics.com/i.js');_kms('//doug1izaerwt3.cloudfront.net/'+window.kissmetrics.api_key+'.1.js');if(typeof window.kissmetrics.username!='undefined')
+_kmq.push(['identify',window.kissmetrics.username]);if(typeof window.kissmetrics_event!='undefined'&&typeof window.kissmetrics_event.name!='undefined'){var prefixed_properties={};for(var key in window.kissmetrics_event.properties){var newkey=window.kissmetrics_event.name+' | '+key;prefixed_properties[newkey]=window.kissmetrics_event.properties[key];}
+_kmq.push(['record',window.kissmetrics_event.name,prefixed_properties]);}}})();

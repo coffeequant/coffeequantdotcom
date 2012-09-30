@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ <id>urn:iweb:9F8533FD-FA2A-43CF-A620-D7F88EAF4AF7</id>
+ <title>Page list Atom feed</title>
+ <updated>2012-09-01T12:41:51+05:30</updated>
+ <link rel="self" href="feed.xml"/>
+ <generator>iWeb</generator>
+ <author>
+  <name>iWeb</name>
+ </author>
+ <entry>
+  <id>urn:iweb:50E53774-14DE-44BA-86AE-68D61D830B80</id>
+  <title>ForwardStriking</title>
+  <title xmlns="urn:iweb:">ForwardStriking</title>
+  <in-navbar xmlns="urn:iweb:">50E53774-14DE-44BA-86AE-68D61D830B80</in-navbar>
+  <link rel="alternate" href="ForwardStriking.html"/>
+  <updated>2012-09-01T12:41:51.001+05:30</updated>
+  <content>ForwardStriking</content>
+ </entry>
+ <entry>
+  <id>urn:iweb:072AC348-0257-426A-B95B-FA16E2D3B085</id>
+  <title>CallRaise</title>
+  <title xmlns="urn:iweb:">CallRaise</title>
+  <in-navbar xmlns="urn:iweb:">072AC348-0257-426A-B95B-FA16E2D3B085</in-navbar>
+  <link rel="alternate" href="CallRaise.html"/>
+  <updated>2012-09-01T12:41:51.002+05:30</updated>
+  <content>CallRaise</content>
+ </entry>
+ <entry>
+  <id>urn:iweb:01D2C325-28BB-4D51-8CC1-6000ECE3984F</id>
+  <title>DailyUpdate</title>
+  <title xmlns="urn:iweb:">DailyUpdate</title>
+  <in-navbar xmlns="urn:iweb:">01D2C325-28BB-4D51-8CC1-6000ECE3984F</in-navbar>
+  <link rel="alternate" href="DailyUpdate.html"/>
+  <updated>2012-09-01T12:41:51.003+05:30</updated>
+  <content>DailyUpdate</content>
+ </entry>
+</feed>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+        "HTMLFiles/xhtml-math11-f.dtd">
+
+<!-- Created by Wolfram Mathematica 7.0 : www.wolfram.com -->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style type="text/css">
+ @import "http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojox/grid/resources/tundraGrid.css";
+            @import "dojor/dijit/themes/tundra/tundra.css";
+            .dojoxGrid table { margin: 0; } html, body { width: 100%; height: 100%;
+            margin: 0; }
+
+body {
+  background-image: url("images/background.png");
+}
+
+        </style>
+	
+ <title>
+  distros
+ </title>
+ <link href="HTMLFiles/Default.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<p>
+<font color="blue">
+
+
+One of my colleagues had asked me this question months back.  
+Consider 2 asset option in stochastic volatility framework. Why does stochastic volatility underestimate correlation? 
+
+The question can easily be extended to
+n asset case. Here's my solution with some analysis in Mathematica, although I might be wrong.  
+<font>
+</p>
+
+<p>
+I found hints to the solution in Peter Jackel's book Monte Carlo Methods in Finance.
+If we consider how we generate correlated random numbers (which actually does not involve stochastic volatility at all!)
+
+We take two random numbers between 0 and 1, and we use inverse CDF to find gaussian numbers. 
+We map independent gaussian numbers to correlated numbers using the age old formula of 
+z1, and z2c = rho x z1 + (1-rho^2)^0.5 x z2
+<br/><br/>
+
+Now we again map these new numbers back to gaussian using CDF function. What's the correlation between these two?
+We believe that the correlation is rho. 
+
+I checked this in mathematica by computing the linear correlation of the below function. 
+Function is simply 
+
+12 * [Double Integral of CDF(z1) x CDF(z2c) x PDF(z1) x PDF(z2)] - 3
+This is the standard formula for linear correlation. It's basically Spearman's rho with a joint density function.
+The joint density function can be written as simple PDF(z1)*PDF(z2), as z1 and z2 are independent.
+Remember z2c is correlated to z1. z1 and z2 were independent gaussians.
+  
+</p>
+<p class="CellLabel">
+ In[15]:=
+</p>
+
+
+
+<p class="Input">
+ <img src="HTMLFiles/distros_1.gif" alt="distros_1.gif" width="882" height="95" style="vertical-align:middle" />
+</p>
+
+<p class="CellLabel">
+ Out[15]=
+</p>
+
+
+
+<p class="Output">
+ <img src="HTMLFiles/distros_2.gif" alt="distros_2.gif" width="743" height="460" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/distros_3.gif" alt="distros_3.gif" width="4" height="17" style="vertical-align:middle" />
+</p>
+
+<p class="CellLabel">
+ In[5]:=
+</p>
+
+<p>
+The line above is not straight. It's a bit curved! So rho is not exactly mapped to the value of correlation computed from the integral
+Its just an approximation.
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/distros_4.gif" alt="distros_4.gif" width="891" height="161" style="vertical-align:middle" />
+</p>	
+
+<p class="CellLabel">
+ In[11]:=
+</p>
+
+<p>
+These are underestimated values of rho
+</p>
+
+
+<p class="Input">
+ <img src="HTMLFiles/distros_5.gif" alt="distros_5.gif" width="885" height="128" style="vertical-align:middle" />
+</p>
+
+<p class="CellLabel">
+ Out[11]=
+</p>
+
+
+<p>
+Actual values confirm this
+</p>
+<p class="Output">
+ <img src="HTMLFiles/distros_6.gif" alt="distros_6.gif" width="604" height="362" style="vertical-align:middle" />
+</p>
+
+
+<p>
+These were the real values taken.
+</p>
+<p class="Input">
+ <img src="HTMLFiles/distros_7.gif" alt="distros_7.gif" width="4" height="17" style="vertical-align:middle" />
+</p>
+
+<p class="CellLabel">
+ In[4]:=
+</p>
+
+
+
+<p class="Input">
+ <img src="HTMLFiles/distros_8.gif" alt="distros_8.gif" width="778" height="84" style="vertical-align:middle" />
+</p>
+
+<p class="CellLabel">
+ Out[4]=
+</p>
+
+
+
+<p class="Output">
+ <img src="HTMLFiles/distros_9.gif" alt="distros_9.gif" width="558" height="333" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="HTMLFiles/distros_10.gif" alt="distros_10.gif" width="4" height="40" style="vertical-align:middle" />
+</p>
+
+
+
+
+<div style="font-family:Helvetica; font-size:11px; width:100%; border:1px none #999999; border-top-style:solid; padding-top:2px; margin-top:20px;">
+ <a href="http://www.wolfram.com/products/mathematica/" style="color:#000; text-decoration:none;">
+  <img src="HTMLFiles/spikeyIcon.jpg" alt="Spikey" width="20" height="21" style="padding-right:2px; border:0px solid white; vertical-align:middle;" />
+  <span style="color:#555555">Created with</span> Wolfram <span style="font-style: italic;">Mathematica</span> 7.0
+ </a>
+</div>
+
+
+</body>
+
+</html>

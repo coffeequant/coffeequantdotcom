@@ -1,0 +1,240 @@
+.cp {
+	height: 800px;
+}
+#explorer-header {
+	position:relative;
+	height:50px;
+	border-bottom:1px solid #f8d582;
+	margin-right: 3px;
+}
+#DojoLink, #DijitLink, #DojoxLink {
+	background: url('../images/header-bg.png');
+	position:absolute;
+	bottom:0;
+	width:129px;
+	padding:0;
+	cursor:pointer;
+}
+#DojoLink {
+	left:20px;
+}
+#DojoxLink {
+	left:290px;
+}
+#DijitLink {
+	left:155px;
+}
+#HomeLink {
+	position: absolute;
+	right: 5px;
+	top: 23px;
+	font-size: 10px;
+	width: 78px;	
+	height: 24px;
+}
+
+#HomeLink a {
+	text-decoration: none;	
+}
+	
+.fisheyeTarget {
+	position:relative;
+	bottom:0;
+	left:0;
+	height:1px;
+	width:1px;
+	cursor:pointer;
+}
+.inner {
+	cursor:pointer;
+	position:absolute;
+	bottom:5px;
+	margin-left:10px;
+	font-size: 18px;
+}
+.subtext {
+	visibility:hidden;
+	position:absolute;
+	bottom:27px;
+	left:10px;
+	font:8pt Arial,sans-serif;
+	color:#666;
+}
+
+#feature-menu {
+	/*margin-top: 28px;*/
+}
+#feature-content {
+
+}
+#feature-intro {
+	padding: 10px 0 50px 0;
+	font-size: 12px;
+	margin: 10px 15px 0px 10px;
+}
+
+.menuItem {
+	width: 150px; 
+	margin-top: 5px;
+}
+
+.cpContent {
+	margin-left: 10px;
+}
+
+#demoTitle {
+	padding: 0 0 10px 0;
+	font-weight: bold;
+	text-align: left;
+	padding-right: 15px;
+	margin: 0px;
+}
+pre, code {
+	font-size: 12px;
+	background-color: #fff;
+}
+.campus .dijitTab {
+	margin-right: 6px !important;
+}
+
+.campus .dijitTabLabels-top {
+	padding: 7px 0 0 7px;
+	background: url("../images/tabTop.png") no-repeat;
+	height: 31px;
+	margin-bottom: -7px;
+	border: none !important;
+}
+
+.campus .dijitTab {
+	background: url("../images/tabSprite.png") no-repeat 0 -300px !important;
+	padding:0px !important;
+	margin-bottom: 1px !important;
+	border: none !important;
+	font-family: Tahoma, Arial !important;
+	font-size: 11px !important;
+	color: #a9a098 !important;
+}
+ 
+.campus .dijitTabContent {
+    background: url("../images/tabSprite.png") repeat-x 0 -350px !important;
+	padding:5px 10px 5px 10px !important;
+	border: none !important;
+}
+ 
+.campus .dijitTabInnerDiv {
+    background: url("../images/tabSprite.png") no-repeat right -400px !important;
+	padding:0px 10px 0px 10px !important;
+	border: none !important;
+}
+
+.campus .dijitTabHover {
+	background: url("../images/tabSprite.png") no-repeat 0px -150px !important;
+}
+ 
+.campus .dijitTabHover .dijitTabInnerDiv {
+	background: url("../images/tabSprite.png") no-repeat right -250px !important;
+	border: none !important;
+}
+ 
+.campus .dijitTabHover .dijitTabInnerDiv .dijitTabContent {
+	background: url("../images/tabSprite.png") repeat-x 0 -200px !important;
+	padding:5px 10px 5px 10px !important;
+}
+ 
+.campus .dijitTabChecked {
+	/* the selected tab (with or without hover) */
+	background: url("../images/tabSprite.png") no-repeat 0px -0px !important;
+	margin-bottom: 0px !important;
+	color: #3b3836 !important;
+	font-weight: bold !important;
+}
+ 
+.campus .dijitTabChecked .dijitTabInnerDiv {
+	padding:0px 10px 0px 10px !important;
+	background: url("../images/tabSprite.png") no-repeat right -100px !important;
+	border: none !important;
+}
+ 
+.campus .dijitTabChecked .dijitTabInnerDiv .dijitTabContent {
+	background: url("../images/tabSprite.png") repeat-x 0 -50px !important;
+	padding:5px 10px 6px 10px !important;
+}
+
+
+.campus .dijitTabPaneWrapper { /* Container for tab content */
+	/*
+	overflow: hidden;
+	*/
+	background: url("../images/tabContainer.png") no-repeat !important;
+	width: 712px !important;
+	height: 671px !important;
+	border: 0 !important;
+}
+
+.campus .dijitTabPane {
+	padding: 10px !important;
+}
+
+pre {
+	font-size: 11px !important;
+   	white-space: pre-wrap;       /* css-3 */
+   	white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+   	white-space: -pre-wrap;       /* Opera 4-6 */
+   	white-space: -o-pre-wrap;       /* Opera 7 */
+   	word-wrap: break-word;       /* Internet Explorer 5.5+ */
+   	border: none;
+}
+
+pre, code {
+   	border: none;
+}
+
+/*Links*/
+a {
+	color: #000;	
+}
+
+.linkTitle {
+	border-bottom: 1px dotted #dadada;
+	margin: 10px 0 3px 0px;
+	padding: 0 0 0 3px;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.linkBody .linkRoot {
+	background: #fbfbfb;
+	border: none;
+}
+
+.linkRoot {
+	background: #fafafa;	
+	padding: 10px;
+	border: 1px dotted #dadada;
+}
+
+.linkRoot a {
+	line-height: 15px;	
+}
+
+.explorer-feature-item {
+	float: left; 
+	margin: 5px; 
+	padding: 25px; 
+	border: 1px #fff solid; 
+	cursor: pointer;
+	text-align: center;
+	background-color: #fafafa;
+	width: 100px;
+	height: 100px;
+	font-size: 11px;
+}
+
+.explorer-feature-item img {
+	margin: 5px;
+}
+
+#version {
+	font-size: 9px;
+	color: #cccccc;
+}

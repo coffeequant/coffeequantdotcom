@@ -1,0 +1,358 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="Content-Type">
+  <title>nifty</title>
+</head>
+<body>
+<br>
+Nifty data was taken in csv files from www.nse-india.com. R has been
+used extensively, and matlab users please switch to R!<br>
+Excel is nice for small data, but for analysis nothing beats R. <br>
+<br>
+You can easily load up huge amount of data from a csv file into R <span
+ class="Apple-style-span"
+ style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+ class="Apple-style-span"
+ style="color: rgb(68, 68, 68); font-size: 14px; line-height: 18px;">
+<pre class="rsplus" style="font-family: monospace;">niftycalls <span
+ style="color: rgb(0, 136, 0);">&lt;-</span> <span
+ style="color: rgb(0, 0, 255); font-weight: bold;">read.<span>csv</span></span><span
+ style="color: rgb(0, 136, 0);">(</span><span
+ style="color: rgb(255, 0, 0);">"niftycalls.csv"</span><span
+ style="color: rgb(0, 136, 0);">)</span><br><span
+ class="Apple-style-span"
+ style="border-collapse: separate; color: rgb(0, 0, 0); font-family: 'Times New Roman'; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: normal; orphans: 2; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; font-size: medium;"><span
+ class="Apple-style-span"
+ style="color: rgb(68, 68, 68); font-size: 14px; line-height: 18px;"><pre
+ class="rsplus" style="font-family: monospace;">niftyputs <span
+ style="color: rgb(0, 136, 0);">&lt;-</span> <span
+ style="color: rgb(0, 0, 255); font-weight: bold;">read.<span>csv</span></span><span
+ style="color: rgb(0, 136, 0);">(</span><span
+ style="color: rgb(255, 0, 0);">"niftyputs.csv"</span><span
+ style="color: rgb(0, 136, 0);">)</span><br><br>I used puts and calls separately, coz I used OTM calls and OTM puts for analyzing the Implied Volatility. The options were of expiry "28-July-2011".<br>So all the data from 2 months back had been used for analyzing the portfolio. <br></pre></span></span></pre>
+</span></span>
+<br>
+<img style="width: 480px; height: 480px;" alt=""
+ src="images/calibration.png"><br>
+<br>
+Calibration is crap even with a Variance Gamma model. I used the close
+prices for calibrating this, but still the picture is useless or
+crappy. The standard approach to hedging might not even work and it's
+better to leave calibration and try something different. <br>
+<br>
+The maximum of marketvols gives us 23% and minimum gives us 9%. The
+same range holds for whole of 2 months. To make it numerically simpler
+I have used 10% and 20% as volatility range. <br>
+<br>
+&gt; qts<br>
+[1] 5600 5700 5900 5500 6000<br>
+&gt; qta<br>
+[1] -1.0 -0.5&nbsp; 0.5&nbsp; 0.5&nbsp; 0.0<br>
+&nbsp;<br>
+5 strike options with randomly chosen quantities make up the portfolio.
+For the volatility range change I will be using the worst case scenario
+to value this portfolio. It's simple FD scheme (from Wilmott). Next
+part is interesting, and this is where R comes into picture. <br>
+<br>
+For the whole portfolio I wrote a minimizer function....<br>
+<br>
+p=scenarios(0.10,stockprice,0.10,0.20,0.21,qts,qta)<br>
+y=((p)^2)<br>
+<br>
+T = 0.21 denotes the time remaining to expiry. (55/365)<br>
+Here I optimize, the quantities chosen such that portfolio is MINIMUM
+VALUE in the WORST CASE.<br>
+Worst case just means that we are assuming the worst possible scenario
+in the stock market.&nbsp; <br>
+<br>
+&gt; optim(qta,niftyoptim,qta,qts)<br>
+<br>
+$par<br>
+[1] -1.3714474&nbsp; 0.3244366&nbsp; 0.9999429&nbsp; 0.7721878
+-0.3463454<br>
+<br>
+$value<br>
+[1] 2.59796<br>
+<br>
+$counts<br>
+function gradient <br>
+&nbsp;&nbsp;&nbsp;&nbsp; 384&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NA <br>
+<br>
+$convergence<br>
+[1] 0<br>
+<br>
+So as per the optimization routing our portfolio has worst possible
+value of 2.59 today. What about other days?<br>
+For other dates, value are as follows<br>
+&nbsp;[1] 5-May-11&nbsp; 6-May-11&nbsp; 9-May-11&nbsp; 10-May-11
+11-May-11 12-May-11 13-May-11<br>
+&nbsp;[8] 16-May-11 17-May-11 18-May-11 19-May-11 20-May-11 23-May-11
+24-May-11<br>
+[15] 25-May-11 26-May-11 27-May-11 30-May-11 31-May-11 1-Jun-11&nbsp;
+2-Jun-11 <br>
+[22] 3-Jun-11 <br>
+<br>
+[1] 3.524807 6.101814 3.449788 1.215155 3.932902 2.908498 2.552883
+1.963109<br>
+&nbsp;[9] 1.314877 2.247007 2.396172 1.899852 1.557935 1.297025
+1.355236 1.658355<br>
+[17] 1.437658 1.832772 2.374552 3.146235 2.714636 2.128832<br>
+<br>
+The max and min range were <br>
+&gt; max(calcportfolio(exprs,finalqta))<br>
+[1] 6.101814<br>
+&gt; min(calcportfolio(exprs,finalqta))<br>
+[1] 1.215155<br>
+<br>
+<br>
+<img style="width: 480px; height: 480px;" alt=""
+ src="images/portfolio.png"><br>
+<br>
+The x axis just shows the interval (nothing to do with NIFTY Index!)<br>
+<br>
+Lots of improvements can be made. For starters we can add the actual
+carrying cost of the portfolio into the optimizer function itself. The
+initial carrying cost will depend on the market prices of options hence
+for only some strike choices the scheme will work. <br>
+<br>
+Money making happens in this when some of the options move differently
+from the portfolio. To avoid arbitrage other strikes should also be
+affected, but if they don't then whole of the portfolio can be cashed
+out for a profit. Of course there is no guarantee and it's not a
+perfect model. If the volatility barriers are broken, it will fail
+drastically. <br>
+<br>
+Optimization routines can be built to find out a minimum variance
+portfolio. The variance of this is much better than a standard delta
+hedge. There is a huge amount of code for this, and I am posting all of
+it here. ---Start Copying---<br>
+<br>
+<br>
+&gt; marketdatac[1:3,1:10]<br>
+&nbsp;&nbsp;&nbsp; Symbol&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Date&nbsp;&nbsp;&nbsp; Expiry Strike.Price Open High Low&nbsp;&nbsp;
+Close LTP<br>
+487&nbsp; NIFTY 30-May-11
+28-Jul-11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+4100&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp; 0
+1317.25&nbsp;&nbsp; 0<br>
+488&nbsp; NIFTY 30-May-11
+28-Jul-11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+7000&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;
+0&nbsp;&nbsp;&nbsp; 1.00&nbsp;&nbsp; 1<br>
+489&nbsp; NIFTY 30-May-11
+28-Jul-11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+4300&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp; 0
+1329.90&nbsp;&nbsp; 0<br>
+&nbsp;&nbsp;&nbsp; Settle.Price<br>
+487&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1436.45<br>
+488&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.35<br>
+489&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1239.60<br>
+<br>
+Similarly I had taken marketdatap for Put options. <br>
+<br>
+-----For Calculating Implied Volatilities for NIFTY ----<br>
+impliedCalc&lt;-function(T,r,marketdatac,marketdatap)<br>
+{<br>
+<br>
+n=length(marketdatac$Strike.Price)<br>
+c1&lt;-array(0,dim=c(n,2))<br>
+for(i in 1:n)<br>
+{<br>
+<br>
+<br>
+if(marketdatac$Underlying.Value[i] &lt; marketdatac$Strike.Price[i])<br>
+{<br>
+&nbsp; c1[i,1]&lt;-marketdatac$Strike.Price[i]<br>
+&nbsp;
+c1[i,2]&lt;-implied.vol(marketdatac$Underlying.Value[i],marketdatac$Strike.Price[i],T,r,marketdatac$Settle.Price[i],"C")
+<br>
+}<br>
+else<br>
+{<br>
+&nbsp; c1[i,1]&lt;-marketdatac$Strike.Price[i]<br>
+<br>
+&nbsp;
+c1[i,2]&lt;-implied.vol(marketdatac$Underlying.Value[i],marketdatac$Strike.Price[i],T,r,marketdatap[marketdatap$Strike.Price==marketdatac$Strike.Price[i],]$Settle.Price,"P")<br>
+}<br>
+<br>
+}<br>
+return (c1)<br>
+}<br>
+&gt; <br>
+<br>
+<br>
+<br>
+impliedvol.function(S, K, T, r, market, type){<br>
+&nbsp; sig &lt;- 0.20<br>
+&nbsp; sig.up &lt;- 1<br>
+&nbsp; sig.down &lt;- 0.001<br>
+&nbsp; count &lt;- 0<br>
+&nbsp; err &lt;- BS(S, K, T, r, sig, type) - market <br>
+&nbsp;<br>
+&nbsp; ## repeat until error is sufficiently small or counter hits 1000<br>
+&nbsp; while(abs(err) &gt; 0.00001 &amp;&amp; count&lt;1000){<br>
+&nbsp;&nbsp;&nbsp; if(err &lt; 0){<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sig.down &lt;- sig<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sig &lt;- (sig.up + sig)/2<br>
+&nbsp;&nbsp;&nbsp; }else{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sig.up &lt;- sig<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sig &lt;- (sig.down + sig)/2<br>
+&nbsp;&nbsp;&nbsp; }<br>
+&nbsp;&nbsp;&nbsp; err &lt;- BS(S, K, T, r, sig, type) - market<br>
+&nbsp;&nbsp;&nbsp; count &lt;- count + 1<br>
+&nbsp; }<br>
+&nbsp;<br>
+&nbsp; ## return NA if counter hit 1000<br>
+&nbsp; if(count==1000){<br>
+&nbsp;&nbsp;&nbsp; return(NA)<br>
+&nbsp; }else{<br>
+&nbsp;&nbsp;&nbsp; return(sig)<br>
+&nbsp; }<br>
+}<br>
+&nbsp;<br>
+<span
+ style="color: rgb(0, 0, 153); text-decoration: underline; font-style: italic;">-----Worst
+Case
+Prices----</span><br>
+<br>
+&gt; scenarios<br>
+function(rate,stockprice,sigma,sigmax,expiry,qts,qta)<br>
+{<br>
+<br>
+gridsize = 50<br>
+ds = 2 * 5500/ gridsize<br>
+dt = 0.9 / (gridsize * gridsize * sigma * sigma)<br>
+NTS = as.integer(expiry/dt)+1<br>
+dt = expiry/NTS<br>
+optionprices &lt;-matrix(0,nrow=gridsize+1,ncol=NTS+1)<br>
+<br>
+stocks &lt;-matrix(nrow=gridsize+1,ncol=1)<br>
+sell = 0.0<br>
+buy = 0.0<br>
+n&lt;-5<br>
+dummy = abs(stockprice/ds-round(stockprice/ds))<br>
+for(i in 1:gridsize)<br>
+{<br>
+stocks[i,1] = i * ds<br>
+for(k in 1:n)<br>
+{<br>
+optionprices[i,1] = optionprices[i,1] + qta[k]*max(stocks[i,1] -
+qts[k],0)<br>
+}<br>
+}<br>
+<br>
+delta = 0.0<br>
+gamma = 0.0<br>
+theta = 0.0<br>
+vol = 0.0<br>
+gamma=0;<br>
+<br>
+for(k in 2:NTS)<br>
+{<br>
+for(i in 2:(gridsize-1))<br>
+{<br>
+delta=(optionprices[i+1,k-1] - optionprices[i-1,k-1])/(2*ds);<br>
+gamma=(optionprices[i+1,k-1]+optionprices[i-1,k-1]-2*optionprices[i,k-1])/(ds*ds);<br>
+vol = sigma<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(gamma&lt;=0)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+vol
+=
+sigmax<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+<br>
+theta = -1 * 0.5 * vol * vol * gamma *stocks[i,1]*stocks[i,1] - rate *
+stocks[i,1]*delta+rate*optionprices[i,k-1];<br>
+<br>
+optionprices[i,k] &lt;- optionprices[i,k-1] - dt * theta;<br>
+<br>
+}<br>
+optionprices[1,k] &lt;- optionprices[1,k-1] * (1 - rate*dt)<br>
+optionprices[gridsize,k] &lt;- 2 * optionprices[gridsize-1,k] -
+optionprices[gridsize-2,k]<br>
+<br>
+<br>
+<br>
+}<br>
+dummyindex=round(stockprice/ds)<br>
+prices&lt;-dummy*optionprices[dummyindex+1,]+(1-dummy)*optionprices[dummyindex,]<br>
+return (max(abs(prices)))<br>
+<br>
+}<br>
+&gt; <br>
+<br>
+<span
+ style="text-decoration: underline; font-style: italic; color: rgb(0, 0, 153);">---Optimizer
+using
+Worst
+Prices---</span><br>
+&gt; niftyoptim<br>
+function(qta,qts,stockprice)<br>
+{<br>
+<br>
+n&lt;-5<br>
+flag=1<br>
+for(i in 1:n)<br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(qta[i] &gt; 1)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+y
+=
+100000<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+flag
+=
+0<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+}<br>
+if(flag == 1)<br>
+{<br>
+p=scenarios(0.10,stockprice,0.10,0.20,0.21,qts,qta)<br>
+y=((p)^2)<br>
+}<br>
+<br>
+return (y)<br>
+}<br>
+&gt; <br>
+<br>
+--- Optimize using R optim function---<br>
+<br>
+&gt; optim(qta,niftyoptim,qta,qts,stockprice)<br>
+<br>
+It spits out the final quantities<br>
+&gt; finalqta<br>
+[1] -0.3086058330 -0.0008656604&nbsp; 0.7668074838&nbsp; 0.1675314638
+-0.6963132412<br>
+<br>
+<span style="font-style: italic; text-decoration: underline;">Below
+function just calculates the values of the portfolio each day using the
+historical data. </span><br
+ style="font-style: italic; text-decoration: underline;">
+<br>
+&gt; calcportfolio<br>
+function(exprs,finalqta)<br>
+{<br>
+val&lt;-array(0,length(exprs))<br>
+index=1<br>
+for(i in exprs)<br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+marketdatac&lt;-niftycalls[niftycalls$Date==i,]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for(i in 1:5) {
+val[index]&lt;-val[index]+finalqta[i]*marketdatac[marketdatac$Strike.Price==qts[i],]$Close
+}<br>
+index = index + 1<br>
+}<br>
+return (val)<br>
+}<br>
+&gt; <br>
+&nbsp;<br>
+<br>
+</body>
+</html>

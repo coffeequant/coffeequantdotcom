@@ -1,0 +1,320 @@
+/* Event list widget*/
+.EventList .tools {
+	margin-bottom: 10px;
+}
+
+.EventList .tools input {
+	border: 1px solid #ccc;
+}
+
+.EventList_mini .vevent h1.summary a {
+	font-weight: bold;
+}
+
+.EventList_mini .Rounded .vevent {
+	margin-top: 0;
+}
+
+.dojoc-light .dijitTabSpacer,
+.dojoc-dark .dijitTabSpacer {
+	display: none;
+}
+
+.dojoc-light .dijitTabContainerTop-tabs,
+.dojoc-dark .dijitTabContainerTop-tabs {
+	border: none;
+}
+
+.dojoc-light .dijitTabPaneWrapper,
+.dojoc-dark .dijitTabPaneWrapper {
+	margin-top: -1px;
+}
+
+.dojoc-light .dijitTabPaneWrapper { /* Container for tab content */
+	/*
+	overflow: hidden;
+	*/
+	background: url("../images/tab-light-bg.gif") no-repeat;
+	border: none;
+	border-top: 0px solid transparent;
+	padding: 10px;
+	font-size: 12px;
+}
+
+.dojoc-light .dijitTab { 
+	line-height:normal;
+	margin-right:3px;	/* space between one tab and the next in top/bottom mode */
+	padding:0px;
+	background: url("../images/tab-light-left-inact.gif") no-repeat 0;
+	font-size: 11px;
+	font-weight: bold;
+	color: #373941;
+	margin-bottom: -1px;	
+}
+
+.dojoc-light dijitTabChecked {
+	margin-bottom: -2px;	
+}
+
+.dojoc-light .dijitTabInnerDiv .dijitTabContent {
+	padding:6px 10px 5px 10px;
+	background: url("../images/tab-light-center-inact.gif") repeat-x 0;
+}
+
+.dojoc-light .dijitTabInnerDiv {
+	padding:0px 10px 0px 10px;
+	background: url("../images/tab-light-right-inact.gif") no-repeat;
+	background-position: right;
+	border: none;
+}
+
+.dojoc-light .dijitTabChecked,
+.dojoc-light .dijitTabCloseButtonChecked
+{
+	/* the selected tab (with or without hover) */
+	background: url("../images/tab-light-left.gif") no-repeat 0px -0px;
+}
+
+.dojoc-light .dijitTabChecked .dijitTabInnerDiv {
+	padding:0px 10px 0px 10px;
+	background: url("../images/tab-light-right.gif") no-repeat right top;
+	border: none;
+}
+
+.dojoc-light .dijitTabChecked .dijitTabInnerDiv .dijitTabContent {
+	background: url("../images/tab-light-center.gif") repeat-x;
+	padding:6px 10px 6px 10px;
+	color: #243C5F !important;
+}
+
+.dojoc-light .dijitTabLabels-top {
+	border:none;
+	background: none;
+	padding: 0;
+}
+
+
+
+/* dark tabs */
+
+
+.dojoc-dark .dijitTabPaneWrapper { /* Container for tab content */
+	/*
+	overflow: hidden;
+	*/
+	background: url("../images/tab-dark-bg.gif") no-repeat;
+	border: none;
+	border-top: 0px solid transparent;
+	padding: 10px;
+	font-size: 12px;
+}
+
+.dojoc-dark .dijitTab { 
+	line-height:normal;
+	margin-right:3px;	/* space between one tab and the next in top/bottom mode */
+	padding:0px;
+	background: url("../images/tab-dark-left-inact.gif") no-repeat 0;
+	font-size: 11px;
+	font-weight: bold;
+	color: #373941;
+	margin-bottom: -1px;	
+}
+
+.dojoc-dark dijitTabChecked {
+	margin-bottom: -2px;	
+}
+
+.dojoc-dark .dijitTabInnerDiv .dijitTabContent {
+	padding:6px 10px 5px 10px;
+	background: url("../images/tab-dark-center-inact.gif") repeat-x 0;
+}
+
+.dojoc-dark .dijitTabInnerDiv {
+	padding:0px 10px 0px 10px;
+	background: url("../images/tab-dark-right-inact.gif") no-repeat;
+	background-position: right;
+	border: none;
+}
+
+.dojoc-dark .dijitTabChecked,
+.dojoc-dark .dijitTabCloseButtonChecked
+{
+	/* the selected tab (with or without hover) */
+	background: url("../images/tab-dark-left.gif") no-repeat 0px -0px;
+}
+
+.dojoc-dark .dijitTabChecked .dijitTabInnerDiv {
+	padding:0px 10px 0px 10px;
+	background: url("../images/tab-dark-right.gif") no-repeat right top;
+	border: none;
+}
+
+.dojoc-dark .dijitTabChecked .dijitTabInnerDiv .dijitTabContent {
+	background: url("../images/tab-dark-center.gif") repeat-x;
+	padding:6px 10px 6px 10px;
+	color: #243C5F !important;
+}
+
+.dojoc-dark .dijitTabLabels-top {
+	border:none;
+	background: none;
+	padding: 0;
+}
+
+/* scrollers */
+
+.scroller_view {
+	position:absolute;
+	z-index:5000;
+}
+.scroll_view_content {
+	height:135px;
+	margin:0px;
+	padding:0px;
+	position:relative;
+	width:209px;
+}
+#tutorial_scroller {
+	position:absolute;
+	width:209px;
+}
+#tutorial_scroller_button_up {
+	height:25px;
+	position:absolute;
+	right:0px;
+	bottom:-25px;
+	width:62px;
+	z-index:700;
+	text-align: right;
+	float: none !important;
+	font-weight: bold;
+	font-size: 10px;
+	color: #5c5c5c;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+#tutorial_scroller_button_up img {
+	float: none !important;
+	vertical-align: middle;
+	margin: 0 0 0 5px;
+	padding: 0;
+}
+
+#tutorial_scroller_button_down {
+	bottom:-25px;
+	height:25px;
+	position:absolute;
+	left:0px;
+	width:82px;
+	text-align: left;
+	z-index:700;
+	float: none !important;
+	font-weight: bold;
+	font-size: 10px;
+	color: #5c5c5c;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+#tutorial_scroller_button_down img {
+	float: none !important;
+	vertical-align: middle;
+	margin: 0 5px 0 0;
+	padding: 0;
+}
+
+#tutorial_scroll_view {
+	height:135px;
+	overflow:hidden;
+	position:absolute;
+	width:209px;
+}
+#tutorial_scroll_container {
+	height:135px;
+	position:absolute;
+	width:209px;
+}
+#tutorial_scroller_status_container {
+	height:1px;
+	left:-25px;
+	position:absolute;
+	width:1px;
+}
+#tutorial_scroller_status {
+	position:relative;
+	width:10px;
+}
+
+
+#video_scroller {
+	position:absolute;
+	width:209px;
+}
+#video_scroller_button_up {
+	height:25px;
+	position:absolute;
+	right:0px;
+	bottom:-25px;
+	width:62px;
+	z-index:700;
+	text-align: right;
+	float: none !important;
+	font-weight: bold;
+	font-size: 10px;
+	color: #5c5c5c;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+#video_scroller_button_up img {
+	float: none !important;
+	vertical-align: middle;
+	margin: 0 0 0 5px;
+	padding: 0;
+}
+
+#video_scroller_button_down {
+	bottom:-25px;
+	height:25px;
+	position:absolute;
+	left:0px;
+	width:82px;
+	text-align: left;
+	z-index:700;
+	float: none !important;
+	font-weight: bold;
+	font-size: 10px;
+	color: #5c5c5c;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+#video_scroller_button_down img {
+	float: none !important;
+	vertical-align: middle;
+	margin: 0 5px 0 0;
+	padding: 0;
+}
+
+#video_scroll_view {
+	height:135px;
+	overflow:hidden;
+	position:absolute;
+	width:209px;
+}
+#video_scroll_container {
+	height:135px;
+	position:absolute;
+	width:209px;
+}
+#video_scroller_status_container {
+	height:1px;
+	left:-25px;
+	position:absolute;
+	width:1px;
+}
+#video_scroller_status {
+	position:relative;
+	width:10px;
+}

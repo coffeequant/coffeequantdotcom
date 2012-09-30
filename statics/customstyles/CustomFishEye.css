@@ -1,0 +1,21 @@
+.dojoxFisheyeListBar {
+	margin: 5px 30px;
+	text-align: left;
+}
+
+.outerbar {
+        background-image: url('../images/background.png');
+	text-align: left;
+	left: 0px;
+	top: 5px;
+	width: 80%;
+
+}
+.dojoxFisheyeListItemLabel
+{
+	text-align: right;
+}
+.dojoxFisheyeListItem
+{
+	text-align: right;
+}

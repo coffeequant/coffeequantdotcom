@@ -1,0 +1,269 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>CoffeeQuant</title>
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dijit/themes/claro/claro.css" media="screen">
+        <link rel="stylesheet" href="/statics/dojor/dojox/widget/Portlet/Portlet.css">
+        
+		<!-- load dojo and provide config via data attribute -->
+		<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js"
+				data-dojo-config="async: true, parseOnLoad: true">
+		</script>
+        
+        
+		<script>
+        var tree;
+        
+        function setHeight()
+        { 
+            dojo.byId('treecontent').height = dojo.byId('treecontent').contentWindow.document.body.scrollHeight+"px";
+            
+            var str_name = dojo.byId('treecontent').src;
+            if(str_name.search("DailyUpdate.html")<=0)
+            {
+                  window.scrollTo(0,200);
+
+            }
+  
+        }
+        
+    require(["dijit/layout/BorderContainer", "dijit/layout/TabContainer", "dijit/layout/ContentPane", "dojo/parser","dojox/widget/Roller","dojo/data/ItemFileWriteStore"]);
+	require(["dojo/store/JsonRest", "dojo/store/Observable", "dijit/Tree", "dijit/tree/dndSource", "dojo/query", "dojo/domReady!","dijit/dijit","dojox/widget/Portlet","dojox/widget/FeedPortlet"], function(JsonRest, Observable, Tree, dndSource, query) {
+				
+				usGov = JsonRest({
+					target:"/statics/data/",
+					mayHaveChildren: function(object){
+						// see if it has a children property
+						return "children" in object;
+					},
+					getChildren: function(object, onComplete, onError){
+						// retrieve the full copy of the object
+						this.get(object.id).then(function(fullObject){
+							// copy to the original object so it has the children array as well.
+							object.children = fullObject.children;
+							// now that full object, we should have an array of children
+							onComplete(fullObject.children);
+						}, function(error){
+							// an error occurred, log it, and indicate no children
+							console.error(error);
+							onComplete([]);
+						});
+					},
+					getRoot: function(onItem, onError){
+						// get the root object, we will do a get() and callback the result
+						this.get("root").then(onItem, onError);
+					},
+					getLabel: function(object){
+						// just get the name
+						return object.name;
+					},
+					
+					pasteItem: function(child, oldParent, newParent, bCopy, insertIndex){
+						var store = this;
+						store.get(oldParent.id).then(function(oldParent){
+							store.get(newParent.id).then(function(newParent){
+								var oldChildren = oldParent.children;
+								dojo.some(oldChildren, function(oldChild, i){
+									if(oldChild.id == child.id){
+										oldChildren.splice(i, 1);
+										return true; // done
+									}
+								});
+								store.put(oldParent);
+								newParent.children.splice(insertIndex || 0, 0, child);
+								store.put(newParent);
+							}, function(error){
+								alert("Error occurred (this demo is not hooked up to a real database, so this is expected): " + error);
+							});
+						});
+					},
+					put: function(object, options){
+						this.onChildrenChange(object, object.children);
+						this.onChange(object);
+						return JsonRest.prototype.put.apply(this, arguments);
+					},
+					remove: function(id){
+						// We call onDelete to signal to the tree to remove the child. The 
+						// remove(id) gets and id, but onDelete expects an object, so we create 
+						// a fake object that has an identity matching the id of the object we 
+						// are removing.
+						this.onDelete({id: id});
+						// note that you could alternately wait for this inherited add function to 
+						// finish (using .then()) if you don't want the event to fire until it is 
+						// confirmed by the server
+						return JsonRest.prototype.remove.apply(this, arguments);
+					}
+				});
+				tree = new Tree({
+					model: usGov,
+					dndController: dndSource
+				}, "tree"); // make sure you have a target HTML element with this id
+				tree.startup();
+                tree.set('paths',[['root','advanced','outperf']]);
+
+				query("#add-new-child").on("click", function(){
+					var selectedObject = tree.get("selectedItems")[0];
+					if(!selectedObject){
+						return alert("No object selected");
+					}
+					usGov.get(selectedObject.id).then(function(selectedObject){
+						selectedObject.children.push({
+							name: "New child",
+							id: Math.random()
+						});
+						usGov.put(selectedObject);
+					});
+					
+				});
+				query("#remove").on("click", function(){
+					var selectedObject = tree.get("selectedItems")[0];
+					if(!selectedObject){
+						return alert("No object selected");
+					}
+					usGov.remove(selectedObject.id);
+				});
+				tree.on("dblclick", function(object){
+					//object.name = prompt("Enter a new name for the object");
+					//usGov.put(object);
+				}, true);
+
+				tree.on("click", function(object){
+                if(object.url)
+                    dojo.byId('treecontent').src=object.url;
+                
+				}, true);
+			});
+
+            require(["dojo/ready", "dojo/parser", "dijit/registry", "dijit/Dialog"], function(ready, parser, registry){
+     ready(function(){
+                    var myCp= dojo.byId("treecontent");
+                    myCp.src='/statics/Outperformance.html';
+                    dojo.byId('treecontent').height = dojo.byId('treecontent').contentWindow.document.body.scrollHeight;
+
+     });
+});
+
+
+
+
+            
+		</script>
+        
+        <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-34238806-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=245026658944139";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+</script>
+	</head>
+	<body class="claro">
+    <div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : 'YOUR_APP_ID', // App ID
+      channelUrl : '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel File
+      status     : true, // check login status
+      cookie     : true, // enable cookies to allow the server to access the session
+      xfbml      : true  // parse XFBML
+    });
+
+    // Additional initialization code here
+  };
+
+  // Load the SDK Asynchronously
+  (function(d){
+     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement('script'); js.id = id; js.async = true;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     ref.parentNode.insertBefore(js, ref);
+   }(document));
+</script>
+
+    <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<iframe src="/statics/header.html" style="height:134px;width:100%;border:0px" scrolling="no">
+</iframe>
+<table><tr><td  style="width:100px;height:100px"><div id='tree' showRoot="false" autoExpand="true"></div></td>
+<!--<td>
+
+
+</td>-->
+<td>
+<iframe src="/statics/cmdhacked.html" allowfullscreen="" frameborder="0" height="300" width="900"></iframe>
+</td>
+
+</tr>
+<tr>
+<td>
+</td>
+</tr>
+
+
+</table>
+<div data-dojo-type="dijit.layout.ContentPane" title="w" id="Warnings"  class="box">
+<ul dojoType="dojox.widget.Roller">
+<li><font size="6px" color="lightblue">Welcome to CoffeeQuant Quantitative Finance</font></li>
+<li><font size="6px" color="lightblue"><u>New</u> Introducing - Quiz (Questions on Exotic Derivatives)</font></li>
+<li><font size="6px" color="lightblue">Exotic Derivatives Pricers on Top Bar</font></li>
+<li><font size="6px" color="lightblue">Complicated Maths?? Introducing Tutorials</font></li>
+<li><font size="6px" color="lightblue"><u>New</u> Article on Autocallables Hedging <br/></font></li>
+<li><font size="6px" color="lightblue"><u>New</u> Poker - New Section</font></li>
+<li><font size="6px" color="lightblue"><u>New</u> TradeAnt - No Frills FDM</font></li>
+</ul>                 
+</div>
+
+<!-- Place this tag where you want the +1 button to render. -->
+<div class="g-plusone" data-annotation="inline" data-width="300"></div>
+<div class="fb-like" data-href="http://www.coffeequant.com" data-send="true" data-layout="button_count" data-width="450" data-show-faces="true"></div>
+<!-- Place this tag after the last +1 button tag. -->
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>
+<!--Loading Content-->
+<iframe id="treecontent" allowfullscreen="" onLoad="javascript:setHeight();" height="100%" frameborder="0" width="100%" scrolling="no"></iframe>
+
+<div data-dojo-type="dojox.widget.ExpandableFeedPortlet" title="Linux" openNew="true" tooltip="true"
+  id="todaysNews"
+  maxResults="9"
+  >
+  <select data-dojo-type="dojox.widget.PortletFeedSettings">
+        <option value="http://linuxonmac.wordpress.com/feed/"></option>
+  </select>
+  <div>Linux Topics</div>
+</div>
+
+<iframe src="http://www.youtube.com/embed/0j3yjreCgmM?rel=0&autoplay=1&loop=1&theme=light" allowfullscreen="" frameborder="0" height="300" width="550"></iframe>
+	</body>
+
+</html>
+

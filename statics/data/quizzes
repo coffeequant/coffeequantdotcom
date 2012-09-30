@@ -1,0 +1,37 @@
+{
+	"name": "Quizzes",
+	"id": "quizzes",
+	"children": [
+		{
+			"name": "Quiz",
+			"id": "qz1",
+			url: "/statics/quiz.html"
+		},
+		{
+			"name": "Quiz 1",
+			"id": "qz2",
+			url: "/statics/quiz1.html"
+		},
+		{
+			"name": "Quiz 2",
+			"id": "qz3",
+			url: "/statics/quiz2.html"
+		},
+		{
+			"name": "Quiz 3",
+			"id": "qz4",
+			url: "/statics/quiz3.html"
+		},
+		{
+			"name": "Quiz 4",
+			"id": "qz5",
+			url: "/statics/quiz4.html"
+		},		
+		{
+			"name": "Quiz 5",
+			"id": "qz6",
+			url: "/statics/quiz5.html"
+		}
+
+	]
+}

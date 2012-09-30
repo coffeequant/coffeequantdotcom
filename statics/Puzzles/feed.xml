@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ <id>urn:iweb:FB4D9144-A5E6-4093-B4B7-B436FD8D5287</id>
+ <title>Page list Atom feed</title>
+ <updated>2012-08-24T10:58:37+05:30</updated>
+ <link rel="self" href="feed.xml"/>
+ <generator>iWeb</generator>
+ <author>
+  <name>iWeb</name>
+ </author>
+ <entry>
+  <id>urn:iweb:36AFF4F3-BF4B-4268-976E-F71044C813BA</id>
+  <title>Dices</title>
+  <title xmlns="urn:iweb:">Dices</title>
+  <in-navbar xmlns="urn:iweb:">36AFF4F3-BF4B-4268-976E-F71044C813BA</in-navbar>
+  <link rel="alternate" href="Dices.html"/>
+  <updated>2012-08-24T10:58:37.001+05:30</updated>
+  <content>Dices</content>
+ </entry>
+ <entry>
+  <id>urn:iweb:2E1CBA9F-633E-4945-8CE1-DD29B390332E</id>
+  <title>Autocalls</title>
+  <title xmlns="urn:iweb:">Autocalls</title>
+  <in-navbar xmlns="urn:iweb:">2E1CBA9F-633E-4945-8CE1-DD29B390332E</in-navbar>
+  <link rel="alternate" href="Autocalls.html"/>
+  <updated>2012-08-24T10:58:37.002+05:30</updated>
+  <content>Autocalls</content>
+ </entry>
+ <entry>
+  <id>urn:iweb:3181E988-EB39-4A99-9374-AFBE7CF55B0C</id>
+  <title>Quantos</title>
+  <title xmlns="urn:iweb:">Quantos</title>
+  <in-navbar xmlns="urn:iweb:">3181E988-EB39-4A99-9374-AFBE7CF55B0C</in-navbar>
+  <link rel="alternate" href="Quantos.html"/>
+  <updated>2012-08-24T10:58:37.003+05:30</updated>
+  <content>Quantos</content>
+ </entry>
+ <entry>
+  <id>urn:iweb:DBFF3124-C121-4A82-8D46-D225186795BB</id>
+  <title>Hedging</title>
+  <title xmlns="urn:iweb:">Hedging</title>
+  <in-navbar xmlns="urn:iweb:">DBFF3124-C121-4A82-8D46-D225186795BB</in-navbar>
+  <link rel="alternate" href="Hedging.html"/>
+  <updated>2012-08-24T10:58:37.004+05:30</updated>
+  <content>Hedging</content>
+ </entry>
+ <entry>
+  <id>urn:iweb:A55E3C0F-25D9-4B1D-808C-5CF57E437980</id>
+  <title>OutPerformanceAutocalls</title>
+  <title xmlns="urn:iweb:">OutPerformanceAutocalls</title>
+  <in-navbar xmlns="urn:iweb:">A55E3C0F-25D9-4B1D-808C-5CF57E437980</in-navbar>
+  <link rel="alternate" href="OutPerformanceAutocalls.html"/>
+  <updated>2012-08-24T10:58:37.005+05:30</updated>
+  <content>OutPerformanceAutocalls</content>
+ </entry>
+ <entry>
+  <id>urn:iweb:09AA806B-0397-44F2-A6CF-040A154D0601</id>
+  <title>CrossGamma</title>
+  <title xmlns="urn:iweb:">CrossGamma</title>
+  <in-navbar xmlns="urn:iweb:">09AA806B-0397-44F2-A6CF-040A154D0601</in-navbar>
+  <link rel="alternate" href="CrossGamma.html"/>
+  <updated>2012-08-24T10:58:37.006+05:30</updated>
+  <content>CrossGamma</content>
+ </entry>
+ <entry>
+  <id>urn:iweb:4256AB41-214A-4050-BC39-B0F7841C08A9</id>
+  <title>StochasticVolatility</title>
+  <title xmlns="urn:iweb:">StochasticVolatility</title>
+  <in-navbar xmlns="urn:iweb:">4256AB41-214A-4050-BC39-B0F7841C08A9</in-navbar>
+  <link rel="alternate" href="StochasticVolatility.html"/>
+  <updated>2012-08-24T10:58:37.007+05:30</updated>
+  <content>StochasticVolatility</content>
+ </entry>
+ <entry>
+  <id>urn:iweb:6584FF82-CB31-4A5E-A0AA-C77DA00E1270</id>
+  <title>AutocallsHedges</title>
+  <title xmlns="urn:iweb:">AutocallsHedges</title>
+  <in-navbar xmlns="urn:iweb:">6584FF82-CB31-4A5E-A0AA-C77DA00E1270</in-navbar>
+  <link rel="alternate" href="AutocallsHedges.html"/>
+  <updated>2012-08-24T10:58:37.008+05:30</updated>
+  <content>AutocallsHedges</content>
+ </entry>
+</feed>

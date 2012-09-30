@@ -1,0 +1,161 @@
+import jinja2
+import os
+from numpy import *
+
+import cgi
+import webapp2
+import datetime
+import urllib
+
+from google.appengine.ext import db
+from google.appengine.api import users
+
+class scenario(webapp2.RequestHandler):
+    def post(self):
+        stockPrice = int(cgi.escape(self.request.get('stockPrice')))
+        intRate = float(cgi.escape(self.request.get('intRate')))
+        vol = float(cgi.escape(self.request.get('volatility')))
+        mat = float(cgi.escape(self.request.get('mat')))
+        N1 = int(cgi.escape(self.request.get('spotsteps')))
+        expectedExpiry = float(cgi.escape(self.request.get('expectedexpiry')))
+        expectedPrice = float(cgi.escape(self.request.get('expectedPrice')))
+        stockLevel = int(cgi.escape(self.request.get('stockLevel')))
+        ds = 2 * expectedPrice/N1
+        dt = 0.9/(vol * vol * N1 * N1)
+        m1 = int(mat/dt)+1
+        dt = mat/m1
+        indexExpectedlevel = int(expectedPrice/ds)
+        indexExpectedExpiry = int(expectedExpiry/dt)
+        indexStockLevel = int(stockLevel / ds)-1
+        U = zeros((1000,1000))
+        for i in range(1,indexExpectedExpiry+1):
+            U[indexStockLevel][i] = 1
+        
+        for i in range(1,indexStockLevel+1):
+            U[i][indexExpectedExpiry] = 0
+        
+        for j in range(2,indexExpectedExpiry):
+            for i in range(2,indexStockLevel):
+                delta = (U[i+1][j-1]-U[i-1][j-1])/(2*ds)
+                gamma = (U[i+1][j-1]+U[i-1][j-1]-2*U[i][j-1])/(ds*ds)
+                theta = -0.5*vol*vol*i*i*ds*ds*gamma-intRate*i*ds*delta
+                U[i][j] = U[i][j-1]-dt*theta
+            U[1][j]=U[1][j-1]*(1-intRate*dt)
+        
+        currentLevel = int(expectedPrice/ds)
+        dummyV = 0
+        self.response.headers['Content-Type']='application/json'
+        self.response.out.write("[")
+        for i in range(1,indexExpectedExpiry+1):
+            dummyV = i*dt
+            self.response.out.write("{ Stock: '"+str(dummyV)+"', OP: '"+str(U[currentLevel][i])+"' },")
+            
+        self.response.out.write("{ Stock: 'X', OP: 'X'}]")
+
+        
+        
+        
+        
+
+class advancedfd(webapp2.RequestHandler):
+    def post(self):
+        stockPrice = int(cgi.escape(self.request.get('stockPrice')))
+        intRate = float(cgi.escape(self.request.get('intRate')))
+        strike = float(cgi.escape(self.request.get('strike')))
+                
+        mat = float(cgi.escape(self.request.get('strike')))
+        Smax = int(cgi.escape(self.request.get('spotsteps')))
+        Sigmax = int(cgi.escape(self.request.get('volsteps')))
+        dt = 0.01
+        a = float(cgi.escape(self.request.get('hestona')))
+        b = float(cgi.escape(self.request.get('hestona')))
+        c = float(cgi.escape(self.request.get('hestona')))
+        d = float(cgi.escape(self.request.get('hestona')))
+        
+        rho = float(cgi.escape(self.request.get('hestonrho')))
+        ds = 2.0 * strike / Smax
+        dsig = 1.0 / Sigmax
+        N = int(mat / dt)
+        dt = mat / N
+        
+        vold = zeros((Smax+1,Sigmax+1))
+        vnew = zeros((Smax+1,Sigmax+1))
+        Sig = zeros((Sigmax+1))
+        S = zeros((Smax+1))
+        
+        for i in range(0,Smax+1):
+            S[i] = i*ds
+        
+        for j in range(0,Sigmax+1):
+            Sig[j] = j * dsig
+            
+        for i in range(0,Smax+1):
+            for j in range(0,Sigmax+1):
+                vold[i][j] = max(S[i]-strike,0)
+        
+        deltasig = 0
+        
+        for k in range(1,N):
+            for i in range(0,Smax):
+                for j in range(0,Sigmax):
+                    deltas = (vold[i+1][j] - vold[i-1][j])/(2*ds)
+                    deltasig1 = (vold[i][j+1] - vold[i][j])/dsig
+                    deltasig2 = (vold[i][j] - vold[i][j-1])/dsig
+                    deltasig = deltasig1
+                    if ((a-b*Sig[j] < 0)):
+                        deltasig = deltasig2
+                        
+                    gammas = (vold[i+1][j]-2*vold[i][j]+vold[i-1][j])/(ds*ds)
+                    gammasig = (vold[i][j+1]-2*vold[i][j]+vold[i][j-1])/(dsig*dsig)
+                    xgamma = (vold[i+1][j+1] - vold[i+1][j-1] - vold[i-1][j-1] + vold[i-1][j-1])/(4 * ds * dsig)
+                    theta = 0.5 * Sig[j] * Sig[j] * S[i] * S[i] * gammas + intRate * S[i] * deltas - intRate * vold[i][j] + 0.5 * d * d * Sig[j]*gammasig + c*(a-b*Sig[j])*deltasig + rho *Sig[j] * S[i] * d * sqrt(Sig[j]) * xgamma
+                    vnew[i][j] = vold[i][j] + dt * theta
+                    
+            for j in range(0,Sigmax+1):
+                vnew[Smax][j] = 2 * vnew[Smax-1][j] - vnew[Smax-2][j]
+            
+            for i in range(0,Smax+1):
+                vnew[i][Sigmax] = 2 * vnew[i][Sigmax-1] - vnew[i][Sigmax-2]
+            
+            for i in range(0,Smax):
+                for j in range(0,Sigmax):
+                    vold[i][j] = vnew[i][j]
+        
+        self.response.headers['Content-Type']='application/json'
+        self.response.out.write("[[")
+        self.response.out.write("{ name: 'Row', field: 'id'},")
+        
+        for j in range(0,Sigmax):
+            tmp2 = j * dsig
+            if (j==0):
+                self.response.out.write("{ name: 'Stock Prices / Volatility -->', field: '"+str(j)+"',formatter: formatGrid },")
+            if (j==(Sigmax-1)):
+                self.response.out.write("{ name: '"+str(tmp2)+"', field: '"+str(j)+"',formatter: formatGrid }")
+            if (j!=0 and j!=(Sigmax-1)):
+                self.response.out.write("{ name: '"+str(tmp2)+"', field: '"+str(j)+"',formatter: formatGrid },")
+        
+        self.response.out.write("]]|[")
+        
+        for i in range(0,Smax):
+            self.response.out.write("{")
+            for j in range(0,Sigmax):
+                vold[i][j] = vnew[i][j]
+                tmp1 = i*ds
+                tmp2 = j*dsig
+                
+                if (j==0):
+                    self.response.out.write(str(j)+": '"+str(tmp1)+"',")
+                    
+                if (j==Sigmax-1):
+                    self.response.out.write(str(j)+": '"+str(vold[i][j])+"'")
+                    
+                if (j!=0 and j!=(Sigmax-1)):
+                    self.response.out.write(str(j)+": '"+str(vold[i][j])+"',")
+            self.response.out.write("},")
+        
+        self.response.out.write("{ Stock: 'X', OP: 'X', Delta: 'X'}]")
+
+
+
+
+app = webapp2.WSGIApplication([('/advancedtools/scenarios',scenario),('/advancedtools/advancedfd',advancedfd)],debug=True)

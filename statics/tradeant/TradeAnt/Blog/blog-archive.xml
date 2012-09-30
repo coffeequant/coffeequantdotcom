@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<rss xmlns:iweb="http://www.apple.com/iweb" version="2.0">
+  <channel>
+    <title>Blog</title>
+    <link>http://www.coffeequant.com/tradeant/TradeAnt/Blog</link>
+    <description>Hours of mathematical analysis boiled down to the following analysis. Fully stable explicit method for all the numerical analysis in TradeAnt. 
+
+Download Latest Version</description>
+    <item>
+      <title>Tutorial</title>
+      <link>http://www.coffeequant.com/tradeant/TradeAnt/Blog/Entries/2012/3/20_Tutorial.html</link>
+      <guid isPermaLink="false">784f353a-9ca9-4a02-a932-c9bcba6e475e</guid>
+      <pubDate>Tue, 20 Mar 2012 23:32:55 +0530</pubDate>
+      <iweb:comment enabled="0" count="0" link="http://www.coffeequant.com/tradeant/TradeAnt/Blog/Entries/2012/3/20_Tutorial.html#comment_layer"></iweb:comment>
+    </item>
+    <item>
+      <title>Tradeant</title>
+      <link>http://www.coffeequant.com/tradeant/TradeAnt/Blog/Entries/2012/3/4_Tradeant.html</link>
+      <guid isPermaLink="false">14b6bdb1-c450-4e2b-a173-f0f36ff42d4c</guid>
+      <pubDate>Sun, 4 Mar 2012 01:43:52 +0530</pubDate>
+      <iweb:comment enabled="0" count="0" link="http://www.coffeequant.com/tradeant/TradeAnt/Blog/Entries/2012/3/4_Tradeant.html#comment_layer"></iweb:comment>
+    </item>
+    <iweb:dateFormat>M/d/yy</iweb:dateFormat>
+    <iweb:baseURL>http://www.coffeequant.com/tradeant/TradeAnt/Blog</iweb:baseURL>
+    <iweb:maximumSummaryItems>10</iweb:maximumSummaryItems>
+  </channel>
+</rss>

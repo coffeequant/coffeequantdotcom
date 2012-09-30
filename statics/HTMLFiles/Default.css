@@ -1,0 +1,2484 @@
+/* Wolfram Mathematica Default stylesheet
+* CSS version
+*
+* Created by Wolfram Mathematica 6.0. */
+
+/* Notebook:*/
+html {
+  font-size: 12px;
+  padding: 8px;
+}
+img {
+  border: 0px;
+}
+
+/* MessagesWindow:*/
+.MessagesWindow {
+  background-color: #F9E4DC;
+  padding: 8px;
+}
+.MessagesWindowInline {
+  background-color: #F9E4DC;
+}
+/* Title:*/
+.Title {
+  font-size: 36px;
+  font-family: Helvetica;
+  font-weight: bold;
+  line-height: 1.30556;
+  padding: 8px;
+  margin-left: 27px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+.TitleInline {
+  font-size: 36px;
+  font-family: Helvetica;
+  font-weight: bold;
+  line-height: 1.30556;
+}
+/* Subtitle:*/
+.Subtitle {
+  font-size: 24px;
+  font-family: Helvetica;
+  padding: 8px;
+  margin-left: 27px;
+  margin-top: 2px;
+  margin-bottom: 20px;
+}
+.SubtitleInline {
+  font-size: 24px;
+  font-family: Helvetica;
+}
+/* Subsubtitle:*/
+.Subsubtitle {
+  font-size: 16px;
+  font-family: Helvetica;
+  padding: 8px;
+  margin-left: 27px;
+  margin-top: 2px;
+  margin-bottom: 8px;
+}
+.SubsubtitleInline {
+  font-size: 16px;
+  font-family: Helvetica;
+}
+/* Section:*/
+.Section {
+  font-size: 20px;
+  font-family: Helvetica;
+  font-weight: bold;
+  line-height: 1.1;
+  padding: 4px;
+  margin-left: 27px;
+  margin-top: 34px;
+  margin-bottom: 8px;
+  border-left: 0px;
+  border-right: 0px;
+  border-top: 1px;
+  border-bottom: 0px;
+  border-style: solid;
+  border-color: #000000;
+}
+.SectionInline {
+  font-size: 20px;
+  font-family: Helvetica;
+  font-weight: bold;
+  line-height: 1.1;
+}
+/* Subsection:*/
+.Subsection {
+  font-size: 14px;
+  font-family: Helvetica;
+  font-weight: bold;
+  padding: 8px;
+  margin-left: 60px;
+  margin-top: 12px;
+  margin-bottom: 8px;
+  display: list-item;
+  list-style-type: square;
+}
+.SubsectionInline {
+  font-size: 14px;
+  font-family: Helvetica;
+  font-weight: bold;
+}
+/* Subsubsection:*/
+.Subsubsection {
+  font-family: Times;
+  font-weight: bold;
+  padding: 8px;
+  margin-left: 60px;
+  margin-top: 10px;
+  margin-bottom: 2px;
+  display: list-item;
+  list-style-type: square;
+}
+.SubsubsectionInline {
+  font-family: Times;
+  font-weight: bold;
+}
+/* Text:*/
+.Text {
+  line-height: 1.25;
+  padding: 8px;
+  margin-left: 60px;
+  margin-right: 10px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+.TextInline {
+  line-height: 1.25;
+}
+/* SmallText:*/
+.SmallText {
+  font-size: 9px;
+  font-family: Helvetica;
+  line-height: 1.33333;
+  padding: 8px;
+  margin-left: 60px;
+  margin-right: 10px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+.SmallTextInline {
+  font-size: 9px;
+  font-family: Helvetica;
+  line-height: 1.33333;
+}
+/* RawText:*/
+.RawText {
+  font-family: Courier;
+  padding: 8px;
+  margin-left: 0px;
+  margin-right: 10px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+.RawTextInline {
+  font-family: Courier;
+}
+/* Input:*/
+.Input {
+  font-weight: bold;
+  padding: 8px;
+  margin-left: 66px;
+  margin-right: 10px;
+  margin-top: 7px;
+  margin-bottom: 5px;
+}
+.InputInline {
+  font-weight: bold;
+}
+/* InputOnly:*/
+.InputOnly {
+  font-weight: bold;
+  padding: 8px;
+  margin-left: 66px;
+  margin-right: 10px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+.InputOnlyInline {
+  font-weight: bold;
+}
+/* Output:*/
+.Output {
+  padding: 8px;
+  margin-left: 66px;
+  margin-right: 10px;
+  margin-top: 5px;
+  margin-bottom: 7px;
+}
+.OutputInline {
+}
+/* Message:*/
+.Message {
+  font-size: 10px;
+  color: #991A1A;
+  padding: 8px;
+  margin-left: 66px;
+}
+.MessageInline {
+  font-size: 10px;
+  color: #991A1A;
+}
+/* Print:*/
+.Print {
+  padding: 8px;
+  margin-left: 66px;
+}
+.PrintInline {
+}
+/* Graphics:*/
+.Graphics {
+  font-size: 10px;
+  font-family: Times;
+  font-weight: normal;
+  padding: 8px;
+  margin-left: 4px;
+}
+.GraphicsInline {
+  font-size: 10px;
+  font-family: Times;
+  font-weight: normal;
+}
+/* CellLabel:*/
+.CellLabel {
+  font-size: 9px;
+  font-family: Helvetica;
+  color: #454F99;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+/* FrameLabel:*/
+.FrameLabel {
+  font-size: 9px;
+  font-family: Helvetica;
+  padding: 8px;
+}
+.FrameLabelInline {
+  font-size: 9px;
+  font-family: Helvetica;
+}
+/* RM:*/
+.RM {
+  font-style: normal;
+  font-weight: normal;
+  padding: 8px;
+}
+.RMInline {
+  font-style: normal;
+  font-weight: normal;
+}
+/* BF:*/
+.BF {
+  font-weight: bold;
+  padding: 8px;
+}
+.BFInline {
+  font-weight: bold;
+}
+/* IT:*/
+.IT {
+  font-style: italic;
+  padding: 8px;
+}
+.ITInline {
+  font-style: italic;
+}
+/* TR:*/
+.TR {
+  font-family: Times;
+  font-style: normal;
+  font-weight: normal;
+  padding: 8px;
+}
+.TRInline {
+  font-family: Times;
+  font-style: normal;
+  font-weight: normal;
+}
+/* TI:*/
+.TI {
+  font-family: Times;
+  font-style: italic;
+  font-weight: normal;
+  padding: 8px;
+}
+.TIInline {
+  font-family: Times;
+  font-style: italic;
+  font-weight: normal;
+}
+/* TB:*/
+.TB {
+  font-family: Times;
+  font-style: normal;
+  font-weight: bold;
+  padding: 8px;
+}
+.TBInline {
+  font-family: Times;
+  font-style: normal;
+  font-weight: bold;
+}
+/* TBI:*/
+.TBI {
+  font-family: Times;
+  font-style: italic;
+  font-weight: bold;
+  padding: 8px;
+}
+.TBIInline {
+  font-family: Times;
+  font-style: italic;
+  font-weight: bold;
+}
+/* MR:*/
+.MR {
+  font-family: Courier;
+  font-style: normal;
+  font-weight: normal;
+  padding: 8px;
+}
+.MRInline {
+  font-family: Courier;
+  font-style: normal;
+  font-weight: normal;
+}
+/* MO:*/
+.MO {
+  font-family: Courier;
+  font-style: italic;
+  font-weight: normal;
+  padding: 8px;
+}
+.MOInline {
+  font-family: Courier;
+  font-style: italic;
+  font-weight: normal;
+}
+/* MB:*/
+.MB {
+  font-family: Courier;
+  font-style: normal;
+  font-weight: bold;
+  padding: 8px;
+}
+.MBInline {
+  font-family: Courier;
+  font-style: normal;
+  font-weight: bold;
+}
+/* MBO:*/
+.MBO {
+  font-family: Courier;
+  font-style: italic;
+  font-weight: bold;
+  padding: 8px;
+}
+.MBOInline {
+  font-family: Courier;
+  font-style: italic;
+  font-weight: bold;
+}
+/* SR:*/
+.SR {
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: normal;
+  padding: 8px;
+}
+.SRInline {
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: normal;
+}
+/* SO:*/
+.SO {
+  font-family: Helvetica;
+  font-style: italic;
+  font-weight: normal;
+  padding: 8px;
+}
+.SOInline {
+  font-family: Helvetica;
+  font-style: italic;
+  font-weight: normal;
+}
+/* SB:*/
+.SB {
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: bold;
+  padding: 8px;
+}
+.SBInline {
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: bold;
+}
+/* SBO:*/
+.SBO {
+  font-family: Helvetica;
+  font-style: italic;
+  font-weight: bold;
+  padding: 8px;
+}
+.SBOInline {
+  font-family: Helvetica;
+  font-style: italic;
+  font-weight: bold;
+}
+/* SO10:*/
+.SO10 {
+  font-size: 10px;
+  font-family: Helvetica;
+  font-style: italic;
+  font-weight: normal;
+  padding: 8px;
+}
+.SO10Inline {
+  font-size: 10px;
+  font-family: Helvetica;
+  font-style: italic;
+  font-weight: normal;
+}
+/* Inert:*/
+.Inert {
+  background-color: #DEE7F8;
+  padding: 8px;
+}
+.InertInline {
+  background-color: #DEE7F8;
+}
+/* Small:*/
+.Small {
+  font-size: 9px;
+  padding: 8px;
+}
+.SmallInline {
+  font-size: 9px;
+}
+/* Medium:*/
+.Medium {
+  font-size: 12px;
+  padding: 8px;
+}
+.MediumInline {
+  font-size: 12px;
+}
+/* Large:*/
+.Large {
+  font-size: 24px;
+  padding: 8px;
+}
+.LargeInline {
+  font-size: 24px;
+}
+/* HideContentsInPrint:*/
+.HideContentsInPrint {
+  padding: 8px;
+}
+.HideContentsInPrintInline {
+}
+/* HyperlinkActive:*/
+.HyperlinkActive {
+  color: #D27D22;
+  padding: 8px;
+}
+.HyperlinkActiveInline {
+  color: #D27D22;
+}
+/* InlineFormula:*/
+.InlineFormula {
+  padding: 8px;
+  margin-left: 10px;
+  margin-right: 4px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+}
+.InlineFormulaInline {
+}
+/* DisplayFormula:*/
+.DisplayFormula {
+  padding: 8px;
+  margin-left: 60px;
+}
+.DisplayFormulaInline {
+}
+/* Code:*/
+.Code {
+  font-weight: bold;
+  padding: 8px;
+  margin-left: 66px;
+  margin-right: 10px;
+  margin-top: 7px;
+  margin-bottom: 5px;
+}
+.CodeInline {
+  font-weight: bold;
+}
+/* Program:*/
+.Program {
+  font-family: Courier;
+  padding: 8px;
+  margin-left: 60px;
+  margin-right: 4px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  border-top: 1px;
+  border-bottom: 1px;
+  border-style: solid;
+  border-color: #000000;
+}
+.ProgramInline {
+  font-family: Courier;
+}
+/* Outline1:*/
+.Outline1 {
+  font-size: 18px;
+  font-weight: bold;
+  text-indent: 0px;
+  padding: 8px;
+  margin-left: 60px;
+  margin-right: 10px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+.Outline1Inline {
+  font-size: 18px;
+  font-weight: bold;
+  text-indent: 0px;
+}
+/* Outline2:*/
+.Outline2 {
+  font-size: 15px;
+  font-weight: bold;
+  text-indent: 0px;
+  padding: 8px;
+  margin-left: 90px;
+  margin-right: 10px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+.Outline2Inline {
+  font-size: 15px;
+  font-weight: bold;
+  text-indent: 0px;
+}
+/* Outline3:*/
+.Outline3 {
+  font-size: 12px;
+  text-indent: 0px;
+  padding: 8px;
+  margin-left: 120px;
+  margin-right: 10px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+.Outline3Inline {
+  font-size: 12px;
+  text-indent: 0px;
+}
+/* Outline4:*/
+.Outline4 {
+  font-size: 10px;
+  text-indent: 0px;
+  padding: 8px;
+  margin-left: 150px;
+  margin-right: 10px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+.Outline4Inline {
+  font-size: 10px;
+  text-indent: 0px;
+}
+/* Hyperlink:*/
+.Hyperlink {
+  color: #454F99;
+  padding: 8px;
+}
+.HyperlinkInline {
+  color: #454F99;
+}
+/* MainBookLink:*/
+.MainBookLink {
+  color: #454F99;
+  padding: 8px;
+}
+.MainBookLinkInline {
+  color: #454F99;
+}
+/* MainBookLinkMR:*/
+.MainBookLinkMR {
+  font-family: Courier;
+  color: #454F99;
+  padding: 8px;
+}
+.MainBookLinkMRInline {
+  font-family: Courier;
+  color: #454F99;
+}
+/* AddOnsLink:*/
+.AddOnsLink {
+  font-family: Courier;
+  color: #454F99;
+  padding: 8px;
+}
+.AddOnsLinkInline {
+  font-family: Courier;
+  color: #454F99;
+}
+/* AddOnsLinkText:*/
+.AddOnsLinkText {
+  font-family: Times;
+  color: #454F99;
+  padding: 8px;
+}
+.AddOnsLinkTextInline {
+  font-family: Times;
+  color: #454F99;
+}
+/* RefGuideLink:*/
+.RefGuideLink {
+  font-family: Courier;
+  color: #454F99;
+  padding: 8px;
+}
+.RefGuideLinkInline {
+  font-family: Courier;
+  color: #454F99;
+}
+/* RefGuideLinkText:*/
+.RefGuideLinkText {
+  color: #454F99;
+  padding: 8px;
+}
+.RefGuideLinkTextInline {
+  color: #454F99;
+}
+/* GettingStartedLink:*/
+.GettingStartedLink {
+  color: #454F99;
+  padding: 8px;
+}
+.GettingStartedLinkInline {
+  color: #454F99;
+}
+/* DemosLink:*/
+.DemosLink {
+  color: #454F99;
+  padding: 8px;
+}
+.DemosLinkInline {
+  color: #454F99;
+}
+/* TourLink:*/
+.TourLink {
+  color: #454F99;
+  padding: 8px;
+}
+.TourLinkInline {
+  color: #454F99;
+}
+/* FrontEndLink:*/
+.FrontEndLink {
+  color: #454F99;
+  padding: 8px;
+}
+.FrontEndLinkInline {
+  color: #454F99;
+}
+/* FrontEndLinkMR:*/
+.FrontEndLinkMR {
+  font-family: Courier;
+  color: #454F99;
+  padding: 8px;
+}
+.FrontEndLinkMRInline {
+  font-family: Courier;
+  color: #454F99;
+}
+/* OtherInformationLink:*/
+.OtherInformationLink {
+  color: #454F99;
+  padding: 8px;
+}
+.OtherInformationLinkInline {
+  color: #454F99;
+}
+/* OtherInformationLinkMR:*/
+.OtherInformationLinkMR {
+  font-family: Courier;
+  color: #454F99;
+  padding: 8px;
+}
+.OtherInformationLinkMRInline {
+  font-family: Courier;
+  color: #454F99;
+}
+/* MasterIndexLink:*/
+.MasterIndexLink {
+  color: #454F99;
+  padding: 8px;
+}
+.MasterIndexLinkInline {
+  color: #454F99;
+}
+/* NotebookLink:*/
+.NotebookLink {
+  font-family: Times;
+  color: #454F99;
+  padding: 8px;
+}
+.NotebookLinkInline {
+  font-family: Times;
+  color: #454F99;
+}
+/* NotebookLinkMR:*/
+.NotebookLinkMR {
+  font-family: Courier;
+  color: #454F99;
+  padding: 8px;
+}
+.NotebookLinkMRInline {
+  font-family: Courier;
+  color: #454F99;
+}
+/* Header:*/
+.Header {
+  font-size: 10px;
+  font-style: italic;
+  padding: 8px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 1px;
+  margin-bottom: 4px;
+}
+.HeaderInline {
+  font-size: 10px;
+  font-style: italic;
+}
+/* Footer:*/
+.Footer {
+  font-size: 9px;
+  font-style: italic;
+  padding: 8px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 4px;
+  margin-bottom: 0px;
+}
+.FooterInline {
+  font-size: 9px;
+  font-style: italic;
+}
+/* PageNumber:*/
+.PageNumber {
+  font-size: 10px;
+  font-family: Times;
+  padding: 8px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 1px;
+  margin-bottom: 4px;
+}
+.PageNumberInline {
+  font-size: 10px;
+  font-family: Times;
+}
+/* Paste:*/
+.Paste {
+  padding: 8px;
+}
+.PasteInline {
+}
+/* Evaluate:*/
+.Evaluate {
+  padding: 8px;
+}
+.EvaluateInline {
+}
+/* EvaluateCell:*/
+.EvaluateCell {
+  padding: 8px;
+}
+.EvaluateCellInline {
+}
+/* CopyEvaluate:*/
+.CopyEvaluate {
+  padding: 8px;
+}
+.CopyEvaluateInline {
+}
+/* CopyEvaluateCell:*/
+.CopyEvaluateCell {
+  padding: 8px;
+}
+.CopyEvaluateCellInline {
+}
+/* Placeholder:*/
+.Placeholder {
+  font-style: italic;
+  color: #E3DC62;
+  padding: 8px;
+}
+.PlaceholderInline {
+  font-style: italic;
+  color: #E3DC62;
+}
+/* PrimaryPlaceholder:*/
+.PrimaryPlaceholder {
+  font-style: italic;
+  background-color: #E9E381;
+  padding: 8px;
+}
+.PrimaryPlaceholderInline {
+  font-style: italic;
+  background-color: #E9E381;
+}
+/* CellExpression:*/
+.CellExpression {
+  font-size: 12px;
+  font-family: Courier;
+  background-color: #FFFFFF;
+  padding: 8px;
+  margin-left: 6px;
+}
+.CellExpressionInline {
+  font-size: 12px;
+  font-family: Courier;
+  background-color: #FFFFFF;
+}
+/* InputForm:*/
+.InputForm {
+  font-family: Courier;
+  padding: 8px;
+}
+.InputFormInline {
+  font-family: Courier;
+}
+/* OutputForm:*/
+.OutputForm {
+  font-family: Courier;
+  text-align: left;
+  line-height: 0.683333;
+  padding: 8px;
+}
+.OutputFormInline {
+  font-family: Courier;
+  text-align: left;
+  line-height: 0.683333;
+}
+/* StandardForm:*/
+.StandardForm {
+  font-family: Courier;
+  line-height: 1.25;
+  padding: 8px;
+}
+.StandardFormInline {
+  font-family: Courier;
+  line-height: 1.25;
+}
+/* ProgramForm:*/
+.ProgramForm {
+  font-family: Courier;
+  line-height: 1.25;
+  padding: 8px;
+}
+.ProgramFormInline {
+  font-family: Courier;
+  line-height: 1.25;
+}
+/* TraditionalForm:*/
+.TraditionalForm {
+  line-height: 1.25;
+  padding: 8px;
+}
+.TraditionalFormInline {
+  line-height: 1.25;
+}
+/* InlineCell:*/
+.InlineCell {
+  text-align: left;
+  padding: 8px;
+}
+.InlineCellInline {
+  text-align: left;
+}
+/* InlineCellEditing:*/
+.InlineCellEditing {
+  background-color: #F6EDD6;
+  padding: 8px;
+}
+.InlineCellEditingInline {
+  background-color: #F6EDD6;
+}
+/* UnmatchedBracket:*/
+.UnmatchedBracket {
+  color: #C254CC;
+  padding: 8px;
+}
+.UnmatchedBracketInline {
+  color: #C254CC;
+}
+/* FunctionTemplateArgument:*/
+.FunctionTemplateArgument {
+  font-style: italic;
+  padding: 8px;
+}
+.FunctionTemplateArgumentInline {
+  font-style: italic;
+}
+/* FunctionTemplateHighlight:*/
+.FunctionTemplateHighlight {
+  font-weight: bold;
+  padding: 8px;
+}
+.FunctionTemplateHighlightInline {
+  font-weight: bold;
+}
+/* SlideShowNavigationBar:*/
+.SlideShowNavigationBar {
+  font-size: 10px;
+  background-color: #CCCCCC;
+  text-align: center;
+  padding: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  border: 1px;
+  border-style: solid;
+  border-color: #FFFFFF;
+}
+.SlideShowNavigationBarInline {
+  font-size: 10px;
+  background-color: #CCCCCC;
+  text-align: center;
+}
+/* SlideShowSection:*/
+.SlideShowSection {
+  font-size: 18px;
+  font-family: Helvetica;
+  font-weight: normal;
+  color: #FFFFFF;
+  background-color: #6870CC;
+  padding-left: 12px;
+  padding-right: 4px;
+  padding-top: 12px;
+  padding-bottom: 6px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  margin-bottom: 10px;
+  border-left: 0px;
+  border-right: 0px;
+  border-top: 1px;
+  border-bottom: 0px;
+  border-style: solid;
+  border-color: #000000;
+}
+.SlideShowSectionInline {
+  font-size: 18px;
+  font-family: Helvetica;
+  font-weight: normal;
+  color: #FFFFFF;
+  background-color: #6870CC;
+}
+/* SlideHyperlink:*/
+.SlideHyperlink {
+  font-size: 26px;
+  color: #666666;
+  padding: 8px;
+}
+.SlideHyperlinkInline {
+  font-size: 26px;
+  color: #666666;
+}
+/* PreviousNext:*/
+.PreviousNext {
+  font-size: 10px;
+  font-family: Helvetica;
+  color: #808080;
+  text-align: right;
+  line-height: 1.3;
+  padding: 8px;
+  margin-left: 60px;
+  margin-right: 10px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+.PreviousNextInline {
+  font-size: 10px;
+  font-family: Helvetica;
+  color: #808080;
+  text-align: right;
+  line-height: 1.3;
+}
+/* SlidePreviousNextLink:*/
+.SlidePreviousNextLink {
+  text-decoration: none;
+  padding: 8px;
+}
+.SlidePreviousNextLinkInline {
+  text-decoration: none;
+}
+/* SlideTOCLink:*/
+.SlideTOCLink {
+  font-family: Helvetica;
+  padding: 8px;
+  margin-left: 24px;
+}
+.SlideTOCLinkInline {
+  font-family: Helvetica;
+}
+/* SlideTOC:*/
+.SlideTOC {
+  font-family: Helvetica;
+  padding: 8px;
+  margin-left: 18px;
+  display: list-item;
+  list-style-type: square;
+}
+.SlideTOCInline {
+  font-family: Helvetica;
+}
+/* MathCaption:*/
+.MathCaption {
+  color: #333333;
+  line-height: 1.08333;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 2px;
+  padding-bottom: 8px;
+  margin-left: 66px;
+  margin-right: 12px;
+  margin-top: 24px;
+  margin-bottom: 2px;
+  border-left: 0px;
+  border-right: 0px;
+  border-top: 1px;
+  border-bottom: 0px;
+  border-style: solid;
+  border-color: #B3B3B3;
+}
+.MathCaptionInline {
+  color: #333333;
+  line-height: 1.08333;
+}
+/* ObjectName:*/
+.ObjectName {
+  font-weight: bold;
+  padding: 8px;
+  margin-left: 66px;
+  margin-right: 4px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+.ObjectNameInline {
+  font-weight: bold;
+}
+/* Usage:*/
+.Usage {
+  font-weight: bold;
+  padding: 8px;
+  margin-left: 66px;
+  margin-right: 4px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+.UsageInline {
+  font-weight: bold;
+}
+/* Notes:*/
+.Notes {
+  font-weight: bold;
+  padding: 8px;
+  margin-left: 66px;
+  margin-right: 4px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+.NotesInline {
+  font-weight: bold;
+}
+/* InlineOutput:*/
+.InlineOutput {
+  font-weight: bold;
+  padding: 8px;
+  margin-left: 66px;
+  margin-right: 4px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+.InlineOutputInline {
+  font-weight: bold;
+}
+/* Box:*/
+.Box {
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+  border: 1px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.BoxInline {
+  background-color: #F6EDD6;
+}
+/* DoubleBox:*/
+.DoubleBox {
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+  border: 1px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.DoubleBoxInline {
+  background-color: #F6EDD6;
+}
+/* 1ColumnBox:*/
+.X1ColumnBox {
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+  border: 1px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.X1ColumnBoxInline {
+  background-color: #F6EDD6;
+}
+/* 2ColumnBox:*/
+.X2ColumnBox {
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+  border: 1px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.X2ColumnBoxInline {
+  background-color: #F6EDD6;
+}
+/* 2ColumnEvenBox:*/
+.X2ColumnEvenBox {
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+  border: 1px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.X2ColumnEvenBoxInline {
+  background-color: #F6EDD6;
+}
+/* 2ColumnSmallBox:*/
+.X2ColumnSmallBox {
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+  border: 1px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.X2ColumnSmallBoxInline {
+  background-color: #F6EDD6;
+}
+/* 3ColumnBox:*/
+.X3ColumnBox {
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+  border: 1px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.X3ColumnBoxInline {
+  background-color: #F6EDD6;
+}
+/* 3ColumnSmallBox:*/
+.X3ColumnSmallBox {
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+  border: 1px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.X3ColumnSmallBoxInline {
+  background-color: #F6EDD6;
+}
+/* 4ColumnBox:*/
+.X4ColumnBox {
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+  border: 1px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.X4ColumnBoxInline {
+  background-color: #F6EDD6;
+}
+/* 5ColumnBox:*/
+.X5ColumnBox {
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+  border: 1px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.X5ColumnBoxInline {
+  background-color: #F6EDD6;
+}
+/* 6ColumnBox:*/
+.X6ColumnBox {
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+  border: 1px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.X6ColumnBoxInline {
+  background-color: #F6EDD6;
+}
+/* FramedBox:*/
+.FramedBox {
+  font-weight: normal;
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+  border: 1px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.FramedBoxInline {
+  font-weight: normal;
+  background-color: #F6EDD6;
+}
+/* DefinitionBox:*/
+.DefinitionBox {
+  font-weight: normal;
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+  border: 1px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.DefinitionBoxInline {
+  font-weight: normal;
+  background-color: #F6EDD6;
+}
+/* DefinitionBox3Col:*/
+.DefinitionBox3Col {
+  font-weight: normal;
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+  border: 1px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.DefinitionBox3ColInline {
+  font-weight: normal;
+  background-color: #F6EDD6;
+}
+/* DefinitionBox4Col:*/
+.DefinitionBox4Col {
+  font-weight: normal;
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+  border: 1px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.DefinitionBox4ColInline {
+  font-weight: normal;
+  background-color: #F6EDD6;
+}
+/* DefinitionBox5Col:*/
+.DefinitionBox5Col {
+  font-weight: normal;
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+  border: 1px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.DefinitionBox5ColInline {
+  font-weight: normal;
+  background-color: #F6EDD6;
+}
+/* DefinitionBox6Col:*/
+.DefinitionBox6Col {
+  font-weight: normal;
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+  border: 1px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.DefinitionBox6ColInline {
+  font-weight: normal;
+  background-color: #F6EDD6;
+}
+/* TopBox:*/
+.TopBox {
+  font-weight: normal;
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+  border-left: 1px;
+  border-right: 1px;
+  border-top: 1px;
+  border-bottom: 0px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.TopBoxInline {
+  font-weight: normal;
+  background-color: #F6EDD6;
+}
+/* MiddleBox:*/
+.MiddleBox {
+  font-weight: normal;
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: -7px;
+  margin-bottom: 0px;
+  border-left: 1px;
+  border-right: 1px;
+  border-top: 0px;
+  border-bottom: 0px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.MiddleBoxInline {
+  font-weight: normal;
+  background-color: #F6EDD6;
+}
+/* BottomBox:*/
+.BottomBox {
+  font-weight: normal;
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: -7px;
+  margin-bottom: 0px;
+  border-left: 1px;
+  border-right: 1px;
+  border-top: 0px;
+  border-bottom: 1px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.BottomBoxInline {
+  font-weight: normal;
+  background-color: #F6EDD6;
+}
+/* TopSpanBox:*/
+.TopSpanBox {
+  font-weight: normal;
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: 8px;
+  margin-bottom: -2px;
+  border-left: 1px;
+  border-right: 1px;
+  border-top: 1px;
+  border-bottom: 0px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.TopSpanBoxInline {
+  font-weight: normal;
+  background-color: #F6EDD6;
+}
+/* MiddleSpanBox:*/
+.MiddleSpanBox {
+  font-weight: normal;
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 27px;
+  margin-right: 12px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  border-left: 1px;
+  border-right: 1px;
+  border-top: 0px;
+  border-bottom: 0px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.MiddleSpanBoxInline {
+  font-weight: normal;
+  background-color: #F6EDD6;
+}
+/* Picture:*/
+.Picture {
+  padding: 8px;
+  margin-left: 27px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+.PictureInline {
+}
+/* OpenCloseItemizedPicture:*/
+.OpenCloseItemizedPicture {
+  padding: 8px;
+  margin-left: 88px;
+  margin-right: 4px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+.OpenCloseItemizedPictureInline {
+}
+/* ItemizedPicture:*/
+.ItemizedPicture {
+  padding: 8px;
+  margin-left: 88px;
+  margin-right: 4px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+.ItemizedPictureInline {
+}
+/* ListGraphic:*/
+.ListGraphic {
+  padding: 8px;
+  margin-left: 88px;
+  margin-right: 4px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+.ListGraphicInline {
+}
+/* ListNoteBox:*/
+.ListNoteBox {
+  background-color: #F6EDD6;
+  padding: 8px;
+  margin-left: 88px;
+  margin-right: 12px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  border: 1px;
+  border-style: solid;
+  border-color: #BFB18D;
+}
+.ListNoteBoxInline {
+  background-color: #F6EDD6;
+}
+/* PictureGroup:*/
+.PictureGroup {
+  padding: 8px;
+  margin-left: 41px;
+  margin-right: 4px;
+  margin-top: 4px;
+  margin-bottom: 0px;
+}
+.PictureGroupInline {
+}
+/* Sound:*/
+.Sound {
+  padding: 8px;
+  margin-left: 27px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+}
+.SoundInline {
+}
+/* 2ColumnTable:*/
+.X2ColumnTable {
+  padding: 8px;
+  margin-left: 35px;
+  margin-right: 4px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+}
+.X2ColumnTableInline {
+}
+/* 2ColumnEvenTable:*/
+.X2ColumnEvenTable {
+  padding: 8px;
+  margin-left: 35px;
+  margin-right: 4px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+}
+.X2ColumnEvenTableInline {
+}
+/* 3ColumnTable:*/
+.X3ColumnTable {
+  padding: 8px;
+  margin-left: 35px;
+  margin-right: 4px;
+  margin-top: 8px;
+  margin-bottom: 0px;
+}
+.X3ColumnTableInline {
+}
+
+@media screen{
+/* All:Working*/
+html {
+}
+}
+
+@media print{
+/* All:Printout*/
+html {
+  font-size: 80%;
+}
+/* Title:Printout*/
+.Title {
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 10pt;
+  margin-top: 30pt;
+  margin-bottom: 12pt;
+}
+.TitleInline {
+}
+/* Subtitle:Printout*/
+.Subtitle {
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 10pt;
+  margin-top: 8pt;
+  margin-bottom: 12pt;
+}
+.SubtitleInline {
+}
+/* Subsubtitle:Printout*/
+.Subsubtitle {
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 10pt;
+  margin-top: 8pt;
+  margin-bottom: 12pt;
+}
+.SubsubtitleInline {
+}
+/* Section:Printout*/
+.Section {
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 22pt;
+  margin-bottom: 7pt;
+}
+.SectionInline {
+}
+/* Subsection:Printout*/
+.Subsection {
+  padding: 8pt;
+  margin-left: 9pt;
+  margin-right: 0pt;
+  margin-top: 22pt;
+  margin-bottom: 7pt;
+}
+.SubsectionInline {
+}
+/* Subsubsection:Printout*/
+.Subsubsection {
+  padding: 8pt;
+  margin-left: 9pt;
+  margin-right: 0pt;
+  margin-top: 14pt;
+  margin-bottom: 7pt;
+}
+.SubsubsectionInline {
+}
+/* Text:Printout*/
+.Text {
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 2pt;
+  margin-top: 6pt;
+  margin-bottom: 6pt;
+}
+.TextInline {
+}
+/* SmallText:Printout*/
+.SmallText {
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 2pt;
+  margin-top: 5pt;
+  margin-bottom: 5pt;
+}
+.SmallTextInline {
+}
+/* RawText:Printout*/
+.RawText {
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 2pt;
+  margin-top: 6pt;
+  margin-bottom: 6pt;
+}
+.RawTextInline {
+}
+/* Input:Printout*/
+.Input {
+  padding: 8pt;
+  margin-left: 39pt;
+  margin-right: 0pt;
+  margin-top: 6pt;
+  margin-bottom: 4pt;
+}
+.InputInline {
+}
+/* InputOnly:Printout*/
+.InputOnly {
+  padding: 8pt;
+  margin-left: 39pt;
+  margin-right: 0pt;
+  margin-top: 6pt;
+  margin-bottom: 4pt;
+}
+.InputOnlyInline {
+}
+/* Output:Printout*/
+.Output {
+  padding: 8pt;
+  margin-left: 39pt;
+  margin-right: 0pt;
+  margin-top: 4pt;
+  margin-bottom: 6pt;
+}
+.OutputInline {
+}
+/* Message:Printout*/
+.Message {
+  color: #000000;
+  padding: 8pt;
+  margin-left: 39pt;
+}
+.MessageInline {
+  color: #000000;
+}
+/* Print:Printout*/
+.Print {
+  padding: 8pt;
+  margin-left: 39pt;
+}
+.PrintInline {
+}
+/* Graphics:Printout*/
+.Graphics {
+  font-size: 80%;
+  padding: 8pt;
+}
+.GraphicsInline {
+  font-size: 80%;
+}
+/* CellLabel:Printout*/
+.CellLabel {
+  font-family: Courier;
+  font-style: italic;
+  color: #000000;
+  margin-top: 0pt;
+  margin-bottom: 0pt;
+}
+/* FrameLabel:Printout*/
+.FrameLabel {
+  font-family: Courier;
+  font-style: italic;
+  color: #000000;
+  padding: 8pt;
+}
+.FrameLabelInline {
+  font-family: Courier;
+  font-style: italic;
+  color: #000000;
+}
+/* SO10:Printout*/
+.SO10 {
+  font-family: Helvetica;
+  font-style: italic;
+  font-weight: normal;
+  padding: 8pt;
+}
+.SO10Inline {
+  font-family: Helvetica;
+  font-style: italic;
+  font-weight: normal;
+}
+/* Inert:Printout*/
+.Inert {
+  background-color: #FFFFFF;
+  padding: 8pt;
+}
+.InertInline {
+  background-color: #FFFFFF;
+}
+/* HideContentsInPrint:Printout*/
+.HideContentsInPrint {
+  padding: 8pt;
+}
+.HideContentsInPrintInline {
+}
+/* InlineFormula:Printout*/
+.InlineFormula {
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 6pt;
+  margin-bottom: 6pt;
+}
+.InlineFormulaInline {
+}
+/* DisplayFormula:Printout*/
+.DisplayFormula {
+  padding: 8pt;
+}
+.DisplayFormulaInline {
+}
+/* Code:Printout*/
+.Code {
+  padding: 8pt;
+  margin-left: 39pt;
+  margin-right: 0pt;
+  margin-top: 6pt;
+  margin-bottom: 4pt;
+}
+.CodeInline {
+}
+/* Program:Printout*/
+.Program {
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 6pt;
+  margin-bottom: 6pt;
+}
+.ProgramInline {
+}
+/* Outline1:Printout*/
+.Outline1 {
+  padding: 8pt;
+}
+.Outline1Inline {
+}
+/* Outline2:Printout*/
+.Outline2 {
+  padding: 8pt;
+}
+.Outline2Inline {
+}
+/* Outline3:Printout*/
+.Outline3 {
+  padding: 8pt;
+}
+.Outline3Inline {
+}
+/* Outline4:Printout*/
+.Outline4 {
+  padding: 8pt;
+}
+.Outline4Inline {
+}
+/* Hyperlink:Printout*/
+.Hyperlink {
+  color: #000000;
+  padding: 8pt;
+}
+.HyperlinkInline {
+  color: #000000;
+}
+/* MainBookLink:Printout*/
+.MainBookLink {
+  color: #000000;
+  padding: 8pt;
+}
+.MainBookLinkInline {
+  color: #000000;
+}
+/* MainBookLinkMR:Printout*/
+.MainBookLinkMR {
+  color: #000000;
+  padding: 8pt;
+}
+.MainBookLinkMRInline {
+  color: #000000;
+}
+/* AddOnsLink:Printout*/
+.AddOnsLink {
+  color: #000000;
+  padding: 8pt;
+}
+.AddOnsLinkInline {
+  color: #000000;
+}
+/* AddOnsLinkText:Printout*/
+.AddOnsLinkText {
+  color: #000000;
+  padding: 8pt;
+}
+.AddOnsLinkTextInline {
+  color: #000000;
+}
+/* RefGuideLink:Printout*/
+.RefGuideLink {
+  color: #000000;
+  padding: 8pt;
+}
+.RefGuideLinkInline {
+  color: #000000;
+}
+/* RefGuideLinkText:Printout*/
+.RefGuideLinkText {
+  color: #000000;
+  padding: 8pt;
+}
+.RefGuideLinkTextInline {
+  color: #000000;
+}
+/* GettingStartedLink:Printout*/
+.GettingStartedLink {
+  color: #000000;
+  padding: 8pt;
+}
+.GettingStartedLinkInline {
+  color: #000000;
+}
+/* DemosLink:Printout*/
+.DemosLink {
+  color: #000000;
+  padding: 8pt;
+}
+.DemosLinkInline {
+  color: #000000;
+}
+/* TourLink:Printout*/
+.TourLink {
+  color: #000000;
+  padding: 8pt;
+}
+.TourLinkInline {
+  color: #000000;
+}
+/* FrontEndLink:Printout*/
+.FrontEndLink {
+  color: #000000;
+  padding: 8pt;
+}
+.FrontEndLinkInline {
+  color: #000000;
+}
+/* FrontEndLinkMR:Printout*/
+.FrontEndLinkMR {
+  color: #000000;
+  padding: 8pt;
+}
+.FrontEndLinkMRInline {
+  color: #000000;
+}
+/* OtherInformationLink:Printout*/
+.OtherInformationLink {
+  color: #000000;
+  padding: 8pt;
+}
+.OtherInformationLinkInline {
+  color: #000000;
+}
+/* OtherInformationLinkMR:Printout*/
+.OtherInformationLinkMR {
+  color: #000000;
+  padding: 8pt;
+}
+.OtherInformationLinkMRInline {
+  color: #000000;
+}
+/* MasterIndexLink:Printout*/
+.MasterIndexLink {
+  color: #000000;
+  padding: 8pt;
+}
+.MasterIndexLinkInline {
+  color: #000000;
+}
+/* NotebookLink:Printout*/
+.NotebookLink {
+  color: #000000;
+  padding: 8pt;
+}
+.NotebookLinkInline {
+  color: #000000;
+}
+/* NotebookLinkMR:Printout*/
+.NotebookLinkMR {
+  color: #000000;
+  padding: 8pt;
+}
+.NotebookLinkMRInline {
+  color: #000000;
+}
+/* Placeholder:Printout*/
+.Placeholder {
+  padding: 8pt;
+}
+.PlaceholderInline {
+}
+/* PrimaryPlaceholder:Printout*/
+.PrimaryPlaceholder {
+  padding: 8pt;
+}
+.PrimaryPlaceholderInline {
+}
+/* UnmatchedBracket:Printout*/
+.UnmatchedBracket {
+  color: #000000;
+  padding: 8pt;
+}
+.UnmatchedBracketInline {
+  color: #000000;
+}
+/* SlideShowNavigationBar:Printout*/
+.SlideShowNavigationBar {
+  line-height: 1.25;
+  padding: 8pt;
+  margin-left: 18pt;
+  margin-right: 4pt;
+  margin-top: 4pt;
+  margin-bottom: 4pt;
+}
+.SlideShowNavigationBarInline {
+  line-height: 1.25;
+}
+/* SlideShowSection:Printout*/
+.SlideShowSection {
+  padding: 8pt;
+  margin-left: 18pt;
+  margin-right: 30pt;
+  margin-top: 30pt;
+  margin-bottom: 0pt;
+}
+.SlideShowSectionInline {
+}
+/* SlideHyperlink:Printout*/
+.SlideHyperlink {
+  text-decoration: none;
+  color: #000000;
+  padding: 8pt;
+}
+.SlideHyperlinkInline {
+  text-decoration: none;
+  color: #000000;
+}
+/* PreviousNext:Printout*/
+.PreviousNext {
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 2pt;
+  margin-top: 6pt;
+  margin-bottom: 6pt;
+}
+.PreviousNextInline {
+}
+/* SlidePreviousNextLink:Printout*/
+.SlidePreviousNextLink {
+  padding: 8pt;
+}
+.SlidePreviousNextLinkInline {
+}
+/* SlideTOCLink:Printout*/
+.SlideTOCLink {
+  text-decoration: none;
+  color: #000000;
+  padding: 8pt;
+}
+.SlideTOCLinkInline {
+  text-decoration: none;
+  color: #000000;
+}
+/* SlideTOC:Printout*/
+.SlideTOC {
+  color: #000000;
+  padding: 8pt;
+}
+.SlideTOCInline {
+  color: #000000;
+}
+/* MathCaption:Printout*/
+.MathCaption {
+  color: #000000;
+  padding: 8pt;
+  margin-left: 39pt;
+  margin-right: 0pt;
+  margin-top: 14pt;
+  margin-bottom: 0pt;
+}
+.MathCaptionInline {
+  color: #000000;
+}
+/* ObjectName:Printout*/
+.ObjectName {
+  padding: 8pt;
+  margin-left: 39pt;
+  margin-right: 0pt;
+  margin-top: 6pt;
+  margin-bottom: 6pt;
+}
+.ObjectNameInline {
+}
+/* Usage:Printout*/
+.Usage {
+  padding: 8pt;
+  margin-left: 39pt;
+  margin-right: 0pt;
+  margin-top: 6pt;
+  margin-bottom: 6pt;
+}
+.UsageInline {
+}
+/* Notes:Printout*/
+.Notes {
+  padding: 8pt;
+  margin-left: 39pt;
+  margin-right: 0pt;
+  margin-top: 6pt;
+  margin-bottom: 6pt;
+}
+.NotesInline {
+}
+/* InlineOutput:Printout*/
+.InlineOutput {
+  padding: 8pt;
+  margin-left: 39pt;
+  margin-right: 0pt;
+  margin-top: 6pt;
+  margin-bottom: 6pt;
+}
+.InlineOutputInline {
+}
+/* Box:Printout*/
+.Box {
+  background-color: #E6E6E6;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.BoxInline {
+  background-color: #E6E6E6;
+}
+/* DoubleBox:Printout*/
+.DoubleBox {
+  background-color: #E6E6E6;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.DoubleBoxInline {
+  background-color: #E6E6E6;
+}
+/* 1ColumnBox:Printout*/
+.X1ColumnBox {
+  background-color: #E6E6E6;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.X1ColumnBoxInline {
+  background-color: #E6E6E6;
+}
+/* 2ColumnBox:Printout*/
+.X2ColumnBox {
+  background-color: #E6E6E6;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.X2ColumnBoxInline {
+  background-color: #E6E6E6;
+}
+/* 2ColumnEvenBox:Printout*/
+.X2ColumnEvenBox {
+  background-color: #E6E6E6;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.X2ColumnEvenBoxInline {
+  background-color: #E6E6E6;
+}
+/* 2ColumnSmallBox:Printout*/
+.X2ColumnSmallBox {
+  background-color: #E6E6E6;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.X2ColumnSmallBoxInline {
+  background-color: #E6E6E6;
+}
+/* 3ColumnBox:Printout*/
+.X3ColumnBox {
+  background-color: #E6E6E6;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.X3ColumnBoxInline {
+  background-color: #E6E6E6;
+}
+/* 3ColumnSmallBox:Printout*/
+.X3ColumnSmallBox {
+  background-color: #E6E6E6;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.X3ColumnSmallBoxInline {
+  background-color: #E6E6E6;
+}
+/* 4ColumnBox:Printout*/
+.X4ColumnBox {
+  background-color: #E6E6E6;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.X4ColumnBoxInline {
+  background-color: #E6E6E6;
+}
+/* 5ColumnBox:Printout*/
+.X5ColumnBox {
+  background-color: #E6E6E6;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.X5ColumnBoxInline {
+  background-color: #E6E6E6;
+}
+/* 6ColumnBox:Printout*/
+.X6ColumnBox {
+  background-color: #E6E6E6;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.X6ColumnBoxInline {
+  background-color: #E6E6E6;
+}
+/* FramedBox:Printout*/
+.FramedBox {
+  background-color: #FFFFFF;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 4pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.FramedBoxInline {
+  background-color: #FFFFFF;
+}
+/* DefinitionBox:Printout*/
+.DefinitionBox {
+  background-color: #FFFFFF;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 4pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.DefinitionBoxInline {
+  background-color: #FFFFFF;
+}
+/* DefinitionBox3Col:Printout*/
+.DefinitionBox3Col {
+  background-color: #FFFFFF;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 4pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.DefinitionBox3ColInline {
+  background-color: #FFFFFF;
+}
+/* DefinitionBox4Col:Printout*/
+.DefinitionBox4Col {
+  background-color: #FFFFFF;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 4pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.DefinitionBox4ColInline {
+  background-color: #FFFFFF;
+}
+/* DefinitionBox5Col:Printout*/
+.DefinitionBox5Col {
+  background-color: #FFFFFF;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 4pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.DefinitionBox5ColInline {
+  background-color: #FFFFFF;
+}
+/* DefinitionBox6Col:Printout*/
+.DefinitionBox6Col {
+  background-color: #FFFFFF;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 4pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.DefinitionBox6ColInline {
+  background-color: #FFFFFF;
+}
+/* TopBox:Printout*/
+.TopBox {
+  background-color: #FFFFFF;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.TopBoxInline {
+  background-color: #FFFFFF;
+}
+/* MiddleBox:Printout*/
+.MiddleBox {
+  background-color: #FFFFFF;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 2pt;
+  margin-bottom: 0pt;
+}
+.MiddleBoxInline {
+  background-color: #FFFFFF;
+}
+/* BottomBox:Printout*/
+.BottomBox {
+  background-color: #FFFFFF;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: -5pt;
+  margin-bottom: 0pt;
+}
+.BottomBoxInline {
+  background-color: #FFFFFF;
+}
+/* TopSpanBox:Printout*/
+.TopSpanBox {
+  background-color: #FFFFFF;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 8pt;
+  margin-bottom: -2pt;
+}
+.TopSpanBoxInline {
+  background-color: #FFFFFF;
+}
+/* MiddleSpanBox:Printout*/
+.MiddleSpanBox {
+  background-color: #FFFFFF;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 0pt;
+  margin-bottom: -5pt;
+}
+.MiddleSpanBoxInline {
+  background-color: #FFFFFF;
+}
+/* Picture:Printout*/
+.Picture {
+  font-size: 65%;
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-top: 4pt;
+  margin-bottom: 4pt;
+}
+.PictureInline {
+  font-size: 65%;
+}
+/* OpenCloseItemizedPicture:Printout*/
+.OpenCloseItemizedPicture {
+  padding: 8pt;
+  margin-left: 76pt;
+  margin-right: 2pt;
+  margin-top: 0pt;
+  margin-bottom: 0pt;
+}
+.OpenCloseItemizedPictureInline {
+}
+/* ItemizedPicture:Printout*/
+.ItemizedPicture {
+  font-size: 50%;
+  padding: 8pt;
+  margin-left: 77pt;
+  margin-right: 2pt;
+  margin-top: -4pt;
+  margin-bottom: 4pt;
+}
+.ItemizedPictureInline {
+  font-size: 50%;
+}
+/* ListGraphic:Printout*/
+.ListGraphic {
+  font-size: 50%;
+  padding: 8pt;
+  margin-left: 77pt;
+  margin-right: 2pt;
+  margin-top: -4pt;
+  margin-bottom: 4pt;
+}
+.ListGraphicInline {
+  font-size: 50%;
+}
+/* ListNoteBox:Printout*/
+.ListNoteBox {
+  background-color: #E6E6E6;
+  padding: 8pt;
+  margin-left: 77pt;
+  margin-right: 4pt;
+  margin-top: 2pt;
+  margin-bottom: 6pt;
+}
+.ListNoteBoxInline {
+  background-color: #E6E6E6;
+}
+/* PictureGroup:Printout*/
+.PictureGroup {
+  padding: 8pt;
+  margin-left: 76pt;
+  margin-right: 2pt;
+  margin-top: 0pt;
+  margin-bottom: 0pt;
+}
+.PictureGroupInline {
+}
+/* Sound:Printout*/
+.Sound {
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.SoundInline {
+}
+/* 2ColumnTable:Printout*/
+.X2ColumnTable {
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.X2ColumnTableInline {
+}
+/* 2ColumnEvenTable:Printout*/
+.X2ColumnEvenTable {
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.X2ColumnEvenTableInline {
+}
+/* 3ColumnTable:Printout*/
+.X3ColumnTable {
+  padding: 8pt;
+  margin-left: 2pt;
+  margin-right: 0pt;
+  margin-top: 8pt;
+  margin-bottom: 0pt;
+}
+.X3ColumnTableInline {
+}
+}
+
+.script {font-family: Mathematica5, cursive}
+.gothic {font-family: Mathematica6, Century Gothic}
+.doublestruck {font-family: Mathematica7}

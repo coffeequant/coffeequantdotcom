@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ <id>urn:iweb:C546D087-A014-4FA7-A158-35110ABACFE6</id>
+ <title>Page list Atom feed</title>
+ <updated>2012-08-24T11:00:10+05:30</updated>
+ <link rel="self" href="feed.xml"/>
+ <generator>iWeb</generator>
+ <author>
+  <name>iWeb</name>
+ </author>
+ <entry>
+  <id>urn:iweb:9360A6C7-465A-4A4F-B93C-DC6775284343</id>
+  <title>Numeraire</title>
+  <title xmlns="urn:iweb:">Numeraire</title>
+  <in-navbar xmlns="urn:iweb:">9360A6C7-465A-4A4F-B93C-DC6775284343</in-navbar>
+  <link rel="alternate" href="Numeraire.html"/>
+  <updated>2012-08-24T11:00:10.001+05:30</updated>
+  <content>Numeraire</content>
+ </entry>
+ <entry>
+  <id>urn:iweb:7DC1E855-D785-4574-B97B-00C8B0072A1B</id>
+  <title>Calibration</title>
+  <title xmlns="urn:iweb:">Calibration</title>
+  <in-navbar xmlns="urn:iweb:">7DC1E855-D785-4574-B97B-00C8B0072A1B</in-navbar>
+  <link rel="alternate" href="Calibration.html"/>
+  <updated>2012-08-24T11:00:10.002+05:30</updated>
+  <content>Calibration</content>
+ </entry>
+</feed>

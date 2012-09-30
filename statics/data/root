@@ -1,0 +1,32 @@
+{
+	"name": "Articles",
+	"id": "root",
+	"children": [
+		{
+			"name": "Basics",
+			"id": "basics",
+			"children": true
+		},
+		{
+			"name": "Quiz",
+			"id": "quizzes",
+			"children": true
+		},
+		{
+			"name": "Tutorials",
+			"id": "tuts",
+			"children": true
+		},
+		{
+			"name": "Advanced",
+			"id": "advanced",
+			"children": true
+		},
+		{
+			"name": "TradeAnt",
+			"id": "tradeant",
+			"children": true
+		}
+
+	]
+}

@@ -1,0 +1,41 @@
+{
+	"name": "Executive",
+	"id": "exec",
+	"children": [
+		{
+			"name": "Volatility Calibration",
+			"id": "vcc",
+			"url":"/statics/Advanced/Calibration.html"
+		},
+		{
+			"name": "Outperformance",		                      
+			"id": "outperf",
+			"url": "/statics/Outperformance.html"
+		},
+		{
+			"name": "Asians",		                      
+			"id": "asians",
+			"url": "/statics/AsianOptions.html"
+		},
+		{
+			"name": "Numeraire",
+			"id": "vcc",
+			"url":"/statics/Advanced/Numeraire.html"
+		},
+		{
+			"name": "Correlation Errors",
+			"id": "correls",
+			"url":"/statics/distros.html"
+		},
+		{
+			"name": "Deciphering Exotics",
+			"id": "wop",
+			"url":"/statics/articles/WOP.htm"
+		},
+
+		{
+			"name": "Bayes Applications",
+			"id": "bas"
+		}
+	]
+}
