@@ -1,0 +1,243 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 6.0.7.3 (Linux)"/>
+	<meta name="created" content="2020-06-29T18:48:40.724211607"/>
+	<meta name="changed" content="2020-06-29T22:13:59.190166175"/>
+	<style type="text/css">
+		@page { margin: 2cm }
+		p { margin-bottom: 0.25cm; line-height: 115% }
+	</style>
+</head>
+<body lang="en-IN" dir="ltr">
+<p style="margin-bottom: 0cm; line-height: 100%"><u><b>Bias and
+Variance</b></u></p>
+<p style="margin-bottom: 0cm; line-height: 100%"><br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+Simple questions provide an insiinght into the underlying concept.
+Suprisingly i have found that candidates memorize the model /
+procedure but fail to explain the concepts. 
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+Bias =&gt; How biased is the model</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+Variance =&gt; How much is the variance in predictions</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+Let’s add some symbols. To keep it simple I have kept the function
+as 1 dimensional (so a single feature model). 
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+The orignal data satisfies some pure unknown function which can be
+assumed 
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+Y = F(X)</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+The Model which a modeler built has the follwing function</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+Z = P(X)</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+There will of course be some difference between Y and Z which will
+depend on the goodness of the model. 
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+In basic modeling you train your model for a subset of data and then
+test it against remaining data. Lets say I have 100 data points where
+each data point is (X,Y) pair. If I divide this complete set into 5
+parts then each part will have 20 data points.</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+I can train my model on part 1 and see how well it can predict part 2</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+(X<sub>1 , </sub>Y<sub>1 </sub>)   (X<sub>2 , </sub>Y<sub>2 </sub>)  
+  ................(X<sub>20 , </sub>Y<sub>20 </sub>)</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+Above will be my input to the model where it will try to find the
+parameters to match Y values for corresponding X values. If model is
+biased then it will be very good in finding Y<sub>1 </sub>.... Y<sub>20
+</sub>for corresponding X<sub>1 </sub>to X<sub>20. </sub>If I shift
+to a newer input such as X<sub>21 </sub>then the output will be very
+different from Y<sub>21</sub></p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+How do we express this anomaly in simpler terms?</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+E[P(<font face="Liberation Serif, serif">À</font>)] – Y(<font face="Liberation Serif, serif">À</font>)
+– error =&gt; Bias</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+Isin’t it an elegant way of expressing the crude thought? E stands
+for expectation of the function and it denotes how output of P(X)
+changes for different sets of training data for a new input <font face="Liberation Serif, serif">À</font></p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+error =&gt; For now can be assumed to be a noise term whose average
+value is 0</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+To be more precise bias doesnt consider the error term as it’s
+average value is 0</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+So Bias = E[P(<font face="Liberation Serif, serif">À</font>)] –
+Y(<font face="Liberation Serif, serif">À</font>)</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+Variance =&gt; E[P(<font face="Liberation Serif, serif">À</font>)<sup>2</sup>]
+- ( E[P(<font face="Liberation Serif, serif">À</font>)] )<sup>2</sup></p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+Bias =&gt; On average how far are we from the actual result. Here
+average means results for different training  data sets. 
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+Variance =&gt; How much is the error in the results.</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+For example with one training set the ouput is very good but with
+newer set the learning is bad. The best analogy is kids puzzle
+solving. If they learn to solve a jungle picture based puzzle will
+they repeat the same success on newer vegetable picture puzzle? 
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+Intuitively there is always a tradeoff and you want a model with low
+bias and low variance. 
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+Low Bias + Low Variance =&gt; Holy Grail below!</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<img src="BiasVariance_html_5f87dcccc3b85982.png" name="Image1" align="left" width="259" height="194" border="0"/>
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+  
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+Models with low variance tend to be less complex with a simple
+structure. They also tend to be more robust. Models with low bias
+will generally be more complex. It’s like learning to solve a very
+complex puzzle to perfection but you might end up learning that only
+one puzzle. 
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+<p style="margin-bottom: 0cm; font-weight: normal; line-height: 100%; text-decoration: none">
+<br/>
+
+</p>
+</body>
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 4.4.3.2 (MacOSX)"/>
+	<meta name="author" content="animesh "/>
+	<meta name="created" content="2014-01-25T00:00:01.796269824"/>
+	<meta name="changed" content="2015-05-27T11:59:28.607903000"/>
+	<meta name="CHANGEDBY" content="animesh ">
+	<meta name="CHANGEDBY" content="animesh ">
+	<style type="text/css">
+		@page { size: 8.27in 11.69in }
+		td p { margin-bottom: 0in }
+		p { margin-bottom: 0.08in }
+		a:link { so-language: zxx }
+	</style>
+</head>
+<body lang="en-US" dir="ltr">
+<p style="margin-bottom: 0in"><font face="Chalkduster"><font size="3" style="font-size: 12pt">In
+a typical market scenario orders are matched from buy side and sell
+side. If someone wants to buy 2000 shares at 500/share then we need
+someone on the opposite side willing to sell 2000 shares at
+500/share. Indeed this is a very crude example, coz market making is
+bit more complex. The above two persons on opposite sides can be a
+group of people on opposite sides. The best execution price selected
+is generally based on volume. Ignoring the complexities of the market
+making algorithm, a trader needs to understand how the order book
+works. In an exchange we have the following structure (sample values
+placed)</font></font></p>
+<p style="margin-bottom: 0in"><br/>
+
+</p>
+<table width="100%" cellpadding="4" cellspacing="0">
+	<col width="64*">
+	<col width="64*">
+	<col width="64*">
+	<col width="64*">
+	<tr valign="top">
+		<td width="25%" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">Buy
+			Quantity</font></font></p>
+		</td>
+		<td width="25%" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">Buy
+			Price</font></font></p>
+		</td>
+		<td width="25%" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">Sell
+			Price</font></font></p>
+		</td>
+		<td width="25%" style="border: 1px solid #000000; padding: 0.04in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">Sell
+			Quantity</font></font></p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="25%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">100</font></font></p>
+		</td>
+		<td width="25%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">100.5</font></font></p>
+		</td>
+		<td width="25%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">100.7</font></font></p>
+		</td>
+		<td width="25%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">50</font></font></p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="25%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">200</font></font></p>
+		</td>
+		<td width="25%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">99.5</font></font></p>
+		</td>
+		<td width="25%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">101</font></font></p>
+		</td>
+		<td width="25%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">100</font></font></p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="25%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">300</font></font></p>
+		</td>
+		<td width="25%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">95</font></font></p>
+		</td>
+		<td width="25%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">105</font></font></p>
+		</td>
+		<td width="25%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">150</font></font></p>
+		</td>
+	</tr>
+</table>
+<p style="margin-bottom: 0in"><br/>
+
+</p>
+<p style="margin-bottom: 0in"><font face="Chalkduster"><font size="3" style="font-size: 12pt">A
+trader can place Bid/Offer for a future contract or he/she can place
+a stoploss order. In a long gamma position it generally results in
+“buy low sell high” scenario. This can be labeled as earning the
+<font color="#dc2300"><b>spread (offer price -bid price)</b></font>.
+Conversely in short gamma we place stop loss orders. It takes a bit
+of practice to understand the spread capturing based on the
+underlying market dynamics. </font></font>
+</p>
+<p style="margin-bottom: 0in"><br/>
+
+</p>
+<p style="margin-bottom: 0in; text-decoration: none"><font face="Chalkduster"><font size="3" style="font-size: 12pt">One
+of the crude ways is to place spread orders around daily vol limit.
+For instance if 1Day vol calculated with 1 Hour Sample data is 10%
+then spread can be (Spot +/- 1.65*Spot * Vol/100). This intuitively
+is relying on confidence interval as can easily be seen from the
+number 1.65. Assuming that return distribution is normal, trader
+hedges 10% of the time. The vol can be scaled for long duration
+options. Of course delta hedge required should in integer number of
+LOTS. The rule is not perfect coz if volatility is low your theta
+decay is not being hedged properly by gamma. </font></font>
+</p>
+<p style="margin-bottom: 0in; text-decoration: none"><font face="Chalkduster"><font size="3" style="font-size: 12pt">Let's
+take a small scenario, sample market order book, (assume spot = 100)</font></font></p>
+<p style="margin-bottom: 0in"><br/>
+
+</p>
+<p style="margin-bottom: 0in"><br/>
+
+</p>
+<table width="100%" cellpadding="4" cellspacing="0">
+	<col width="64*">
+	<col width="64*">
+	<col width="64*">
+	<col width="64*">
+	<tr valign="top">
+		<td width="25%" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">Buy
+			Quantity</font></font></p>
+		</td>
+		<td width="25%" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">Buy
+			Price</font></font></p>
+		</td>
+		<td width="25%" style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">Sell
+			Price</font></font></p>
+		</td>
+		<td width="25%" style="border: 1px solid #000000; padding: 0.04in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">Sell
+			Quantity</font></font></p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="25%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">100</font></font></p>
+		</td>
+		<td width="25%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">100.5</font></font></p>
+		</td>
+		<td width="25%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">100.7</font></font></p>
+		</td>
+		<td width="25%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">50</font></font></p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="25%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">200</font></font></p>
+		</td>
+		<td width="25%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">99.5</font></font></p>
+		</td>
+		<td width="25%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">101</font></font></p>
+		</td>
+		<td width="25%" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">100</font></font></p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="25%" bgcolor="#94bd5e" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">5000</font></font></p>
+		</td>
+		<td width="25%" bgcolor="#94bd5e" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font color="#dc2300"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><b>90</b></font></font></font></p>
+		</td>
+		<td width="25%" bgcolor="#94bd5e" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font color="#dc2300"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><b>110</b></font></font></font></p>
+		</td>
+		<td width="25%" bgcolor="#94bd5e" style="border-top: none; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">6000</font></font></p>
+		</td>
+	</tr>
+</table>
+<p style="margin-bottom: 0in"><br/>
+
+</p>
+<p style="margin-bottom: 0in"><br/>
+
+</p>
+<p style="margin-bottom: 0in"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="text-decoration: none">If
+the market is moving higher up the huge sell quantity at 110 will
+influence the market. A trader with a long gamma position can take up
+a short position at </span><span style="text-decoration: none"><i><b>109
+(to play safe!) and a long at 91</b></i></span><span style="text-decoration: none">.
+A huge sell order might pull the market down, so the rule above has
+to take into account large orders. </span></font></font>
+</p>
+<p style="margin-bottom: 0in"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="text-decoration: none">This
+is again a very specific scenario and not all the up/down movements
+can be covered by any hedging strategy. Structure of the order book
+plays a major role in deciding the spread limits. Quants generally
+calibrate the price movements in a price impact function. This is
+simply the expected price impact for some Quantity Q of buy/sell
+order. A simple integration gives the final </span><font color="#dc2300"><span style="text-decoration: none"><b>expected</b></span></font><span style="text-decoration: none">
+execution price. </span></font></font>
+</p>
+<p style="margin-bottom: 0in"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhUAAAF6CAMAAACZcFpeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC9FBMVEUAAAAAARgCER0ZAQAeEQUUHx0AAScAATUJGSwLHDIbDC8bCjYaIBwOJDoSJzQkAQAlFQU5AwA1KRY9MBoiKSYjNj84KSc6PzwACUsADFQAF1cAGGYAH3YSLk0EJWcAJHcKOXkiNk8nP14jPWETQ1EfRmodSn8qRE4oRGM5WXZIBgBNGABSDQBcEgBCLQlJLBZTJAJaLxJNITBjFgByHQBnIgBnOhZ1IwB4OQprLzNLQixJRTVdQitaRzR5RQ56RxhpQCJmTDJsUTp3VDdJSUtGVXFdbEBQa21kfll2cmgAKIUFNoMBN5kAO6gUSpEKSqYCQ7EOUasMU7gWU6ISWLEbZrU2V4ozbJwkY6ombLYqcbszZa4xca00dbQSX8IWZ8UdcswkZcQkec0oftFEZYxMbZZGeLRRfqIrh9cxg881h9I5lN0zmeI6pelbhapxh51oj7tCjdFJmdtbjNFCneJVo9xJpeVHsu9LtvFYq+VXu/Fxns5qqNlnu+16u+dvwO9mxPR7x+dxy/V70fiJKgCIOAWcOAGaQAaBTiSSVyGjQQSnUA6lVBSySQa2WxShXymTd0ewcFDBXhHDYxXNcx3AbyPMdyLSfCKXqn6gg167gkm8jVmoj3a6oX/XhyzUiTXfki/ckzrimzjMjEXTkkjRmV3Qn3DdrkrboVvHomnXpWTRqHnjn0LnqEvkp1Pvt1Xyvlzqum70wV7zxWv2zXX4032Hl6WRmaKQo7WglIejmpS9r6qDrc+DrdeHsdiUrNaft+OvuMuAzfSG1viex+mRzPCZ2fea4/y3xdS90N6ixumo3PeyyeS23vao5vy56vu78f7Rro/Qvq7luYHayZjVwqTXyrfrw4TvzJrq0Z/zz5T41YP32ZXizLbl36vxzaP12ab845z96Kf86rb/8brF3vPc4NnC6/vH9P7V5fPZ9/7h2czp19bz3sTk3uLo5t787cP46dP+9MP++Nfr6+rp5/Tn+/7+++f+/v78A/sAAAD///8lT7AtAAAA+nRSTlP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8A3mBFIwAAD/RJREFUeJztnXt8HFUVx890YlIV2C4WTRNsEZVHCIoGbH0gYEUEWp6iYCggoGJBBbTyllf5VMv7WUWFUnlUBaRNQQRBXrZCoQ8RqA0IJMGWKGKzIXPnP+eRtNk9k93Zze7Myb2/7z/ZJJu9Z3K+nzNn7p0HuQAUQmkHAAQCKwAHVgAOrAAcWAE4sAJwYAXgwArAgRWAAysAB1YADqwAHFgBOLACcGAF4MAKwIEVgAMrAAdWAA6sABxYATiwAnBgBeDACsARZoWwcExFWBqEhWMqstJAssIxFllpIGghAllZgBUyEJUFghUyEJUFghYyEJUEWCEESUkgWCEESUmAFVKQlASCFkIQlAOCFVIQlANYIQZBOSBoIQU5KSBYIQY5KYAVchCWAmHhmIqwNAgLx1SEpUFYOKYiLA3CwjEVYWkQFo6pCEuDsHBMRVgahIVjKsLSICwcUxGWBmHhmIqwNAgLx1SEpUFYOKYiLA3CwjEVYWkQFo6pCEuDsHBMRVgahIVjKsLSICwcUxGWBmHhmIqwNAgLx1SEpUFYOKYiLA3CwjEVYWkQFo6pCEuDsHBMRVgahIVjKsLSICwcUxGWBmHhmIqwNAgLx1SEpUFYOKYiLA3CwjEVYWkQFo6pCEuDsHBMRVgahIVjKsLSICwcUxGWBmHhmIqwNAgLx1SEpUFYOKYiLA3CwjEVYWkQFo6pCEuDsHBMRVgahIVjKsLSICwcUxGWBmHhmIqwNAgLx1SEpUFYOKYiLA3CwjGVJNLQmRm8bfu4XR5R6YcDSpKoFR5fH0g9HFCSZKyov7i//53+/hemkXVB0WoBK0SQkBVPhq/69qRDixYLWCGCZK1QC6h5Q9rhgJIkbMUialyTdjigJAlbcQM1b0w7HFCSZK3o3p2OQF8hn+SOQfr7//2rPaj+idTDASVJeL7COqP4NBasEEGiVozf/ynM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" name="Object1" align="left" width="334" height="231" border="0"/>
+<br/>
+
+</p>
+<p style="margin-bottom: 0in"><br/>
+
+</p>
+<p style="margin-bottom: 0in; text-decoration: none"><font face="Chalkduster"><font size="3" style="font-size: 12pt">Delta
+or Gamma hedge is easily understood in the first few days of trading
+vanillas. Hedging an exotic option, requires intuitive understanding
+of greeks along with order book knowledge. Quants can calculate
+greeks using mathematical models, but a trader needs to know
+intuitively the profile of delta, gamma, volga and other greeks. In
+the following post I will be hand-drawing the greeks profiles.....</font></font></p>
+<p style="margin-bottom: 0in"><br/>
+
+</p>
+<p style="margin-bottom: 0in; text-decoration: none"><font face="Chalkduster"><font size="3" style="font-size: 12pt">Let's
+take an example of ONETOUCH Binary Call. It cannot be replicated
+using European calls or a call spread. </font></font>
+</p>
+<p style="margin-bottom: 0in"><br/>
+
+</p>
+<p style="margin-bottom: 0in; text-decoration: none"><font face="Chalkduster"><font size="3" style="font-size: 12pt">The
+payoff function is shown below, the option pays 1$ as soon as strike
+is touched. </font></font>
+</p>
+<p style="margin-bottom: 0in"><br/>
+
+</p>
+<p style="margin-bottom: 0in; text-decoration: none"><font face="Chalkduster"><font size="3" style="font-size: 12pt">As
+the spot moves towards the strike the option value will increase.
+After the strike is crossed the option value becomes “1”. As the
+spot approaches the strike the increase in option value will be less.
+So initially the change in option value is more, but near the strike
+this change is slow. Mathematically or crudely! this can be
+understood in terms of a function f(x). Where,</font></font></p>
+<p style="margin-bottom: 0in"><br/>
+
+</p>
+<p style="margin-bottom: 0in; text-decoration: none"><font face="Chalkduster"><font size="3" style="font-size: 12pt">f(x)
+= 1 at x = y1</font></font></p>
+<p style="margin-bottom: 0in; text-decoration: none"><font face="Chalkduster"><font size="3" style="font-size: 12pt">f(x)
+~ 0 at x = y0</font></font></p>
+<p style="margin-bottom: 0in"><br/>
+
+</p>
+<p style="margin-bottom: 0in; text-decoration: none"><font face="Chalkduster"><font size="3" style="font-size: 12pt">where
+y0 and y1 are two extreme boundaries. Since the payoff is convex
+function the derivative of a convex function will have a smooth
+shape, as shown below</font></font></p>
+<p style="margin-bottom: 0in"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhUAAAF7CAMAAABSLIn7AAAACXBIWXMAAA7EAAAOzgFvxOaRAAAC91BMVEUAAAAAAAwKAAAAAhQCER0TAAAcAAAbCwAdEQQAACIAACkACyQAADMAADgIGSwIHTQbCjYMICkOJDoaJCcWJTkkAAAiDwMqAAAlFQU5AQA9EwArKR40KBY9MBooKikjNj86PzwAA0UABUgACU0ADFEAFk8AGVQAGGcAHXATJ0IeMEUDKmMAJHciNk8nP14TQ1EfRmooQEgqQl0qRWY0WHRHBgBSDABTEQBDKQdJLBZaLxJiFABmHwBpGABrIgBnOhZ0JgF8OAlLQixdQitaRzR6TB1pQCJnTDNsUTp3VDdFTlFJTWZDXn1dbEB8cGMALIcBNI4ANJoAO6cSTZkfWpoISKgCQ7IFSbUJTLIOUasMVLocV6AQVrAfa7koZ6oqbbUxca0zdLUVZcUec8wkecxEZYxMbZZScJRGf7dYfaErhtcyi9g5lN01nOQ6pelxh51ghrNukblBmt9DneJWpNxGru1KpORJretLs+9ItPBXr+lWu/Jnk8JkquFtvu5zt+Vjw/R8yel1yfR70feGKQCFOQeUMgCdNgCdPAKAXD+dZjSvTQqjVRi2WxS1cCqGYEHBXhHGaxnMch3MeCPTfSOgg165gUqrh2eoj3avkmzWgibWijTfki/ckzrjnj/ooznsqT3SkkrVl1zQn3DcoFjYpmXQpn/jn0LnqEvrs1jxtkvnsmjgtHf0wl/zxWzzyHL4032JmqmJpbyglIe9q6aDrc+HstqxuceD1fmG2PmK2fqQxeid1fSa4/y3xdS90N6iyuqj3Pi0y+K23vak6f6o5fyx7v684fe64vi97f218P/Op4TPu5/VsIvQvq7MvsHayZjZzLvpwoTvzJrq0Z/zz5T51YH52YvtzKL12af127P84pn96ab24Lj97LL867r/8LfM19/c0cPM2OXH6frC9P/J9f/Y9v7z3sTo5t7249P+88j989L/+db/+tvn7e/r6OPu7u3j9f3k+//q/P7+++fz9vXy/v7+/fT+/v78A/sAAAD///+H02spAAAA+3RSTlP/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////AOOfA8gAAA3xSURBVHic7d1pmFtlGcbxNzMwdYYCKo7toKK4FNCKayuKG4oobiB6obiAIKiA4gbKJSpCwR0FRFCsG4IiyKIiChZ3UHFHLSA4VAVGbFGhHSYnn8xJSCeTJ8kkOefkuXPm//sA7fV2eu73mbsnJ5kzmVACGgXvABBEK2DRCli0AhatgEUrYNEKWLQCFq2ARStg0QpYtAIWrYBFK2DRCli0AhatgEUrYNEKWLQCFq2ARStg0QpYtAIWrYBFK2DRCli0AhatgEUrYNEKWLQCFq2ARStg0QpYtAIWrYBFK2DRCli0AhatgEUrYNEKWLQCFq2ARStg0QpYtAIWrYBFK2DRCli0AhatgEUrYNEKWLQCFq2ARStg0QpYtAIWrYBFK2DRCli0AhatgEUrYNEKWLQCFq2ARStg0QpYtAIWrYBFK2DRCli0AhatgEUrYNEKWLQCFq2ARStg0QpYtAIWrYBFK2DRCli0AhatgEUrYNEKWLQCFq2ARStg0QpYtAIWrYBFK2DRCli0AhatgEUrYNEKWLQCFq2ARStg0QpYtAIWrYBFK2DRCli0AhatgEUrYNEKWLQCFq2ARStg0QpYtAIWrYBFK2DRCli0AhatgEUrYNEKWLQCFq2ARStg0QpYtAIWrYBFK2DRCli0AhatgEUrYNEKWLQCFq2ARStg0QpYtAIWrYBFK2DRCli0AhatgEUrYNEKWLQCFq2ARStg0QpYtAIWrYBFK2DRCli0AhatgEUrYNEKWLQCFq2ARStg0QpYtAIWrYBFK2DRCli0AhatgEUrYNEKWLQCFq2ARStg0QpYtAIWrYBFK2DRCljKrVDOlm/Kk1fOlm/Kkw/K4XJNePCBVngRHjytcCM8+EAtvOjOPdAKN7pzpxV+dOceqIUb3bHTCj+yYw+0wo/s2AO18CM7dVrhSHXqgVY4Up16oBaOVIdOKzwpD105W74pT145W74pT145W74pT145W74pT145W74pT145W74pT145W74pT145W74pT145W74pT145W74pT145W74pT145W74pT145W74pT145W74pT145W74pT14x28K450N5g3rZan3Iey+Ut6eWrb4L+e6F8ubUsoU2v8sX5b2JZWuMk+PThfLOxLLZOGIB06O8Ma1szdJoJUyP8r60sjVNk9NHEeVdSWVrFUYqZFqUNyWVrWUYqZQp8d7T2vHqq4WFB7zpF1HDmne2em2yKMVMifeWaq0oG31/Qy28s9Vrl0UpZzq8d7R2fPSEu+6663//+Nz2YfQDc2vhna1O+yhCQdPhvaG142NXVH81+fSw821z1ryz1aEVfTXbitIlI4X3zDlZeGebNV8SnaTp8N5PXSumPxRetal+zTvbrHmT6ERNhfd2ytcVtVYUzwg7316/5p1t1vxJdLKmwXs3deeK6Mthx2vq17yzbdZJEJmwafDeTF0rSheExVfXr3ln24xW9FndI0jpgqGtr6pf885W01kOlbRp8N5L/SPIl8LDr61f885W02EOlbgp8N5KXSuKp4flU/Vr3tlqOs2hkjc5753UPYLceVJ4teIz045jiORNgfdOZs8V0cUjw8fNWfPOdq/OY4gETs57I7OtuOWZYZ85DyDu2aq6SaGRODnvfWz+6thZ24exVYpfHaMV/Vf3lfTFxyt+Jb27EBKRk/PeRq0Vw48+/NbGNe9sFV2GkMicmPIuJLJ1G0IidFLKm1DI1nUGhdCJKW9CIVv3GRRSJ6W8B4FsvUQQiJ2U8hYEstEKOf7Zekvgnzsp5R34Z6MVetyz9RrAPXhSyhtwz0YrBHln6/343smTUs7vnY1WKHLOluDwylPthHL+wW2Fd/Sk3ONHf/3U0jC86+Uzdsk3W6Kju481Ge/40YVLQmG7pSEctMms0Qov3vGvnwgHTpWK35wovLPxTU18syU8uPdck3FOXzwlHHB3+f/R+Y1vU1CiFX6c06/fvXBs5ReTK0ZXNS56Zkt6bFqRwE0T4X47xB40FI5tXBzkVngPNhnn8Ncv2XwzbziqcdExW/JD04re3TQxdmXLRVrhxTn8upXhmMpzj+nf/9O8YuGXLY0jD3ItnLNPfzzsG3/DWPSNLRdf2bhIK7x4Z790SXjF7aXouhXhteZlLFrhxTt7dO5I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" name="Object2" align="left" width="399" height="305" border="0"/>
+<br/>
+
+</p>
+<p style="margin-bottom: 0in"><br/>
+
+</p>
+<p style="margin-bottom: 0in; text-decoration: none"><font face="Chalkduster"><font size="3" style="font-size: 12pt">Although
+this would have been a smooth bell curve I can't draw it properly.
+Apologies for my bad drawing skills on mac. </font></font>
+</p>
+<p style="margin-bottom: 0in"><br/>
+
+</p>
+<p style="margin-bottom: 0in; text-decoration: none"><font face="Chalkduster"><font size="3" style="font-size: 12pt">Since
+delta is actually the first derivative, we move on to the next one.
+Drawing the second derivative is quite easy by looking at the first.
+Differentiating the above results in a sign change graph.
+Mathematically think of it as slope being positive and then being
+negative. So the graph picture below should make sense,</font></font></p>
+<p style="margin-bottom: 0in; text-decoration: none"><font face="Chalkduster"><font size="3" style="font-size: 12pt">This
+also should have been symmetrical (bad </font></font>
+</p>
+<p style="margin-bottom: 0in; text-decoration: none"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhQAAAF7CAMAAAC97uLFAAAACXBIWXMAAA7DAAAOzQFZ7IXqAAAC9FBMVEUAAAAAABoHEAMXAAAVAhEeEQcAASYAAjYGFiobCjYWIiwlAQAjFgclHh86AQA7FAA8KRYlMy0ABkgADVQAF00AFVgAGGgAHXIEKUUELVcSJ0MAJGsAJHoIMmsINXQpGkgpO1AjPWETQ1EfRmoqQlUsWHsySWI9VnRHBwBFEQBSDgBbFABEIAFNMBtSKQNaLxJUPClnGQBzHQBrLANnOhZ7IwB6OgtVRS96TB1pQCJjRzNsUTp1UzZNVV1JTWZDXn1XWGZqSGRrYlJlbnIAKocFOYsANJcAPKgNQYcKRZoURoYSTZkGRacHS7MOUasNVbcXWqkQWrsbZbomcIEoZqglaLQ0Za82ca40dbUSX8IXaMUedc0lecwifNJEZYldfotRfqJpdotSgWk2lLcphtc3i9U6k9w2muI7oeZZi79xh51ukbl4l7dOkMtDneFXo9xHqulHsu9UrOdTs+1Wu/FgjsBnk8Jyn89sqdlvuuplxPR1wu91zvZ60fiIKgCHNQOYNwGSNx+jOwGJSguPTReaTxWGXzOfXSKRfSyoRgalVhu4UwyzXBS9YRSrazK3bCq6cjqEakqId1yVdE6RbmajZFrBXhHEaRjLcRzNeSbReyKXin2wg1Soj3axjm/XhSnVjDbfki/ckjfimTfloDvFhkPTkknSl13FnHfUnmLYpGXjn0Lop0TjqFbosEvttVXzvlnsuWfltnb0xmf0yXT30XqPl5OJpby/q6q+saS/uLWFqs+BqdGIsdmWu96jt8W0u8mBwqSwyoiExO2LyvCH1/idxuSSyvCZ2/ib4/y90N6o1vK269eo5/y36vy28P7IloPOp4TJt57gso3ayZjXwabXyrfU5qvsw4XvzJrq0Z/zz5T514X52pXx1an845z96qj86bX/8bvN2N/fxMvez97e2M/L3uvS6s3C6frH9P7d7/vY+P7q2Mjz3sTo5t714tT+9Mr++Nfs7e7u7/Ho/P7x6On+++f+/v78A/sAAAD///9+BoIaAAAA+nRSTlP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8A3mBFIwAAEsRJREFUeJztnX28HFdZx5/tNHtjt95KMKmksaIWvIQXbTDVgrwIIVYoSlUitg2+EKQq2haqrdCXWFEMtEUUaIlobJu2UAttSeIrVdQGGmpaUVGKabIJKKZJxbuQ7tn/PHNmd+9Nnt2dM2fOmXufOb9vP5/c7f3M2/M733vmzOy8UA+AE6CF3gCw+IAUgAEpAANSAAakAAxIARiQAjAgBWBACsCAFIABKQADUgAGpAAMSAEYkAIwIAVgQArAgBSAASkAA1IABqQADEgBGJACMCAFYEAKwIAUgAEpAANSAAakAAxIARiQAjAgBWBACsCAFIABKQADUgAGpAAMSAEYkAIwIAVgQArAgBSAASkAA1IABqQADEgBGJACMCAFYEAKwIAUgAEpAANSAAakAAxIARiQAjAgBWBACsCAFIABKQADUgAGpAAMSAEYkAIwIAVgQArAgBSAASkAA1IABqQADEgBGJACMCAFYEAKwIAUgAEpAANSAAakAAxIARiQAjAgBWBACsCAFIABKQADUgAGpAAMSAEYkAIwIAVgQArAgBSAASkAA1IABqQADEgBGJACMCAFYEAKwIAUgAEpAANSAAakAAxIARiQAjAgBWBACsCAFIABKQADUgAGpAAMSAEYkAIwIAVgQArAgBSAASkAA1IABqQADEgBGJACMCAFYEAKwIAUgBGXFHFV60xcMcVVrTNxxURxletKVCkRpLAiqpQghR1RpUSwwoqYQiJIYUdMIUEKS2IKiWCFHTFlBCksiSgjghSWRJQRwQpLIooIUtgST0QEKWyJJyKCFbbEkxCksCauhOKq1pm4YoqrWmfiiimuap2JK6a4qnUmrpjiqtaZuGKKq1pn4ooprmqdiSumuKp1Jq6Y4qrWmbhiiqtaZ+KKKa5qnYkrpriqdSaumOKq1pm4YoqrWmfiiimuap2JK6a4qnUmrpji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" name="Object3" align="left" width="400" height="297">
+  <br clear="left"/>
+</img>
+<br/>
+
+</p>
+<p style="margin-bottom: 0in; text-decoration: none"><font face="Chalkduster"><font size="3" style="font-size: 12pt">drawing!).
+On both sides of positive and negative gamma.</font></font></p>
+<p style="margin-bottom: 0in"><br/>
+
+</p>
+<p style="margin-bottom: 0in"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="text-decoration: none">So
+when the </span><font color="#800000"><span style="text-decoration: none"><span style="background: #ffff00">gamma
+is positive</span></span></font><span style="text-decoration: none">
+a 1 unit change in </span><font color="#800000"><span style="text-decoration: none"><span style="background: #ffff00">spot</span></span></font><span style="text-decoration: none">
+will lead to </span><font color="#800000"><span style="text-decoration: none"><span style="background: #ffff00">1
+x (</span></span></font><font color="#800000"><span style="text-decoration: none"><span style="background: #ffff00">gamma</span></span></font><font color="#800000"><span style="text-decoration: none"><span style="background: #ffff00">)
+increase in delta</span></span></font><span style="text-decoration: none">.
+</span><span style="text-decoration: none">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASoAAABRCAIAAADqynzOAAAfl0lEQVR4nO2dCTiU2x/HX5J17FG2yJJ17FuXFuJ2K1TaJJQWWlW3TeUqSbcNt+VWSqLCVahkuVLdunVD9jXZ2hCyLzEa5v++877GzBiDSej5n88zT/3mnPOeOe94v3P23+EgkUgQAAAYCzjGugAAwP8vQH4AwJgB5AcAjBlAfgDAmAHkBwCMGUB+AMCYMUz59XTG3gwKfRBf/q6axMGpqIxfsMzJ3tqEndWPL4i56ngkgJ1yfXePm2+kk7n8cPN5Gey37UIYJRtOadN/7/0BfloA45xhPKL173JW2ix9nFdGCUlLTQ6/ccV/3q6nsX78LD3scjNtzpyUzM1N8/Pw+tiJhAiLC7GQj+r8pT78khHXz4XEJcNv8VLGQHuA8c9Qn9LOupK5ZrNy3rVAEI+2vqaoIK6yLKfoXR0clZnov3KXXPx5NxY+nk94srnlQjOT6X57vMgB8ngFERbyEZ4sO3+pbEvmI1R+6kp4FjIBAEaZIcqv22ODbU4dztPPf9tGezEcNxpaVZZ95sAe/zuPEy54PNq61kJFgLVCNJYVfCQbOHVtaR7W8kBILctBDVVtPdZzAQBGiyHJr/RxkO/TtpjkVGsNaepwSQVtv9sPVTycXH1CQ4LCLU65slaI0pxs1MBrTfuGRiOxvPA1auloK/SPfleQlvPhy8L5s0G7FDBOGNKj+KGD+25kHJ32emF38b4cG5WUkJBEPOXK2pOdnVOEGpoqJixlgED68jY9r51swi1YYbpYYut7a8uZzSqOi+bPZvkjAICRZUh6MbdyZBbNhtu5Y92DnbG1REiSJf0VfChGDSVNVVauJ9P4tqCSbOCUGbRg/bZvyP9EWGSrzHL+AMCIMzINMaN5FhDhDrFnqOm7iYS6z3WEr91cnLyi4kIfX6Py4zE2kBvoks625tq6BkI3JDZZQqi380lNcVYWauD15OjuqvRJ8P6QR7ChpKQ/aNm+NDc1tLaQSBMEhIQE+fngECLxKwmaMJGD5ekVAIAxw5YfrJyayqqWDgL7RE4Zmak8nEgOfDIKSlDZx7quqZKczC9/nRx7+o+r0Q9imjuwEH5+ntZW8hs+NeUp/XXV/TTiuu+lS7HPMilBPy9xOnrqpJHiFOp0L7MLUUNT5SfKtYXp/0ZFxtwMvY6+T4w4WvjwNGyQJA1irx6h1hOxozHo0rkbIbf+yy2lBIopalibGyeEBS45GPXnAdtBvhoAYJgMQ34FybH+F65GwspphSsqHqijA+IRWrrC3uuYtzoiBCFeTjYmlxOaK/e6OJ+/nQTbKnNs3K3nTOZjS099eeP6HTSBlLbmJNoKpq2mZIPjsoikXPjz7NbvWPizUfr9G2fD/n5498bDZy/TszP1ZPgpictLMfkpaqpjQV0V61c6VzS1VjQ0owGNVeUtVYihKmFM/VGpMdfWbN33pqIBwok5b/nVUEe1paYsISziaWF+UGk+nEDTQHvoXxQAMESGJj9ii/dmO8/ABNi0XX/Q030LXkGK1E3IfBbvsdtdQ/9JWtKVT5CQKG7igBk0f5xjapKS/xGu7byvhhzasARVqrPrzp/Vtizeewm2dbVpOmZfat7MNDXNLq2D+KaGPXi4ygyJdVixrLFa/saTCqih9EpAXMAxu97krQVpmPwMdOSwME7Z5LJ3LW/iBVUWwu+4FReWl8T2L2Ji6PFfHA7BhoreL3fv/6UiJYiG7zv4q56AeGYbbPLracoM6YsCAIbDEOT3tWnT7NkByUgV5Bf+eJfdjN5LuQzmLknMsty1wGTlss1ELtzEATPr2me/gKw9yCvwrsf6udRxuSXYMhpFeaqOGal9nbUNoj0I8g+5h2qPzEQNvB4Eyw+CKur71t90N5Zmkas1iE9bXZKmBVuahU0Gqmkp9tdeZVakPVl7EmqWT/+Nn8zbV4ETPpUWtpEtAbyi2IC/LAAAywwqP5K3gxVZe5D94ct92qPAhvs95GaUrBYkbT1pgMz+u3XGPx5pwimZrz1Iqz1YOAWZKailb6JOCY2+6BWRhozHaCzeu2OpDlX6rozkVNSSk9ekhNYUFaDtyykaGqK0xUjPyEMNTSUD+pL1NLk4bG8gm6euBVNrD6Y88z/yMjhouhFeiFmzGgBgkUHkV5wY6Hn7P9gQUbC4cMiJYRpucU17h1nxtbKMK4iuzzsPHEfNQz7e9J9HrM7PbyFbQlrKk9Cw7i/v3D1Pk01+/xMHqZ/822f3R7yqhg2cFH6Pyy+U8OzUNNTQ1VGjU0peGTYXr6JHvxLtYeCJ+EIkN6WFrquNJeliC3LeoAZeVZHhnQEA3whz+XUdOXoUtbbt8RAeuP3V8OGjgY4Lw6jsmJD0CmQ2XEx7ub0x/cR9a3luAVrFSBrIC2GFSQkLKSFXSWK61nOUhdDA9sbKs0d+PXTuNmyLyGrcTXg4TbCvQHml5aihKEtdVcJ0FGVno5aeJt1GCsLlS1dQa+vmnf2rt+SCXNSQ1/ipXyQAMAIwk199fkL4ywqyKbnaYcD1KN1txbEP3572nMMw9l5sDGrMszTrr9+SzGzUwBuqUqbKbz+KQw1L8xkd9bUZ6S+ioiLDboY3dEI8IpJOLrsOu2+TEKTu4JEKcrF89Ew1aMrWUpr2lmxxaqrL46ij2t8lJ2Q3kk0FG7P+0/FdJVkFqGVsACbrAd8FZvJ7HpeIGooWVtNxA6ZMjYz4JKBlaSjFKLIj5Z/nqKUz06J/dHoGNi6ipaRFueR1MtaSDDuzHX7BhpDIZDPb9fMXLV1lY4nj7leSnvrXWejPhJCWqgR1TF1RIdonFFRTnUx7XfajeLTeFdQzlOOlr/xI7eWZRegSNmm8IiubMACAQWEmv5QybCmmrjqTn3/CuYCAObYu4gybpsTPJR8wU3X65P7xuSXYuIiGtm7vJTVlvZecCon5SUVKdqqM5GQx9oEHPwg1r/OxIUpNeZEJ1FH5L7FxHQN9VbpFK2VvP6OGmrJE/7zrS/KwJWxK+tNwYOAF8F1gJr+22jrUkJveb8ywl+LHIREplUG+6waI76GogYe734IYUmve896lKjrTsEA2TmRJGbliMpptaSLLYH0ZHeXZqWg9pjJTnZ9WKTnv0KYnpKxAvwWps4uAGpxcDH458p5j46sq2vRL2ACAkYLZo9X9lYgaxPY6xil6mna5HVUyW+f4E8PNEHACqLvXrK5uhmi1RKwvykRH/SE1LQXB3tCu5k7MrKltgYYgv8JMbJmYhiL9EOXr11j/Tf8nLboobk5MdTWfmvvn+aoYq/m1FcG4C+B7wUx+0nJwjYSM2k8UEGeYINjbLb6wPS78xIC5cPBPEoTKyY93/L1YO6P1lBhSZ/0Oe1e0zSiIVxenVI1cU9SVON+XdMHmw39eLDdgsNKSSOzm4OhrZCYX56OGgrYxbcKO90WYMpXk6W+BX4APNYr+iS9r6VEQ6Guc5sdd9w/Ehn+U9dQhAOD7wEx+C83NPC7Gw8azpwmQK/3IZ3KEr/ORm2uPBC/QFBswC3Zh/bl6r6IzYPOmv5eNrfkyA6SR+SY1zmXDvn/zCyEeWCOQri71Llvun3+ZH19yH7YC/Tw2LptpKN+X/9cvTaGBZ48eP+MVlu9oLksOI77PwTqQhtoqNJ9Oam/CalceHi76OzWYZQRByGI3iPBh9YbfHoX54DggQntj4KmDe44Gd/aOwxroToMAgO8DM/lp27paafjH5lel/PVniIPDmoW9D3dPZ4jfb5v2njFYfvDS4TVM82ff9+u2i9HOiEn4uNxQfa6VZev7jFd5lRIqRqsXmYTeR+b05WVpOmYbDnidvXH/LVxn1rw20tLcvGP7LHX56sqPbwqz7kbfrWnutNvnbztHFkvdVZmdg07ci8tOpt3nxyYgLskFFcN9vI4Ndo4ONnoNVVUvnqb6/JVoMo1Peoad3QzPv5KRcZ7UO8dVM+JUZQUy0p83tEKu+38NPemH1MxcePkpYLkZ4HvBdFiBjf/m30mONktjM4vWWukmbd48S2P62/LCu1ERb6p79p8J9t69ZtBnU9ZkbfSVUnsXH3KHruMxeRpwgd3+wIDD++ZNRdNcO7ry3qWDt56k/qIhCr/lk9B68uS+1bKNBW9robbqSz6HLvXmZrrQPuTo0Xm6fb4kGop7e35Qrb4kr6iMopvHaU+XxeQQzo379sRt8IGtrCfh8Av5aPudMkJow5Ur4E5C+S8LXuW/h99UlOdUlEMiUspBN0JmcqcGnCQnIeRN5RWYv8kj/tLBIXyZAMDwGGRUT0hK7UFGTlJ4cHj8w9L8tLDCLGFxKaftXs7OjhLCvEP8jCUbjxXPmH/uekTblx5hSemlKxz0lJGhmgMX47Z0YkMzPT2QmmKfhwg5XZvcIotnSfGPnqe1tn+ZyMU7VU7daom1ghS9FwmBaaYvXrxkp5pVEJuqRLEXrT+WLq1+KyG5h22ilIz84mV206eK9l0rpZacnnMz6Oqr3DIOLl41Y7PVSxbguNjb62RevDSgZMkrQr8ebZRpaapravkCG8IiU/hxg+yoBPxADGVQndNylQv8+paPkdEwOe1L33tU0zFkcgk7J6/ZwmXwi3nOHHxiJiYDdz4hSG/eKvg14KdwCa7ZvIeuAc03SdJk0hhLjpqo07vXHb8BG87ugUG/rx80PeBHAcxp/QBwslFq4gnM0o0cg7r2GIzupob6lrbOCZyc/LwCOH5eJqsmsAuIXfWf6zu/fuXk5BWdJEJ27UHq7Ozi4uZifimhvbmhpZU0ASdJ56CZRKyp+tRGIMnITeUcmp+QEclqWDcC5PetNH54HR77nIOlL1JEQn2ZNevO3RgSHnDkVgy2ao/Uw+EbGq1KuxIo4prPjeiXSCyJ3d3/5qzeRe1khuraYyDqK4sunDgTeuduSU0DJZCHh19ZQ1MDr7n9wAlDRXpnsMXpSWf8/4yKSWxo653w5eGfbT5ftPNNdEpPTVOuOAfUXPLEbttp9l53OxKaloG/72z5VLzv190hf8Wil1lt8I4I8OBFknTfDf5j/28nSiqQ+erJCprXo+Pna2KLIkcwKxZuhA4gv2+lMDF469ZTrF0723nfiMvPwHDuxzrCjasBBe+RBeW2GR9ULWnmTvAKiqUZ3sU1yKIf/NKCWcpYAYbl2oMRhGsn3Hcf+KMZfqanqe712qsqJ9lQVfEmP/VmaEx22n/wy2HvCeoLiG1V7i7rfcP/hm3lGfN3LjaTEJyYl5EWcjXsWRyytUXKxEmM/IRyTZq+0mbB39EhEU+QSSzraTOLkyN/WeTw9jOBklts4G9HdGec2mjgvsbyZNgrSnhNWe6aZW7vi6PQYfERzIqFG6EDyO9bYecYXytCFXVm7tOZyd1YusM3En6bmZIF0cpPbc5Kd+f4dSeQzqS2GjaGPEzXHv0heDrM8g5FntTV+88GHHPj632yulvzo0JjkOqASwNPVfV1t1XMNp31MuctBPF7XQr+bZMt5Xucqyy0aM9FpHhaqmggt7D02q3b+dtfo5rhaauyMD9AlNG5cePC0pnqZ7YtPhz8FA5/8Sz6SIr7ybB0R3ffY7+uby+MNp2zDq6FP5ck5FZ/NSLPIY1gVizcCB1Aft/KDOcTJOcTg6djCGlEi0LFbEMdCELkl1HwAq4C6WIrm2shZMvyrHn65CblMF179OemzyZUe7b7A26doBmlqynMQ5uhgqqqVK0vosdqa/IjC3ldT/BcS9MEyCnG5pIUaVfqJuchOzB5eKDbIefxM5ySkq5NJqt8jaMdqpnkiIvJkGjA3SyXxdrkb8FpjubO6NwWCOroIBDh2/kOWbFyIxSA/MaUfj+JxNaPfn7hHRDVaAcPVPIsGzUzX0SfPNnS2Ul1AU+j4zp3+UlcdPkoz5iJLlzPSymC/6UZPOmqiYxEmklbDrqLkJ+i4br2oKMmO2q7RzBsiClZBB6jHyHPTcY2nehSnSCQFuF3Iga5KeVfNnqspWt+9/kfMTSi3r1JfJ+HLG/q6IDktSySHl2fzIv139oJ7ZREPiGRmGAQOhvrMV8K/Hwc3yMrlm6kDyC/8QWxpXz/kf0Dxea8eAC/6AKl9NfKm8vSBXJL4/VFoBcNUMf75DcN3VpUoy9Rl0/lfIak8Yt+2zQfYsm1By1de932oovW93ieEO73QOWUYjWAqnLv4vWv9Tv3YV4UPLy96IcSqfyP4FWpppS6KnqXN0G+QeEUwcAU9x56J//zhgNOcyjhpC+Vr9FtY3xqCiJUK0RGKivWboQKBvJjYxtfnZlxCIn03VqNw2cCxGgsnE1Ie7b2i7vZENSUlluh1btG70tN1p5DfrDSzgRfxJGvY8G1BzWNBQ9vPifv6ppktMGufxOLVJCNDaKq62CL13Pirr/8QPY/YmBnpy9BdwG1/xEFkb7ns6k8H9UxTmXxAt1J1Je8yMM2ba9dsZ762a0tzKomG9OM1ISovqSRyoq1G6EG1H7jCw6eKW5ubnS/gEUvHiZmIFtPVPTnzTdRofbl39PTIy/JxzArEx29C4j8oKyUbAiTH8lnq+u7Nshmi89KXWxdwfBde9AQdzsSNWYtmM3gGeupy81Bn1t+fS1sjWH0vVjUWGC2oP8VVP5HlKnXVZVnY8LQM1KiXfhDfJuHrbnXNaY5IyT/Bdb206B1ljVSWbF2I9QA+X0rpO7urp4els5/ILEhJ0fQKI1DRPns2bN06UI91qHym2Fp53d87RBzN/zJEIKuwUZOzr8QtAg2ipKuHI9Kw0lpXjy5tTfV8F170PIsGXMmoqf1c//YjsrCHHRTGZ+K4mT0Uf+S/OgZGqtpymDZE8X/iKaCJm04tnVTXYHW2yXhQy7WklTRVBKkjskqxzZby0vrUoePUFYs3gg1DL7ccdWyGv+8DDpk6nKStWvnbtj/6OpQRk1JdP8PBVndGfATBPfKMtNKvkLQxK7PrlsOwOFH/UKkcL0/F8N37UFLx/s3mI85SSX61hfM2xxs5GaaAV4E/cyu2rJKLFZdmcElFP8jeF0aHwsUh5Hy2mrU4U1lhVhLUl1NgrYue/0a81Wna0pzychkxeqNUANqv2/mG3rKxO7v+Es3QXj6LGW+B2/aO8qev2nqTju/89/SRo2Fv+5Yod2XaPiuPeg+hJMXbvoi/R9RfgZnG+fllqCGhjrWliN9JVCmt7m4mPkf0dCinq5s73UYyWOsQzPORGlJatGdzdpTn4t5uRNSV6FesjMyWbF6IzQA+X0rSmaOd6KNWFuLKTBZfvBErMOlOkPvwRu45dn078Ooo55hEOfUkADaAbrhu/agpZv4BRup//ihCoLofY68ys9GDUV5bFSGbSInZZJkEP8jVM2/7pZy7PnnU1amPUQgvdcfpJoKTUuSUFeSjw7ICqgpivb9fUYqK9ZuhA4gv29FXEF9mcI4dUhhrqF1CoLlB21duRL+d9fvvrpSNM5OWXDtQQsHn7AA9AHpL/2dmODpRNMFehBy/Ep4Omr3nSDAzssPF4HcIezvf2QXlf+RKVQ1CsVhJHKIAG0/m9KSnE57Nuu7rCz0h0XRCC9I1UIZsaxYuhE6gPx+ALpZ6foh6JrNhKDzqC2NX3R0Z//dW8N17UHHRCMjk+gc5Oir5DDfP6wtdtohU8/N1cXee7b7hj7sXRsppKXc6yuVY5KBiXxOItJjvOnvZW1rvpzsf6QoNWHThj3PGPsfgXJ7HUb2O0SgncqLOU0J83N7u160w54jlhVLN0IHkN8PgJnjthhjpF6aPI3+mArmiKnrwa1b8tgI/5lrF3GMxmeH59qjHxv37j1+JYFcn7TuWmUaHmDJR2j8Jxmu9MRO/X7M84AHEkN1ggDcXdy9a29g4mbEJHxcYahuNndWS21+BlP/I5nlvcdgydJ4rOtrSXJqqsvQTMCkFmIOuCRElUlUPfSRy4qVG6EDyO8HQEZFD36xciWXrLGxcHlKIzLRZ8B4A/GwXHv0R1jR7MGdc7bL3VBflK+eIsenKhtZX7t+mbcwZB85EG+oTL1FQGXepvCz5at2oEttOv55jDhTZ+5/5HVuBoRlRTNWWVeYh7YkcXh12gO2iCXp2DjKxcM2Yeemup8M2k8+XWsEs2LhRugYO/n1dMbeDAp9EF/+rprEwamojF+wzMne2gQcoD6iTFi1/bCI4Xt3n61MEg3dtQdDZi7bXvRhbsD5ax9bv/DihMwWLF9gpgv/HW/cwo6I0lSgX/Fo53bK2Mzmz+DbQ/Q/4n72ruuXbiREbyp1PoKq5qirEV5hCdonh/3YjcR9nZTWeo+knPqIZ8XCjdAxNvKrf5ez0mbp47y+RfRpqcnhN674z9v1NNaPf+iF6iGk//sk8dHTtxXVdU1NJBI0gYNTSERYbNIkZby+qYnJdFkGnu3/r7Cy32FlP3iyIbr2GAhRGbWDp3zpAjNLsbkyvH6/YyFhzeNNT/ua0gUO5H9ERYtxOLfgFBMThvuA2dV1jBmFj2RWKMO6ETrGQH6ddSVzzWblvGuBIB5tfU1RQVxlWU7RO6Txkpnov3KXXPx5t6Hk8+pekPOug4XvatC3srJTCV8aqj+3URJoLNmRF/3Hd7gDAMZFL9epi49ZaTFaT9zTkPIoi2wJWcxVYZAAMBby6/bYYJtTh/P089+20V6s149IVVn2mQN7/O88Trjg8WjrWgsVBnO41NwP9Fi8EfEgCOEkPQ4fdXOxFxNA+hftzbWPoiMOeR8teFtnoDzgagPASPDl3tUrU9p1rbRc+8elhF9NJU98yc1ZoiMGvLMxZrTlV/o4yPdpW0xyqrUGzRStpIK23+2HKh5Orj6hIUHhFqcY/EUptH96tRnVHiR6+1nqct2+rPgExRc5bxfsfG+2xVe533G2gJGE2F7XBmVGB5bvWS0vTjOd+OnNc+fdh1Hby9sT9OcHYrTl96GD+25kHJ32emF38b4cG5WUkJBEPOXKpGT3rwR8Ihvma9yotUeBi7xQuN9xtoCRpb2tGapvTtdQVXVeu36uuam89OSOpqrYiLA/L91ARxGXH7jiZCo3tqUcz4y2/MytHJlFs+F27lj3YGdsLRGSHLhor3rXv6qp6zBMwCkorWtsjac9zhYwsnR3cpg5Laq9fb+5oeKin9dFP5pY3CS5337327thyRiV7sdg3M37Gc2zgAh3iD3M0rTXYcvpvrS1MkygZ7stw3bbiJcNQM0EnHRAyL3zAW35Wen/paZXVdYQvn4lTZgoNklcf+acmUZ6PBNBq3MQxlJ+3URCTWVVSweBfSKnjMxUHk6kMHwyCkpQ2ce6rqmSA/bXeUSFUCP86vEDWxcrig/V3T1gxOHkxunOmAO/xrogPyRjI7+C5Fj/C1cjH8Q0t5LdTXV0QDxCS1fYex3zVkemXoR4OZlt47EwNDx/G3Fh0PGpYPasWbfvxZqoMJyxAQDGNaMuP2KL92Y7z0Bkka7t+oOe7lvwClKkbkLms3iP3e4a+k/Skq58goREccyOTlro6q7uG1TwCVmnX/Umw1R1+upNe7y9dk0TZ+4HFgAYX4yu/L42bZo9OyAZ8aPsF/54l13vYggOLoO5SxKzLHctMFm5bDORCzeRabkm4GTvx4TPtVj6HjsWujX08uHQ4D9dD3ic2LtFiGeUDkIAAL6R0ZQfydvBiqw9yP7w5T7tUWDD/R5yM0pWC5K2njRYuRT0bV9lZriud7j3FNujBXXWBhx2iwy89MfFcAcr+pPcAYBxyOjJrzgx0PM2sgVDRMHiwiEnhmm4xTXtHWbF18oO5URZcXndu//kP7kd6HbwcEEZ6k4Lqv/42tFa+/31uENrF4xY0QGA78Ooya/ryFHMIem2PR7CA8ur4cNHA52hnyXIbr7CJd/W4a/rZz1+8ymrwRwfeDg7/TSj2IyyxRMAGJeMkvzq8xPCX1aQTcnVDgOe6dPdVhz78O1pzznDy52D127jARtbhy02NiEvs9EP9Dl5ySzoEKvlBQBGg1GS3/O4RNRQtLCajhvwQ1MjIz4JaFkaMj4/jTm8ojLB/zyq0dP8O78Kfvsy6b8uCAJLfQHjmVGSX0pZEWroqisPnIpwLiBgjq2L+IBNU1J56RtOwSnSYkKM4zlFj+za+vd6pNLj4OcGvvIB45xRkl9bLeqLAJKbPuAmoOLHIREplUG+6wbMpad+OV5Vc2fg9YHPN5dUxFwqkHqA+gDjnVGSX/dXImoQ2+sYp+hp2uV2VMlsneNPDDdDIBCqSwo7IS2m55vnpGOe7bT0pw1l+BQAGENGSX7SctMgCJmgmyggzjBBsLdbfGF7XPgJJgV6l5PaCUHsbAPLj9R6OTAKNZctXPMN5QUARoNRkt9CczOPi/Gw8expAuRKP/KZHOHrfOTm2iPBCzQZH4OGkp+PHAEZG3kuf4u1hrQQfTSp8+zeNXGvkQlABeNVm1aBvbaA8c4oyU/b1tVKwz82vyrlrz9DHBzWLOx1/tHTGeL326a9ZwyWH7x0eJD6KqMEGb+pKUnHa2hu3bbVccUSzenTuLk42pvrnsZEnTl56lkh4qhRTsPgQfSV4XpLBwBGn9Gadmfjv/l3kqPN0tjMorVWukmbN8/SmP62vPBuVMSb6p79Z4K9d68ZtKu2fc/xxo5Tt27dbWv++KePO/yiS4ATk3ZxO3h47yYBLjDuAvgBGL1FZ0JSag8ycpLCg8PjH5bmp4UVZgmLSzlt93J2dpQQHtKGPYnpxpduRp+92pKT9SrlZXZFdXXHVyKJROLi4p4soTzD1FBfR42bA2zxBPwwjPKGI07LVS7w65uy4BYwmGEBv0aqTADAWDHunE0AAP8/APkBAGMGkB8AMGYA+QEAYwaQHwAwZvwPjzjR+JrNu+IAAAAASUVORK5CYII=" name="Object6" hspace="9" width="298" height="81"/>
+</span></font></font></p>
+<p style="margin-bottom: 0in"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="text-decoration: none">The
+term dS crudely denotes the change in spot. If a trader is </span><font color="#dc2300"><span style="text-decoration: none"><b><span style="background: #ffff00">expecting
+upward market</span></b></span></font><font color="#dc2300"><span style="text-decoration: none"><b>
+</b></span></font><font color="#dc2300"><span style="text-decoration: none"><b><span style="background: #ffff00">trend</span></b></span></font><span style="text-decoration: none">
+will he underhedge/overhedge? This is in contrast to a quants world
+of perfect hedging.</span></font></font></p>
+<p style="margin-bottom: 0in; text-decoration: none"><font face="Chalkduster"><font size="3" style="font-size: 12pt">1.
+Position is Long Delta – <span style="background: #ffff00">Hedge is
+selling delta → Underhedge (Sell less)</span></font></font></p>
+<p style="margin-bottom: 0in; text-decoration: none"><font face="Chalkduster"><font size="3" style="font-size: 12pt">2.
+Position is Short Delta – <span style="background: #ffff00">Hedge
+is buying delta → OverHedge (Buy more)</span></font></font></p>
+<p style="margin-bottom: 0in"><br/>
+
+</p>
+<p style="margin-bottom: 0in; text-decoration: none"><font face="Chalkduster"><font size="3" style="font-size: 12pt">Conversely
+when gamma is negative <font color="#800000"><span style="background: #ffff00">1
+unit change in </span></font><font color="#800000"><span style="background: #ffff00">spot</span></font><font color="#800000"><span style="background: #ffff00">
+will lead to -1 x (</span></font><font color="#800000"><span style="background: #ffff00">gamma</span></font><font color="#800000"><span style="background: #ffff00">)</span></font>
+increase in delta or<span style="background: #ffff00"> </span><span style="background: #ffff00">(removing
+minus sign)</span> a decrease in delta. Intuitively hedging involves
+predicting the market which is counter intuitive coz we tend to think
+of hedge as neutralizing market movement. It actually ends up
+predicting movements and taking position based on short/long term
+trends. </font></font>
+</p>
+<p style="margin-bottom: 0in; text-decoration: none"><font color="#ff3333"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="background: #ffff00">What
+if gamma is changing signs? </span></font></font></font>
+</p>
+<p style="margin-bottom: 0in; text-decoration: none"><br/>
+
+</p>
+<p style="margin-bottom: 0in"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><font color="#800000"><span style="text-decoration: none"><span style="background: #ffff00">Volatility
+hedge for digitals will consist of a set of european options with
+different maturities (Vega Buckets)</span></span></font><span style="text-decoration: none">.
+</span>The American digital will have Vega sensitivity to the
+volatilities of these Europeans and we need the model to be
+calibrated to them in order to show risk against them. As the market
+moves, the volatility sensitivities can change, for example when the
+underlying moves closer to the barrier, and thus the model dynamic
+specified will give different model dependent prices for American
+digitals. </font></font>
+</p>
+<p style="margin-bottom: 0in"><br/>
+
+</p>
+<p style="margin-bottom: 0in; text-decoration: none"><font face="Chalkduster"><font size="3" style="font-size: 12pt">Most
+traders do vega bucketing. Hedging long term Vega is also complicated
+coz it deals with buying/selling illiquid vanillas with long
+expiries. </font></font>
+</p>
+<p style="margin-bottom: 0in"><br/>
+
+</p>
+<div id="disqus_thread" dir="ltr">
+	<p><br/>
+<br/>
+
+	</p>
+</div>
+<p><script>
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'coffee.coffeequant.com';
+		var disqus_identifier = 1234;
+		var disqus_title = 'hedging';
+		var disqus_url = 'http://localhost:8080/statics/WriteUps/Hedging.html';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+</script><noscript><font face="Chalkduster"><font size="3" style="font-size: 12pt">Please
+enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments
+powered by Disqus.</a></noscript> 
+<script>
+    /* * * CONFIGURATION VARIABLES * * */
+		var disqus_shortname = 'coffeequant';
+		var disqus_identifier = 1234;
+		var disqus_title = 'hedging';
+		var disqus_url = 'http://localhost:8080/statics/WriteUps/Hedging.html';
+
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+
+</script>
+</font></font></p>
+</body>
+</html>

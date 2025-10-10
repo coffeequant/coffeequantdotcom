@@ -1,0 +1,383 @@
+
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+        <style type="text/css">
+ @import "http://ajax.googleapis.com/ajax/libs/dojo/1.9.2/dojox/grid/resources/tundraGrid.css";
+            @import "dojor/dijit/themes/tundra/tundra.css";
+            .dojoxGrid table { margin: 0; } html, body { width: 100%; height: 100%;
+            margin: 0; }
+
+body {
+  background-image: url("https://coffeequant.appspot.com/statics/static/images/background.png");
+	overflow-x:hidden;
+
+}
+
+        </style>
+		<meta charset="utf-8">
+		<title>Coffee Quant</title>
+
+		<!-- load dojo and provide config via data attribute -->
+		<script src="dojo.xd.js"
+				djConfig="parseOnLoad: true">
+		</script>
+		<script>
+
+function formatSGrid(value)
+	{
+		if(dojo.number.format(value) == null)
+			return value;
+		var a = parseFloat(eval(value));
+		return a.toFixed(2);
+
+
+	}
+
+	function formatGrid(value)
+	{
+		if(dojo.number.format(value) == null)
+			return value;
+		var a = parseFloat(eval(value));
+		return a.toFixed(4);
+
+	}
+
+	function pressed1(){
+	            //The parameters to pass to xhrPost, the message, and the url to send it to
+                    //Also, how to handle the return and callbacks.
+		    dojo.byId('loadingMessage').hidden=false;
+		    dojo.byId('graphContainer9').hidden=true;
+
+                    var xhrArgs = {
+			url: '/portfolioanalyzer/portfoliograph',
+                        form: dojo.byId("pricer"),
+                        handleAs: "text",
+                        load: function(datalis3t) {
+		    dojo.byId('loadingMessage').hidden=true;
+		    dojo.byId('graphContainer9').hidden=false;
+
+olddata = eval(datalis3t);
+			//assume it's there...now proceed
+			var data = {
+			identifier: 'id',
+			label: 'Stock',
+			items: []
+			};
+
+			//cleanup
+            var node = dojo.byId("graphContainer9");
+			while (node.hasChildNodes()) {
+			    node.removeChild(node.lastChild);
+			}
+
+        var newname = "default"+s1;
+
+        var s1 = dojo.byId('graphsetting').value;
+
+        var graphchild = dojo.create(s1);
+        var newname = "default"+s1;
+
+
+        var chart1 = new dojox.charting.Chart2D(graphchild,{title:s1});
+        chart1.addPlot(newname, {
+            type: "Lines",
+            markers:true,
+            tension: 'S'
+        });
+
+       // setTheme(dojox.charting.themes.ThreeD);
+
+        chart1.addAxis("x");
+        chart1.addAxis("y", {
+            vertical: true
+        });
+			var datalist = new Array();
+        for(i=0;i<(olddata.length-1);i++)
+        {
+        		datalist[i] = olddata[i]
+        }
+        chart1.addSeries("Series 1", datalist);
+
+        var anim1a = new dojox.charting.action2d.Magnify(chart1, newname);
+        var anim1b = new dojox.charting.action2d.Tooltip(chart1, newname);
+
+        //chart1.setTheme(dojox.charting.themes.PlotKit.blue);
+
+
+        chart1.style="overflow:auto";
+
+        chart1.render();
+        node.insertBefore(graphchild,node.firstChild);
+
+
+                    }
+           }
+                    //Call the asynchronous xhrPost
+                    var deferred = dojo.xhrPost(xhrArgs);
+
+	}
+
+
+	function pressed(){
+	            //The parameters to pass to xhrPost, the message, and the url to send it to
+                    //Also, how to handle the return and callbacks.
+                    var xhrArgs = {
+                        form: dojo.byId("pricer"),
+                        handleAs: "text",
+                        load: function(datalis3t) {
+datalist = eval(datalis3t);//[{ Stock: 'normal', OP: false, Delta: 'new', Gamma: 'But are not followed by two hexadecimal', Theta: 29.91 },{ Stock: 'normal', OP: false, Delta: 'new', Gamma: 'But are not followed by two hexadecimal', Theta: 29.91 }];
+
+			//assume it's there...now proceed
+			var data = {
+			identifier: 'id',
+			label: 'Stock',
+			items: []
+			};
+
+			//cleanup
+			var node = dojo.byId("gridContainer4");
+			while (node.hasChildNodes()) {
+			    node.removeChild(node.lastChild);
+			}
+
+
+
+			var rows = datalist.length;
+			for(var i=0, l=datalist.length; i<rows; i++){
+				data.items.push(dojo.mixin({ id: i }, datalist[i%l]));
+			}
+			var store4 = new dojo.data.ItemFileWriteStore({data: data});
+
+	                // set the layout structure:
+			var layout4 = [
+				[
+					{ name: 'Row', field: 'id'},
+					{ name: 'Stock Price', field: 'Stock',formatter: formatSGrid },
+					{ name: 'Option Price Worst', field: 'OPW',formatter: formatGrid  },
+					{ name: 'Option Price Best', field: 'OPB', width: '150px',formatter: formatGrid  },
+					{ name: 'Delta Worst', field: 'DeltaW' ,formatter: formatGrid },
+					{ name: 'Delta Best', field: 'DeltaB',formatter: formatGrid  },
+					{ name: 'Gamma Worst', field: 'GammaW',formatter: formatGrid  },
+					{ name: 'Gamma Best', field: 'GammaB',formatter: formatGrid  },
+					{ name: 'Theta Worst', field: 'ThetaW',formatter: formatGrid  },
+					{ name: 'Theta Best', field: 'ThetaB',formatter: formatGrid  }
+				]
+			];
+			// create a fucking new grid:
+		        var grid4 = new dojox.grid.DataGrid({
+		            query: {
+		                id: '*'
+		            },
+		            store: store4,
+		            clientSort: true,
+		            rowSelector: '20px',
+		            structure: layout4
+		        },
+		        document.createElement('div'));
+
+		        // append the new grid to the div "gridContainer4":
+		        dojo.byId("gridContainer4").appendChild(grid4.domNode);
+
+		        // Call startup, in order to render the grid:
+		        grid4.startup();
+                        },
+                        error: function(error) {
+                            //We'll 404 in the demo, but that's okay.  We don't have a 'postIt' service on the
+                            //docs server.
+                            alert('Error with parameters supplied');
+                        }
+                    }
+                    //Call the asynchronous xhrPost
+                    var deferred = dojo.xhrPost(xhrArgs);
+                    pressed1();
+
+
+	}
+	dojo.require("dijit.form.CheckBox");
+	dojo.require("dijit.form.NumberTextBox");
+	dojo.require("dijit.form.ValidationTextBox");
+        dojo.require("dijit.form.ComboBox");
+        dojo.require("dojox.widget.FisheyeList");
+	dojo.require("dojox.widget.Roller");
+	dojo.require("dojox.form.RangeSlider");
+	dojo.require("dijit.form.Button");
+	dojo.require("dijit.form.Textarea");
+	dojo.require("dojox.grid.DataGrid");
+        dojo.require("dojo.data.ItemFileWriteStore");
+	dojo.require("dijit.layout.TabContainer");
+        dojo.require("dijit.layout.ContentPane");
+    dojo.require("dojox.charting.Chart2D");
+    dojo.require('dojox.charting.widget.Chart2D');
+    dojo.require('dojox.charting.themes.ThreeD');
+    dojo.require("dojox.charting.action2d.Magnify");
+    dojo.require("dojox.charting.themes.PlotKit.blue");
+
+
+
+	</script>
+
+	</head>
+	<body class="tundra">
+<table cellpadding="1"><TR>
+		<td>
+
+  <div style="width: 250px; height: 300px">
+            <div dojoType="dijit.layout.TabContainer" style="width: 800px; height: 300px;">
+	<div dojoType="dijit.layout.ContentPane" title="Portfolio Analyzer" selected="true" style="background-color:white;"><br/><br/>
+Portfolio Analyzer, analyzes your portfolio of plain vanilla calls and puts for extreme volatility conditions and interest rates. It's not as simple as saying at maximum volatility (30% in this case) all options will be at maximum price. Some positions are positively affected are some negatively affected (long or short). The below pricer uses a finite difference grid to analyze at each step the effect of maximum or minimum volatility. This is much different from putting a static value in black scholes formula.
+<br/><br/>
+At each step it generates the best and worst prices and the greeks too. This analyses is not possible with any monte carlo pricer. The limits of volatility and interest rate are specified by the user below.
+
+<br/><br/>
+Interest Rates or cost of funding can have a different effect. If you have invested in the option then on higher interest rate you can't take advantage. This makes it the worst case, and simply opposite is the best case. The portfolio of options can be of different maturities but they should be on the same index/stock.
+</div>
+            </div>
+</div></td>
+</TR>
+</table>
+
+<h4>Portfolio Analyzer</h4>
+
+<form id="pricer" action="https://coffeequant.appspot.com/portfolioanalyzer/portfolio">
+
+<table width="96%" border="0" cellspacing="0" cellpadding="5">
+<tr>
+<td width="40%">
+	<table width="100%" border="0" cellspacing="0" cellpadding="1">
+	<TR><TD>
+	Stock Price </TD>
+
+        <td>
+	<input name="stockPrice" value="100.0" dojoType="dijit.form.NumberTextBox"
+		trim="true" id="stockPrice" style="width:80px;"/></TD></tr>
+	<tr>
+	<td>
+	Volatility (Min,Max)</li><br/></TD><TD><br/>
+	<div id="rangeSlider" dojoType="dojox.form.HorizontalRangeSlider" value="0.1,0.30"
+		minimum="0" maximum="1.0" intermediateChanges="true" showButtons="false"
+		style="width:300px;">
+		<script type="dojo/method" event="onChange" args="value">
+			var a = String(value);
+			var numbers = a.split(',');
+			var n1 = parseFloat(numbers[0]).toFixed(2);
+			var n2 = parseFloat(numbers[1]).toFixed(2);
+
+			dojo.byId("volValue").value = n1.concat(',',n2);
+		</script>
+		</div>
+		<p>
+		<input type="text" value="0.2,0.30" id="volValue" readonly="false" name="volminmax" />
+		</p>
+	<p></TD></TR>
+
+	<tr>
+	<td>
+	Interest Rates (Min,Max)</li><br/></TD><TD><br/>
+	<div id="rangeSlider2" dojoType="dojox.form.HorizontalRangeSlider" value="0.1,0.30"
+		minimum="0" maximum="1.0" intermediateChanges="true" showButtons="false"
+		style="width:300px;">
+		<script type="dojo/method" event="onChange" args="value">
+			var a = String(value);
+			var numbers = a.split(',');
+			var n1 = parseFloat(numbers[0]).toFixed(2);
+			var n2 = parseFloat(numbers[1]).toFixed(2);
+
+			dojo.byId("intrValue").value = n1.concat(',',n2);
+		</script>
+		</div>
+		<p>
+		<input type="text" value="0.07,0.1" id="intrValue" readonly="false" name="intrminmax" />
+		</p>
+	<p></TD></TR>
+
+
+
+	<TR><td><strong><strong>
+	Number of Spot Steps:
+	</TD>
+	<TD>
+	<input type='text' id='spotsteps' name='spotsteps' value='40' dojoType="dijit.form.NumberTextBox" style="width:50px;"/></td>
+<tr>
+<tr>
+<TD>Quantity</TD><TD>
+<input style="align:left;" type='text' id='qts' name='qts' value='2,-3,1' dojoType="dijit.form.TextBox" style="width:100px;"/>
+	</TD></TR>
+<tr>
+<TD>Strikes</TD><TD>
+<input style="align:left;" type='text' id='strikes' name='strikes' value='90,110,120' dojoType="dijit.form.TextBox" style="width:100px;"/>
+	</TD></TR>
+<tr>
+<TD>Time to Maturity</TD><TD>
+<input style="align:left;" type='text' id='maturity' name='maturity' value='1,1,1' dojoType="dijit.form.TextBox" style="width:100px;"/>
+	</TD></TR>
+<tr>
+
+
+<TD>Call/Put</TD><TD>
+<input style="align:left;" type='text' id='callorputs' name='callorputs' value='C,C,C' dojoType="dijit.form.ValidationTextBox" style="width:20px;" regExp="['C,P']+" required="true" invalidMessage="Invalid Non-Space Text."/>
+	</TD></TR>
+
+
+	<TR><TD>
+Graph Setting:
+<select dojoType="dijit.form.ComboBox" id="graphsetting" name="graphsetting">
+    <option selected>
+        Price
+    </option>
+    <option>
+        Delta
+    </option>
+    <option>
+        Gamma
+    </option>
+    <option>
+        Theta
+    </option>
+        <option>Vega</option>
+        <option>
+    DeltaWStock</option>
+            <option>
+    GammaWStock</option>
+            <option>
+    ThetaWStock</option>
+        <option>
+    VegaWStock</option>
+
+</select>
+</TD></TR>
+
+
+</table>
+
+<button dojoType="dijit.form.Button" onclick="pressed" Label="Pricing" timeout="1">
+            Analyze
+          </button>
+<button dojoType="dijit.form.Button" onclick="pressed1" Label="RefreshGraph" timeout="1">
+            Refresh It
+        </button>
+</form>
+
+<br/><br/><br/>
+<!--Hidden Container Activated When Prices are sent -->
+
+<div id="loadingMessage"><h3>Calculating.....</h3>
+</div>
+
+<table cellpadding="4">
+<tr>
+<td><div id="gridContainer4" style="width:500px;height:600px"></div></td>
+<td><div id="graphContainer9"  style="width:300px;height:700px"></div></td>
+
+</tr>
+</table>
+
+
+	<style type="text/css">
+            @import url('https://coffeequant.appspot.com/statics/statics/dojor/dojox/form/resources/RangeSlider.css');
+        </style>
+	<script>
+		dojo.addOnLoad(pressed);
+	</script>
+	</body>
+</html>

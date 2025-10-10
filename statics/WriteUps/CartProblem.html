@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 4.4.3.2 (MacOSX)"/>
+	<meta name="created" content="00:00:00"/>
+	<meta name="changed" content="2015-05-23T23:10:32.187463000"/>
+	<meta name="created" content="2015-05-23T16:58:32.332931000">
+	<meta name="changed" content="2015-05-23T20:24:16.302105000">
+</head>
+<body lang="en-US" dir="ltr">
+<p><font color="#ff3333"><u><font face="Chalkduster">Problem
+Statement:</u><font color="#000000"><span style="text-decoration: none">
+Suppose you are traveling in an Indian Train that has 1 to N number
+of carts. Assume that you are locked up in nth cart where N &gt; n.
+What is the expected value of N? </span></font></font></font>
+</p>
+<p><font color="#ff3333"><font face="Chalkduster"><span style="text-decoration: none"><span style="background: #ffff00">First
+Look: </span></span><font color="#000000"><span style="text-decoration: none"><span style="background: #ffff00">It's
+based on conditional probability. N is assumed random and the value
+“n” is given, from which you have to calculate expected value of
+N</span></span></font></font></font></p>
+<p style="text-decoration: none"><font color="#ff3333"><font face="Chalkduster"><span style="background: transparent">P(N
+given n) = P(N intersection n) / P(n)</span></font></font></p>
+<p style="text-decoration: none"><font color="#000000"><font face="Chalkduster"><span style="background: transparent">E[N]
+= summation from i = (n..N) ( i x P(N given n)). </span></font></font>
+</p>
+<p style="text-decoration: none"><font color="#000000"><font face="Chalkduster"><span style="background: transparent">The
+integral is simple to evaluate after we calc the conditional
+probability. For simplicity let's assume N = 100, and n = 5.</span></font></font></p>
+<p style="text-decoration: none"><font color="#000000"><font face="Chalkduster"><span style="background: transparent">Let
+A = You are in Cart 5</span></font></font></p>
+<p style="text-decoration: none"><font color="#000000"><font face="Chalkduster"><span style="background: transparent">B
+= There are 100 Carts</span></font></font></p>
+<p style="text-decoration: none"><font color="#000000"><font face="Chalkduster"><span style="background: transparent">P(B|A)
+= P(A Intersection B) / P(A) </span></font></font>
+</p>
+<p style="text-decoration: none"><font color="#800000"><font face="Chalkduster"><span style="background: #ffff00">What
+is the probability of being dropped in 5<sup>th</sup> cart given that
+there are “i” carts? Answer = 96/100</span></font></font></p>
+<p style="text-decoration: none"><font color="#000000"><font face="Chalkduster"><span style="background: transparent">Expectation
+(B) = k x P(B|A) = (k x P (A intersection B) / P(A))</span></font></font></p>
+<p><font color="#000000"><font face="Chalkduster"><span style="background: transparent"><span style="text-decoration: none">P(A)
+= P(A|B) * P(B) (using total probability, </span><span style="text-decoration: none">as
+it's given carts can be between 1..100</span><span style="text-decoration: none">)</span></span></font></font></p>
+<p style="text-decoration: none"><font color="#000000"><font face="Chalkduster"><span style="background: #ffff00">What
+is the probability that you are in cart 5 given that there are 100
+carts =&gt; 1/100</span></font></font></p>
+<p style="text-decoration: none"><font color="#000000"><font face="Chalkduster"><span style="background: #ffff00">What
+is the probability that you are in cart 5 given that there are 99
+carts =&gt; 1/99</span></font></font></p>
+<p style="text-decoration: none"><font color="#000000"><span style="background: transparent">………<font face="Chalkduster">..
+and so on till</font></span></font></p>
+<p style="text-decoration: none"><font color="#000000"><font face="Chalkduster"><span style="background: transparent">What
+is the probability that you are in cart 5 given that there are 10
+carts =&gt; 1/10, and the pattern continues!</span></font></font></p>
+<p style="text-decoration: none"><font color="#000000"><font face="Chalkduster"><span style="background: transparent">Now
+it's easy to calculate the above probability P(A)</span></font></font></p>
+<p style="text-decoration: none"><font color="#000000"><font face="Chalkduster"><span style="background: transparent">P(B)
+= Probability that there are 100 carts = 1/100 since it's a uniform
+distribution.</span></font></font></p>
+<p style="text-decoration: none"><font color="#800000"><font face="Chalkduster"><span style="background: #ffff00">P(A)
+= 1/100 * 1/100 + 1/99 * 1/100 + 1/98 * 1/100 + ….</span></font></font></p>
+<p style="text-decoration: none"><font color="#800000"><font face="Chalkduster"><span style="background: #ffff00">P(A)
+= (1/5+1/6….1/100) *1/100</span></font></font></p>
+<p style="text-decoration: none"><font color="#000000"><font face="Chalkduster"><span style="background: transparent">Now
+lets assume k = 1 to 100, then P(A) = summation from k = 1 to 100</span></font></font></p>
+<p><font color="#800000"><span style="background: #ffff00"><span style="text-decoration: none"><font face="Chalkduster">Final</font></span>
+<span style="text-decoration: none"><font face="Chalkduster">answer</font></span>
+= <span style="text-decoration: none"><font face="Chalkduster">96/(1/5+1/6….1/100)</font></span></span></font></p>
+<p><font color="#800000"><font face="Chalkduster"><span style="background: #ffff00">So
+what is the general expression, 
+<img src="data:image/png;base64,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" name="Object1" hspace="9" width="265" height="85"/>
+</span></font></font></p>
+<p><br/>
+<br/>
+
+</p>
+<p><br/>
+<br/>
+
+</p>
+<p><br/>
+<br/>
+
+</p>
+</body>
+</html>
