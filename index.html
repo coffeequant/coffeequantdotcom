@@ -44,16 +44,32 @@
       </div>
     </section>
   </header>
+<main class="cq-main cq-maingrid">
+  <!-- Left dock -->
+  <aside class="cq-dock">
+    <h4>Navigate</h4>
+    <a href="#daily">📰 Daily</a>
+    <a href="#labs">🧪 Labs</a>
+    <a href="#tools">⌨️ Tools</a>
+    <a href="#notes">📝 Notes</a>
+    <a href="#curios">🔗 Curios</a>
+    <!-- Hide archive until ready -->
+    <a href="statics/WriteUps/" class="cq-hide">📚 Archive</a>
 
-  <main class="cq-main">
-    <!-- Daily spark -->
+    <h4 style="margin-top:1rem">Shortcuts</h4>
+    <a href="#" id="openKbar">⌘K · Command palette</a>
+    <a href="statics/Tools/PricingCLI.html">▶ Pricing CLI</a>
+  </aside>
+
+  <!-- Right content -->
+  <div>
+    <!-- Daily -->
     <section id="daily" class="cq-section">
       <div class="cq-section-head">
         <h2>CoffeeQuant Daily</h2>
         <span class="cq-pill">60-second reads</span>
       </div>
       <article id="dailyCard" class="cq-card cq-daily">
-        <!-- Filled by cq.js from statics/data/daily.json -->
         <div class="cq-skeleton">Loading today’s spark…</div>
       </article>
     </section>
@@ -67,20 +83,34 @@
       <div class="cq-grid">
         <a class="cq-tile" href="statics/WriteUps/DicePuzzle.html">
           <h3>Dice Puzzle</h3>
-          <p class="cq-muted">The max of $k$ minimums from $n$ dice — play, then derive.</p>
+          <p class="cq-muted">Max of $k$ minimums from $n$ dice — play, then derive.</p>
           <div class="cq-tags"><span>Probability</span><span>Order stats</span></div>
         </a>
         <a class="cq-tile" href="statics/WriteUps/BetSizing.html">
           <h3>Bet Sizing</h3>
-          <p class="cq-muted">Loaded coin, compounding, and the Kelly sweet spot.</p>
+          <p class="cq-muted">Loaded coin, compounding, Kelly sweet spot.</p>
           <div class="cq-tags"><span>Kelly</span><span>Risk</span></div>
         </a>
         <a class="cq-tile" href="statics/WriteUps/OldLehmanStory.html">
           <h3>30y Swap Spreads</h3>
-          <p class="cq-muted">Non-inversion notes, hedging flips, and inversion risk.</p>
+          <p class="cq-muted">Non-inversion notes, gamma flips, inversion risk.</p>
           <div class="cq-tags"><span>Rates</span><span>Gamma</span></div>
         </a>
-        <!-- Add more labs as you publish -->
+      </div>
+    </section>
+
+    <!-- Tools section -->
+    <section id="tools" class="cq-section">
+      <div class="cq-section-head">
+        <h2>Tools</h2>
+        <span class="cq-pill">Try in browser</span>
+      </div>
+      <div class="cq-grid">
+        <a class="cq-tile" href="statics/Tools/PricingCLI.html">
+          <h3>Pricing CLI</h3>
+          <p class="cq-muted">Terminal-style commands: Black–Scholes, Kelly, dice probs…</p>
+          <div class="cq-tags"><span>Options</span><span>Quick calc</span></div>
+        </a>
       </div>
     </section>
 
@@ -95,7 +125,7 @@
       </div>
     </section>
 
-    <!-- Curiosities -->
+    <!-- Curios -->
     <section id="curios" class="cq-section">
       <div class="cq-section-head">
         <h2>Quant Curiosities</h2>
@@ -105,7 +135,17 @@
         <div class="cq-skeleton">Loading curiosities…</div>
       </div>
     </section>
-  </main>
+  </div>
+</main>
+
+<!-- Command palette -->
+<div id="cqKbar" class="cq-kbar" aria-hidden="true">
+  <div class="cq-kbar-box">
+    <input id="kbarInput" placeholder="Type a command… (e.g., 'dice', 'kelly', 'pricing')" />
+    <div id="kbarList" class="cq-kbar-list"></div>
+  </div>
+</div>
+
 
   <footer class="cq-footer">
     <div class="cq-footer-inner">

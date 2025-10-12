@@ -114,3 +114,40 @@ h1,h2,h3 { text-shadow:0 1px 2px rgba(0,0,0,0.25); }
 
 .cq-skeleton{opacity:.6}
 
+/* Docked left menu (collapsible) */
+.cq-dock {
+  position: sticky; top: 0; align-self: flex-start;
+  width: 220px; min-height: 100vh; padding: .8rem .8rem 1.5rem;
+  border-right:1px solid var(--line); background: var(--bg);
+}
+.cq-dock h4 { margin:.2rem 0 .6rem; font-size:.95rem; opacity:.8; }
+.cq-dock a {
+  display:flex; align-items:center; gap:.5rem;
+  padding:.45rem .55rem; border-radius:8px; color:var(--fg); text-decoration:none;
+}
+.cq-dock a:hover { background: var(--card); }
+.cq-maingrid { display:grid; grid-template-columns: 220px 1fr; gap:1rem; }
+
+/* Command palette (⌘K / Ctrl+K) */
+.cq-kbar {
+  position: fixed; inset: 0; display:none; place-items:center; background: rgba(0,0,0,.35); z-index: 50;
+}
+.cq-kbar.open { display:grid; }
+.cq-kbar-box {
+  width:min(720px, 92vw); background:var(--bg); color:var(--fg);
+  border:1px solid var(--line); border-radius:12px; box-shadow: 0 20px 50px rgba(0,0,0,.25);
+}
+.cq-kbar-box input {
+  width:100%; border:0; outline:0; padding: .9rem 1rem; font-size:1rem; background:transparent; color:var(--fg);
+  border-bottom:1px solid var(--line);
+}
+.cq-kbar-list { max-height: 50vh; overflow:auto; }
+.cq-kbar-item { padding:.7rem 1rem; border-bottom:1px solid var(--line); cursor:pointer; }
+.cq-kbar-item:hover { background: var(--card); }
+
+/* Micro motion */
+.cq-tile:hover { transform: translateY(-2px) scale(1.01); transition: transform .15s ease; }
+
+/* Hide archive link until ready */
+.cq-hide { display:none !important; }
+

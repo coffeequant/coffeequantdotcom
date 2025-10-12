@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>CQ · Pricing CLI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="../css/cq.css"/>
+  <style>
+    .term { max-width: 900px; margin: 1rem auto; border:1px solid var(--line); border-radius:12px; background:var(--card); }
+    .term-head { display:flex; align-items:center; gap:.4rem; padding:.4rem .6rem; border-bottom:1px solid var(--line); }
+    .dot { width:10px;height:10px;border-radius:50%; }
+    .dot.r{ background:#ef4444 } .dot.y{ background:#f59e0b } .dot.g{ background:#22c55e }
+    .term-body { padding: .8rem .9rem; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .95rem; min-height: 360px; }
+    .prompt { color: var(--muted); }
+    .in { color: var(--fg); }
+    .out { color: var(--fg); opacity: .9; }
+    .inputline { display:flex; gap:.5rem; align-items:center; }
+    .inputline input { flex: 1 1 auto; border:0; outline:none; background:transparent; color:var(--fg); padding:.4rem 0; }
+    .help table { border-collapse: collapse; width: 100%; }
+    .help th,.help td { border-bottom:1px solid var(--line); padding:.3rem .2rem; text-align:left; }
+    .badge { display:inline-block; border:1px solid var(--line); border-radius:999px; padding:.05rem .4rem; font-size:.78rem; opacity:.9; }
+  </style>
+</head>
+<body>
+  <div class="cq-shell">
+    <nav class="cq-nav">
+      <a class="cq-logo" href="/">☕ CoffeeQuant</a>
+      <div class="cq-navlinks">
+        <a href="/#tools">Back to Tools</a>
+      </div>
+    </nav>
+  </div>
+
+  <main class="cq-main">
+    <section class="cq-section">
+      <div class="cq-section-head">
+        <h2>Pricing CLI</h2>
+        <span class="cq-pill">In-browser terminal</span>
+      </div>
+      <div class="term">
+        <div class="term-head">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="badge">alpha</span>
+        </div>
+        <div id="termBody" class="term-body">
+          <div class="out">Type <code>help</code> to see commands. Example: <code>bs_call S=100 K=100 r=0.02 q=0.00 sigma=0.2 T=1</code></div>
+        </div>
+        <div class="inputline" style="padding:.4rem .9rem .8rem">
+          <span class="prompt">cq&gt;</span>
+          <input id="termInput" placeholder="command… (⌘K for site palette)"/>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // --- tiny utils ---
+    const $ = (id)=>document.getElementById(id);
+    const out = (html)=>{ const div=document.createElement('div'); div.className='out'; div.innerHTML=html; $('termBody').appendChild(div); $('termBody').scrollTop = $('termBody').scrollHeight; };
+
+    // --- math bits (no deps) ---
+    function cnd(x){ // standard normal CDF (Abramowitz-Stegun approx)
+      const a1=0.319381530,a2=-0.356563782,a3=1.781477937,a4=-1.821255978,a5=1.330274429;
+      const L=Math.abs(x); const k=1.0/(1.0+0.2316419*L);
+      const w=1.0-1.0/Math.sqrt(2*Math.PI)*Math.exp(-L*L/2)*(a1*k+a2*k**2+a3*k**3+a4*k**4+a5*k**5);
+      return x<0?1-w:w;
+    }
+    function bs_call({S,K,r=0,q=0,sigma,T}){ // Black–Scholes call with cont. rates
+      S=+S;K=+K;r=+r;q=+q;sigma=+sigma;T=+T;
+      const d1=(Math.log(S/K)+(r-q+0.5*sigma*sigma)*T)/(sigma*Math.sqrt(T));
+      const d2=d1 - sigma*Math.sqrt(T);
+      const price = S*Math.exp(-q*T)*cnd(d1) - K*Math.exp(-r*T)*cnd(d2);
+      return {price,d1,d2};
+    }
+    function kelly({p}){ p=+p; if(!(p>0&&p<1)) throw Error('p in (0,1)'); return {f: 2*p - 1}; }
+    function dice_sum7(){ return {p: 6/36}; }
+
+    // --- command registry ---
+    const cmds = {
+      help(){
+        return `<div class="help">
+          <table>
+            <tr><th>Command</th><th>Args</th><th>Description</th></tr>
+            <tr><td><code>bs_call</code></td><td>S,K,r,q,sigma,T</td><td>Black–Scholes European call.</td></tr>
+            <tr><td><code>kelly</code></td><td>p</td><td>Kelly fraction for a loaded coin (even payoff).</td></tr>
+            <tr><td><code>dice_sum7</code></td><td>—</td><td>Probability sum=7 for 2 dice (demo).</td></tr>
+            <tr><td><code>clear</code></td><td>—</td><td>Clear screen.</td></tr>
+          </table>
+          <div style="margin-top:.4rem" class="muted small">Examples:<br>
+          <code>bs_call S=100 K=95 r=0.03 q=0 sigma=0.25 T=0.5</code><br>
+          <code>kelly p=0.62</code>
+          </div>
+        </div>`;
+      },
+      clear(){ $('termBody').innerHTML=''; return ''; },
+      bs_call(args){
+        const res = bs_call(args);
+        return `Call = <strong>${res.price.toFixed(4)}</strong><br>d1=${res.d1.toFixed(4)}, d2=${res.d2.toFixed(4)}`;
+      },
+      kelly(args){
+        const {f} = kelly(args);
+        return `f* = <strong>${f.toFixed(4)}</strong>  (bet ${ (f*100).toFixed(1) }% of wealth)`.replace('NaN','—');
+      },
+      dice_sum7(){ const {p}=dice_sum7(); return `P(sum=7) = <strong>${p.toFixed(3)}</strong>`; }
+    };
+
+    function parse(input){
+      const [cmd, ...rest] = input.trim().split(/\s+/);
+      const args = {}; rest.join(' ').split(/\s+/).forEach(tok=>{
+        const m = tok.match(/^([A-Za-z_]+)=(.+)$/); if(m) args[m[1]] = m[2];
+      });
+      return {cmd, args};
+    }
+
+    function run(input){
+      if(!input.trim()) return;
+      const {cmd,args} = parse(input);
+      const divIn = document.createElement('div'); divIn.className='in';
+      divIn.innerHTML = `<span class="prompt">cq&gt;</span> ${input}`;
+      $('termBody').appendChild(divIn);
+
+      try {
+        if(!cmds[cmd]) out(`unknown command: <code>${cmd}</code>. Type <code>help</code>`);
+        else {
+          const html = cmds[cmd](args);
+          if (html) out(html);
+        }
+      } catch(e) {
+        out(`<span style="color:#ef4444">error:</span> ${e.message}`);
+      }
+      $('termBody').scrollTop = $('termBody').scrollHeight;
+    }
+
+    $('termInput').addEventListener('keydown', (e)=>{
+      if(e.key==='Enter'){ run(e.target.value); e.target.value=''; }
+    });
+
+    // preload help
+    out(cmds.help());
+  </script>
+</body>
+</html>
+

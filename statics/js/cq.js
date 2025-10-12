@@ -78,3 +78,44 @@
   });
 })();
 
+// --- Command palette (⌘K / Ctrl+K) ---
+(function(){
+  const el = document.getElementById('cqKbar');
+  const input = document.getElementById('kbarInput');
+  const list = document.getElementById('kbarList');
+  const open = () => { el.classList.add('open'); input.value=''; render(''); input.focus(); };
+  const close = () => { el.classList.remove('open'); };
+
+  const items = [
+    { k:'daily', t:'Open CoffeeQuant Daily', href:'#daily' },
+    { k:'labs', t:'Open Labs', href:'#labs' },
+    { k:'tools', t:'Open Tools', href:'#tools' },
+    { k:'notes', t:'Open Notes', href:'#notes' },
+    { k:'curios', t:'Open Curiosities', href:'#curios' },
+    { k:'pricing', t:'Open Pricing CLI', href:'statics/Tools/PricingCLI.html' },
+    { k:'dice', t:'Open Dice Puzzle', href:'statics/WriteUps/DicePuzzle.html' },
+    { k:'kelly', t:'Open Bet Sizing (Kelly)', href:'statics/WriteUps/BetSizing.html' }
+  ];
+
+  function render(q){
+    const ql = q.trim().toLowerCase();
+    const match = items.filter(i => !ql || i.k.includes(ql) || i.t.toLowerCase().includes(ql));
+    list.innerHTML = match.map(i=>`<div class="cq-kbar-item" data-href="${i.href}">${i.t}</div>`).join('') || '<div class="cq-kbar-item">No results</div>';
+  }
+
+  list.addEventListener('click', e => {
+    const row = e.target.closest('.cq-kbar-item'); if(!row) return;
+    const href = row.getAttribute('data-href');
+    close(); if (href.startsWith('#')) location.hash = href; else location.href = href;
+  });
+
+  input.addEventListener('input', e => render(e.target.value));
+  document.getElementById('openKbar')?.addEventListener('click', e => { e.preventDefault(); open(); });
+
+  window.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); open(); }
+    if (e.key === 'Escape' && el.classList.contains('open')) close();
+  });
+})();
+
+
