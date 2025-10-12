@@ -2,9 +2,78 @@
   --fg:#0b0f14; --bg:#ffffff; --muted:#6b7280; --card:#f6f7f9; --line:#e5e7eb; --accent:#2563eb;
 }
 @media (prefers-color-scheme: dark){
-  :root{ --fg:#e5e7eb; --bg:#0b0f14; --muted:#9aa3af; --card:#111827; --line:#1f2937; --accent:#38bdf8; }
+
+:root {
+  --fg:#0b0f14;
+  --bg:#ffffff;
+  --muted:#6b7280;
+  --card:#f8fafc;
+  --line:#e5e7eb;
+  --accent:#2563eb;
 }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fg:#e5e9f0;
+    --bg:linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+    --muted:#94a3b8;
+    --card:rgba(255,255,255,0.05);
+    --line:rgba(255,255,255,0.1);
+    --accent:#38bdf8;
+  }
+}
+/* optional: make sure <body> picks up gradient */
+body {
+  background:var(--bg);
+  background-attachment:fixed;
+  color:var(--fg);
+  margin:0;
+  font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+}
+
+/* cards pop a little */
+.cq-card, .cq-tile {
+  background:var(--card);
+  border:1px solid var(--line);
+  box-shadow:0 2px 6px rgba(0,0,0,0.15);
+  border-radius:12px;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+.cq-tile:hover {
+  transform:translateY(-2px);
+  box-shadow:0 4px 12px rgba(0,0,0,0.25);
+}
+
+/* navigation bar tint */
+.cq-nav {
+  background:rgba(255,255,255,0.4);
+  backdrop-filter:blur(8px);
+  border-radius:12px;
+  padding:.5rem 1rem;
+}
+@media (prefers-color-scheme: dark) {
+  .cq-nav {
+    background:rgba(15,23,42,0.7);
+    backdrop-filter:blur(10px);
+  }
+}
+}
+
 *{box-sizing:border-box} body{margin:0;font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;color:var(--fg);background:var(--bg)}
+.cq-hero {
+  text-align:center;
+  padding:2rem 1rem 2.5rem;
+  background:linear-gradient(135deg,#f9fafb 0%,#e0f2fe 100%);
+  border-radius:16px;
+}
+@media (prefers-color-scheme: dark){
+  .cq-hero{
+    background:linear-gradient(135deg,#1e293b 0%,#0f172a 100%);
+  }
+}
+
+a:hover, .cq-btn:hover { filter:brightness(1.1); }
+h1,h2,h3 { text-shadow:0 1px 2px rgba(0,0,0,0.25); }
 
 .cq-shell{padding:1rem 1.25rem}
 .cq-nav{display:flex;align-items:center;justify-content:space-between;gap:.75rem}
