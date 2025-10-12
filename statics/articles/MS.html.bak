@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    
+    <meta name="Generator" content="iWeb 3.0.4" />
+    <meta name="iWeb-Build" content="local-build-20120824" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <meta name="viewport" content="width=1000" />
+    <title>Stochastic Integral
+
+Here’s the confusing aspect, if X is a random number dX means X(t=2) - X(t=1). So for two different instances I have two different random numbers. When I say integrate dX^2 I am actually saying
+(X(t(p)) - X(t(p-1)))^2 where p is from 1 to n and n can be infinite. How do we expect this integral to converge? For example take 2 random numbers in excel, compute their difference. Take a million cases and finally add them, which is equivalent to the stochastic integral. Does it converge? No! 
+
+We never say that the integral converges in normal sense. It converges in _MEAN SQUARE SENSE_. Now many of us might have memorized this proof but again it’s easy to memorize but hard to apply or remember. 
+￼
+
+
+All in all the integral converges in the MEAN SQUARE sense and hence we write in short cut dX^2 = dt, and that’s why financial prices are not perfect like mathematical formulas or physics equations. It all depends on probability which is again risk neutral probability.  
+
+PS: X(t2) - X(t1) is normally distributed, here I have used wiener process definition that increments are normally distributed and for a standard normal distribution mean is 1. 
+
+
+
+
+
+
+</title>
+    <link rel="stylesheet" type="text/css" media="screen,print" href="MS_files/MS.css" />
+    <!--[if lt IE 8]><link rel='stylesheet' type='text/css' media='screen,print' href='MS_files/MSIE.css'/><![endif]-->
+    <!--[if gte IE 8]><link rel='stylesheet' type='text/css' media='screen,print' href='Media/IE8.css'/><![endif]-->
+    <script type="text/javascript" src="Scripts/iWebSite.js"></script>
+    <script type="text/javascript" src="Scripts/Widgets/SharedResources/WidgetCommon.js"></script>
+    <script type="text/javascript" src="Scripts/Widgets/Navbar/navbar.js"></script>
+    <script type="text/javascript" src="MS_files/MS.js"></script>
+  </head>
+  <body style="background: rgb(255, 255, 255) url(MS_files/BG_Tile.jpg) repeat scroll top left; margin: 0pt; " onload="onPageLoad();" onunload="onPageUnload();">
+    <div style="text-align: center; ">
+      <div style="margin-bottom: 0px; margin-left: auto; margin-right: auto; margin-top: 0px; overflow: hidden; position: relative; word-wrap: break-word;  background: rgb(255, 255, 255); text-align: left; width: 1000px; " id="body_content">
+        <div style="height: 65px; margin-left: 0px; position: relative; width: 1000px; z-index: 10; " id="header_layer">
+          <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+          <div id="id1" style="height: 34px; left: 20px; position: absolute; top: 8px; width: 160px; z-index: 1; " class="style_SkipStroke shape-with-text">
+            <div class="text-content Normal_External_160_34" style="padding: 0px; ">
+              <div class="Normal"></div>
+            </div>
+          </div>
+          
+
+
+          <div id="id2" style="height: 55px; left: 190px; position: absolute; top: 10px; width: 490px; z-index: 1; " class="style_SkipStroke_1 shape-with-text">
+            <div class="text-content style_External_490_55" style="padding: 0px; ">
+              <div class="style"></div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-left: 0px; position: relative; width: 1000px; z-index: 0; " id="nav_layer">
+          <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+          <div id="id3" style="height: 600px; left: 0px; position: absolute; top: -600px; width: 700px; z-index: 1; " class="style_SkipStroke_2 shape-with-text">
+            <div class="text-content graphic_shape_layout_style_default_External_700_600" style="padding: 0px; ">
+              <div class="graphic_shape_layout_style_default"></div>
+            </div>
+          </div>
+          <div style="height: 1px; line-height: 1px; " class="tinyText"> </div>
+          <div class="com-apple-iweb-widget-navbar flowDefining" id="widget0" style="margin-left: 0px; margin-top: -1px; opacity: 1.00; position: relative; width: 700px; z-index: 1; ">
+    
+            <div id="widget0-navbar" class="navbar">
+
+      
+              <div id="widget0-bg" class="navbar-bg">
+
+        
+                <ul id="widget0-navbar-list" class="navbar-list">
+ <li></li> 
+</ul>
+                
+      
+</div>
+              
+    
+</div>
+          </div>
+          <script type="text/javascript"><!--//--><![CDATA[//><!--
+new NavBar('widget0', 'Scripts/Widgets/Navbar', 'Scripts/Widgets/SharedResources', '.', {"path-to-root": "", "navbar-css": ".navbar {\n\tfont-family: \"MarkerFelt-Thin\", sans-serif;\n\tfont-size: 1em;\n\tcolor: #737373;\n\tmargin: 0px;\n\tline-height: 26px;\n\ttext-transform: uppercase;\n}\n\n.navbar-bg {\n\ttext-align: center;\n\tpadding: 0px;\n}\n\n.navbar-bg ul {\n\tlist-style: none;\n\tmargin: 0px;\n\tpadding: 0px;\n}\n\n\nli {\n\tlist-style-type: none;\n\tdisplay: inline;\n\tpadding: 0px 10px 0px 10px;\n}\n\n\nli a {\n\ttext-decoration: none;\n\tcolor: #737373;\n}\n\nli a:visited {\n\ttext-decoration: none;\n\tcolor: #737373;\n}\n\nli a:hover\r{\r\n \tcolor: #7EC03D;\n\ttext-decoration: none;\r}\n\n\nli.current-page a\r{\r\t color: #00ADEF;\n\ttext-decoration: none;\r\r}", "current-page-GUID": "7498720E-3D26-4386-BF57-ADE99F5B6D95", "isCollectionPage": "NO"});
+//--><!]]></script>
+          <div style="clear: both; height: 0px; line-height: 0px; " class="spacer"> </div>
+        </div>
+        <div style="margin-left: 0px; position: relative; width: 1000px; z-index: 5; " id="body_layer">
+          <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+          <div style="height: 2px; width: 700px;  height: 2px; left: 0px; position: absolute; top: 0px; width: 700px; z-index: 1; " class="tinyText style_SkipStroke_3">
+            <img src="MS_files/TopStroke.jpg" alt="" style="border: none; height: 2px; width: 700px; " />
+          </div>
+          
+
+
+          <div id="id4" style="height: 1177px; left: 65px; position: absolute; top: 322px; width: 810px; z-index: 1; " class="style_SkipStroke_4 shape-with-text">
+            <div class="text-content graphic_shape_layout_style_default_External_810_1177" style="padding: 0px; ">
+              <div class="graphic_shape_layout_style_default">
+                <p style="padding-top: 0pt; " class="Title">Stochastic Integral<br /></p>
+                <p class="paragraph_style"><br /></p>
+                <p class="paragraph_style_1">Here’s the confusing aspect, if X is a random number dX means X(t=2) - X(t=1). So for two different instances I have two different random numbers. When I say integrate dX^2 I am actually saying<br /></p>
+                <p class="paragraph_style_1">(X(t(p)) - X(t(p-1)))^2 where p is from 1 to n and n can be infinite. How do we expect this integral to converge? For example take 2 random numbers in excel, compute their difference. Take a million cases and finally add them, which is equivalent to the stochastic integral. Does it converge? No! <br /></p>
+                <p class="paragraph_style_1"><br /></p>
+                <p class="paragraph_style_1">We never say that the integral converges in normal sense. It converges in _MEAN SQUARE SENSE_. Now many of us might have memorized this proof but again it’s easy to memorize but hard to apply or remember. <br /></p>
+                <div class="paragraph paragraph_style_2"><div style="height: 604px; width: 800px;  height: 606px; left: 5px; position: relative; top: 5px; width: 802px; " class="tinyText inline-block"><div style="position: relative; width: 792px; "><img src="MS_files/shapeimage_1.png" alt="" style="height: 604px; left: 0px; margin-left: -4px; margin-top: -4px; position: absolute; top: 0px; width: 800px; " /></div></div><br /></div>
+                <p class="paragraph_style_2"><br /></p>
+                <p class="paragraph_style_2"><br /></p>
+                <p class="paragraph_style_3">All in all the integral converges in the MEAN SQUARE sense and hence we write in short cut dX^2 = dt, and that’s why financial prices are not perfect like mathematical formulas or physics equations. It all depends on probability which is again risk neutral probability.  <br /></p>
+                <p class="paragraph_style_3"><br /></p>
+                <p class="paragraph_style_3">PS: X(t2) - X(t1) is normally distributed, here I have used wiener process definition that increments are normally distributed and for a standard normal distribution mean is 1. <br /></p>
+                <p class="paragraph_style_2"><br /></p>
+                <p class="paragraph_style_2"><br /></p>
+                <p class="paragraph_style_2"><br /></p>
+                <p class="paragraph_style_2"><br /></p>
+                <p class="paragraph_style_2"><br /></p>
+                <p class="paragraph_style_2"><br /></p>
+              </div>
+              <div style="clear: both; height: 0px; line-height: 0px; " class="tinyText"> </div>
+            </div>
+          </div>
+          
+
+
+          <div style="height: 318px; width: 419px;  height: 308px; left: 15px; position: absolute; top: 14px; width: 411px; z-index: 1; " class="tinyText">
+            <div style="position: relative; width: 411px; ">
+              <img src="MS_files/shapeimage_2.png" alt="" style="height: 318px; left: 0px; margin-left: -4px; margin-top: -4px; position: absolute; top: 0px; width: 419px; " />
+            </div>
+          </div>
+          <div style="height: 1499px; line-height: 1499px; " class="spacer"> </div>
+        </div>
+        <div style="height: 110px; margin-left: 0px; position: relative; width: 1000px; z-index: 15; " id="footer_layer">
+          <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+          <div id="id5" style="height: 70px; left: 0px; position: absolute; top: 40px; width: 700px; z-index: 1; " class="style_SkipStroke_5 shape-with-text">
+            <div class="text-content graphic_shape_layout_style_default_External_700_70" style="padding: 0px; ">
+              <div class="graphic_shape_layout_style_default"></div>
+            </div>
+          </div>
+          <a href="http://apple.com/mac" title="http://apple.com/mac"><img src="MS_files/mwmac.png" alt="Made on a Mac" style="border: none; height: 50px; left: 280px; opacity: 0.35; position: absolute; top: 50px; width: 139px; z-index: 1; " id="id6" />
+
+</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+

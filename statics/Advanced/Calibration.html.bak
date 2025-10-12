@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    
+    <meta name="Generator" content="iWeb 3.0.4" />
+    <meta name="iWeb-Build" content="local-build-20120824" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <meta name="viewport" content="width=1200" />
+    <title>Calibration</title>
+    <link rel="stylesheet" type="text/css" media="screen,print" href="Calibration_files/Calibration.css" />
+    <!--[if lt IE 8]><link rel='stylesheet' type='text/css' media='screen,print' href='Calibration_files/CalibrationIE.css'/><![endif]-->
+    <!--[if gte IE 8]><link rel='stylesheet' type='text/css' media='screen,print' href='Media/IE8.css'/><![endif]-->
+    <script type="text/javascript" src="Scripts/iWebSite.js"></script>
+    <script type="text/javascript" src="Scripts/Widgets/SharedResources/WidgetCommon.js"></script>
+    <script type="text/javascript" src="Scripts/Widgets/Navbar/navbar.js"></script>
+    <script type="text/javascript" src="Scripts/iWebImage.js"></script>
+    <script type="text/javascript" src="Calibration_files/Calibration.js"></script>
+  </head>
+  <body style="background: rgb(246, 247, 255); margin: 0pt; " onload="onPageLoad();" onunload="onPageUnload();">
+    <div style="text-align: center; ">
+      <div style="margin-bottom: 10px; margin-left: auto; margin-right: auto; margin-top: 10px; overflow: hidden; position: relative; word-wrap: break-word;  text-align: left; width: 1200px; " id="body_content">
+        <div style="background: transparent url(Calibration_files/backgroundimage_1.jpg) no-repeat scroll center center; width: 1200px; ">
+          <div style="margin-left: 0px; position: relative; width: 1200px; z-index: 0; " id="nav_layer">
+            <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+            <div class="com-apple-iweb-widget-navbar flowDefining" id="widget0" style="margin-left: 20px; margin-top: 0px; opacity: 1.00; position: relative; width: 660px; z-index: 1; ">
+    
+              <div id="widget0-navbar" class="navbar">
+
+      
+                <div id="widget0-bg" class="navbar-bg">
+
+        
+                  <ul id="widget0-navbar-list" class="navbar-list">
+ <li></li> 
+</ul>
+                  
+      
+</div>
+                
+    
+</div>
+            </div>
+            <script type="text/javascript"><!--//--><![CDATA[//><!--
+new NavBar('widget0', 'Scripts/Widgets/Navbar', 'Scripts/Widgets/SharedResources', '.', {"path-to-root": "", "navbar-css": ".navbar {\n\tfont-family: 'Helvetica Neue', Arial, sans-serif;\n\tfont-size: .8em;\n\tcolor: #666666;\n\tline-height: 30px;\n\tborder-bottom: 3px solid #ccc;\n}\n\n.navbar-bg {\n\ttext-align: right;}\n\n.navbar-bg ul {\n\tlist-style: none;\n\tmargin: 0px;\n\tpadding: 0px;\n}\n\n\nli {\n\tlist-style-type: none;\n\tdisplay: inline;\n\tpadding: 0px 5px 0px 0px;\n}\n\n\nli a {\n\ttext-decoration: none;\n\tpadding: 10px;\n\tcolor: #666666;\n\tfont-weight: bold;\n}\n\nli a:visited {\n\ttext-decoration: none;\n\tpadding: 10px;\n\tcolor: #666666;\n\tfont-weight: bold;\n}\n\nli a:hover\r{\r\n \tcolor: #999999;\n\ttext-decoration: none;\r}\n\n\nli.current-page a\r{\r\t color: #66ABC5;\n\ttext-decoration: none;\r}\n", "current-page-GUID": "7DC1E855-D785-4574-B97B-00C8B0072A1B", "isCollectionPage": "NO"});
+//--><!]]></script>
+            <div style="clear: both; height: 0px; line-height: 0px; " class="spacer"> </div>
+          </div>
+          <div style="height: 87px; margin-left: 0px; position: relative; width: 1200px; z-index: 10; " id="header_layer">
+            <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+            <div id="id1" style="height: 87px; left: 0px; position: absolute; top: 0px; width: 791px; z-index: 1; " class="style_SkipStroke shape-with-text">
+              <div class="text-content style_External_791_87" style="padding: 0px; ">
+                <div class="style">
+                  <p style="padding-bottom: 0pt; padding-top: 0pt; " class="Header">Calibration - Modified Approach</p>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div id="id2" style="height: 43px; left: 802px; position: absolute; top: 22px; width: 145px; z-index: 1; " class="style_SkipStroke_1 shape-with-text">
+              <div class="text-content style_External_145_43" style="padding: 0px; ">
+                <div class="style_1">
+                  <p style="padding-bottom: 0pt; padding-top: 0pt; " class="Heading_1">2012</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-left: 0px; position: relative; width: 1200px; z-index: 5; " id="body_layer">
+            <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+            <div id="id3" style="height: 20px; left: 20px; position: absolute; top: 97px; width: 295px; z-index: 1; " class="style_SkipStroke_2 shape-with-text">
+              <div class="text-content style_External_295_20" style="padding: 0px; ">
+                <div class="style_2">
+                  <p style="padding-bottom: 0pt; padding-top: 0pt; " class="Summary_Title">Calibration</p>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div style="height: 245px; width: 271px;  height: 245px; left: 25px; position: absolute; top: 136px; width: 271px; z-index: 1; " class="tinyText style_SkipStroke_3 stroke_0">
+              <img src="Calibration_files/droppedImage.jpg" alt="" style="border: none; height: 245px; width: 272px; " />
+            </div>
+            
+
+
+            <div id="id4" style="height: 36px; left: 545px; position: absolute; top: 333px; width: 9px; z-index: 1; " class="style_SkipStroke_1 shape-with-text">
+              <div class="text-content graphic_textbox_layout_style_default_External_9_36" style="padding: 0px; ">
+                <div class="graphic_textbox_layout_style_default">
+                  <p style="padding-top: 0pt; " class="paragraph_style"><br /></p>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div style="height: 350px; width: 903px;  height: 350px; left: 22px; position: absolute; top: 3100px; width: 903px; z-index: 1; " class="tinyText style_SkipStroke_4">
+              <img src="Calibration_files/finalsurface.jpg" alt="" style="border: none; height: 350px; width: 903px; " />
+            </div>
+            
+
+
+            <div style="height: 70px; width: 984px;  height: 70px; left: 25px; position: absolute; top: 711px; width: 984px; z-index: 1; " class="tinyText style_SkipStroke_5 stroke_1">
+              <img src="Calibration_files/droppedImage.png" alt="" style="border: none; height: 71px; width: 984px; " />
+            </div>
+            
+
+
+            <div style="height: 303px; width: 485px;  height: 303px; left: 580px; position: absolute; top: 1942px; width: 485px; z-index: 1; " class="tinyText style_SkipStroke_6">
+              <img src="Calibration_files/d9Hvvf93nwfxMawz0%3D.png" alt="" style="border: none; height: 303px; width: 485px; " />
+            </div>
+            
+
+
+            <div id="id5" style="height: 408px; left: 326px; position: absolute; top: 94px; width: 703px; z-index: 1; " class="style_SkipStroke_1 shape-with-text">
+              <div class="text-content graphic_textbox_layout_style_default_External_703_408" style="padding: 0px; ">
+                <div class="graphic_textbox_layout_style_default">
+                  <p style="padding-top: 0pt; " class="paragraph_style_1">This seems a perfectly fitted curve for arbitrary set of points! Calibration as a whole in financial markets is never meant to be a perfect curve passing through each and every point. The deviation in the option prices from today to tomorrow should be minimal hence it is tested for a huge amount of historical data. So qualities in a vol model or golden rules according to me are, <br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <ol>
+                    <li style="line-height: 20px; padding-left: 13px; text-indent: -13px; " class="full-width" value="1">
+                      <p style="text-indent: -13px; " class="paragraph_style_2"><span style="font-size: 14px; " class="Bullet">1.</span><span style="width: 2px; " class="inline-block"></span>If one point moves (X strike option is now trading above 5% vol and the market has changed only by a %, we can’t possible change our whole curve or shift it. The profit/loss would gyrate wildly and hedges might suffer market impacts quite a lot. <br /></p>
+                    </li>
+                  </ol>
+                  <p class="paragraph_style_1"><br /></p>
+                  <ol>
+                    <li style="line-height: 20px; padding-left: 13px; text-indent: -13px; " class="full-width" value="2">
+                      <p style="text-indent: -13px; " class="paragraph_style_3"><span style="font-size: 14px; " class="Bullet">2.</span><span style="width: 2px; " class="inline-block"></span>It’s important that the daily hedges are not volatility if the market movement is not volatile<br /></p>
+                    </li>
+                  </ol>
+                  <p class="paragraph_style_4"><br /></p>
+                  <ol>
+                    <li style="line-height: 20px; padding-left: 13px; text-indent: -13px; " class="full-width" value="3">
+                      <p style="text-indent: -13px; " class="paragraph_style_3"><span style="font-size: 14px; " class="Bullet">3.</span><span style="width: 2px; " class="inline-block"></span>Avoid Second Derivatives in the volatility expression. Local volatility model suffers from this anomaly. Reason is this second derivatives can become infinite and cause a lot of painful greeks. <br /></p>
+                    </li>
+                  </ol>
+                  <p class="paragraph_style_4"><br /></p>
+                  <ol>
+                    <li style="line-height: 20px; padding-left: 13px; text-indent: -13px; " class="full-width" value="4">
+                      <p style="text-indent: -13px; " class="paragraph_style_3"><span style="font-size: 14px; " class="Bullet">4.</span><span style="width: 2px; " class="inline-block"></span>Most of the volatility models have been refined by traders to suit the practical needs, but I haven’t found anything of this sort in books written by quants. <br /></p>
+                    </li>
+                  </ol>
+                  <p class="paragraph_style_4"><br /></p>
+                  <p class="paragraph_style_4">So objective of this post is to refine the SABR model and get rid of it’s ugliness. As per wikipedia (SABR Model) the ugliness is this expression<br /></p>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div id="id6" style="height: 138px; left: 20px; position: absolute; top: 545px; width: 1019px; z-index: 1; " class="style_SkipStroke_7 shape-with-text">
+              <div class="text-content style_External_1019_138" style="padding: 0px; ">
+                <div class="style_3">
+                  <p style="padding-top: 0pt; " class="paragraph_style_5">Of course there are other ugly terms which I will avoid for reasons unknown. This term is basically expressing implied volatility as a function of some sort of moneyness function (the alpha Log(F0/K)/D(....) part. <br /></p>
+                  <p class="paragraph_style_5"><br /></p>
+                  <p style="padding-bottom: 0pt; " class="paragraph_style_5">This term is being adjusted by some factor in square brackets and then added back. We are going to modify the term in square brackets. Will use mathematica a bit for understanding. </p>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div id="id7" style="height: 407px; left: 17px; position: absolute; top: 779px; width: 1000px; z-index: 1; " class="style_SkipStroke_1 shape-with-text">
+              <div class="text-content graphic_textbox_layout_style_default_External_1000_407" style="padding: 0px; ">
+                <div class="graphic_textbox_layout_style_default">
+                  <p style="padding-top: 0pt; " class="paragraph_style_6">Any volatility distribution can be synthesized using three things (for a given time to maturity)<br /></p>
+                  <p class="paragraph_style_6"><br /></p>
+                  <ol>
+                    <li style="line-height: 19px; padding-left: 13px; text-indent: -13px; " class="full-width" value="1">
+                      <p style="text-indent: -13px; " class="paragraph_style_7"><span style="font-size: 13px; " class="Bullet">1.</span><span style="width: 3px; " class="inline-block"></span>ATM Volatility (The Level)<br /></p>
+                    </li>
+                    <li style="line-height: 19px; padding-left: 13px; text-indent: -13px; " class="full-width" value="2">
+                      <p style="text-indent: -13px; " class="paragraph_style_7"><span style="font-size: 13px; " class="Bullet">2.</span><span style="width: 3px; " class="inline-block"></span>Skew   (The Bends)<br /></p>
+                    </li>
+                    <li style="line-height: 19px; padding-left: 13px; text-indent: -13px; " class="full-width" value="3">
+                      <p style="text-indent: -13px; " class="paragraph_style_7"><span style="font-size: 13px; " class="Bullet">3.</span><span style="width: 3px; " class="inline-block"></span>Kurtosis  (The Curvature)<br /></p>
+                    </li>
+                  </ol>
+                  <p class="paragraph_style_6"><br /></p>
+                  <p class="paragraph_style_6">SABR uses the terms<br /></p>
+                  <p class="paragraph_style_6"><br /></p>
+                  <ol>
+                    <li style="line-height: 19px; padding-left: 19px; text-indent: -19px; " class="full-width" value="1">
+                      <p style="text-indent: -19px; " class="paragraph_style_8"><span style="font-size: 13px; " class="Bullet">1.</span><span style="width: 9px; " class="inline-block"></span>Vol of Vol<br /></p>
+                    </li>
+                    <li style="line-height: 19px; padding-left: 19px; text-indent: -19px; " class="full-width" value="2">
+                      <p style="text-indent: -19px; " class="paragraph_style_8"><span style="font-size: 13px; " class="Bullet">2.</span><span style="width: 9px; " class="inline-block"></span>Correlation<br /></p>
+                    </li>
+                    <li style="line-height: 19px; padding-left: 19px; text-indent: -19px; " class="full-width" value="3">
+                      <p style="text-indent: -19px; " class="paragraph_style_8"><span style="font-size: 13px; " class="Bullet">3.</span><span style="width: 9px; " class="inline-block"></span>And some variance related terms<br /></p>
+                    </li>
+                  </ol>
+                  <p class="paragraph_style_9"><br /></p>
+                  <p class="paragraph_style_9">Traders can’t think of these terms intuitively so this is my mapping. These are not hard and fast rules<br /></p>
+                  <p class="paragraph_style_9"><br /></p>
+                  <ol>
+                    <li style="line-height: 19px; padding-left: 19px; text-indent: -19px; " class="full-width" value="1">
+                      <p style="text-indent: -19px; " class="paragraph_style_10"><span style="font-size: 13px; " class="Bullet">1.</span><span style="width: 9px; " class="inline-block"></span>Vol of vol is directly proportional to skew<br /></p>
+                    </li>
+                    <li style="line-height: 19px; padding-left: 19px; text-indent: -19px; " class="full-width" value="2">
+                      <p style="text-indent: -19px; " class="paragraph_style_10"><span style="font-size: 13px; " class="Bullet">2.</span><span style="width: 9px; " class="inline-block"></span>Vol of vol is inversely proportional to correlation<br /></p>
+                    </li>
+                  </ol>
+                  <p class="paragraph_style_9"><br /></p>
+                  <p class="paragraph_style_9">Hence keeping the ratio vol of vol = factor x skew / correlation, where factor can be anything &gt; 0. As of now still i don’t know the correlation. I keep correlation dependent on this function<br /></p>
+                  <p class="paragraph_style_9"><br /></p>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div id="id8" style="height: 568px; left: 23px; position: absolute; top: 1208px; width: 378px; z-index: 1; " class="style_SkipStroke_1 shape-with-text">
+              <div class="text-content graphic_textbox_layout_style_default_External_378_568" style="padding: 0px; ">
+                <div class="graphic_textbox_layout_style_default">
+                  <p style="padding-top: 0pt; " class="paragraph_style_11">ATMVOL := 0.7<br />skew := 0.9<br /><br />Plot[-1*Min[0.99, <br />   1/,(6*(0.25 + <br />         kurtosis*ATMVOL^2*<br />          ATMVOL/(4*(skew*ATMVOL)^2)))], {kurtosis, -0.1, -0.8}, <br /> PlotStyle -&gt; {Directive[Darker[Blue], Thick], <br />   Directive[Gray, Thickness[0.01]], Directive[Blue, Dashed], <br />   Directive[Blue, Dashed]}]<br /></p>
+                  <p class="paragraph_style_11"><br /></p>
+                  <p class="paragraph_style_1">Rules are, for correlation<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_11">&quot;More Negative Skew - More Correlation&quot;<br /></p>
+                  <p class="paragraph_style_11">&quot;More Kurtosis - Less Correlation&quot;<br /></p>
+                  <p class="paragraph_style_11">&quot;More ATM Vol - Less Correlation&quot;<br /></p>
+                  <p class="paragraph_style_11"><br /></p>
+                  <p class="paragraph_style_11">You can try out different rules or modify this expression. <br /></p>
+                  <p class="paragraph_style_11"><br /></p>
+                  <p style="padding-bottom: 0pt; " class="paragraph_style_11">Some quants might question this approach and say “Why not just use a simple correl function to calculate correlation between stock and volatility series?”. In a perfect world this should be done but since the correlation value obtained using correl function (assuming excel) is unstable (or gyrates rapidly), this is not a practical approach. </p>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div id="id9" style="height: 331px; left: 475px; position: absolute; top: 1531px; width: 548px; z-index: 1; " class="style_SkipStroke_8 shape-with-text">
+              <div class="text-content graphic_textbox_layout_style_default_External_548_331" style="padding: 0px; ">
+                <div class="graphic_textbox_layout_style_default">
+                  <p style="padding-top: 0pt; " class="paragraph_style_12">When skew is very high it means OTM puts are priced at high premiums compared to ATM. Likewise if skew is very low OTM puts are priced at low premiums compared to ATM. When skew increases from low to high, what can be the behavior of correlation between stock &amp; volatility?<br /></p>
+                  <p class="paragraph_style_12"><br /></p>
+                  <p class="paragraph_style_12">Market is falling drastically and volatility is increasing =&gt; Correlation = High<br /></p>
+                  <p class="paragraph_style_12">Market is stable, and volatility is low =&gt; Correlation = Low<br /></p>
+                  <p class="paragraph_style_12">Hence it can be said that correlation between stock and volatility increases with increase of negative skew. <br /></p>
+                  <p class="paragraph_style_12"><br /></p>
+                  <p class="paragraph_style_12">Kurtosis means volatility is clustered around the mean or the distribution of ATM vol for different maturities will almost be similar. So high kurtosis means vols are clustered in the middle and stock movement doesn’t cause much change. Hence lower correlation. <br /></p>
+                  <p class="paragraph_style_12"><br /></p>
+                  <p class="paragraph_style_12">Last case is easy to understand and I will leave that for reader to imply. <br /></p>
+                  <p class="paragraph_style_12"><br /></p>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div style="height: 100px; width: 100px;  height: 100px; left: 400px; position: absolute; top: 1627px; width: 100px; z-index: 1; " class="tinyText">
+              <div style="position: relative; width: 100px; ">
+                <img src="Calibration_files/shapeimage_1.png" alt="" style="height: 100px; left: 0px; position: absolute; top: 0px; width: 100px; " />
+              </div>
+            </div>
+            
+
+
+            <div id="id10" style="height: 557px; left: 24px; position: absolute; top: 1792px; width: 442px; z-index: 1; " class="style_SkipStroke_8 shape-with-text">
+              <div class="text-content graphic_textbox_layout_style_default_External_442_557" style="padding: 0px; ">
+                <div class="graphic_textbox_layout_style_default">
+                  <p style="padding-top: 0pt; " class="paragraph_style_13">Now comes the easy part formulating growth rate of ATM VOL and Skew which is generally observed or can be given as input by the traders. <br /></p>
+                  <p class="paragraph_style_13"><br /></p>
+                  <p class="paragraph_style_13">The trader enters the ATM vols for different maturities as per his/her view. This is then mapped using an exponential function. Exponential function is best for this type of growth in vols and skews. My function uses two inputs <br /></p>
+                  <p class="paragraph_style_13"><br /></p>
+                  <p class="paragraph_style_14">l0 := 0<br />l1 := 1<br /><br />Plot[-0.03 - 0.01*(Exp[-l1*mat] - Exp[-l0*mat])/(Exp[-l1*1] - Exp[-l0*1]) - <br />  0.03*( Exp[-l1*1 - l0*mat] - Exp[-l0*1 - l1*mat] )/(Exp[-l1*1] - <br />      Exp[-l0*1]), {mat, 0, 2}, <br /> PlotStyle -&gt; {Directive[Darker[Blue], Thick], <br />   Directive[Gray, Thickness[0.01]], Directive[Blue, Dashed], <br />   Directive[Red, Dashed]}]<br /></p>
+                  <p class="paragraph_style_14"><br /></p>
+                  <p class="paragraph_style_14">But wait - Can i manipulate ATM VOL this way? No but I can manipulate ATM Variance and this is what I get as a smooth curve. This shows traders has used decreasing ATM Vols for future maturities. Same function can be used for the skew. <br /></p>
+                  <p class="paragraph_style_14"><br /></p>
+                  <p class="paragraph_style_14">Note: I obtain a growth rate function using change in variance expected by the trader. <br /></p>
+                  <p class="paragraph_style_14"><br /></p>
+                  <p class="paragraph_style_14">Lastly kurtosis can be manipulated using a simple growth rate function like <br /></p>
+                  <p class="paragraph_style_14"><br /></p>
+                  <p style="padding-bottom: 0pt; " class="paragraph_style_14">kurtosis + kurtosis * (1 - e{kurtosis growth rate)) or something similar depending on data. </p>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div id="id11" style="height: 723px; left: 19px; position: absolute; top: 2361px; width: 1062px; z-index: 1; " class="style_SkipStroke_1 shape-with-text">
+              <div class="text-content graphic_textbox_layout_style_default_External_1062_723" style="padding: 0px; ">
+                <div class="graphic_textbox_layout_style_default">
+                  <p style="padding-top: 0pt; " class="paragraph_style_12">This is the nice function hyperbolic tan which can be used to replace the ugly expression in SABR and still use the original expression. <br /></p>
+                  <p class="paragraph_style_12"><br /></p>
+                  <p class="paragraph_style_5">alpha Log(F0/K)/D(....) [ 1 + tanh(.....) ] <br /></p>
+                  <p class="paragraph_style_5"><br /></p>
+                  <p class="paragraph_style_5">The tanh causes the vol surface to flatten out smoothly starting from specific strikes. This can easily be specified using <br /></p>
+                  <p class="paragraph_style_5"><br /></p>
+                  <p class="paragraph_style_5">    X = Log(strike / fwd) / atmvol / Sqr(tenor)<br /></p>
+                  <p class="paragraph_style_5">    minlimit = Log(strikeDnRatio + alpha * strike / fwd) / atmvol / Sqr(tenor)<br /></p>
+                  <p class="paragraph_style_5">    maxlimit = Log(strikeUpRatio) / atmvol / Sqr(tenor)<br /></p>
+                  <p class="paragraph_style_5">    final = maxlimit * WorksheetFunction.Tanh(X / xmax)<br /></p>
+                  <p class="paragraph_style_5"><br /></p>
+                  <p class="paragraph_style_5">and similarly for minlimit. These are just for upward and downward strikes. TanH helps in growing them as a smooth curve. Of course sinh or cosh or some other function can also be tried. <br /></p>
+                  <p class="paragraph_style_5"><br /></p>
+                  <p class="paragraph_style_5">final vol (strike, time step) = atmvol * final (.....) <br /></p>
+                  <p class="paragraph_style_5">An extremely simple crude version might be<br /></p>
+                  <p class="paragraph_style_5"><br /></p>
+                  <p class="paragraph_style_5">vol = atm vol + skew * moneyness function + kurtosis * moneyness function squared. of course you can do better than that!<br /></p>
+                  <p class="paragraph_style_5"><br /></p>
+                  <p class="paragraph_style_5">I can’t give the complete code, but here’s the surface produced for illiquid markets. It shows first three maturities, 1 month, 3 months and 4 month surfaces for some illiquid market.<br /></p>
+                  <p class="paragraph_style_5">    <br /></p>
+                  <p class="paragraph_style_5">    finalvol = atmvol * volofvol * moneyness function / D(...)<br /></p>
+                  <p class="paragraph_style_5">    <br /></p>
+                  <p class="paragraph_style_5">Note: The integral for the parameter inside D needs to be approximated. D is from original SABR (wikipedia symbols)<br /></p>
+                  <p class="paragraph_style_5"><br /></p>
+                  <p class="paragraph_style_5">The key point is or again my rules are.....<br /></p>
+                  <p class="paragraph_style_5"><br /></p>
+                  <ol>
+                    <li style="line-height: 23px; padding-left: 13px; text-indent: -13px; " class="full-width" value="1">
+                      <p style="text-indent: -13px; " class="paragraph_style_15"><span style="font-size: 13px; " class="Bullet">1.</span><span style="width: 3px; " class="inline-block"></span>Always refine the model and drill into it’s basic parts<br /></p>
+                    </li>
+                    <li style="line-height: 23px; padding-left: 13px; text-indent: -13px; " class="full-width" value="2">
+                      <p style="text-indent: -13px; " class="paragraph_style_15"><span style="font-size: 13px; " class="Bullet">2.</span><span style="width: 3px; " class="inline-block"></span>Never trust a elegant looking mathematical expression<br /></p>
+                    </li>
+                  </ol>
+                  <p class="paragraph_style_12"><br /></p>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div id="id12" style="height: 69px; left: 459px; position: absolute; top: 1233px; width: 172px; z-index: 1; " class="style_SkipStroke_8 shape-with-text">
+              <div class="text-content graphic_textbox_layout_style_default_External_172_69" style="padding: 0px; ">
+                <div class="graphic_textbox_layout_style_default">
+                  <p style="padding-bottom: 0pt; padding-top: 0pt; " class="paragraph_style_16">Correlation (Y) vs Kurtosis (X)</p>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div id="id13" style="height: 69px; left: 542px; position: absolute; top: 1949px; width: 172px; z-index: 1; " class="style_SkipStroke_8 shape-with-text">
+              <div class="text-content graphic_textbox_layout_style_default_External_172_69" style="padding: 0px; ">
+                <div class="graphic_textbox_layout_style_default">
+                  <p style="padding-bottom: 0pt; padding-top: 0pt; " class="paragraph_style_16">ATM Vol vs Maturity</p>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div style="height: 270px; width: 448px;  height: 270px; left: 404px; position: absolute; top: 1242px; width: 448px; z-index: 1; " class="tinyText style_SkipStroke_9 shadow_0">
+              <img src="Calibration_files/s+j01pmZub9Fgge+81Xrv2t6brI%3D.png" alt="" style="border: none; height: 270px; width: 449px; " />
+            </div>
+            <div style="height: 3500px; line-height: 3500px; " class="spacer"> </div>
+          </div>
+          <div style="height: 75px; margin-left: 0px; position: relative; width: 1200px; z-index: 15; " id="footer_layer">
+            <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+            <a href="http://apple.com/mac" title="http://apple.com/mac"><img src="Calibration_files/mwmac.png" alt="Made on a Mac" style="border: none; height: 50px; left: 280px; opacity: 0.35; position: absolute; top: 8px; width: 139px; z-index: 1; " id="id14" />
+
+</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+

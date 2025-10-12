@@ -1,0 +1,522 @@
+
+<!DOCTYPE HTML> 
+<html lang="en"> 
+	<head> 
+        <style type="text/css">
+            @import "dojor/dojox/grid/resources/Grid.css";
+            @import "dojor/dijit/themes/claro/claro.css";
+            .dojoxGrid table { margin: 0; } html, body { width: 100%; height: 100%;
+            margin: 0; }
+        </style>
+<style type="text/css">
+
+		.dojoxFisheyeListItemLabel {
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: #eee;
+	border: 2px solid #666;
+	padding: 2px;
+	text-align: center;
+	position: absolute;
+	display: none;
+	white-space:pre; 
+}
+.dojoxFisheyeListItemLabel.dojoxFishSelected {
+	display: block;
+}
+.dojoxFisheyeListItemImage {
+	border: 0px;
+	position: absolute;
+}
+.dojoxFisheyeListItem {
+	position: absolute;
+	z-index: 2;
+}
+.dojoxFisheyeListBar {
+	position: relative;
+}
+
+
+		.dojoxFisheyeListBar {
+			margin: 0 auto;
+			text-align: center;
+		}
+		.outerbar {
+			background-color: #666;
+			text-align: center;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			border-bottom:2px solid #333;
+		}
+		
+
+</style>
+	        
+		<meta charset="utf-8"> 
+		<title>Quantanalysis</title> 
+ 
+		<!-- load dojo and provide config via data attribute --> 
+		<script src="dojor/dojo/dojo.js"
+				djConfig="parseOnLoad: true"> 
+		</script> 
+		<script> 
+	
+	function formatSGrid(value)
+	{
+		if(dojo.number.format(value) == null)
+			return value;
+		var a = parseFloat(eval(value));
+		return a.toFixed(2);
+
+
+	}
+	
+	function formatGrid(value)
+	{
+		if(dojo.number.format(value) == null)
+			return value;
+		var a = parseFloat(eval(value));
+		return a.toFixed(4);
+
+	}
+
+
+
+function statichedging()
+	{
+		var xhrArgs = {
+			url: 'cgi-bin/statichedge.pl',
+                        form: dojo.byId("pricer"),
+                        handleAs: "text",
+                        load: function(datalis3t) {
+				//data_list is taken from perl script....
+//datalist = [{ Stock: 'normal', OP: false, Delta: 'new', Gamma: 'But are not followed by two hexadecimal', Theta: 29.91 },{ Stock: 'normal', OP: false, 
+//Delta: 'new', Gamma: 'But are not followed by two hexadecimal', Theta: 29.91 }];
+datalist = eval(datalis3t);//[{ Stock: 'normal', OP: false, Delta: 'new', Gamma: 'But are not followed by two hexadecimal', Theta: 29.91 },{ Stock: 'normal', OP: false, Delta: 'new', Gamma: 'But are not followed by two hexadecimal', Theta: 29.91 }];
+
+			//assume it's there...now proceed
+			var data = {
+			identifier: 'id',
+			label: 'Stock',
+			items: []
+			};
+			
+			//cleanup
+			var node = dojo.byId("gridContainer4");
+			while (node.hasChildNodes()) {
+			    node.removeChild(node.lastChild);
+			}
+
+
+
+			var rows = datalist.length;
+			for(var i=0, l=datalist.length; i<rows; i++){
+				data.items.push(dojo.mixin({ id: i }, datalist[i%l]));
+			}
+			var store4 = new dojo.data.ItemFileWriteStore({data: data});
+		
+	                // set the layout structure:
+			var layout4 = [
+				[
+					{ name: 'Row', field: 'id'},
+					{ name: 'Hedged Sell', field: 'Sell',formatter: formatGrid},
+					{ name: 'Hedged Buy', field: 'Buy',formatter: formatGrid}
+				]
+			];
+			// create a fucking new grid:
+		        var grid4 = new dojox.grid.DataGrid({
+		            query: {
+		                id: '*'
+		            },
+		            store: store4,
+		            clientSort: true,
+		            rowSelector: '20px',
+		            structure: layout4
+		        },
+		        document.createElement('div'));
+
+		        // append the new grid to the div "gridContainer4":
+		        dojo.byId("gridContainer4").appendChild(grid4.domNode);
+
+		        // Call startup, in order to render the grid:
+		        grid4.startup();
+                        },
+                        error: function(error) {
+                            //We'll 404 in the demo, but that's okay.  We don't have a 'postIt' service on the
+                            //docs server.
+                            alert('Error with parameters supplied');
+                        }
+                    }
+                    //Call the asynchronous xhrPost
+                    var deferred = dojo.xhrPost(xhrArgs);
+
+	
+
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	function pressed(){
+	            //The parameters to pass to xhrPost, the message, and the url to send it to
+                    //Also, how to handle the return and callbacks.
+                    var xhrArgs = {
+                        form: dojo.byId("pricer"),
+                        handleAs: "text",
+                        load: function(datalis3t) {
+				//data_list is taken from perl script....
+//datalist = [{ Stock: 'normal', OP: false, Delta: 'new', Gamma: 'But are not followed by two hexadecimal', Theta: 29.91 },{ Stock: 'normal', OP: false, 
+//Delta: 'new', Gamma: 'But are not followed by two hexadecimal', Theta: 29.91 }];
+
+datalist = eval(datalis3t);//[{ Stock: 'normal', OP: false, Delta: 'new', Gamma: 'But are not followed by two hexadecimal', Theta: 29.91 },{ Stock: 'normal', OP: false, Delta: 'new', Gamma: 'But are not followed by two hexadecimal', Theta: 29.91 }];
+
+			//assume it's there...now proceed
+			var data = {
+			identifier: 'id',
+			label: 'Stock',
+			items: []
+			};
+			
+			//cleanup
+			var node = dojo.byId("gridContainer4");
+			while (node.hasChildNodes()) {
+			    node.removeChild(node.lastChild);
+			}
+
+
+
+			var rows = datalist.length;
+			for(var i=0, l=datalist.length; i<rows; i++){
+				data.items.push(dojo.mixin({ id: i }, datalist[i%l]));
+			}
+			var store4 = new dojo.data.ItemFileWriteStore({data: data});
+		
+	                // set the layout structure:
+			var layout4 = [
+				[
+					{ name: 'Row', field: 'id'},
+					{ name: 'Stock Price', field: 'Stock',formatter: formatSGrid },
+					{ name: 'Option Price', field: 'OP',formatter: formatGrid  },
+					{ name: 'Delta', field: 'Delta', width: '150px',formatter: formatGrid  },
+					{ name: 'Gamma', field: 'Gamma' ,formatter: formatGrid },
+					{ name: 'Theta', field: 'Theta',formatter: formatGrid  }
+				]
+			];
+			// create a fucking new grid:
+		        var grid4 = new dojox.grid.DataGrid({
+		            query: {
+		                id: '*'
+		            },
+		            store: store4,
+		            clientSort: true,
+		            rowSelector: '20px',
+		            structure: layout4
+		        },
+		        document.createElement('div'));
+
+		        // append the new grid to the div "gridContainer4":
+		        dojo.byId("gridContainer4").appendChild(grid4.domNode);
+
+		        // Call startup, in order to render the grid:
+		        grid4.startup();
+                        },
+                        error: function(error) {
+                            //We'll 404 in the demo, but that's okay.  We don't have a 'postIt' service on the
+                            //docs server.
+                            alert('Error with parameters supplied');
+                        }
+                    }
+                    //Call the asynchronous xhrPost
+                    var deferred = dojo.xhrPost(xhrArgs);
+
+	}
+	dojo.require("dijit.form.CheckBox");
+	dojo.require("dijit.form.NumberTextBox");
+	dojo.require("dijit.form.ValidationTextBox");
+        dojo.require("dijit.form.ComboBox");
+        dojo.require("dojox.widget.FisheyeList");					
+	dojo.require("dojox.widget.Roller");	
+	dojo.require("dojox.form.RangeSlider");
+	dojo.require("dijit.form.Button");
+	dojo.require("dojox.grid.DataGrid");
+        dojo.require("dojo.data.ItemFileWriteStore");
+	dojo.require("dijit.layout.TabContainer");
+        dojo.require("dijit.layout.ContentPane");
+
+
+
+	</script> 
+
+	</head> 
+	<body class="claro"> 
+
+
+	<br/><br/><br/><br/>
+<div class="footer">
+<ul dojoType="dojox.widget.Roller">
+    <li><h3>Welcome to QuantAnalysis - Transfered from quantanalysis.wordpress.com</h3></li>
+    <li><h3>Enjoy pricing with Basic/Advanced Models - Power of Finite Difference Methods</h3></li>
+    <li><h3>Read the old blog! - Explore the Menu at the top</h3></li>
+    <li><h3> Sign My Guestbook - Suggestions Welcome</h3></li>	
+</ul>
+</div>
+
+<table cellpadding="20"><TR><TD><h1>Welcome to Quantanalysis</h1> 
+<img src="images/quant.png"/>
+</TD>
+		<td>
+
+  <div style="width: 350px; height: 300px">
+            <div dojoType="dijit.layout.TabContainer" style="width: 700px; height: 400px;">
+                <div dojoType="dijit.layout.ContentPane" title="Pricer (Left Column)" selected="true">
+                    <br/><br/>
+<h3>AutoCallables Analyzed</h3>
+ <a href='autocallable.html'><h3>Pricing, Understanding </u>AutoCallables</u></h3></a>
+
+
+
+Check out the new Monte Carlo Pricer <a href='gmc.html'><h3>Generic Monte Carlo</h3></a>
+<h4>Prices structures like 'Best of Call (n assets)', Worst of Call (n assets) and many more to be added</h4>
+
+All the blog articles can be found in <a href='papers.html'><h3>Blog Articles</h3></a>
+
+<h3>A simple Chat Site, I am sometimes online.</h3>
+<a href='chatmain.html'><h3>Simple Chat</a>
+<br/><br/>
+
+<strong>By Default this screen prices a vanilla call option. For more exotic options check out the Monte Carlo Pricer. 
+Call selection is indicated by the checkmark on top. If you unclick it it will price a standard put option. <br/><br/></strong>
+The stock price setting is moot coz it prices using a Grid, so you get a bunch of option prices for different stock prices. You can play around with other parameters<br/>
+Notice that for Grid size 50 the stock prices are spaced by 4 points. If you increase the Grid Size, you get more accuracy and reduced spacing. Of course it will take more time to number crunch! 
+<font color="red"><strong><p>The grid is mostly stable coz I don't let users chose the dt (time step parameter. The reason being I maintain the stability of grid by applying condition dx/dt^2 < 0.5 (Heat Equation Fundamentals). </p></strong></font>
+<strong>I am using currently VolMin to price this option. Gamma is single signed in this case, so no use choosing volatility based on Sign of Gamma. This I use in the static hedging framework.  <br/><br/></strong>
+                </div>
+                <div dojoType="dijit.layout.ContentPane" title="Static Hedging Framework"><br/><br/>
+			<strong><p>
+       		    Static Hedging or Replication means replicating the derivative using market prices of other derivatives. Theory is really simple and explained in a Finite Difference framework in the Link above static hedging calculator. In this case I have used 3 calls to calculate the actual price I can trade the call/put on the left hand side.  <p><font color="blue">I can actually sell the call for the Volatility Range Indicated. <br/>
+		    
+		    More details are given in the article link. Basic assumption is in worst case when I am long gamma, I will be worst hit by volatility when I choose Vol = 20% when Gamma = Positive, and Vol = 30% when Gamma = Negative. My best price will be just the opposite
+		    Gamma = Positive, and I choose Vol = 30% and when Gamma = Negative choose Vol = 20%. 
+		    This simple analysis is done when calculating the replicating portfolio. Since the prices of other calls/puts being used to construct the replicating portfolio are in fact market prices this framework takes liquidity into account which standard stochastic volatility models (or Fudge Models) don't. </p></font><br/>	</p></strong>
+                </div>
+                <div dojoType="dijit.layout.ContentPane" title="Is All this Free?" closable="true"><br/><br/>
+			<p>Yes :)</p>
+			<strong><p>
+                    There is a generic stochastic volatility pricer in advanced tools. In basic stuff it's all about analytical formulas. You can price multiple options by giving "," separated parameters. Will keep copy pasting formula's for more and more options. This will make it similar to sitmo.com. I believe that site is closed. </p></strong>
+		    <p><font color="blue">From simple google searches I found there were no online pricers available for free, hence the main purpose in creating this site. </font></p>
+                </div>
+            </div>
+</div></td></TR>
+</table>
+
+<img src="/cgi-sys/Count.cgi?df=quantana.dat|display=Counter|ft=6|md=6|frgb=100;139;216|dd=A">        
+<h4>Sample Call / Put Pricer</h4>
+
+
+
+<form id="pricer" action="cgi-bin/fd.pl">
+        
+
+<input id="mycheck" name="mycheck" dojoType="dijit.form.CheckBox" value="agreed"
+        checked onChange="cp.value=1; if(dijit.byId('mycheck').attr('value') == false) cp.value=2;">
+        <label for="Call">
+Call        </label>
+	<input type="hidden" value=1 id="cp" name="cp"></input>
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+<tr>
+<td width="50%">
+	<table width="100%" border="0" cellspacing="0" cellpadding="1">
+	<TR><TD>
+	Stock Price </TD><TD>
+	<input name="stockPrice" value="100.0" dojoType="dijit.form.NumberTextBox"
+		trim="true" id="stockPrice" style="width:80px;"/></TD>
+	
+	</TR>
+	<TD>Strike &nbsp;&nbsp;&nbsp;</TD><TD><input type="text" name="strike" id="strike" value="100.0" dojoType="dijit.form.NumberTextBox" style="width:80px;"
+	required="true" trim="true" /></TD>
+	<TR><TD>
+	Time to Maturity (Years) &nbsp;&nbsp;&nbsp;</TD><TD><input type="text" name="mat" id="mat" value="0.5" dojoType="dijit.form.NumberTextBox" style="width:50px;"
+		trim="true" />
+	
+	</TD></TR>
+	<TR><TD>
+	Interest Rate &nbsp;&nbsp;&nbsp;</TD><TD><input type="text" name="intRate" id="intRate" value="0.05" dojoType="dijit.form.NumberTextBox" style="width:50px;"
+		trim="true" />
+	
+	</TD></TR>
+	<TR><TD>
+	
+	Volatility (Min,Max)</li><br/></TD><TD><br/><br/>
+	<div id="rangeSlider" dojoType="dojox.form.HorizontalRangeSlider" value="0.1,0.30"
+		minimum="0" maximum="1.0" intermediateChanges="true" showButtons="false"
+		style="width:300px;">
+		<script type="dojo/method" event="onChange" args="value">
+			var a = String(value);
+			var numbers = a.split(',');
+			var n1 = parseFloat(numbers[0]).toFixed(2);
+			var n2 = parseFloat(numbers[1]).toFixed(2);
+			
+			dojo.byId("sliderValue").value = n1.concat(',',n2);
+		</script>
+		</div>
+		<p>
+		<input type="text" value="0.2,0.30" id="sliderValue" readonly="false" name="volminmax" />
+		</p>
+	<p>
+	</TD></TR>
+	<TR><strong><strong>
+	---- Grid Setting ----</strong></TD></TR><TD>
+	Number of Spot Steps: 
+	</TD>
+	<TD>
+	<input type='text' id='spotsteps' name='spotsteps' value='50' dojoType="dijit.form.NumberTextBox" style="width:50px;"/>
+	</TD></TR>
+	</table>
+</TD>
+<TD width="50%">
+<table width="100%" border="0" cellspacing="0" cellpadding="1">
+<tr><TD>
+-----Static Hedging Framework-----</TD></tr>
+	
+<tr><TD><a href="StaticHedge.html">Static Hedging</a></TD></tr>
+	<TD>Bid</TD>
+	<TD>
+	<input style="align:left;" type='text' id='bids' name='bids' value='9.22,4.22,2.11' dojoType="dijit.form.TextBox" style="width:20px;"/></TD></tr>
+<tr>
+<TD>Ask</TD>
+<TD>
+<input style="align:left;" type='text' id='asks' name='asks' value='9.22,5.22,2.31' dojoType="dijit.form.TextBox" style="width:20px;"/></TD>
+</tr><tr>
+<TD>Quantity</TD><TD>
+<input style="align:left;" type='text' id='qts' name='qts' value='0.6,0.4,0.1' dojoType="dijit.form.TextBox" style="width:20px;"/>
+	</TD></TR>
+<tr>
+<TD>Strikes</TD><TD>
+<input style="align:left;" type='text' id='strikes' name='strikes' value='90,110,120' dojoType="dijit.form.TextBox" style="width:20px;"/>
+	</TD></TR>
+<tr>
+<TD>Call/Put</TD><TD>
+<input style="align:left;" type='text' id='callorputs' name='callorputs' value='C,C,C' dojoType="dijit.form.ValidationTextBox" style="width:20px;" regExp="['C,P']+" required="true" invalidMessage="Invalid Non-Space Text."/>
+	</TD></TR>
+
+</table>
+</TD>
+</tr>
+
+</table>
+<button dojoType="dijit.form.Button" onclick="pressed" Label="Pricing" timeout="1">
+            Price It
+        </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<button dojoType="dijit.form.Button" onclick="statichedging" Label="Hedge" timeout="1">
+            Hedge
+        </button>
+</form>
+
+<br/><br/><br/>
+<!--Hidden Container Activated When Prices are sent -->
+
+<div id="gridContainer4" style="width: 1000px; height: 1000px;"></div>
+
+<div class="outerbar">
+<div dojoType="dojox.widget.FisheyeList"
+		itemWidth="90" itemHeight="90"
+		itemMaxWidth="250" itemMaxHeight="250"
+		orientation="horizontal"
+		effectUnits="2"
+		itemPadding="5"
+		attachEdge="left"
+		labelEdge="bottom"
+		id="fisheye1"
+	>
+	<div dojoType="dojox.widget.FisheyeListItem"
+		id="item1"
+		onclick="window.open('papers.html');"
+		label="Read Articles"
+		iconSrc="images/articles.png">
+	</div>
+
+	<div dojoType="dojox.widget.FisheyeListItem"
+		label="Advanced Tools"
+		onclick="window.open('advancedtools.html');"
+		iconSrc="images/tools2.png">
+	</div>
+
+	<div dojoType="dojox.widget.FisheyeListItem"
+		label="Autocallables Pricer"
+		onclick="window.open('autocallable.html');"
+		iconSrc="images/autocalls.png">
+	</div>
+
+	
+	<div dojoType="dojox.widget.FisheyeListItem"
+		label="Basic Tools"
+		onclick="window.open('basictools.html');"
+		iconSrc="images/wd.png">
+	</div>
+	
+	
+
+	<div dojoType="dojox.widget.FisheyeListItem"
+		label="Monte Carlo Pricer"
+		onclick="window.open('gmc.html');"
+		iconSrc="images/monte.png">
+	</div>
+
+
+	<div dojoType="dojox.widget.FisheyeListItem"
+		label="Guestbook"
+		onclick="window.open('guestbook.html');"
+		iconSrc="images/guest.png">
+	</div>
+
+	<div dojoType="dojox.widget.FisheyeListItem"
+		label="Top Articles"
+		onclick="window.open('vega-stupid-greek.html');"
+		iconSrc="images/marticles.png">
+	</div>
+
+
+
+	<div dojoType="dojox.widget.FisheyeListItem"
+		label="About me"
+		onclick="window.open('aboutme.html');"
+		iconSrc="images/icon_users.png">
+	</div>
+	<div dojoType="dojox.widget.FisheyeListItem"
+		label="Home Sweet Home"
+		onclick="window.location='index.html';"
+		iconSrc="images/icon_browser.png">
+	</div>
+</div>
+</div>
+
+
+<br/><br/>
+
+<br/><br/><br/>
+
+
+	<style type="text/css">
+            @import url('dojor/dojox/form/resources/RangeSlider.css');
+        </style>
+	<script>
+		dojo.addOnLoad(pressed);
+	</script>
+	</body> 
+</html> 

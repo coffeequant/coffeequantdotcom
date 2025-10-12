@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    
+    <meta name="Generator" content="iWeb 3.0.4" />
+    <meta name="iWeb-Build" content="local-build-20120824" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <meta name="viewport" content="width=1000" />
+    <title>Dice Puzzle</title>
+    <link rel="stylesheet" type="text/css" media="screen,print" href="Dices_files/Dices.css" />
+    <!--[if lt IE 8]><link rel='stylesheet' type='text/css' media='screen,print' href='Dices_files/DicesIE.css'/><![endif]-->
+    <!--[if gte IE 8]><link rel='stylesheet' type='text/css' media='screen,print' href='Media/IE8.css'/><![endif]-->
+    <script type="text/javascript" src="Scripts/iWebSite.js"></script>
+    <script type="text/javascript" src="Scripts/Widgets/SharedResources/WidgetCommon.js"></script>
+    <script type="text/javascript" src="Scripts/Widgets/Navbar/navbar.js"></script>
+    <script type="text/javascript" src="Dices_files/Dices.js"></script>
+  </head>
+  <body style="background: rgb(251, 251, 255); margin: 0pt; " onload="onPageLoad();" onunload="onPageUnload();">
+    <div style="text-align: center; ">
+      <div style="margin-bottom: 10px; margin-left: auto; margin-right: auto; margin-top: 10px; overflow: hidden; position: relative; word-wrap: break-word;  text-align: left; width: 1000px; " id="body_content">
+        <div style="background: transparent url(Dices_files/backgroundimage_1.jpg) no-repeat scroll center center; width: 1000px; ">
+          <div style="margin-left: 0px; position: relative; width: 1000px; z-index: 0; " id="nav_layer">
+            <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+            <div class="com-apple-iweb-widget-navbar flowDefining" id="widget0" style="margin-left: 18px; margin-top: 0px; opacity: 1.00; position: relative; width: 982px; z-index: 1; ">
+    
+              <div id="widget0-navbar" class="navbar">
+
+      
+                <div id="widget0-bg" class="navbar-bg">
+
+        
+                  <ul id="widget0-navbar-list" class="navbar-list">
+ <li></li> 
+</ul>
+                  
+      
+</div>
+                
+    
+</div>
+            </div>
+            <script type="text/javascript"><!--//--><![CDATA[//><!--
+new NavBar('widget0', 'Scripts/Widgets/Navbar', 'Scripts/Widgets/SharedResources', '.', {"path-to-root": "", "navbar-css": ".navbar {\n\tfont-family: 'Helvetica Neue', Arial, sans-serif;\n\tfont-size: .8em;\n\tcolor: #666666;\n\tline-height: 30px;\n\tborder-bottom: 3px solid #ccc;\n}\n\n.navbar-bg {\n\ttext-align: right;}\n\n.navbar-bg ul {\n\tlist-style: none;\n\tmargin: 0px;\n\tpadding: 0px;\n}\n\n\nli {\n\tlist-style-type: none;\n\tdisplay: inline;\n\tpadding: 0px 5px 0px 0px;\n}\n\n\nli a {\n\ttext-decoration: none;\n\tpadding: 10px;\n\tcolor: #666666;\n\tfont-weight: bold;\n}\n\nli a:visited {\n\ttext-decoration: none;\n\tpadding: 10px;\n\tcolor: #666666;\n\tfont-weight: bold;\n}\n\nli a:hover\r{\r\n \tcolor: #999999;\n\ttext-decoration: none;\r}\n\n\nli.current-page a\r{\r\t color: #66ABC5;\n\ttext-decoration: none;\r}", "current-page-GUID": "36AFF4F3-BF4B-4268-976E-F71044C813BA", "isCollectionPage": "NO"});
+//--><!]]></script>
+            <div style="clear: both; height: 0px; line-height: 0px; " class="spacer"> </div>
+          </div>
+          <div style="height: 75px; margin-left: 0px; position: relative; width: 1000px; z-index: 10; " id="header_layer">
+            <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+            <div id="id1" style="height: 43px; left: 20px; position: absolute; top: 17px; width: 515px; z-index: 1; " class="style_SkipStroke shape-with-text">
+              <div class="text-content style_External_515_43" style="padding: 0px; ">
+                <div class="style">
+                  <p style="padding-bottom: 0pt; padding-top: 0pt; " class="Header">Dice Puzzle</p>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div id="id2" style="height: 43px; left: 535px; position: absolute; top: 17px; width: 461px; z-index: 1; " class="style_SkipStroke_1 shape-with-text">
+              <div class="text-content style_External_461_43" style="padding: 0px; ">
+                <div class="style_1">
+                  <p style="padding-bottom: 0pt; padding-top: 0pt; " class="Heading_1">2012</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-left: 0px; position: relative; width: 1000px; z-index: 5; " id="body_layer">
+            <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+            <div style="height: 1px; line-height: 1px; " class="tinyText"> </div>
+            <div style="margin-left: 12px; margin-top: 313px; position: relative; width: 976px; z-index: 1; " class="style_SkipStroke_3 shape-with-text flowDefining">
+              <div class="text-content style_External_976_2331" style="padding: 0px; ">
+                <div class="style_2">
+                  <p style="padding-top: 0pt; " class="paragraph_style">It's a lot to take, but if we break down this puzzle, it's really simple. I will work out a generic solution for n dices tossed k times.<br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">Coin tossing puzzles are too simple sometimes, so I tried to make a puzzle with dices. Good thing with a simple puzzle is you can add more attributes to it to make it more complex, or a bit interesting. <br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">Let's say I have 6 dices and I toss them once. I want to find the expectation of MINIMUM Value. This simply suggests that I need the following probabilities<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">1 x P(X=1) + 2 x P(X=2) + ..... 6 x P(X=6)<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">X = 1 can only be obtained if in all 6 dices I get at least one of the tosses to be 1. The hard path is to list out all combinations and that's where I look for the opposite path. P(X&gt;1) is simply 5/6, and so if in all tosses I get P(X&gt;1) = (5/6)^6. so P(X=1) is simply 1 - (5/6)^6.<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">This was easy, now it's a bit complicated for X = 2<br /></p>
+                  <p class="paragraph_style_1">If I proceed in a similar fashion I can get P(X &gt; 2) =  1 - (4/6)^6, but this includes the probability of P(X=1), so a simple modification is <br /></p>
+                  <p class="paragraph_style_1">P(X=2) = 1 - P(X&gt;2) - P(X=1)<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">And so I have a simple pattern resulting in<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">P(X=1) 0.6651<br /></p>
+                  <p class="paragraph_style_1">P(X=2)  0.2471<br /></p>
+                  <p class="paragraph_style_1">P(X=3)  0.0721<br /></p>
+                  <p class="paragraph_style_1">P(X=4)  0.01425<br /></p>
+                  <p class="paragraph_style_1">P(X=5)  0.00135<br /></p>
+                  <p class="paragraph_style_1">P(X=6)  0.000021<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">At this point expectation calculation is simple, but here I add another attribute to the puzzle. I want 6 tosses of the 6 dices.<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_2">In each set I will take the minimum value as in the previous part. I will then take the maximum of these 6 minimum values. Now what is the expectation of this maximum value?<br /></p>
+                  <p class="paragraph_style_3">So another layer is added, and this can be continued for many times, but let's think of the second layer as of now. <br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">P(X=1) will simply be getting a 1 in all the minimums otherwise it won't get selected so it's easiest = 0.665102^6 = 0.0865.<br /></p>
+                  <p class="paragraph_style_1">P(X=2) is not so simple, and can't be calculated by P(X&gt;2) logic, since it's a maximum I use P(X&lt;=2) and this time I use the probabilities calculated previously. <br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">P(X&lt;=2) = SUM(P(X=1) + P(X=2))^6<br /></p>
+                  <p class="paragraph_style_1">Again this includes the case of P(X=1), so I subtract NOT 0.6651, but 0.0865 (calculated above)<br /></p>
+                  <p class="paragraph_style_1">so P(X=2) (in this max case) becomes 0.48962<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">Similarly P(X=3) becomes SUM(P(X=1) + P(X=2) + P(X=3)^6   - 0.48962 - 0.0865<br /></p>
+                  <p class="paragraph_style_1">and we again have the following table<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">P(X=1) 0.0865<br /></p>
+                  <p class="paragraph_style_1">P(X=2) 0.4896<br /></p>
+                  <p class="paragraph_style_1">P(X=3) 0.3336<br /></p>
+                  <p class="paragraph_style_1">P(X=4) 0.0819<br /></p>
+                  <p class="paragraph_style_1">P(X=5) 0.00807<br /></p>
+                  <p class="paragraph_style_1">P(X=6) 0.00012<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_2">From these values if I calculate the expectation I get approx 2.435. This can be verified by doing a simple spreadsheet experiment. Use RANDBETWEEN function to generate random numbers between 1 and 6. Note down minimum for 6 sets. Calculate maximum. Repeat this calculation for another set, and do let's say 1000 sets. Sum/1000 =&gt; Approx 2.43. So our reasoning was right, and we solved a puzzle by using normal kiddish arguments :)<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">Opposite of this might be first taking the MAX, and then taking the MIN value.<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">The refined Problem statement was <br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">6 Dices tossed 6 times, and each time a minimum is noted. What is expectation of maximum of these 6 minimum values.<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">From a mathematical point of view it's fun to work this out. Let's try!<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">Now to be more generic n dices tossed k times, and each time a minimum is noted. What is the expectation of maximum of these k tosses. <br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">P(X&gt;1) = (5/6)^(n)<br /></p>
+                  <p class="paragraph_style_1">P(X&gt;2) = (4/6)^(n) and so on.....<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">P(X=1) = 1 - (5/6)^n<br /></p>
+                  <p class="paragraph_style_1">P(X=2) = 1 - (4/6)^n - (P(X=1))<br /></p>
+                  <p class="paragraph_style_1">              = 1 - (4/6)^n - 1 + (5/6)^n     <br /></p>
+                  <p class="paragraph_style_1">              =  - (4/6)^n + (5/6)^n<br /></p>
+                  <p class="paragraph_style_1">That's a nice pattern<br /></p>
+                  <p class="paragraph_style_1">P(X=3) = 1 - (3/6)^n - (P(X=2)) - P(X=1)) <br /></p>
+                  <p class="paragraph_style_1">             =  1 - (3/6)^n + (4/6)^n - (5/6)^n - 1 + (5/6)^n<br /></p>
+                  <p class="paragraph_style_1">             =   - (3/6)^n + (4/6)^n<br /></p>
+                  <p class="paragraph_style_1">so the pattern is...<br /></p>
+                  <p class="paragraph_style_1">P(X=4) = - (2/6)^n + (3/6)^n <br /></p>
+                  <p class="paragraph_style_1">P(X=a) = - ((6-a)/6)^n + ((6-a+1)/6)^n<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">Now again moving to k times tossing for maximum value we have...<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">P(X=1) = (1-(5/6)^n)^k<br /></p>
+                  <p class="paragraph_style_1">P(X=2) = (- (4/6)^n + (5/6)^n + 1 - (5/6)^n )^ k - (1-(5/6)^n)^k<br /></p>
+                  <p class="paragraph_style_1">              = <br /></p>
+                  <div class="paragraph paragraph_style_1">    <div style="height: 46px; width: 249px;  height: 46px; position: relative; width: 249px; " class="tinyText style_SkipStroke_2 inline-block"><img src="Dices_files/droppedImage.png" alt="" style="border: none; height: 46px; width: 249px; " /></div><br /></div>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">P(X=3) = <br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <div class="paragraph paragraph_style_1"><div style="height: 92px; width: 590px;  height: 92px; position: relative; width: 590px; " class="tinyText style_SkipStroke_2 inline-block"><img src="Dices_files/droppedImage_1.png" alt="" style="border: none; height: 92px; width: 590px; " /></div><br /></div>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">               Simplifying<br /></p>
+                  <p class="paragraph_style_1">                 = ( - (3/6)^n +1)^k - (1 - (4/6)^n)^k<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">Let's verify for n = 6 and k = 6<br /></p>
+                  <p class="paragraph_style_1">It's 0.3336 hence a perfect match!<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">So pattern is<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <div class="paragraph paragraph_style_1"><div style="height: 47px; width: 411px;  height: 47px; position: relative; width: 411px; " class="tinyText style_SkipStroke_2 inline-block"><img src="Dices_files/droppedImage_2.png" alt="" style="border: none; height: 47px; width: 411px; " /></div><br /></div>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">So expectation is<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <div class="paragraph paragraph_style_1"><div style="height: 63px; width: 455px;  height: 63px; position: relative; width: 455px; " class="tinyText style_SkipStroke_2 inline-block"><img src="Dices_files/droppedImage_3.png" alt="" style="border: none; height: 63px; width: 455px; " /></div><br /></div>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style_1">Which if calculated gives 2.43 for n=k=6, and hence a generic solution!<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                </div>
+                <div style="clear: both; height: 22px; line-height: 22px; " class="tinyText"> </div>
+              </div>
+            </div>
+            
+
+
+            <div id="id3" style="height: 160px; left: 311px; position: absolute; top: 19px; width: 687px; z-index: 1; " class="style_SkipStroke_4 shape-with-text">
+              <div class="text-content Normal_External_687_160" style="padding: 0px; ">
+                <div class="Normal">
+                  <p style="padding-top: 0pt; " class="paragraph_style_4">Problem Statement: 6 Dices tossed 6 times, and each time (or each set) a minimum is noted. What is expectation of maximum of these 6 minimum values.<br /></p>
+                  <p class="paragraph_style_4"><br /></p>
+                  <p style="padding-bottom: 0pt; " class="paragraph_style_4">Let's say I get for first set 1, 4, 6, 2, 3, 2 whose minimum is 1. This is repeated 6 times and let's say the set of minimums is {1,1,2,3,5,4} so maximum of this set is 5. I want to calculate the expectation of this maximum value. </p>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div style="height: 287px; width: 287px;  height: 287px; left: 16px; position: absolute; top: 21px; width: 287px; z-index: 1; " class="tinyText style_SkipStroke_2">
+              <img src="Dices_files/droppedImage.jpg" alt="" style="border: none; height: 287px; width: 287px; " />
+            </div>
+            <div style="height: 0px; line-height: 0px; " class="spacer"> </div>
+          </div>
+          <div style="height: 75px; margin-left: 0px; position: relative; width: 1000px; z-index: 15; " id="footer_layer">
+            <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+            <a href="http://apple.com/mac" title="http://apple.com/mac"><img src="Dices_files/mwmac.png" alt="Made on a Mac" style="border: none; height: 50px; left: 280px; opacity: 0.35; position: absolute; top: 13px; width: 139px; z-index: 1; " id="id4" />
+
+</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+

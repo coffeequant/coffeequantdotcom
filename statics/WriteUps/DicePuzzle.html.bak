@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Dice Puzzle — The 36-Grid Trick</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    .cq-article { max-width: 820px; margin: 0 auto; padding: 1rem 1.25rem 2rem; line-height: 1.6; color: #0b0f14; }
+    .cq-article h1 { font-size: 1.8rem; margin: 0.2rem 0 0.8rem; letter-spacing: -0.01em; }
+    .cq-article h2 { font-size: 1.25rem; margin: 1.25rem 0 0.5rem; }
+    .cq-article p { margin: 0.5rem 0; }
+    .cq-muted { color: #6b7280; font-size: 0.95rem; }
+    .cq-card { background: #f6f7f9; border: 1px solid #e5e7eb; border-radius: 12px; padding: 0.9rem 1rem; }
+    .cq-grid { margin: 0.75rem 0 0; display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 0.5rem; }
+    .cq-badge { display: inline-block; font-size: 0.8rem; background: #e6f8f1; border: 1px solid #c8efe1; color: #125a49; border-radius: 999px; padding: 0.1rem 0.5rem; }
+    .cq-table { border-collapse: collapse; width: 100%; margin: 0.5rem 0 1rem; }
+    .cq-table th, .cq-table td { border-bottom: 1px solid #e5e7eb; text-align: left; padding: 0.5rem 0.4rem; font-variant-numeric: tabular-nums; }
+    .cq-note { border-left: 3px solid #06b6d4; background: #ecfeff; padding: 0.6rem 0.8rem; border-radius: 8px; }
+    .cq-example { border-left: 3px solid #20c997; background: #edfcf7; padding: 0.6rem 0.8rem; border-radius: 8px; }
+    .cq-caution { border-left: 3px solid #f59e0b; background: #fff7ed; padding: 0.6rem 0.8rem; border-radius: 8px; }
+    .cq-small { font-size: 0.9rem; }
+    .cq-center { text-align: center; }
+    .cq-flex { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .cq-pill { padding: 0.25rem 0.55rem; border-radius: 999px; background: #eef2ff; border: 1px solid #e0e7ff; color: #3730a3; font-size: 0.8rem; }
+    /* SVG frame */
+    .cq-frame { border: 1px solid #e5e7eb; border-radius: 12px; padding: 0.5rem; background: #fff; }
+    /* Dark-ish compatibility if parent uses dark bg */
+    @media (prefers-color-scheme: dark) {
+      .cq-article { color: #e5e7eb; }
+      .cq-card { background: #111827; border-color: #1f2937; }
+      .cq-table th, .cq-table td { border-color: #1f2937; }
+      .cq-note { background: rgba(8, 145, 178, 0.12); }
+      .cq-example { background: rgba(16, 185, 129, 0.12); }
+      .cq-caution { background: rgba(245, 158, 11, 0.12); }
+      .cq-frame { background: #0b0f14; border-color: #1f2937; }
+      .cq-badge { background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.25); color: #86efac; }
+      .cq-pill { background: rgba(129,140,248,0.12); border-color: rgba(129,140,248,0.25); color: #c7d2fe; }
+    }
+  </style>
+</head>
+
+<body>
+  <article id="cq-article" class="cq-article">
+    <header>
+      <div class="cq-flex" style="justify-content: space-between; align-items: baseline;">
+        <h1>Dice Puzzle — The 36-Grid Trick</h1>
+        <span class="cq-badge">Two fair dice</span>
+      </div>
+      <p class="cq-muted">A fast recipe you can reuse for most two-dice probability questions.</p>
+    </header>
+
+    <section class="cq-card">
+      <strong>TL;DR</strong>
+      <div class="cq-grid">
+        <div>Two fair, independent dice produce ordered pairs \\((a,b)\\) with \\(a,b\\in\\{1,2,3,4,5,6\\}\\).</div>
+        <div>There are \\(6\\times 6=36\\) equally likely outcomes.</div>
+        <div>For any event: <em>count favourable ordered pairs</em>, then divide by \\(36\\).</div>
+      </div>
+    </section>
+
+    <h2>ELI5: the 6×6 board</h2>
+    <p>
+      Picture a 6×6 board. Each square is an outcome like \\((2,5)\\).
+      Every square is equally likely. To get a probability, just <em>count the right squares</em>
+      and divide by \\(36\\).
+    </p>
+
+    <div class="cq-frame">
+      <!-- Minimal, fast SVG: highlights the “sum = 7” diagonal -->
+      <svg viewBox="0 0 220 220" width="100%" height="220" role="img" aria-label="6x6 grid of dice outcomes with sum=7 highlighted">
+        <defs>
+          <pattern id="cq-grid" width="33.33" height="33.33" patternUnits="userSpaceOnUse">
+            <path d="M33.33 0V33.33H0" fill="none" stroke="currentColor" stroke-opacity="0.15" />
+          </pattern>
+        </defs>
+        <rect x="10" y="10" width="200" height="200" fill="url(#cq-grid)" stroke="currentColor" stroke-opacity="0.25" />
+        <!-- Highlight the diagonal cells for sum=7 -->
+        <g fill="currentColor" fill-opacity="0.10" stroke="currentColor" stroke-opacity="0.35">
+          <!-- (1,6),(2,5),(3,4),(4,3),(5,2),(6,1) -->
+          <rect x="176.67" y="10.00" width="33.33" height="33.33"/>
+          <rect x="143.34" y="43.33" width="33.33" height="33.33"/>
+          <rect x="110.01" y="76.66" width="33.33" height="33.33"/>
+          <rect x="76.68"  y="109.99" width="33.33" height="33.33"/>
+          <rect x="43.35"  y="143.32" width="33.33" height="33.33"/>
+          <rect x="10.02"  y="176.65" width="33.33" height="33.33"/>
+        </g>
+        <text x="110" y="205" font-size="10" text-anchor="middle">Die A →</text>
+        <text x="15" y="110" font-size="10" text-anchor="middle" transform="rotate(-90 15,110)">Die B →</text>
+      </svg>
+      <p class="cq-small cq-muted cq-center">Sum = 7 is a diagonal of 6 squares → probability \\(6/36=1/6\\).</p>
+    </div>
+
+    <h2>Example: probability that the sum equals 7</h2>
+    <div class="cq-example">
+      Favourable ordered pairs:
+      \\((1,6),(2,5),(3,4),(4,3),(5,2),(6,1)\\) — 6 outcomes.\\[
+        \\mathbb{P}(\\text{sum}=7)=\\tfrac{6}{36}=\\tfrac{1}{6}.
+      \\]
+    </div>
+
+    <h2>Quick recipe</h2>
+    <ol>
+      <li>Define the success condition precisely using <em>ordered</em> pairs \\((a,b)\\).</li>
+      <li>Count those pairs on the 6×6 board.</li>
+      <li>Probability = (count) \\(\\div\\) 36.</li>
+    </ol>
+
+    <h2>Distribution of sums</h2>
+    <p class="cq-muted cq-small">Handy table you can memorize or re-derive quickly.</p>
+    <table class="cq-table">
+      <thead>
+        <tr><th>Sum</th><th>Favourable pairs</th><th>Count</th><th>Probability</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>2</td><td>(1,1)</td><td>1</td><td>\\(1/36\\)</td></tr>
+        <tr><td>3</td><td>(1,2),(2,1)</td><td>2</td><td>\\(2/36\\)</td></tr>
+        <tr><td>4</td><td>(1,3),(2,2),(3,1)</td><td>3</td><td>\\(3/36\\)</td></tr>
+        <tr><td>5</td><td>(1,4),(2,3),(3,2),(4,1)</td><td>4</td><td>\\(4/36\\)</td></tr>
+        <tr><td>6</td><td>(1,5),(2,4),(3,3),(4,2),(5,1)</td><td>5</td><td>\\(5/36\\)</td></tr>
+        <tr><td><strong>7</strong></td><td>(1,6),(2,5),(3,4),(4,3),(5,2),(6,1)</td><td><strong>6</strong></td><td>\\(\\mathbf{6/36=1/6}\\)</td></tr>
+        <tr><td>8</td><td>(2,6),(3,5),(4,4),(5,3),(6,2)</td><td>5</td><td>\\(5/36\\)</td></tr>
+        <tr><td>9</td><td>(3,6),(4,5),(5,4),(6,3)</td><td>4</td><td>\\(4/36\\)</td></tr>
+        <tr><td>10</td><td>(4,6),(5,5),(6,4)</td><td>3</td><td>\\(3/36\\)</td></tr>
+        <tr><td>11</td><td>(5,6),(6,5)</td><td>2</td><td>\\(2/36\\)</td></tr>
+        <tr><td>12</td><td>(6,6)</td><td>1</td><td>\\(1/36\\)</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Common gotchas</h2>
+    <div class="cq-caution">
+      <ul>
+        <li><strong>Ordered pairs matter.</strong> \\((2,5)\\neq(5,2)\\) unless the dice are indistinguishable.</li>
+        <li>If dice aren’t <em>fair</em> or <em>independent</em>, the “36 equally likely” idea breaks.</li>
+        <li>When a condition says “at least” or “exactly”, define it carefully in pairs before counting.</li>
+      </ul>
+    </div>
+
+    <h2>Check yourself</h2>
+    <p>Compute: probability that the sum is at least 9.</p>
+    <div class="cq-note cq-small">
+      <em>Hint:</em> Use the table (or count pairs). \\(\\mathbb{P}(\\text{sum}\\ge 9)=(4+3+2+1)/36=10/36=5/18.\\)
+    </div>
+
+    <footer style="margin-top: 1rem;">
+      <div class="cq-flex">
+        <span class="cq-pill">Probability</span>
+        <span class="cq-pill">Combinatorics</span>
+        <span class="cq-pill">Puzzles</span>
+      </div>
+    </footer>
+  </article>
+
+  <!-- Re-typeset THIS article when injected via Dojo ContentPane -->
+  <script>
+    (function () {
+      function typeset() {
+        if (window.MathJax && MathJax.typesetPromise) {
+          MathJax.typesetPromise([document.getElementById('cq-article')]).catch(function (err) {
+            console.error('MathJax typeset failed:', err);
+          });
+        }
+      }
+      // If MathJax finished before this file loaded, typeset now; otherwise queue.
+      if (document.readyState === 'complete' || document.readyState === 'interactive') { typeset(); }
+      else { document.addEventListener('DOMContentLoaded', typeset); }
+    })();
+  </script>
+</body>
+</html>
+
+
+

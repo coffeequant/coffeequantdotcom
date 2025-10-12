@@ -1,0 +1,180 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+
+		<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)']],
+      displayMath: [['\\[', '\\]']],
+      processEscapes: true,
+      tags: 'ams'
+    },
+    options: {
+      skipHtmlTags: ['script','noscript','style','textarea','pre','code']
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+		<meta charset="utf-8">
+		<title>CoffeeQuant</title>
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.10.4/dijit/themes/claro/claro.css" media="screen">
+		<style>
+		html, body {
+height: 90%;
+margin: 0;
+padding: 0;
+}
+body {
+margin: 0;
+padding: 2em;
+font-family: Lucida Sans,Lucida Grande,Arial !important;
+font-size: 13px !important;
+background: white;
+color: #333;
+}
+.pageOverlay {
+top: 0;
+left: 0;
+position: absolute;
+height: 100%;
+width: 100%;
+z-index: 1001;
+display: block;
+}
+
+#loadingOverlay {
+background:  #fff url('http://ajax.googleapis.com/ajax/libs/dojo/1.10.4/dijit/themes/claro/images/loadingAnimation.gif') no-repeat 10px 23px;
+}
+
+.loadingMessage {
+padding: 25px 40px;
+color: #999;
+}</style>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js" data-dojo-config="parseOnLoad:true, isDebug: true, defaultTestTheme:'soria'"></script>
+<script type='text/javascript'>
+dojo.require("dojox.widget.Roller");
+dojo.require("dojox.layout.ContentPane");
+dojo.require("dojox.collections.Dictionary");
+</script>
+
+<script type='text/javascript'>
+var demo;
+require(["dojo/_base/declare","dojo/dom","dojo/dom-style"],
+function(declare, dom, domStyle){
+var Demo = declare(null, {
+overlayNode:null,
+constructor:function(){
+		this.overlayNode = dom.byId("loadingOverlay");
+},
+endLoading: function() {
+		var overlayNode = dom.byId("loadingOverlay");
+		domStyle.set(overlayNode, 'display', 'none');
+},
+});
+demo = new Demo();
+});
+
+require(["dojo/_base/lang", "dojo/domReady!"], function (lang) {
+    setTimeout(function() {
+        demo.endLoading();
+    }, 1000);
+});
+
+		require([
+    "dijit/MenuBar",
+    "dijit/PopupMenuBarItem",
+    "dijit/Menu",
+    "dijit/MenuItem",
+    "dijit/DropDownMenu",
+    "dojo/domReady!",
+		"dojox/collections/Dictionary",
+		"dojox/collections/ArrayList"
+], function(MenuBar, PopupMenuBarItem, Menu, MenuItem, DropDownMenu){
+    var coffeebar = new MenuBar({});
+		var quantbar = new MenuBar({});
+		var coffeemenus = new dojox.collections.Dictionary();
+		var quantmenus = new dojox.collections.Dictionary();
+
+		coffeemenus.add("Articles",new dojox.collections.ArrayList(["BiasVariance","CMSConvexity","PDEs","AutoCall Hedge Note","Numeraire","LookBacks Using FD","Correlation Stock Vol", "Bad Kelly","Outperformance","Finite Differences","Worst of Put","Risk Neutral Probability","Hedging","Barriers"]));
+		coffeemenus.add("SimplePuzzles",new dojox.collections.ArrayList(["Coin Game","Quiz Answers","Brownian Puzzle","Dice Puzzle","Cart Problem","Road Path","Marriage Problem"]));
+		coffeemenus.add("Videos",new dojox.collections.ArrayList(["How to Price Autocallable","Coffee Monad",]));
+		quantmenus.add("Pricers",new dojox.collections.ArrayList(["Autocallable","Range Accrual","Static Hedge","Vanilla Portfolio"]));
+		coffeemenus.add("Python",new dojox.collections.ArrayList(["Stochastic Volatility Models","Spectrograms","Monads In Python"]));
+		quantmenus.add("Haskell",new dojox.collections.ArrayList(["Monad Example","Bored Of Programming","Sudoku Haskell"]));
+		coffeemenus.add("Interview Questions",new dojox.collections.ArrayList(["Exotics","Exotic Derivatives","Vanillas","Vanillas More","Mixed","True False"]));
+		quantmenus.add("Utilities",new dojox.collections.ArrayList(["CodeSnippets","Algorithms","WHOAMI"]));
+
+		dojo.forEach(coffeemenus.getKeyList(),function(a) {
+			  var tmp = new DropDownMenu({});
+				dojo.forEach(coffeemenus.item(a).toArray(),function(b) { tmp.addChild(new MenuItem({label:String(b), onClick: function() {
+					dijit.registry.byId("myContentPane").executeScripts="true";
+					if(a=="Pricers" || a=="Interview Questions") {
+						dijit.registry.byId("myContentPane").setHref("statics/"+String(b).replace(/\s/g,'')+".html");
+					}
+					else { dijit.registry.byId("myContentPane").setHref("statics/WriteUps/"+String(b).replace(/\s/g,'')+".html"); }
+		     } })); });
+				coffeebar.addChild(new PopupMenuBarItem({label:String(a), popup: tmp}));
+		} );
+
+		dojo.forEach(quantmenus.getKeyList(),function(a) {
+			  var tmp = new DropDownMenu({});
+				dojo.forEach(quantmenus.item(a).toArray(),function(b) { tmp.addChild(new MenuItem({label:String(b), onClick: function() {
+					dijit.registry.byId("myContentPane").executeScripts="true";
+					if(a=="Pricers" || a=="Interview Questions") {
+						dijit.registry.byId("myContentPane").setHref("statics/"+String(b).replace(/\s/g,'')+".html");
+					}
+					else { dijit.registry.byId("myContentPane").setHref("statics/WriteUps/"+String(b).replace(/\s/g,'')+".html"); }
+		     } })); });
+				quantbar.addChild(new PopupMenuBarItem({label:String(a), popup: tmp}));
+		} );
+
+		coffeebar.placeAt("coffee");
+		quantbar.placeAt("quant");
+		coffeebar.startup();
+		quantbar.startup();
+
+});
+
+		</script>
+</head>
+
+<body class="claro">
+	<div id="coffee"></div>
+	<br/><br/><br/><br/>
+	<font size="7px"><div id="loadingOverlay" class="loadingOverlay pageOverlay"></div></font>
+<div id="messages" >
+	<ul dojoType="dojox.widget.RollerSlide"  style="list-style: none" delay="3000">
+		<li><font size="10px" color="black">Welcome to CoffeeQuant Quantitative Finance</font></li>
+		<li><font size="10px" color="black">Loading coffee...<img width="100px" height="100px" src="statics/images/coffee.jpeg"></img></font></li>
+		<li><font size="10px" color="black">Try Quiz on Exotic Derivatives & other topics<img width="100px" height="100px" src="statics/images/coffeequiz.jpeg"></img></font></li>
+		<li><font size="10px" color="black"><img width="100px" height="100px" src="statics/images/haskell.jpeg"></img>Haskell Articles Freshly Roasted (Monads)</font></li>
+		<li><font size="10px" color="black">Press 'r' to refresh. Tab / Shift-Tab to navigate menu bar. </font></li>
+	</ul>
+</div>
+<br/><br/><br/><br/><br/><br/><br/>
+<div id="quant"></div>
+<div data-dojo-type="dojox.layout.ContentPane" executeScripts="true" id="myContentPane" style="overflow:auto;width=100%"
+ href="statics/WriteUps/PDEs.html">
+</div>
+
+<script type='text/javascript'>
+require(["dojo/on", "dojo/domReady!"], function(on) {
+	  //var linkval = String();
+    on(document, "keyup", function(event) {
+        if(event.keyCode==82)
+				{
+
+					document.getElementById('messages').style.display = 'block';
+					dijit.registry.byId("myContentPane").executeScripts="true";
+					dijit.registry.byId("myContentPane").set('innerHTML',"<p></p>");
+				}
+    });
+});
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "date": "2025-10-12",
+      "title": "A 6×6 thought: why sum=7 feels special",
+      "deck": "On two dice, the middle sum gets the most paths. Try highlighting the diagonal.",
+      "html": "<p>Count pairs, not magic. The six ways to make 7 line up as a diagonal in the 6×6 grid.</p>",
+      "link": "statics/WriteUps/DicePuzzle.html"
+    },
+    {
+      "title": "Kelly’s whisper",
+      "deck": "If your edge is p, the sweet spot is roughly f = 2p − 1. Too big kills you.",
+      "html": "<p>Play first in the lab, then open the derivation. $g(f)=p\\ln(1+f)+(1-p)\\ln(1-f)$ peaks at $2p-1$.</p>",
+      "link": "statics/WriteUps/BetSizing.html"
+    },
+    {
+      "title": "Gamma flips near zero",
+      "deck": "Binary curve notes: OTM stabilizes, ITM amplifies. Watch the $K=0$ line.",
+      "html": "<p>Replacement flows (receive 30y / pay 10y) lean on the spread when stress rises.</p>",
+      "link": "statics/WriteUps/OldLehmanStory.html"
+    }
+  ]
+}
+

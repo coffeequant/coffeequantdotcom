@@ -1,0 +1,66 @@
+<!DOCTYPE HTML> 
+<html lang="en"> 
+	<head> 
+	<style type="text/css">
+
+html,body
+{
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+}
+
+	</style>
+        <style type="text/css">
+            @import "dojor/dijit/themes/soria/soria.css";
+body {
+  background-image: url("images/background.png");
+}
+
+
+
+        </style>
+		<meta charset="utf-8"> 
+		<title>Coffee Quant</title> 
+ 
+		<!-- load dojo and provide config via data attribute --> 
+        		<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js">
+                        djConfig="parseOnLoad: true">
+        </script>
+
+        
+                <script type="text/javascript">
+require([
+    "dojo/ready", "dojo/store/Memory", "dijit/form/ComboBox"
+], function(ready, Memory, ComboBox){
+
+            var commands = [{name:"coffee", commandtype:"new",value:"help"}];
+            commandStore = new Memory({data:commands, idProperty: "name"});
+
+    ready(function(){
+        var comboBox = new ComboBox({
+            id: "cmd",
+            name: "cmd",
+            value: "cls",
+            store: commandStore,
+            searchAttr: "value"
+        }, "cmd");
+    });
+});
+    function eventsconnect()
+    {
+
+        var node1 = dojo.byId('cmd');
+        dojo.connect(node1, "onkeydown", function(e){
+            alert(e.which);
+        });
+    
+    }
+	</script> 
+
+	</head> 
+	<body class="soria" OnLoad="eventsconnect();">
+    
+    <input id="cmd">
+	</body> 
+</html> 

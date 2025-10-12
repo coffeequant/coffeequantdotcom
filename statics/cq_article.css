@@ -1,0 +1,32 @@
+
+/* CoffeeQuant article styles (drop-in, dark-mode aware) */
+.cq-article { max-width: 820px; margin: 0 auto; padding: 1rem 1.25rem 2rem; line-height: 1.6; color: #0b0f14; }
+.cq-article h1 { font-size: 1.9rem; margin: 0.2rem 0 0.9rem; letter-spacing: -0.01em; }
+.cq-article h2 { font-size: 1.3rem; margin: 1.2rem 0 0.5rem; }
+.cq-article p { margin: 0.5rem 0; }
+.cq-muted { color: #6b7280; font-size: 0.95rem; }
+.cq-card { background: #f6f7f9; border: 1px solid #e5e7eb; border-radius: 12px; padding: 0.9rem 1rem; }
+.cq-grid { margin: 0.75rem 0 0; display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 0.5rem; }
+.cq-badge { display: inline-block; font-size: 0.8rem; background: #e6f8f1; border: 1px solid #c8efe1; color: #125a49; border-radius: 999px; padding: 0.1rem 0.5rem; }
+.cq-table { border-collapse: collapse; width: 100%; margin: 0.5rem 0 1rem; }
+.cq-table th, .cq-table td { border-bottom: 1px solid #e5e7eb; text-align: left; padding: 0.5rem 0.4rem; font-variant-numeric: tabular-nums; }
+.cq-note { border-left: 3px solid #06b6d4; background: #ecfeff; padding: 0.6rem 0.8rem; border-radius: 8px; }
+.cq-example { border-left: 3px solid #20c997; background: #edfcf7; padding: 0.6rem 0.8rem; border-radius: 8px; }
+.cq-caution { border-left: 3px solid #f59e0b; background: #fff7ed; padding: 0.6rem 0.8rem; border-radius: 8px; }
+.cq-small { font-size: 0.9rem; }
+.cq-center { text-align: center; }
+.cq-flex { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.cq-pill { padding: 0.25rem 0.55rem; border-radius: 999px; background: #eef2ff; border: 1px solid #e0e7ff; color: #3730a3; font-size: 0.8rem; }
+.cq-frame { border: 1px solid #e5e7eb; border-radius: 12px; padding: 0.5rem; background: #fff; }
+
+@media (prefers-color-scheme: dark) {
+  .cq-article { color: #e5e7eb; }
+  .cq-card { background: #111827; border-color: #1f2937; }
+  .cq-table th, .cq-table td { border-color: #1f2937; }
+  .cq-note { background: rgba(8, 145, 178, 0.12); }
+  .cq-example { background: rgba(16, 185, 129, 0.12); }
+  .cq-caution { background: rgba(245, 158, 11, 0.12); }
+  .cq-frame { background: #0b0f14; border-color: #1f2937; }
+  .cq-badge { background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.25); color: #86efac; }
+  .cq-pill { background: rgba(129,140,248,0.12); border-color: rgba(129,140,248,0.25); color: #c7d2fe; }
+}

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    
+    <meta name="Generator" content="iWeb 3.0.4" />
+    <meta name="iWeb-Build" content="local-build-20120824" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <meta name="viewport" content="width=700" />
+    <title>Questions</title>
+    <link rel="stylesheet" type="text/css" media="screen,print" href="Questions_files/Questions.css" />
+    <!--[if lt IE 8]><link rel='stylesheet' type='text/css' media='screen,print' href='Questions_files/QuestionsIE.css'/><![endif]-->
+    <!--[if gte IE 8]><link rel='stylesheet' type='text/css' media='screen,print' href='Media/IE8.css'/><![endif]-->
+    <script type="text/javascript" src="Scripts/iWebSite.js"></script>
+    <script type="text/javascript" src="Scripts/Widgets/SharedResources/WidgetCommon.js"></script>
+    <script type="text/javascript" src="Scripts/Widgets/Navbar/navbar.js"></script>
+    <script type="text/javascript" src="Questions_files/Questions.js"></script>
+  </head>
+  <body style="background: rgb(247, 246, 246); margin: 0pt; " onload="onPageLoad();" onunload="onPageUnload();">
+    <div style="text-align: center; ">
+      <div style="margin-bottom: 0px; margin-left: auto; margin-right: auto; margin-top: 0px; overflow: hidden; position: relative; word-wrap: break-word;  background: rgb(247, 246, 246); text-align: left; width: 700px; " id="body_content">
+        <div style="float: left; height: 0px; line-height: 0px; margin-left: 0px; position: relative; width: 700px; z-index: 10; " id="header_layer">
+          <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+        </div>
+        <div style="margin-left: 0px; position: relative; width: 700px; z-index: 0; " id="nav_layer">
+          <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+          <div style="height: 1px; line-height: 1px; " class="tinyText"> </div>
+          <div class="com-apple-iweb-widget-navbar flowDefining" id="widget0" style="margin-left: 0px; margin-top: 24px; opacity: 1.00; position: relative; width: 700px; z-index: 1; ">
+    
+            <div id="widget0-navbar" class="navbar">
+
+      
+              <div id="widget0-bg" class="navbar-bg">
+
+        
+                <ul id="widget0-navbar-list" class="navbar-list">
+ <li></li> 
+</ul>
+                
+      
+</div>
+              
+    
+</div>
+          </div>
+          <script type="text/javascript"><!--//--><![CDATA[//><!--
+new NavBar('widget0', 'Scripts/Widgets/Navbar', 'Scripts/Widgets/SharedResources', '.', {"path-to-root": "", "navbar-css": ".navbar {\n\tfont-family: 'Helvetica Neue', Arial, sans-serif;\n\tfont-size: .85em;\n\tcolor: #999;\n\tmargin: 0px;\n\tline-height: 20px;\n\tfont-weight: bold;\n}\n\n.navbar-bg {\n\ttext-align: left;\n\tpadding: 0px;\n}\n\n.navbar-bg ul {\n\tlist-style: none;\n\tmargin: 0px;\n\tpadding: 0px;\n}\n\n\nli {\n\tlist-style-type: none;\n\tdisplay: inline;\n\tpadding: 0px 15px 0px 10px;\n}\n\n\nli a {\n\ttext-decoration: none;\n\tcolor: #999;\n}\n\nli a:visited {\n\ttext-decoration: none;\n\tcolor: #999;\n}\n\nli a:hover\n{\n \tcolor: #F00;\n\ttext-decoration: none;\n}\n\n\nli.current-page a\n{\n\t color: #666;\n\ttext-decoration: none;\n\n}", "current-page-GUID": "ECA6D242-1B7E-40D7-AC71-E463577A294A", "isCollectionPage": "NO"});
+//--><!]]></script>
+          <div style="clear: both; height: 0px; line-height: 0px; " class="spacer"> </div>
+        </div>
+        <div style="margin-left: 0px; position: relative; width: 700px; z-index: 5; " id="body_layer">
+          <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+          <div id="id1" style="height: 41px; left: 40px; position: absolute; top: 78px; width: 620px; z-index: 1; " class="style_SkipStroke shape-with-text">
+            <div class="text-content graphic_shape_layout_style_default_External_620_41" style="padding: 0px; ">
+              <div class="graphic_shape_layout_style_default">
+                <p style="padding-bottom: 0pt; padding-top: 0pt; " class="paragraph_style">Interview Questions - Derivatives</p>
+              </div>
+            </div>
+          </div>
+          
+
+
+          <div id="id2" style="height: 1817px; left: 42px; position: absolute; top: 144px; width: 643px; z-index: 1; " class="style_SkipStroke_1 shape-with-text">
+            <div class="text-content graphic_textbox_layout_style_default_External_643_1817" style="padding: 0px; ">
+              <div class="graphic_textbox_layout_style_default">
+                <p style="padding-top: 0pt; " class="paragraph_style_1">Are you smarter than a Lehman Brothers Trader<br /></p>
+                <p class="paragraph_style_2"><br /></p>
+                <p class="paragraph_style_2">Q1) Theoretically, what is the main issue in using the Black-Scholes Equation for pricing options on stocks and on baskets composed of those stocks?<br /></p>
+                <p class="Body"><br /></p>
+                <p class="Body">a) <span class="style">Difficulty in calculating the basket forward<br /></span></p>
+                <p class="Body"><span class="style">b) Contradiction between the stock returns and the basket returns both being lognormal<br /></span></p>
+                <p class="Body"><span class="style">c) Valuation of American options<br /></span></p>
+                <p class="Body"><span class="style">d) Estimating the instantaneous basket volatility with a given correlation<br /></span></p>
+                <p class="Body"><span class="style"><br /></span></p>
+                <p class="paragraph_style_2">Q2) Which of these options can be valued by the regular Black-Scholes Equation for European Options (the spot is at 100, American style barrier)?<br /></p>
+                <p class="paragraph_style_2"><br /></p>
+                <ol>
+                  <li style="line-height: 20px; padding-left: 16px; text-indent: -16px; " class="full-width" value="1">
+                    <p style="text-indent: -16px; " class="paragraph_style_3"><span style="font-size: 14px; position: relative; top: 1px; " class="Bullet">a)</span><span style="width: 4px; " class="inline-block"></span><span class="style">1yr European Call with 110 euro strike call with knock in at 130<br /></span></p>
+                  </li>
+                  <li style="line-height: 20px; padding-left: 16px; text-indent: -16px; " class="full-width" value="2">
+                    <p style="text-indent: -16px; " class="paragraph_style_3"><span style="font-size: 14px; position: relative; top: 1px; " class="Bullet">b)</span><span style="width: 3px; " class="inline-block"></span><span class="style">1yr European Call with 90 euro strike call with knock in at 95<br /></span></p>
+                  </li>
+                  <li style="line-height: 20px; padding-left: 16px; text-indent: -16px; " class="full-width" value="3">
+                    <p style="text-indent: -16px; " class="paragraph_style_3"><span style="font-size: 14px; position: relative; top: 1px; " class="Bullet">c)</span><span style="width: 4px; " class="inline-block"></span><span class="style">1yr European Call with 110 euro strike call with knock in at 80<br /></span></p>
+                  </li>
+                  <li style="line-height: 20px; padding-left: 16px; text-indent: -16px; " class="full-width" value="4">
+                    <p style="text-indent: -16px; " class="paragraph_style_3"><span style="font-size: 14px; position: relative; top: 1px; " class="Bullet">d)</span><span style="width: 3px; " class="inline-block"></span><span class="style">1yr European Call with 130 euro strike call with knock in at 110<br /></span></p>
+                  </li>
+                </ol>
+                <p class="Body"><span class="style"><br /></span></p>
+                <p class="paragraph_style_2">Q3) A trader on a cruise is shipwrecked and stranded on a desert island. However, being a dedicated risk manager, he wants to be able simulate a normally distributed variable so that he can manually stress test his trading book back home. Which one of the following should he take to help him do this?<br /></p>
+                <p class="Body"><br /></p>
+                <p class="Body">a) <span class="style">The roulette table from the ship's casino<br /></span></p>
+                <p class="Body"><span class="style">b) Five six-sided dice<br /></span></p>
+                <p class="Body"><span class="style">c) A newspaper with historical data for all the last year's closing prices for the Dow<br /></span></p>
+                <p class="Body"><span class="style">d) Twenty-four one-dollar bills<br /></span></p>
+                <p class="Body"><span class="style"><br /></span></p>
+                <p class="paragraph_style_2">Q4) What is the contradiction in using Black-Scholes to price both options on long-dated interest rates and options on long-dated bonds?<br /></p>
+                <p class="Body"><br /></p>
+                <p class="Body">a) <span class="style"> Interest Rates have no volatility whereas Bonds do <br /></span></p>
+                <p class="Body"><span class="style">b)  Bonds have no volatilty but Interest Rates do <br /></span></p>
+                <p class="Body"><span class="style">c)  Hedging of interest rates with bonds is impossible <br /></span></p>
+                <p class="Body"><span class="style">d)  They both cannot be lognormally distributed <br /></span></p>
+                <p class="Body"><span class="style"><br /></span></p>
+                <p class="paragraph_style_2">Q5) On any day the market can only go up in steps of $1 or down in steps of $9. Given that out of 10 steps, 9 will be up and 1 will be down. What is the price of a one day ATM digital call paying $1 if the market finishes at a higher level tomorrow than today?<br /></p>
+                <p class="Body"><br /></p>
+                <p class="Body">a) <span class="style">$0<br /></span></p>
+                <p class="Body"><span class="style">b) $0.9<br /></span></p>
+                <p class="Body"><span class="style">c) $1<br /></span></p>
+                <p class="Body"><span class="style">d) $4.5<br /></span></p>
+                <p class="Body"><span class="style"><br /></span></p>
+                <p class="paragraph_style_2">Q6) For a digital option, why isn't the delta the probability of exercise?<br /></p>
+                <p class="Body">a) <span class="style">Because of the pricing of volatility skew is not defined for digital options<br /></span></p>
+                <p class="Body"><span class="style">b) Because of the pricing of forward drift changes the expected carry pnl<br /></span></p>
+                <p class="Body"><span class="style">c) Because the probability of exercise does not depend on the magnitude of the moves, while the hedge does.<br /></span></p>
+                <ol>
+                  <li style="line-height: 20px; padding-left: 16px; text-indent: -16px; " class="full-width" value="500">
+                    <p style="text-indent: -16px; " class="paragraph_style_4"><span style="font-size: 14px; position: relative; top: 1px; " class="Bullet">d)</span><span style="width: 4px; " class="inline-block"></span><span class="style">None of the above<br /></span></p>
+                  </li>
+                </ol>
+                <p class="paragraph_style_5"><span class="style"><br /></span></p>
+                <p class="paragraph_style_5"><span class="style">Q7) In general, a volatility cap call gives the purchaser<br /></span></p>
+                <ol>
+                  <li style="line-height: 20px; padding-left: 16px; text-indent: -16px; " class="full-width" value="1">
+                    <p style="text-indent: -16px; " class="paragraph_style_6"><span style="font-size: 13px; position: relative; top: 1px; " class="Bullet">a)</span><span style="width: 5px; " class="inline-block"></span><span style="line-height: 18px; " class="style_1">High leverage to the underlying during a sequence of sharp upward moves<br /></span></p>
+                  </li>
+                  <li style="line-height: 20px; padding-left: 16px; text-indent: -16px; " class="full-width" value="2">
+                    <p style="text-indent: -16px; " class="paragraph_style_6"><span style="font-size: 13px; position: relative; top: 1px; " class="Bullet">b)</span><span style="width: 5px; " class="inline-block"></span><span style="line-height: 18px; " class="style_1">Low leverage to the underlying during a sequence of sharp downward moves<br /></span></p>
+                  </li>
+                  <li style="line-height: 20px; padding-left: 16px; text-indent: -16px; " class="full-width" value="3">
+                    <p style="text-indent: -16px; " class="paragraph_style_6"><span style="font-size: 13px; position: relative; top: 1px; " class="Bullet">c)</span><span style="width: 5px; " class="inline-block"></span><span style="line-height: 18px; " class="style_1">High leverage to the underlying for large realized volatilities<br /></span></p>
+                  </li>
+                  <li style="line-height: 20px; padding-left: 16px; text-indent: -16px; " class="full-width" value="4">
+                    <p style="text-indent: -16px; " class="paragraph_style_6"><span style="font-size: 13px; position: relative; top: 1px; " class="Bullet">d)</span><span style="width: 5px; " class="inline-block"></span><span style="line-height: 18px; " class="style_1">None of the above<br /></span></p>
+                  </li>
+                </ol>
+                <p class="Body"><span style="line-height: 18px; " class="style_1"><br /></span></p>
+                <p class="paragraph_style_7"><span style="line-height: 16px; " class="style_2">Q8) </span>Given 5 stocks and all else being equal, which of the following is cheapest?<br /></p>
+                <p class="Body">a) <span style="line-height: 18px; " class="style_1">Basket of atm monthly Asian calls<br /></span></p>
+                <p class="Body"><span style="line-height: 18px; " class="style_1">b) Monthly asian atm Himalaya<br /></span></p>
+                <p class="Body"><span style="line-height: 18px; " class="style_1">c) atm Himalaya<br /></span></p>
+                <p class="Body"><span style="line-height: 18px; " class="style_1">d) Basket of atm American calls<br /></span></p>
+                <p class="Body"><span style="line-height: 18px; " class="style_1"><br /></span></p>
+                <p class="paragraph_style_7"><span style="line-height: 16px; " class="style_2">Q9) </span>I run a CPPI structure on an equity underlying where I have no additional borrow facility. If the underlying rallies with high volatility (in a non-monotonic fashion), I expect to make more profit than if I simply held the underlying until maturity.<br /></p>
+                <p class="Body">a) <span style="line-height: 18px; " class="style_1">TRUE<br /></span></p>
+                <ol>
+                  <li style="line-height: 20px; padding-left: 15px; text-indent: -15px; " class="full-width" value="2">
+                    <p style="text-indent: -15px; " class="paragraph_style_8"><span style="font-size: 13px; position: relative; top: 1px; " class="Bullet">b)</span><span style="width: 3px; " class="inline-block"></span><span style="line-height: 18px; " class="style_1">FALSE<br /></span></p>
+                  </li>
+                </ol>
+                <p class="paragraph_style_9"><span style="line-height: 18px; " class="style_1"><br /></span></p>
+                <p class="paragraph_style_7"><span style="line-height: 16px; " class="style_2">Q10) </span>A European digital option pays out if the spot level is above a certain barrier at maturity. Does this option contain risk-reversal risk?<br /></p>
+                <p class="paragraph_style_9">a) <span style="line-height: 18px; " class="style_1">Yes<br /></span></p>
+                <ol>
+                  <li style="line-height: 20px; padding-left: 15px; text-indent: -15px; " class="full-width" value="2">
+                    <p style="text-indent: -15px; " class="paragraph_style_8"><span style="font-size: 13px; position: relative; top: 1px; " class="Bullet">b)</span><span style="width: 3px; " class="inline-block"></span><span style="line-height: 18px; " class="style_1">No<br /></span></p>
+                  </li>
+                </ol>
+                <p class="paragraph_style_9"><span style="line-height: 18px; " class="style_1"><br /></span></p>
+                <p class="paragraph_style_9"><span style="line-height: 18px; " class="style_1"><br /></span></p>
+                <p class="paragraph_style_9"><span style="line-height: 18px; " class="style_1"><br /></span></p>
+                <p class="paragraph_style_9"><span style="line-height: 18px; " class="style_1"><br /></span></p>
+                <p class="paragraph_style_9"><span style="line-height: 18px; " class="style_1"><br /></span></p>
+                <p class="paragraph_style_9"><span style="line-height: 18px; " class="style_1">Answers - Only some...<br /></span></p>
+                <p class="paragraph_style_9"><span style="line-height: 18px; " class="style_1"><br /></span></p>
+                <p class="paragraph_style_9"><span style="line-height: 18px; " class="style_1">1) b<br /></span></p>
+                <ol>
+                  <li style="line-height: 20px; padding-left: 15px; text-indent: -15px; " class="full-width" value="2">
+                    <p style="text-indent: -15px; " class="paragraph_style_10"><span style="font-size: 13px; position: relative; top: 1px; " class="Bullet">2)</span><span style="width: 4px; " class="inline-block"></span><span style="line-height: 18px; " class="style_1">d<br /></span></p>
+                  </li>
+                  <li style="line-height: 20px; padding-left: 15px; text-indent: -15px; " class="full-width" value="3">
+                    <p style="text-indent: -15px; " class="paragraph_style_10"><span style="font-size: 13px; position: relative; top: 1px; " class="Bullet">3)</span><span style="width: 4px; " class="inline-block"></span><span style="line-height: 18px; " class="style_1">b<br /></span></p>
+                  </li>
+                  <li style="line-height: 20px; padding-left: 15px; text-indent: -15px; " class="full-width" value="4">
+                    <p style="text-indent: -15px; " class="paragraph_style_10"><span style="font-size: 13px; position: relative; top: 1px; " class="Bullet">4)</span><span style="width: 4px; " class="inline-block"></span><span style="line-height: 18px; " class="style_1">d<br /></span></p>
+                  </li>
+                  <li style="line-height: 20px; padding-left: 15px; text-indent: -15px; " class="full-width" value="5">
+                    <p style="text-indent: -15px; " class="paragraph_style_10"><span style="font-size: 13px; position: relative; top: 1px; " class="Bullet">5)</span><span style="width: 4px; " class="inline-block"></span><span style="line-height: 18px; " class="style_1">b<br /></span></p>
+                  </li>
+                </ol>
+                <p class="paragraph_style_9"><span style="line-height: 18px; " class="style_1">8) b - The optionality of a Himalaya is reduced as each asset is removed and it's value fixed. Having a monthly asian Himalaya is paramount to having asianing on an asian option.<br /></span></p>
+                <p class="paragraph_style_9"><span style="line-height: 18px; " class="style_1">9) b - My position is effectively short gamma - I would be selling lows and buying highs - eating in to my capital.<br /></span></p>
+                <p class="paragraph_style_9"><span style="line-height: 18px; " class="style_1">10) a - Below the barrier the option is long volatility, above the barrier the option is short volatility. If you are long a risk-reversal then you will be long and short vol at different strikes.<br /></span></p>
+                <p class="paragraph_style_9"><span style="line-height: 18px; " class="style_1"><br /></span></p>
+                <p class="paragraph_style_5"><span style="line-height: 13px; " class="style_3"><br /></span></p>
+                <p class="paragraph_style_5"><br /></p>
+                <p class="Body"><span class="style"><br /></span></p>
+                <p class="Body"><span class="style"><br /></span></p>
+                <p class="Body"><span class="style"><br /></span></p>
+                <p class="Body"><span class="style"><br /></span></p>
+              </div>
+            </div>
+          </div>
+          <div style="height: 1961px; line-height: 1961px; " class="spacer"> </div>
+        </div>
+        <div style="height: 100px; margin-left: 0px; position: relative; width: 700px; z-index: 15; " id="footer_layer">
+          <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+

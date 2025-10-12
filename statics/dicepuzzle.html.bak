@@ -1,0 +1,262 @@
+<body>
+<span style="color: rgb(51, 51, 153); font-weight: bold;">
+Problem
+Statement: </span>6 Dices
+tossed 6 times, and each time (or each set) a minimum is noted. What is
+expectation of maximum of these 6 minimum values.<br>
+
+<img style="width: 200px; height: 200px;" alt="NODICE"
+ src="/statics/images/dices.png">
+
+Let's say I get for first set 1, 4, 6, 2, 3, 2 whose minimum is 1. This
+is repeated 6 times and let's say the set of minimums is {1,1,2,3,5,4}
+so maximum of this set is 5. I want to calculate the expectation of
+this maximum value. <br>
+<br>
+It's a lot to take, but if we break down this puzzle, it's really
+simple. I will work out a generic solution for n dices tossed k times.<br>
+<br>
+<br>
+<br>
+Coin tossing puzzles are too simple sometimes, so I tried to make a
+puzzle with dices. Good thing with a simple puzzle is you can add more
+attributes to it to make it more complex, or a bit interesting. <br>
+<br>
+Let's say I have 6 dices and I toss them once. I want to find the
+expectation of MINIMUM Value. This simply suggests that I need the
+following probabilities<br>
+<br>
+1 x P(X=1) + 2 x P(X=2) + ..... 6 x P(X=6)<br>
+<br>
+X = 1 can only be obtained if in all 6 dices I get at least one of the
+tosses to be 1. The hard path is to list out all combinations and
+that's where I look for the opposite path. P(X&gt;1) is simply 5/6, and
+so if in all tosses I get P(X&gt;1) = (5/6)^6. so P(X=1) is simply 1 -
+(5/6)^6.<br>
+<br>
+This was easy, now it's a bit complicated for X = 2<br>
+If I proceed in a similar fashion I can get P(X &gt; 2) =&nbsp; 1 -
+(4/6)^6, but this includes the probability of P(X=1), so a simple
+modification is <br>
+P(X=2) = 1 - P(X&gt;2) - P(X=1)<br>
+<br>
+And so I have a simple pattern resulting in<br>
+<br>
+<table
+ style="text-align: left; width: 30%; background-color: rgb(102, 204, 204);"
+ border="1" cellpadding="2" cellspacing="2">
+<tbody>
+<tr>
+<td
+ style="vertical-align: top; width: 5px; background-color: rgb(102, 255, 255);"><img
+ src="moz-screenshot.png" alt="">P(X=1)</td>
+       <td
+ style="vertical-align: top; width: 7px;">0.6651<br>
+      </td>
+       </tr>
+     <tr>
+       <td style="vertical-align: top;">P(X=2)<br>
+      </td>
+       <td style="vertical-align: top;">0.2471<br>
+      </td>
+       </tr>
+     <tr>
+       <td style="vertical-align: top;">P(X=3)<br>
+      </td>
+       <td style="vertical-align: top;">0.0721<br>
+      </td>
+       </tr>
+     <tr>
+       <td style="vertical-align: top;">P(X=4)<br>
+      </td>
+       <td style="vertical-align: top;">0.01425<br>
+      </td>
+       </tr>
+     <tr>
+       <td style="vertical-align: top;">P(X=5)<br>
+      </td>
+       <td style="vertical-align: top;">0.00135<br>
+      </td>
+       </tr>
+     <tr>
+       <td style="vertical-align: top;">P(X=6)<br>
+      </td>
+       <td style="vertical-align: top;">0.000021<br>
+      </td>
+       </tr>
+     
+  </tbody>
+</table>
+<br>
+At this point expectation calculation is simple, but here I add another
+attribute to the puzzle. I want 6 tosses of the 6 dices.<br>
+<br>
+<span style="font-style: italic; color: rgb(51, 51, 153);">In each set
+I will take the minimum value as in the previous part. I will then take
+the maximum of these 6 minimum values. Now what is the expectation of
+this maximum value?</span><br
+ style="font-style: italic; color: rgb(51, 51, 153);">
+<span style="color: rgb(51, 51, 255); font-style: italic;">So another
+layer is added, and this can be continued for many times, but let's
+think of the second layer as of now. </span><br
+ style="color: rgb(51, 51, 255);">
+<br>
+P(X=1) will simply be getting a 1 in all the minimums otherwise it
+won't get selected so it's easiest = 0.665102^6 = 0.0865.<br>
+P(X=2) is not so simple, and can't be calculated by P(X&gt;2) logic,
+since it's a maximum I use P(X&lt;=2) and this time I use the
+probabilities calculated previously. <br>
+<br>
+P(X&lt;=2) = SUM(P(X=1) + P(X=2))^6<br>
+Again this includes the case of P(X=1), so I subtract NOT 0.6651, but
+0.0865 (calculated above)<br>
+so P(X=2) (in this max case) becomes 0.48962<br>
+<br>
+<small>Similarly P(X=3) becomes SUM(P(X=1) + P(X=2) +
+P(X=3)^6&nbsp;&nbsp; - 0.48962 - 0.0865<br>
+and we again have the following table<br>
+<br>
+</small><br>
+
+<table
+ style="text-align: left; width: 30%; background-color: rgb(102, 204, 204);"
+ border="1" cellpadding="2" cellspacing="2">
+   <tbody>
+     <tr>
+       <td
+ style="vertical-align: top; width: 5px; background-color: rgb(102, 255, 255);"><img
+ src="moz-screenshot.png" alt="">P(X=1)</td>
+       <td
+ style="vertical-align: top; width: 7px;">0.0865<br>
+      </td>
+       </tr>
+     <tr>
+       <td style="vertical-align: top;">P(X=2)<br>
+      </td>
+       <td style="vertical-align: top;">0.4896<br>
+      </td>
+       </tr>
+     <tr>
+       <td style="vertical-align: top;">P(X=3)<br>
+      </td>
+       <td style="vertical-align: top;">0.3336<br>
+      </td>
+       </tr>
+     <tr>
+       <td style="vertical-align: top;">P(X=4)<br>
+      </td>
+       <td style="vertical-align: top;">0.0819<br>
+      </td>
+       </tr>
+     <tr>
+       <td style="vertical-align: top;">P(X=5)<br>
+      </td>
+       <td style="vertical-align: top;">0.00807<br>
+      </td>
+       </tr>
+     <tr>
+       <td style="vertical-align: top;">P(X=6)<br>
+      </td>
+       <td style="vertical-align: top;">0.00012<br>
+      </td>
+       </tr>
+  </tbody>
+</table>
+<br>
+<span style="color: rgb(51, 51, 153);">From these values if I
+calculate the expectation I get approx 2.435. This can be verified by
+doing a simple spreadsheet experiment. Use RANDBETWEEN function to
+generate random numbers between 1 and 6. Note down minimum for 6 sets.
+Calculate maximum. Repeat this calculation for another set, and do
+let's say 1000 sets. Sum/1000 =&gt; Approx 2.43. So our reasoning was
+right, and we solved a puzzle by using normal kiddish arguments :)</span><br
+ style="color: rgb(51, 51, 153);">
+<br>
+Opposite of this might be first taking the MAX, and then taking the MIN
+value.<br>
+<br>
+The refined Problem statement was <br>
+<br>
+6 Dices tossed 6 times, and each time a minimum is noted. What is
+expectation of maximum of these 6 minimum values.<br>
+<br>
+From a mathematical point of view it's fun to work this out. Let's try!<br>
+<br>
+Now to be more generic n dices tossed k times, and each time a minimum
+is noted. What is the expectation of maximum of these k tosses. <br>
+<br>
+P(X&gt;1) = (5/6)^(n)<br>
+P(X&gt;2) = (4/6)^(n) and so on.....<br>
+<br>
+P(X=1) = 1 - (5/6)^n<br>
+P(X=2) = 1 - (4/6)^n - (P(X=1))<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=
+1
+-
+(4/6)^n - 1 + (5/6)^n &nbsp;&nbsp;&nbsp; <br>
+&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; - (4/6)^n +
+(5/6)^n<br>
+That's a nice pattern<br>
+P(X=3) = 1 - (3/6)^n - (P(X=2)) - P(X=1)) <br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; =&nbsp;
+1 - (3/6)^n +  (4/6)^n - (5/6)^n - 1 + (5/6)^n<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=&nbsp;&nbsp; - (3/6)^n + (4/6)^n<br>
+so the pattern is...<br>
+P(X=4) = - (2/6)^n + (3/6)^n <br>
+P(X=a) = - ((6-a)/6)^n + ((6-a+1)/6)^n<br>
+<br>
+Now again moving to k times tossing for maximum
+value we have...<br>
+<br>
+P(X=1) = (1-(5/6)^n)^k<br>
+P(X=2) = (- (4/6)^n + (5/6)^n + 1
+-
+(5/6)^n
+)^
+k - (1-(5/6)^n)^k<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=
+<br>
+&nbsp;&nbsp;&nbsp; <img style="width: 249px; height: 46px;" alt=""
+ src="images/final5.png"><br>
+<br>
+P(X=3) = <br>
+<br>
+<img style="width: 455px; height: 63px;" alt="" src="images/final3.png"><br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Simplifying<br>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = ( - (3/6)^n
++1)^k
+-
+(1 - (4/6)^n)^k<br>
+<br>
+Let's verify for n = 6 and k = 6<br>
+It's 0.3336 hence a perfect match!<br>
+<br>
+So pattern is<br>
+<br>
+<img style="width: 411px; height: 47px;" alt="" src="images/final2.png"><br>
+<br>
+So expectation is<br>
+<br>
+<img style="width: 455px; height: 63px;" alt="Solution"
+ src="images/final1.png"><br>
+<br>
+<br>
+Which if calculated gives 2.43 for n=k=6, and hence a generic solution!<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+

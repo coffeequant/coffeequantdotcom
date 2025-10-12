@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    
+    <meta name="Generator" content="iWeb 3.0.4" />
+    <meta name="iWeb-Build" content="local-build-20120901" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <meta name="viewport" content="width=1000" />
+    <title>Forward Striking Derivatives</title>
+    <link rel="stylesheet" type="text/css" media="screen,print" href="ForwardStriking_files/ForwardStriking.css" />
+    <!--[if lt IE 8]><link rel='stylesheet' type='text/css' media='screen,print' href='ForwardStriking_files/ForwardStrikingIE.css'/><![endif]-->
+    <!--[if gte IE 8]><link rel='stylesheet' type='text/css' media='screen,print' href='Media/IE8.css'/><![endif]-->
+    <script type="text/javascript" src="Scripts/iWebSite.js"></script>
+    <script type="text/javascript" src="Scripts/Widgets/SharedResources/WidgetCommon.js"></script>
+    <script type="text/javascript" src="Scripts/Widgets/Navbar/navbar.js"></script>
+    <script type="text/javascript" src="ForwardStriking_files/ForwardStriking.js"></script>
+  </head>
+  <body style="background: rgb(248, 255, 247); margin: 0pt; " onload="onPageLoad();" onunload="onPageUnload();">
+    <div style="text-align: center; ">
+      <div style="margin-bottom: 10px; margin-left: auto; margin-right: auto; margin-top: 10px; overflow: hidden; position: relative; word-wrap: break-word;  text-align: left; width: 1000px; " id="body_content">
+        <div style="background: transparent url(ForwardStriking_files/backgroundimage_1.jpg) no-repeat scroll center center; width: 1000px; ">
+          <div style="margin-left: 0px; position: relative; width: 1000px; z-index: 0; " id="nav_layer">
+            <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+            <div class="com-apple-iweb-widget-navbar flowDefining" id="widget0" style="margin-left: 20px; margin-top: 0px; opacity: 1.00; position: relative; width: 660px; z-index: 1; ">
+    
+              <div id="widget0-navbar" class="navbar">
+
+      
+                <div id="widget0-bg" class="navbar-bg">
+
+        
+                  <ul id="widget0-navbar-list" class="navbar-list">
+ <li></li> 
+</ul>
+                  
+      
+</div>
+                
+    
+</div>
+            </div>
+            <script type="text/javascript"><!--//--><![CDATA[//><!--
+new NavBar('widget0', 'Scripts/Widgets/Navbar', 'Scripts/Widgets/SharedResources', '.', {"path-to-root": "", "navbar-css": ".navbar {\n\tfont-family: 'Helvetica Neue', Arial, sans-serif;\n\tfont-size: .8em;\n\tcolor: #666666;\n\tline-height: 30px;\n\tborder-bottom: 3px solid #ccc;\n}\n\n.navbar-bg {\n\ttext-align: right;}\n\n.navbar-bg ul {\n\tlist-style: none;\n\tmargin: 0px;\n\tpadding: 0px;\n}\n\n\nli {\n\tlist-style-type: none;\n\tdisplay: inline;\n\tpadding: 0px 5px 0px 0px;\n}\n\n\nli a {\n\ttext-decoration: none;\n\tpadding: 10px;\n\tcolor: #666666;\n\tfont-weight: bold;\n}\n\nli a:visited {\n\ttext-decoration: none;\n\tpadding: 10px;\n\tcolor: #666666;\n\tfont-weight: bold;\n}\n\nli a:hover\r{\r\n \tcolor: #999999;\n\ttext-decoration: none;\r}\n\n\nli.current-page a\r{\r\t color: #66ABC5;\n\ttext-decoration: none;\r}\n", "current-page-GUID": "50E53774-14DE-44BA-86AE-68D61D830B80", "isCollectionPage": "NO"});
+//--><!]]></script>
+            <div style="clear: both; height: 0px; line-height: 0px; " class="spacer"> </div>
+          </div>
+          <div style="height: 75px; margin-left: 0px; position: relative; width: 1000px; z-index: 10; " id="header_layer">
+            <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+            <div id="id1" style="height: 43px; left: 20px; position: absolute; top: 20px; width: 515px; z-index: 1; " class="style_SkipStroke shape-with-text">
+              <div class="text-content Normal_External_515_43" style="padding: 0px; ">
+                <div class="Normal">
+                  <p style="padding-bottom: 0pt; padding-top: 0pt; " class="Header">Forward Striking Derivatives</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-left: 0px; position: relative; width: 1000px; z-index: 5; " id="body_layer">
+            <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+            <div id="id2" style="height: 760px; left: 20px; position: absolute; top: 12px; width: 969px; z-index: 1; " class="style_SkipStroke_1 shape-with-text">
+              <div class="text-content Normal_External_969_760" style="padding: 0px; ">
+                <div class="Normal">
+                  <p style="padding-top: 0pt; " class="paragraph_style">Formula for forward is F(T) = S(t) e^{r(t,T) (T-t)}, where r(t,T) denotes the interest rate from time t (current time) to maturity time T. In some books this might be written in the form of integral, but in this case you can assume r(t,T) as the average from an integral or the simple case that interest rates are constant.<br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style">A general SDE for stock price is dS = mu S dt + sigma S dX, and the risk neutral version is dS = r S dt + sigma S dX, it's solution is (widely known) S(t) = S(<span class="style">0</span>) e^{(r-sigma^<span class="style">2</span>/<span class="style">2</span>)dt + sigma dX}. I am assuming reader is familiar with these terms. Now as per theory I know that at time T (maturity) S(T) = F(T) or future and spot prices will converge.<br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style">So I can write S(T) = S(<span class="style">0</span>) e^{(r-sigma^<span class="style">2</span>/<span class="style">2</span>)dt + sigma dX} or F(T) = F(<span class="style">0</span>) e^{-sigma^<span class="style">2</span>/<span class="style">2</span>dt + sigma dX}. Since the solution of forward price process doesn't contain the drift term I can assume that dF = sigma F dX will be a valid SDE for a forward process. Although not mathematically rigorous, there is an added question of the sigma term.Is the sigma in stock price process same as sigma in forward / future price. <br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style">A future price can be written as F = S / B where B = discount bond. If B is constant then ito's lemma says that dF = (partial F / partial S) x dS + <span class="style">0</span>, coz B is constant....<br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style"><span class="style">0</span>, coz B is constant...<br /></p>
+                  <p class="paragraph_style">dF = <span class="style">1</span>/B x dS<br /></p>
+                  <p class="paragraph_style">or dF = (r S dt + sigma S dX)/B<br /></p>
+                  <p class="paragraph_style">dF = (r S dt + sigma F B dX) / B <br /></p>
+                  <p class="paragraph_style">or dF = r S dt / B + sigma F dX<br /></p>
+                  <p class="paragraph_style">or volatility of forward / future = volatility of spot / underlying. (Compare with Stock SDE Solution)<br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style">An option price is written as E [ (S(T) - K)+ ] B,where B is used for discounting.<br /></p>
+                  <p class="paragraph_style_1"><br /></p>
+                  <p class="paragraph_style">since S(T) = F(T) it doesn't make a difference if we write the payoff as E[ (F(T) - K)+] B, where the forward contract is same maturity as option. Does this matter in hedging? In both the cases two arrive at F(T) or S(T) you need to conduct simulations. Only difference is for S(T) you need the drift term but in F(T) you don't need the drift term for simulations.....but still in either case we need B which depends on r. <br /></p>
+                  <p class="paragraph_style">If I examine this relation F = S / B (where B = Bond) and if B is stochastic then volatility of forward is dependent on spot and bond. An simple application of ito's lemma will give<br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style">volatility of forward = (volspot^<span class="style">2</span> + volbond^<span class="style">2</span> + <span class="style">2</span> volbond volspot correlation(spot,bond))^<span class="style">0.5</span>. <br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style">So if you take an option and backtrack volatility you should get volatility of the forward and only when interest rate is not stochastic <br /></p>
+                  <p class="paragraph_style">volatility of forward = volatility of spot (which most of as assume or don't know).  <br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style">By taking the forward of same maturity as the option the stochastic nature is taken care of and thus provides a more practical hedge. For short term maturities (<span class="style">1</span>,<span class="style">2</span> months) the two volatilities (spot  forward) are approximately same so doesn't make that much of a difference. <br /></p>
+                </div>
+              </div>
+            </div>
+            <div style="height: 1000px; line-height: 1000px; " class="spacer"> </div>
+          </div>
+          <div style="height: 75px; margin-left: 0px; position: relative; width: 1000px; z-index: 15; " id="footer_layer">
+            <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+            <a href="http://apple.com/mac" title="http://apple.com/mac"><img src="ForwardStriking_files/mwmac.png" alt="Made on a Mac" style="border: none; height: 50px; left: 280px; opacity: 0.35; position: absolute; top: 8px; width: 139px; z-index: 1; " id="id3" />
+
+</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+

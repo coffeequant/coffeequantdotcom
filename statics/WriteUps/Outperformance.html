@@ -1,124 +1,279 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-	<title></title>
-	<meta name="generator" content="LibreOffice 4.4.2.2 (MacOSX)"/>
-	<meta name="created" content="00:00:00"/>
-	<meta name="changed" content="2015-05-16T14:40:49.626208000"/>
+  <meta charset="utf-8" />
+  <title>Bet Sizing — From Coin Flips to Kelly (and a Handy Approximation)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- MathJax loads globally in index.html -->
+
+  <style>
+    .cq-article{max-width:920px;margin:0 auto;padding:1rem 1.25rem 2rem;line-height:1.6;color:inherit}
+    h1{font-size:1.9rem;margin:.2rem 0 .6rem;letter-spacing:-.01em}
+    h2{font-size:1.25rem;margin:1.2rem 0 .5rem}
+    .muted{opacity:.78}
+    .pill{display:inline-block;border:1px solid color-mix(in oklab,currentColor 30%,transparent);
+      border-radius:999px;padding:.15rem .6rem;font-size:.8rem;opacity:.9}
+    .card{background:color-mix(in oklab,currentColor 8%,transparent);
+      border:1px solid color-mix(in oklab,currentColor 24%,transparent);
+      border-radius:12px;padding:1rem}
+    .row{display:flex;gap:.75rem;flex-wrap:wrap;align-items:center}
+    .col{flex:1 1 260px}
+    .btn{background:#2563eb;color:#fff;border:0;border-radius:8px;padding:.55rem .9rem;cursor:pointer;font-size:.95rem}
+    .btn:hover{background:#1e40af}
+    .btn-ghost{background:transparent;border:1px solid color-mix(in oklab,currentColor 30%,transparent);color:inherit}
+    .slider{width:100%}
+    canvas{width:100%;height:220px;border:1px solid color-mix(in oklab,currentColor 24%,transparent);border-radius:12px;background:transparent}
+    .small{font-size:.92rem}
+    .note{border-left:3px solid;color:inherit;border-color:color-mix(in oklab,currentColor 45%,transparent);
+      background:color-mix(in oklab,currentColor 8%,transparent);padding:.6rem .8rem;border-radius:8px}
+    details{border:1px dashed color-mix(in oklab,currentColor 30%,transparent);border-radius:10px;padding:.6rem .8rem}
+    summary{cursor:pointer;font-weight:600}
+    @media (prefers-color-scheme: dark){.btn{background:#38bdf8;color:#0b1220}.btn:hover{background:#0284c7}}
+  </style>
 </head>
-<body lang="en-US" dir="ltr">
-<p><font face="Chalkduster"><font size="3" style="font-size: 12pt"><b>Outperformance
-Option Pricing – Finite Difference Methods <br/>
- </b><br/>
-<br/>
-An
-outperformance option has the following payoff.  </font></font>
-</p>
-<p><img src="data:image/png;base64,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" name="Image1" align="left" width="238" height="19" border="0"/>
-<br/>
-<br/>
 
-</p>
-<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">This
-payoff if written in normal PDE terms or a standard text book
-approach will have the following 2D PDE, </font></font>
-</p>
-<p><img src="data:image/png;base64,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" name="Image2" align="left" width="653" height="59" border="0"/>
-<font face="Chalkduster"><font size="3" style="font-size: 12pt"><br/>
-<br/>
+<body>
+  <article id="cq-article" class="cq-article">
+    <header class="row" style="justify-content:space-between">
+      <div>
+        <h1>Bet Sizing — From Coin Flips to Kelly (and a Handy Approximation)</h1>
+        <div class="muted small">by <strong>Animesh Saxena</strong></div>
+      </div>
+      <span class="pill">Gambling • Probability • Strategy</span>
+    </header>
 
-<br/>
-<font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 16pt"><u><b>Similarity
-Reduction</b></u></font></font></font></font></font></p>
-<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">Although
-it can be solved with FD methods it’s not easy to intuitively
-understand and also tough to get an analytical formula. I can do a
-change of variable with the following simplification </font></font>
-</p>
-<p><img src="data:image/png;base64,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" name="Image3" align="left" width="237" height="19" border="0"/>
+    <p>
+      Imagine you have $6 and access to a <em>slightly loaded</em> coin — heads is more likely than tails. You get 5 flips.
+      Each flip, you can risk a fraction of your wealth. Heads pays double the bet; tails loses it.
+    </p>
 
- <font face="Chalkduster"><font size="3" style="font-size: 12pt">where
-x = S<sub>2</sub>/S<sub>1</sub> <br/>
-Now I need to find out all the
-derivatives in the original equation and replace them with our new
-variable Q. <br/>
-   </font></font>
-</p>
-<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAAAnCAYAAADwxU3sAAAEiUlEQVR4nOWbgVH0IBCF72ZSgCVYgiVYgiVYgiVYgiVYgiVYgiVYgh3k52N2MxsOkkXJXcL/ZpzkCAHyHiwLrMMpwdvb2/jz8xPvub68vJzu7+/P4X4Mz2Z5n56eTg8PD2eb9vr6Our94+Mjf7PnR0aJm1L+j4+P8e7uLt5/f3/H6/Pz8yz/kFYQMpzCS2epZIRkrpoWCB8pjD9Ns6BREB8qX2zc0eDhRgHxfD882Gfv7++UMYbrlDYJEAgdA2HxJQUvU3F4YUrjOSMhR75U3h35Xm4AJJMWODinz+j9QbRRhIj8DKbASGxqUsJvzIqtOF5zytPQ3sgHXm7o+ViAr6+viacUvGNNuRVgGloUgOI5IikAkCcFiocGdUU+8HDDM9KXrIOUNeNuEoACIPDz85PJ9UxvDvdjSrQZAbN01KcBtkf0Ag832qvTSTZT1uz3oBUwoVCJKss1VEBFUXGFeDWzytVDonF/+M5dwssNzzXfEnBeeEe9oiiAei7psBKbF9VPC9YCtHLK6LH3e7hhMsYykG9NAESz+Qad4SE0JRCVsfkoa0EBKgBDkWG1ZPeOCi83ag2spcgBruCOsiYBliZcPBrr+yaN00K7nHiBlxvMlKc8iE8XbwO919okBYWiMI1Ih5WqyNCjB/RoeoCXG0TQBaqC3s5VdwJ0zSC8TfkGCEy3GABKeVyq3nx+ixpu+E06EFNz1nuEYcRgLVI+BxJYmZGRIYXqOrxK+ziMAHrAmsu1B2DHhaz4G1Lp1fTetX2qGm74jSuuhAPmCUQhPytj2pAuYKMXBJF2kcFexdJsDvmy4v0VKdeCbgsEAaYP5jvpibTfgxpu1A0XFzV6Rrajkp5dB4AaL+YIHo/2vkDErK2k1W6X1H6v3bII9UB6JJ6RaDsDGC5f7wN8LKaS3m4B8bIjeZV2iIs+bUGkc0q3Ash2efYZNvlaAqi5o87cqOtWAHWVg8mJix+7TXLNQyI1RyVXfRcCsEeeTk4lyHbuKoEsDiFf7C5Jo7iPu5q/diEALpo3b2rTl6Bki3uokyBC7EYEBHAto/+Im36wmh8mX+t+IgZX3cvJLDw35wYBbt4bcv5xCeJbF9sse/XZRaJdt7BG4Kr5MFcZO705N3sxQe68jh3HoveDZ6QeUHoypWfd18YuBGi5m1qaIxhlsjaIdaWHR3QCWbi1aooLuxCgNSAy9PBRwkIiqfzZcBALNUe3ONFbFaA2GOnWsBMpk662eSGMZiJfDmDc39aCm0UBvMFINFyW2zcXxrZhabIGGkig+WrmgFbcFAWoCUbSVeeRAPnmqDWOgtLknaIlN0UBvMFIucYcATl77+1ELblZEsAVqKWhGXueF1qjJTdFAdaCkRjCur1KjyAqWqIEuheiJTdZATzBSFoYBw4MuyMcT7ZAa26yAngDtY5q//+C1txcCFATqPW/2f8tuLkQoCZQKw2z6x1bcHMhQE2glkTFTUOOd9cWP0fGFtxcCFATjERD1Mb1+r8BFltwcyFATTCS7h6SN12E9IgtuMl6Qd5gpL2dr14Drbn5B1tP2lUQ1jvQAAAAAElFTkSuQmCC" name="Image4" align="left" width="96" height="39" border="0"/>
+    <p><strong>Question:</strong> What fraction should you bet each time to grow wealth fastest <em>without</em> blowing up?</p>
 
-   <font face="Andale Mono"><font size="3" style="font-size: 12pt">and
-we have</font></font><font face="Chalkduster"><font size="3" style="font-size: 12pt">
-   </font></font>
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJwAAAApCAMAAAD3YbC5AAAAPFBMVEUAAAAQEBAgICAwMDBAQEBQUFBgYGBwcHCAgICQkJCgoKCwsLDAwMDQ0NDg4ODw8PD////8A/sAAAD///9m6rM/AAAAEnRSTlP//////////////////////wDiv78SAAADcElEQVR4nMVZiZKDIAyNFyDn8P8/u+GQw1YE7cy+ma20muQVSMLrgvXYGaPaGoZQ7j1epe1DMH2Lr14g3DLWmhVflsn4D8zSGy+ZvuP21Ysnp8FN175bSwNZy3u5ZdM3uPDiyRj/qVxxOcGz193BsukbXHiJM2Wk9vcE+K3GRhxH05f0vnmJMyesljvekyDwvVD9TpPpK2rJi5K7wb9Mzqxuh6mNuPc4aaZ/4krTF9ySF5wWOUsBOpEjgQxw90JC6nSiNH2O7AUHfLYmrhy4VPE8lc+FdbVSdHutTB+j9kLyKiA5MfsR8x+u80g2VKaPUXuZ8yogOe53s5k9bwb7QLmvTB+j8uKnUSRyZnEDEj5gQ9unMs3oSPbykexFTJZDrhYuITiRgsRWKpcBbrVpwlHBNcVObaq7Qkruv70uv1DyonCw4zM2k8MKmL6IGezhhWniFn1zt3lp2aQFMZ6KG7Nq7j69JHI/hYkFWfmrnvMdvoXrxovHWvg9OR5XNRavnMjiyBvmt852v0a/J7fGFVqpv6QtZ6Yj1XYfdL8vWb8nd3hkQKssZlMa+Uc6Dgt95LY1gd48qhMHCgDF03NaYOL3oSp24ytyAygnRFBIB0OTC2ikeR8amhg1tOfVIqs74BIsIRKO3SeLM8fz+BlKJtxV/0hOh3nCfumKLqU4cwe5Y2d0zFwXOZZx191M8MhDMmDdF5iVAhkvaOlq/76EitLRi36frVNg5feVikng+iaSQWqSb7Haye0fyG1++YiiQrKYDqGdCsqxbeAwsGP3IirWw6RovzTra3xVwsJvKeM2apwjgQLBD5TUeFOFN4v54qYO78gVivazWbe4fdfT5+LqDkCp3s1Gh7FOZe86PFSK9rNZN3Clp2WdM8LVhNSqJphCaHp8qUZ4qBTtR7Nu4VJPi8bBWLG4wvmQdh0+nueioj036zt6F3q6Y1eUj1yGh0oXn5t1m1q2q6TwIBrhodbFp2bddJrtaik8yK0RHs66uGzWTRR2tRQeQys8fOpi16zlfle/T3bkoXRthodC0eZmjar/7ih40tPzwx8kmuGhULS5WXecU2s9XUrhITTDQ6GLy2Z9S66wO0nhITTDQ6GLy2Z9f8LPdicpPIZWeCgUbdmsO+THhRIeRSP81ZHp/Q+pr9Akx8nM3v9z4TFi+D/FNYRjiFWTXgAAAABJRU5ErkJggg==" name="Image19" align="bottom" width="156" height="41" border="0"/>
-</p>
-<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">Below
-requires the application of product rule of differentiation. </font></font>
-</p>
-<p><img src="data:image/png;base64,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" name="Image5" align="left" width="192" height="41" border="0"/>
-<br/>
-<br/>
+    <!-- PLAYGROUND -->
+    <section class="card">
+      <h2>Playground — loaded coin</h2>
+      <div class="row">
+        <div class="col">
+          <label>Initial wealth: $<span id="wealthOut">6</span></label>
+          <input id="wealth" class="slider" type="range" min="1" max="20" step="1" value="6" oninput="ui()">
+        </div>
+        <div class="col">
+          <label>Number of flips: <span id="flipsOut">5</span></label>
+          <input id="flips" class="slider" type="range" min="1" max="20" step="1" value="5" oninput="ui()">
+        </div>
+        <div class="col">
+          <label>Heads probability: <span id="probOut">0.60</span></label>
+          <input id="prob" class="slider" type="range" min="0.50" max="0.90" step="0.01" value="0.60" oninput="ui()">
+        </div>
+      </div>
+      <div class="row" style="margin-top:.6rem">
+        <div class="col">
+          <label>Bet fraction (of wealth): <span id="betOut">0.20</span></label>
+          <input id="bet" class="slider" type="range" min="0.05" max="1.00" step="0.05" value="0.20" oninput="ui()">
+        </div>
+        <div class="col">
+          <button class="btn" onclick="simulate()">🎲 Run simulation</button>
+          <button class="btn btn-ghost" onclick="clearChart()">Clear</button>
+        </div>
+      </div>
 
-</p>
-<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">These
-substitutions below go in the partial derivatives calculated above
-These substitutions below go in the partial derivatives calculated
-above <br/>
-<br/>
-Similarly I calculate second derivatives <br/>
-</font></font><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHIAAAAsCAMAAACOhxzIAAAAPFBMVEUAAAAQEBAgICAwMDBAQEBQUFBgYGBwcHCAgICQkJCgoKCwsLDAwMDQ0NDg4ODw8PD////8A/sAAAD///9m6rM/AAAAEnRSTlP//////////////////////wDiv78SAAAC9klEQVR4nMVXi3LjIAxU/MA8BAz//7MV4IAAN8FtrrczTR1H3kUCxBpChVJC+PBJXDJCvdQ6hOP4pOI1Y5JUUh4uGBmC2ULwkmDjffqPPxNrGRMMYhxCllSUu99SAYSJn+sjV8OvbobfroNizxhMKrAWWdJBTEmpkCtBOM5y6xlFlBK6WyOj3vMvu06SXqUnqQDGhCQiIQ3QqZkc6dFecmA0y7mI5HrOpUcXAwyNLU22gTSFck5xlOwZ/UOf9xWcWdJQUG0GCDJzxAkw9qeSPaN8PH+RSdJvMXW7C/ZMjPOzSQ6SA+NSrsQSJUWmBs0eApFX3c8ke0ZfuaM4OEgrxgJX2LaAZlaxlxwYEbBc0U9glvRF8rqGbZleO6PkwOiL5BZXJ+jUHfzSlFGCmmoCl5Ij40qFRZJVa7wHPrUO0ZZRNjN7U3JkxDWQIOo9jQKoCaERXSvFoYW9EJQ7HJIXZWQ0hw52ozRSlnHbDhvQ3yjrBS4YLTqaR+tCc3j9ayzepd72h5IPeLg/lrTnhP+h5BPTkvtW8Euz8j+yfIt7D89Qzo7NYsHsOfrdQGcDZcWdZnhL8vNG+p3kx410SSFLZqeb4Q4yzh4b2/sKZ/ygwCgjagrZrVenG3Q8m4/smcWEM+DxXJFRJtQUoiRzunTEpJEvz4G9A49n4JQVOYUoWZ1usUrRRDyN9EuweA5OWXCmkOfydLrhdCchHuLFSL9Eje9FC+UTzxRyltnpxu8SjvO9pRjplyjxnWChtKg8/bEUoHe6Bynd2RuX8ZWShHBBA66mAKPTNQdMvv/w+KZzVEq60EvwvEfC6HTpiZn9yEDxTedoKUW3tqBxuk6Xa1T7e60a374wN+Z56fYaNE5X56UQHSHOtB4WH1jnaMxzSpkvMWicbq6BTZ84IcnjWeeolOYRNHTvjdA4XWEPgzIvnilJFs87R6G0dKEMNts27cty6Pq4j85lNCPJ4tvOcWGeG8lrzEhWTHaOT0rewPdHtFjk795MvsMXdAYtMDbEmYoAAAAASUVORK5CYII=" name="Image16" align="bottom" width="114" height="44" border="0"/>
+      <div style="margin-top:.6rem"><canvas id="chart"></canvas></div>
+      <p id="result" class="small muted"></p>
+    </section>
 
- and   <font face="Chalkduster"><font size="3" style="font-size: 12pt">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJEAAAAqCAMAAACEC0mnAAAAPFBMVEUAAAAQEBAgICAwMDBAQEBQUFBgYGBwcHCAgICQkJCgoKCwsLDAwMDQ0NDg4ODw8PD////8A/sAAAD///9m6rM/AAAAEnRSTlP//////////////////////wDiv78SAAADGElEQVR4nM1Yi5KkIAxk0EHeFP//swcEMSDgzurVTletaxlDmpAJtMQPIARjbmR8Cr0gZPCulN5v238m1A1yZiQ436xX3Hu1escDTHwc/uvHqECMPQhAaR0ZnhmJkEW3plQyFS7LC9LqFvscoSMGBAl80upJdmZkScyIEB5yGrKa35DPEUIxchAv32B6yxMjl97TIZVK+UiCkzQXKx4jhGLsQRTN9c2XTh05bePbKswjFp0iqXz4c4SOGHsQ95LZIEgnR4G1FqsiAZGGJnGhlbnFwGjhwl8Tw+9B+Gt/kZ8YuTUm0bzZ8Si6uHspCvPRVCtiBzFouWW0ZcQgNJHHI8Lgx3EDYVBJvTODGO64DdxqRhamYQhisK5eq085yLUAorGShnMMTXS5sw0jRWFOaNH8Sp8oa1rScI7hCqN1a/uRTA3UUbxInIj7rSglRo1iLIGuDqzE4lpGbolXVi0Sx0X1K6iXl6T8Xjsx9OIDHy3fkWVT2ZJpxer9Sy83CXkTBhVK78N2YqhNehMr7pSj2LvazuOe2z6GMWLHsqGGjB2fRv4A1EVS38ToRV5xOb6IkeGpPr6IUcZ9Ru+jPT9yCv7CHP0evxn1JxFvz8nognuHqIz7jPiBu9tNwhfW0V8TKNj1bWKUBV2E3YJidHgfnBovMHZAowKKvo2MkKCT8XC2YbE4NV5g7IA1JKDoW1IJOpNOU5aiWc6MFxg7YA2JkA5NpBJ0+VCODrVT4wXGDmhUBNC3qY52QefzPlAt/NQ4xcyhjHog61uCBF08wW6N7JgaLzB2QKMWcbmLaFILui10cbxfTo2XGDmgUYu4LCKatIJObSQQ1gI+VnSNH3x+6zugUWtxmZ6eBR0LydTwoalr/OzzW8ehGZXVpU+QoLOy3Oaq6xqrL2NjjB0aDUnr7ZAgQSehDpNyAUYDYyvpuhg71BoSiUtghAQdpM+kKzAaGPcvY1OMHdCotbgERkjQMbMpzaGR5l7RN+bOccFo7HCM2ohLYHQIOhe7Q67hvXv1jHvnmGPm0NOQiFEPklE+SkPpHD/FZw7/AEHxbeVupwtbAAAAAElFTkSuQmCC" name="Image17" align="bottom" width="145" height="42" border="0"/>
+    <h2>Intuition first</h2>
+    <p>You start with $6. Each flip, you risk some fraction \(\,f\,\) of your wealth.</p>
+    <ul>
+      <li>If the coin shows heads, you gain \(\,fW\,\) and end with \(W(1+f)\).</li>
+      <li>If tails, you lose \(\,fW\,\) and end with \(W(1-f)\).</li>
+    </ul>
+    <p>
+      Bet too little and you waste your edge. Bet too much and a short streak of tails wrecks you.  
+      There is a sweet spot that <em>maximizes long-run growth</em>.
+    </p>
 
-</font></font><font face="Andale Mono"><font size="3" style="font-size: 12pt">and</font></font><font face="Chalkduster"><font size="3" style="font-size: 12pt">
-</font></font><font face="Chalkduster"><font size="3" style="font-size: 12pt">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHIAAAAsCAMAAACOhxzIAAAAPFBMVEUAAAAQEBAgICAwMDBAQEBQUFBgYGBwcHCAgICQkJCgoKCwsLDAwMDQ0NDg4ODw8PD////8A/sAAAD///9m6rM/AAAAEnRSTlP//////////////////////wDiv78SAAADBklEQVR4nL1Xh3KsMAwU5YwbePT/Pxu518sZ8t7tTBIC0q7lIhbADCEYM/gM49zhXciXUiIexzPFce74rpMUnB8XKo6odkTDCae9T3/1nGTMjagZfYjWdgheUlDtZncTwJT9vS1+Nsx2TVaZc71iy4jKTbBkXvICW5IQ6GeCcITplncUQ65Fzyhf/slLOkljH6GmCVAKnQgHN8BL3FCMuRYdo1rDJuJbWEujLxugaGxusRW4JeR3FGNuEK0YzRJnQECokoaixa6A4GQ0qMDyCacWhn4w5/oqa0a+xCfcSZrdln6+WMFk48xEkTQqvWoF9Zp3jGu6YquVZJ4aZJEEzO+6T6BUuaJppqNlNJnbisPlh3hCqbDvqBVOgbH2TseoQacregRq9eOtMvd1eu+ssr3TMZokudsdBtJ1B7NW08hBTB5JV1I9IT3jRsPSJCs2ew/MZm+yOotDN/YR1IISuq3dM+oNSVDLlxsFUBPSijWtVG8zinhSqlC67cM9ozoknjuV4aq0x7Y7gOZOp+sxYDz1Ret4Xli9vP43VnO5/vRFyQWW68uSJ/fL9UXJiGnJ157w0Kzclvx3gI+4lzxDOTu2UydMvEd/rXI2kGdMNcMnkn8x0s8k/2Kkh0gleEnvdD2ug4yz0a0ZfosQ3ykUlBa5BO/Ws9NFad/Nh/fMbMIZlPGlYkHpkEuwkoXTpVeMG/kaB/YJZXyBkjLDl2Als9NNVsmaiNIMv0URX6KkTAgl+LUMTheDO0H7Em/M8Bvk+FY0UUbEEnyV3una/zkc4bulMsNvkeIbwUQZzXUuAVqne5DSnbMxjM+UyVznEqB3uuqAO98/Ib7qHJlyYK6hd7qUMXMeC1B81TlqytZcQ+V0L5mup/pdjq8/mCvz3JprqJyu9FuBHOFcv8vx7k/cSJV57sw1VE7Xz8HJ+o//MXI8lp0jU47MNVROl52H0jxuns/9rowvO0eiHJlrdy7TS9fYcxRXcKLfFfF15xiY50pyjKl+l6PnOsevknP97gneSd4Y9V38AG/ZK+6bbjCIAAAAAElFTkSuQmCC" name="Image18" align="bottom" width="114" height="44" border="0"/>
+    <div class="note">
+      <strong>Common-sense rules</strong><br>
+      1) Put the best payoffs on the most likely paths. 2) The average over all paths should match your starting wealth if you “price” paths fairly.  
+      These ideas lead naturally to the Kelly answer below.
+    </div>
 
-</font></font>
-</p>
-<p><font face="Chalkduster"><font size="3" style="font-size: 12pt"><br/>
-And
-after substitution into the first equation we get the final form as,
-(Do try to actually work out the derivatives, rather than just
-reading….) </font></font>
-</p>
-<p><img src="data:image/png;base64,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" name="Image10" align="bottom" width="520" height="41" border="0"/>
-</p>
-<p><font face="Chalkduster"><font size="3" style="font-size: 12pt">Grouping
-terms together…..Compare with the normal black scholes equation. </font></font>
-</p>
-<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUgAAAApCAMAAABgFUBKAAAAPFBMVEUAAAAQEBAgICAwMDBAQEBQUFBgYGBwcHCAgICQkJCgoKCwsLDAwMDQ0NDg4ODw8PD////8A/sAAAD///9m6rM/AAAAEnRSTlP//////////////////////wDiv78SAAAFIElEQVR4nNWaDY+DIAyGmR+IgBr//589KCpl4mxFTe5Nbss89YEKLS2K+WX1vZTT29AXJF7maT3PXfcy9A2BIXulunGelNPgf7tvezcoMGaj3F/zMOuA/SjUG7J3U21q3Ef9CZNuqseTy4aaydkYTtLMHFaxIvtBqDPkKPxT6ns355aJrk8wVimmS4iMMLvprHIh9oNQd+cJumcbN+IFPLCxP73MMg0ZGbMxs+8GnVUqxH4QCgaZ7AggI8BzqPPLuIZEDDc8fLChs8q1sp+Ewoh0Y8T2jTeP915mOL+MPyIXhhFOauawShX79yRUODfsZ9rQSv9L+dhGuIxpSMzYyFRWoRL2c1Axy3Bf4UOAkCHGnYppSMzYyFRWoRL2c1AxCohgA7jhppmtoVzGM2TCWEVmlSllPwcVpoJvBSO/qYiOOGPITO63HkoYq8isMqXs56BCeyc8TxXYQImetsLaGzKT+22HEsYqMqtMKfs5qJggR5Fm4eifZ2/aG3LJ/bKHEsYqKosRYnOnpmxyB9kSs5bWyCXztLTMz6pWdGr/aNfmjp3LaScbD2HGdhMai7p2Nl0zjfFRxSYkbCIUxEvN/TrSbk9yKhr3enna2ruhDtLZ9RBi8Fg9ubignDNUKwU1IWHzOkhLzY22/UAso1kKf8n95gEm+FihQwylqKk5Om8nKePpqAklIqXmxoexeqQZklJ0WnO/deEm0SGGUpSmZ8WVH/xt6HJsQpFIqXnt/9t2txlyy/3mJtjOokMMpaiGHGrCerEPuK0JZSKl5nCOaooNqdvGCY87JbqCNW+KCs0z2ozeDx3KGKNhHtumvAmRRknNbTCkKDWkbK3+6NSxdW4gXt5NSFDjx39Oxn70XB9P1NZ1tYJ/D1VxEzBtl5rDqAlabn+TIVU7bx4JyXTiaskvQYUBpkc/3IbDFLnz/CqsD7b+XG4CphFS882Qh1pOBOtXNZ6/8ZQJHFObcSISh9sfFMzao5aZChF562gcFMF24B2XlBqvQkITzvq3ux2mEVLze0ZkcEwVzhbG8ENdjZiZEflFyDZCL3Na3NCESNul5oPdtHjOKRiyLjOk8h0dkhxahyf4nceQlaCm0Lx1uP1ohBtFHgyZS2ETEG2Xmquo1dpgdinLDAkL3zaJamFeDJeXcCnqA5/658raN2KsehiHti1vAqJRUnMY+BWxrngYbLQ2X8sSOXTGKqKfz5TeUlQbFnK/A7C21uiAhE9WE/ZCNFJq3tm519E5L5voB/emz5LJO5JsoEOEpaSQe+0iRRnmGqae8k3Ys0m3o6Xmo4ethoyb6GPGCt/HetW13B0k9IrAWlLIlN6+UfRcGy4+mM4ZNuu+BC2GRJvoPyNkbJcVPEsiQlJSkL+XF5ZVP+zya74j9p1aDBk30X9HyKDGd/7Dc+Zomx6XFPSZoQxjq2o4eLYH7Fu1+ch1E/13hAz6+NhY82Yd2qZHJQVCnY0xCY9PzbHv1TYiwya6UXWtTvN98GPMXBZt08eSwpU62wVl2TcrGBJtohNcJEh/WNvDyTb9WlK4VGfjK8u+W8GQcROd4iKhcTUv1ny9IlBQ1eDrFTYYEm2iU1ykV8eN2d+vCEiui72sd9hgSLSJLmnxTDNXkYhQWlJg6x02GBJtojsXOZ4bCdYZHOeGCKVVDbbeYYf3I+MmupsG5wYalHXpLceQiFBa1WDrHXYINnETvdP5RDlRDZVR1jIiEgpLChf0CntdR+438G/WRjiuavxr9h+jqkR1QzT2RwAAAABJRU5ErkJggg==" name="Image21" align="bottom" width="328" height="41" border="0"/>
-<font face="Chalkduster"><font size="3" style="font-size: 12pt"><br/>
-</font></font><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 16pt"><u><b>Comparison</b></u></font></font></font><font face="Chalkduster"><font size="3" style="font-size: 12pt"><br/>
-<br/>
-So
-solution of Q can be written in terms of Black Scholes <br/>
-<br/>
-</font></font><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAasAAAATCAMAAAAZIdLzAAAAPFBMVEUAAAAQEBAgICAwMDBAQEBQUFBgYGBwcHCAgICQkJCgoKCwsLDAwMDQ0NDg4ODw8PD////8A/sAAAD///9m6rM/AAAAEnRSTlP//////////////////////wDiv78SAAAEL0lEQVR4nM2Zga6rIAyGmVNBKBDe/2UvFFBAEDhxyf2TzdkD9WupgB5ixiUn2v7ezSve3mX5sYj9aMaYCuecMWg0PcJRUcakbrUK/hh3PfyhkBIjYJNQf9QYC7bsRT0qQVcdf3cyVYjgNyUBApat1fIITThzHb6q1c5pWxBHrGlsgsOBdczGqnkGqif5zc9nWYaiHhRbkpNqpu5CfhK6c5P/uEmvoRce1dJo5rXs2DQreuFsGGx01dEEVEfAGMkM0yxDUQ9q35OTWqZuCvwYg+IrQ+MhSatyeHC3+5Z7oxlKEZdckc8vX+dgo+7nNlKeM1BdQT5WsyxDUY8qrbxqpiqCc6y4ojjLSMGblbOGyWKlvvOTZ+6SexSzC85oDOvzYD22SaiuirGaZRmKelAqrbxqpiq6xooFbnben0II6QZbwqHtJzZ0bQjtVsG+GP0tAMDnB91AOvGAQP+CCwUp9QTUZXiMtc+CNDyhOmH6Ud8gAq4NzACEddHassqrZarJH8ZKfIyr5Hh/btLPpELahR2EHXz1id0oIYQ+e152yUhRr2l+ZIK7WzNQowV8uPkmk8w41GV4jrXLYs+4JwpUl/Kot/VUNN4gAq4LDNzmIQ3hKVMV38lYKY6/9RHvT+p6uwzZoy0DLfPyE5Q8rhOKbMJucHJjmh9zZY4xf86VqzepLyfjUJehqfZYmewvuw2M6ZMqVSfqEiLiusBsVPybhnAGWctUk999bOlqIsPVTJhR47QaJqB8qtjPM35VwcnArTMjSD5p1PPjr6KIKbZHs1Bp5xrS6FgdZNl1SlWPuq4UIsFFs/vKQvCotUzVdI6VG20CAPFqmJw4rYYyCGlR/ow9boh27Fo8FGmfH/+cc2bBXwW/i435BNS9cz3WDosHosuaUqFuUUs4ldzNKUSCi+aPKEJA1TJV9Z2N1UqP82q4ptsMueHGMhAuPI/gS2B/3BD5GZkV6wf69nmH88mUY7Zd/aui+QTUZWiq2AdWWazcBkIvCVWgLKNml67xySAuXG/+2F9pCIGjkqmq7zhWyiVk/eozX+7BTy2H4vYKnOCyaQvD4/pHt4GnK3vwa6bc/CKEVblguHAWknL43P2l2JhPQKWGlsJYtViifZF45YvKjEZdQpy4PjB7QZbY6pnq8RPNlq9bsIXRbCP+vRsHEJwdlg7EIQBtG37vkgpgT2us87K7+4SSD/NRhDqiYI4wmVwOgIN/EmQ0czIBlRoakVonlKk2S7QL60akVF79qO8QEdcHBhR0Yqtnqsdfrp9NCcyldvOp7rUtLxWOKvb8znp4hnqD5XFS/1PU72t4rMzYi7OKbptp9cqrGtQsVIvlccP/v2h8rKD/0r7RsTTQ90p0FqrF8sbLo59rfKyM+FuKddlNvlnDc1Atlpv9v9TEWJk3/nnznptXvL3L8mP9A4OH6jczLE5LAAAAAElFTkSuQmCC" name="Image12" align="bottom" width="427" height="19" border="0"/>
-</p>
-<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGwAAAARCAMAAAAPBLngAAAAPFBMVEUAAAAQEBAgICAwMDBAQEBQUFBgYGBwcHCAgICQkJCgoKCwsLDAwMDQ0NDg4ODw8PD////8A/sAAAD///9m6rM/AAAAEnRSTlP//////////////////////wDiv78SAAABCklEQVR4nLVVyw7DIAzLWMsrPMT//+wC6+iGUhoO8wFVlmtDklIoMqDZ8grPCkEYVqxa4zmhOEzrNZ4TisOUX+M5oTQsQVriWSEU9JiCizMhInquNVf8lRAyhocvz0/l963DfKQ77UQxrWH5mQH4VDPjZH6NLWxrrvhrIdzOU+tKW5zTOjN8cLvMAIbNxdBxtLF1pS6edKaX5uRLwE1kQGG/82RPHHuw1YlOj0jV+LLtPKVtIgMKu5unSNqkXGqvarKOex7477CZARRrZspagRDQW9ceayI+cODnYadQfINUIJZW8jDwN2EdK2FIHa9lyOMN8IcwBEL9ZMaDea2s6NJaKuMbWfYDY/AC5cBu1UDRzn8AAAAASUVORK5CYII=" name="Image13" align="bottom" width="108" height="17" border="0"/>
-</p>
-<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALkAAAAlCAMAAAAp17hWAAAAPFBMVEUAAAAQEBAgICAwMDBAQEBQUFBgYGBwcHCAgICQkJCgoKCwsLDAwMDQ0NDg4ODw8PD////8A/sAAAD///9m6rM/AAAAEnRSTlP//////////////////////wDiv78SAAACeElEQVR4nO2Yi46sIAyGUUfkbnz/lz2AIuXmqYaY3ez8ye7MMC18FmzrkA0pPWEtXxLBmSnGkJavCc2jvuS99CV/X1/y9/WnyTmndMVMgTZE6Rm5Bu+F2LZlQcwQDPX/TTFC19CZLMwcnzj8SjL790HMEQyNvIfY0JPTy1U+QrEw3pB1ifoD8rUIsDsHQMrkBqlhOcETPSAXPBuQcktYWbEnmeHcvLQbekD+yTZb2s/JHdoiPw05u79qIUcu5o8VJj2cLlt0k8QqQcnIw/TRUF0eFyMUh37lTAGDzkoM4jyc/ttd1Ysxw/6auTXJK3Z6vADXdlXBan7pCNnY7Abx+3cE7MItIa/aXZxRM65+jdIvGyErcdcwX5OToJO84ea3apzihtXtzgMX9zekJ0r9OPBTfM5m8sWYCL9zY8xrWp2q5t2dvHADgjGv213E3JtSCvyUzFbcizFhbliPsZ9gUVWu1S8L3I6Y1MmBXWxbVPtp3LjIroOBWHus4shejIl2A/Odqja4f8BN5bUfkkc70N+o7FKBBLFoNmQQaydPQakkdkbJb5Xj2YMBtzzJJXfoaQf6G5bXsihKpZKyOj8EtWF4UIlkniwvyVOuvb+Z2r1u7c4p078rxlhyzpZzp/KJ8plNC+zobwxtLuOPea6C3BdjJDl3SZaE3cvicl0SwYJH27K0Qy4qNUrQkSXXsxdjJPnHbfMQYiXTpZHkoW3RF3eVrKazqpDkg8sG00mYhKCISQMqtC09GsUNTe6PLkE3ZW/oRm4RQ7/H3w7Ck69Tp0ffTsKTLz8LHE8ufhg4mtynsh4PYd2EJNfMNr3yN5JP/rmiz088nfQPWj2ve0pYXdYAAAAASUVORK5CYII=" name="Image20" align="bottom" width="185" height="37" border="0"/>
-<font face="Chalkduster"><font size="3" style="font-size: 12pt"><br/>
-and
-finally we have 
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO0AAAATCAMAAABLC3rUAAAAPFBMVEUAAAAQEBAgICAwMDBAQEBQUFBgYGBwcHCAgICQkJCgoKCwsLDAwMDQ0NDg4ODw8PD////8A/sAAAD///9m6rM/AAAAEnRSTlP//////////////////////wDiv78SAAADLklEQVR4nLVXiZKlIAxEUUAIUPz/z2445JBrtma3q2Z8zzahmwTkETeAHt38KX4V/B8z+2hiBSLkwSuE+0/iDUfGwiByziCntgOvwlsoACnT52f55H5Q1EWco4cNXy01MWuSIQX+4+lmgyljfCaxq8E88QeK+XySNbJ20PSTRMITq6m9W06SiDi8vVJUuJpzkG/KnLJKMJUzDf9A3vF6/yRrAghBmhvKz1WYWcyAlCChtiZ1ikxXJuKlzzhlDAkTdq+rNk/cQp2x55yglawtoHVLfdzNoy6kFAk9IhJ9pUa8eAzu800ZGev1iI7Zh9tUSPauA3vkBUsqWVt83AZz4oq6iKf9vqLebO/DgvDJfjNhlKBUeALWTTcJj8uTyfzYUQKKLA2Pxb9F+tYtRLfhHlwhEdbCvvUweRBOCOHDhDPmjFJ1WZL3lVECJuHebjHrztzq7MyysCZwgiKLtTJ3q8/gFvM+9qWrwihOJrM4ZMwrgnTUT8LRbmXWkvzZ+06yRFgudtXVc7eOhCVxOci91bYhw2/w3IOknnkexmy5Jd+abt0Ow4OQj8z4ydSyWNneZOkcWQXWKQduT1f2lZTWxHDhp1U1E1AY/97nVUtmHWU8DRl6F45tLIsTm92GNVDcntIt0bqNaQQtbgV5TEWHi4zFZuC+5S6MwjmqZwJ1GO8JyvtdFMhduG/jyi7Fr4DDP9QWWWm5rI5rnz05TE6sA9Dotp6uIw4deB2fCpL0bTsGv6nCoI7QIzDq/OypC6/M1nZxztAryJQ8yFKHk6R6fyzcvqJ8d7oToi7imlog7sAwzRWIuJVEt+pIVamY0I2Z4RLCCGL1gujDI+x7KztRXOK5C5+wWZZmoB4FizMkiJtwYYoox8E9afWEF7dt9nMVlpL1ay5tIW8nx0FqRilnCvOCNlvPB6PwGTQYFKNNkfU3eEWZdzhqB9tndzZIbvt933cU7xizPRN+wlc4reETWRt0clHXwC18Nj3JTt8a/UlR4SnBn0w+DF+VdhS+wkEOM5a1QycXdY1ejWoo105NtIz+pz/ntci9PpY1QyfX6xoeBPa/PBf4VfB/zOyj/wDbAA/D8ueVKQAAAABJRU5ErkJggg==" name="Image15" align="bottom" width="237" height="19" border="0"/>
-<br/>
-,
-where S</font></font><sub><font face="Chalkduster"><font size="3" style="font-size: 12pt">2</font></font></sub><font face="Chalkduster"><font size="3" style="font-size: 12pt">
-is the current stock price of the other stock. So volatility is
-maximum when correlation is negative and hence for large negative
-correlation price = maximum. This can be verified intuitively — if
-stocks are moving in opposite direction we have the maximum
-outperformance and hence maximum price. <br/>
-<br/>
-Of course if we
-follow derman approach the payoff is Max(S1-S2,0) or S2 x
-Max(S1/S2-1,0) and without above maths we can simple write the price!
-The PDE technique above shows a very important approach called
-Similarity Reductions and it can be applied in a wide variety of
-payoffs to make the problem simpler. </font></font>
-</p>
+    <!-- KELLY (DERIVATION) -->
+    <details id="kellyBox" style="margin-top:1rem">
+      <summary>Show the Kelly derivation (step by step)</summary>
+      <div style="margin-top:.5rem">
+        <h2>1 — Define the wealth process correctly</h2>
+        <p>
+          Let \(W_i\) be your wealth before the \(i^{\text{th}}\) flip. You bet a fixed fraction \(f\) each time:
+        </p>
+        <p>
+          \[
+            W_{i+1} =
+            \begin{cases}
+              W_i(1 + f) & \text{with prob } p,\\[4pt]
+              W_i(1 - f) & \text{with prob } 1-p.
+            \end{cases}
+          \]
+        </p>
+
+        <h2>2 — Work in log space (because wealth compounds)</h2>
+        <p>
+          Expected log–growth per flip:
+          \[
+            g(f) = p\,\ln(1+f) + (1-p)\,\ln(1-f).
+          \]
+        </p>
+
+        <h2>3 — Maximize \(g(f)\)</h2>
+        <p>
+          Differentiate and set to zero:
+          \[
+            g'(f) = \frac{p}{1+f} - \frac{1-p}{1-f} = 0
+            \;\;\Longrightarrow\;\;
+            p(1-f) = (1-p)(1+f).
+          \]
+          Solve for \(f\):
+          \[
+            p - pf = 1 - p + f - pf
+            \;\;\Longrightarrow\;\; f^* = 2p - 1.
+          \]
+        </p>
+
+        <p><strong>Kelly fraction:</strong> with \(p=0.60\), \(f^* = 0.20\) → bet 20% of wealth each flip.</p>
+
+        <h2>4 — Sanity checks</h2>
+        <ul>
+          <li>Fair coin \(p=0.5\) → \(f^*=0\) (don’t bet).</li>
+          <li>Small edge \(p=0.55\) → \(f^*=0.10\) (bet small).</li>
+          <li>Big edge \(p=0.9\) → \(f^*=0.8\) (go big).</li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- APPROXIMATION -->
+    <details id="approxBox" style="margin-top:.75rem">
+      <summary>A practical approximation (and when to use it)</summary>
+      <div style="margin-top:.5rem">
+        <p>
+          In more complex setups (limited flips, caps, or path-based payouts), practitioners often use a
+          quick sizing guide to avoid overbetting. One such heuristic is:
+        </p>
+        <p>
+          \[
+            f_{\text{approx}} \;\approx\; \frac{1.6\,W\,\big(1 - \frac{W}{M}\big)}{\sqrt{n}}
+          \]
+        </p>
+        <ul>
+          <li>\(W\): your current wealth (or stake) measured in the same “units” as the payoff cap.</li>
+          <li>\(M\): maximum payout you’re targeting (a cap that keeps you from sizing too large).</li>
+          <li>\(n\): number of independent “shots” (flips/trades).</li>
+        </ul>
+        <p class="muted small">
+          This isn’t a substitute for Kelly — it’s a conservative shortcut when the clean Kelly inputs aren’t obvious,
+          or when path caps / constraints mean “full Kelly” would be too punchy.
+        </p>
+      </div>
+    </details>
+
+    <footer class="muted small" style="margin-top:.9rem">
+      If you can’t size a bet on a coin flip, you can’t size a trade in the market. Start simple; let the math guide the sizing.
+    </footer>
+  </article>
+
+  <script>
+    // ------- UI + Simulation -------
+    const $ = id => document.getElementById(id);
+    function ui(){
+      $("wealthOut").textContent = $("wealth").value;
+      $("flipsOut").textContent = $("flips").value;
+      $("probOut").textContent  = (+$("prob").value).toFixed(2);
+      $("betOut").textContent   = (+$("bet").value).toFixed(2);
+    }
+    ui();
+
+    function simulate(){
+      const W0 = +$("wealth").value;
+      const n  = +$("flips").value;
+      const p  = +$("prob").value;
+      const f  = +$("bet").value;
+      const wealth = [W0];
+      let W = W0;
+
+      for (let i=0;i<n;i++){
+        const win = Math.random() < p;
+        W *= (win ? (1+f) : (1-f));
+        wealth.push(W);
+      }
+
+      drawChart(wealth);
+      $("result").innerHTML = `Final wealth after ${n} flips: <strong>$${wealth[wealth.length-1].toFixed(2)}</strong>`;
+    }
+
+    function clearChart(){
+      const c=$("chart"),ctx=c.getContext("2d");
+      ctx.clearRect(0,0,c.width,c.height);
+      $("result").textContent="";
+    }
+
+    function drawChart(data){
+      const c=$("chart"),ctx=c.getContext("2d");
+      const W=c.width=c.clientWidth*devicePixelRatio,H=c.height=220*devicePixelRatio;
+      ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+      ctx.clearRect(0,0,c.width,c.height);
+
+      const left=36,right=10,top=10,bottom=24;
+      const w=c.clientWidth-left-right,h=220-top-bottom;
+
+      const minY=Math.min(...data)*0.9, maxY=Math.max(...data)*1.1;
+      const y=v=>top+h*(1-(v-minY)/(maxY-minY));
+      const x=i=>left+i*(w/(data.length-1));
+
+      ctx.strokeStyle=getComputedStyle(document.body).color;
+      ctx.globalAlpha=.3;
+      ctx.beginPath();ctx.moveTo(left,top);ctx.lineTo(left,top+h);ctx.lineTo(left+w,top+h);ctx.stroke();
+      ctx.globalAlpha=1;
+
+      ctx.beginPath();ctx.moveTo(x(0),y(data[0]));
+      for(let i=1;i<data.length;i++) ctx.lineTo(x(i),y(data[i]));
+      ctx.stroke();
+
+      ctx.fillText("flips →", left+w-40, top+h+16);
+      ctx.fillText("wealth", left-30, top+10);
+    }
+
+    // ------- MathJax re-typeset on open + after load -------
+    function typesetHere(node){
+      if (window.MathJax && MathJax.typesetPromise && node){
+        MathJax.typesetPromise([node]).catch(()=>{});
+      }
+    }
+    const kellyBox = document.getElementById("kellyBox");
+    const approxBox = document.getElementById("approxBox");
+    if (kellyBox) kellyBox.addEventListener("toggle", ()=>{ if (kellyBox.open) typesetHere(kellyBox); });
+    if (approxBox) approxBox.addEventListener("toggle", ()=>{ if (approxBox.open) typesetHere(approxBox); });
+
+    // Also typeset the whole article once after injection (Dojo safe)
+    (function(){
+      const root=document.getElementById('cq-article');
+      if (document.readyState === 'complete' || document.readyState === 'interactive') typesetHere(root);
+      else document.addEventListener('DOMContentLoaded', ()=>typesetHere(root));
+    })();
+  </script>
+
+<script>
+  (function () {
+    var root = document.getElementById('cq-article');
+    function typeset() {
+      if (window.MathJax && MathJax.typesetPromise && root) {
+        MathJax.typesetPromise([root]).catch(console.error);
+      }
+    }
+    if (document.readyState === 'complete' || document.readyState === 'interactive') typeset();
+    else document.addEventListener('DOMContentLoaded', typeset);
+  })();
+</script>
+
+
 </body>
 </html>
+

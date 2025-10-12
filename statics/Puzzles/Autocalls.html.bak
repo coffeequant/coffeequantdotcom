@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    
+    <meta name="Generator" content="iWeb 3.0.4" />
+    <meta name="iWeb-Build" content="local-build-20120824" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <meta name="viewport" content="width=1100" />
+    <title>Autocallable</title>
+    <link rel="stylesheet" type="text/css" media="screen,print" href="Autocalls_files/Autocalls.css" />
+    <!--[if lt IE 8]><link rel='stylesheet' type='text/css' media='screen,print' href='Autocalls_files/AutocallsIE.css'/><![endif]-->
+    <!--[if gte IE 8]><link rel='stylesheet' type='text/css' media='screen,print' href='Media/IE8.css'/><![endif]-->
+    <script type="text/javascript" src="Scripts/iWebSite.js"></script>
+    <script type="text/javascript" src="Scripts/Widgets/SharedResources/WidgetCommon.js"></script>
+    <script type="text/javascript" src="Scripts/Widgets/Navbar/navbar.js"></script>
+    <script type="text/javascript" src="Autocalls_files/Autocalls.js"></script>
+  </head>
+  <body style="background: rgb(250, 255, 253); margin: 0pt; " onload="onPageLoad();" onunload="onPageUnload();">
+    <div style="text-align: center; ">
+      <div style="margin-bottom: 10px; margin-left: auto; margin-right: auto; margin-top: 10px; overflow: hidden; position: relative; word-wrap: break-word;  text-align: left; width: 1100px; " id="body_content">
+        <div style="background: transparent url(Autocalls_files/backgroundimage_1.jpg) no-repeat scroll center center; width: 1100px; ">
+          <div style="margin-left: 0px; position: relative; width: 1100px; z-index: 0; " id="nav_layer">
+            <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+            <div class="com-apple-iweb-widget-navbar flowDefining" id="widget0" style="margin-left: 9px; margin-top: 0px; opacity: 1.00; position: relative; width: 991px; z-index: 1; ">
+    
+              <div id="widget0-navbar" class="navbar">
+
+      
+                <div id="widget0-bg" class="navbar-bg">
+
+        
+                  <ul id="widget0-navbar-list" class="navbar-list">
+ <li></li> 
+</ul>
+                  
+      
+</div>
+                
+    
+</div>
+            </div>
+            <script type="text/javascript"><!--//--><![CDATA[//><!--
+new NavBar('widget0', 'Scripts/Widgets/Navbar', 'Scripts/Widgets/SharedResources', '.', {"path-to-root": "", "navbar-css": ".navbar {\n\tfont-family: 'Helvetica Neue', Arial, sans-serif;\n\tfont-size: .8em;\n\tcolor: #666666;\n\tline-height: 30px;\n\tborder-bottom: 3px solid #ccc;\n}\n\n.navbar-bg {\n\ttext-align: right;}\n\n.navbar-bg ul {\n\tlist-style: none;\n\tmargin: 0px;\n\tpadding: 0px;\n}\n\n\nli {\n\tlist-style-type: none;\n\tdisplay: inline;\n\tpadding: 0px 5px 0px 0px;\n}\n\n\nli a {\n\ttext-decoration: none;\n\tpadding: 10px;\n\tcolor: #666666;\n\tfont-weight: bold;\n}\n\nli a:visited {\n\ttext-decoration: none;\n\tpadding: 10px;\n\tcolor: #666666;\n\tfont-weight: bold;\n}\n\nli a:hover\r{\r\n \tcolor: #999999;\n\ttext-decoration: none;\r}\n\n\nli.current-page a\r{\r\t color: #66ABC5;\n\ttext-decoration: none;\r}\n", "current-page-GUID": "2E1CBA9F-633E-4945-8CE1-DD29B390332E", "isCollectionPage": "NO"});
+//--><!]]></script>
+            <div style="clear: both; height: 0px; line-height: 0px; " class="spacer"> </div>
+          </div>
+          <div style="height: 75px; margin-left: 0px; position: relative; width: 1100px; z-index: 10; " id="header_layer">
+            <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+            <div id="id1" style="height: 43px; left: 20px; position: absolute; top: 20px; width: 515px; z-index: 1; " class="style_SkipStroke shape-with-text">
+              <div class="text-content Normal_External_515_43" style="padding: 0px; ">
+                <div class="Normal">
+                  <p style="padding-bottom: 0pt; padding-top: 0pt; " class="Header">Autocallable</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-left: 0px; position: relative; width: 1100px; z-index: 5; " id="body_layer">
+            <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+            <div id="id2" style="height: 470px; left: 32px; position: absolute; top: 33px; width: 938px; z-index: 1; " class="style_SkipStroke_1 shape-with-text">
+              <div class="text-content graphic_textbox_layout_style_default_External_938_470" style="padding: 0px; ">
+                <div class="graphic_textbox_layout_style_default">
+                  <p style="padding-top: 0pt; " class="paragraph_style">This tutorial is based on the usage of Autocallable pricer available freely on the site. There is no down and in put attached but the analysis can easily be extended with DIP attached. The structure payoff is as follows<br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <ol>
+                    <li style="line-height: 20px; padding-left: 15px; text-indent: -15px; " class="full-width" value="1">
+                      <p style="text-indent: -15px; " class="paragraph_style_1"><span style="font-size: 14px; " class="Bullet">1.</span><span style="width: 4px; " class="inline-block"></span>Payoff a coupon 52$ (absolute) if the Index &gt; 110 on 1 Year from Inception and wind up<br /></p>
+                    </li>
+                    <li style="line-height: 20px; padding-left: 15px; text-indent: -15px; " class="full-width" value="2">
+                      <p style="text-indent: -15px; " class="paragraph_style_1"><span style="font-size: 14px; " class="Bullet">2.</span><span style="width: 4px; " class="inline-block"></span>Payoff a coupon 57$ (absolute) if the Index &gt; 110 on 2 Year from Inception<br /></p>
+                    </li>
+                  </ol>
+                  <p class="paragraph_style">If condition 1 is struck then structure gets Autocalled without 2nd condition being checked. Other extensions may simply add more payoffs for different maturities. <br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style">Let’s set the notation for this tutorial<br /></p>
+                  <p class="paragraph_style">Structure started at 9-Jan-2011, and in 1 year (or first fixing date) it will be 9-Jan-2012<br /></p>
+                  <p class="paragraph_style">Second fixing date similarly will be 9-Jan-2013<br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style">To understand or break apart any complicated structure try to picture the payoff’s intuitively. A crude way is <br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <ol>
+                    <li style="line-height: 20px; padding-left: 15px; text-indent: -15px; " class="full-width" value="1">
+                      <p style="text-indent: -15px; " class="paragraph_style_1"><span style="font-size: 14px; " class="Bullet">1.</span><span style="width: 4px; " class="inline-block"></span>1 day before 1 year fixing date or on 8th January 2012 spot is at 109. If spot moves &gt; 1 then structure is in the money, otherwise 0. Delta will be around 26 (approximately). Delta = (52-0)/(111-109) or approx 26<br /></p>
+                    </li>
+                    <li style="line-height: 20px; padding-left: 15px; text-indent: -15px; " class="full-width" value="2">
+                      <p style="text-indent: -15px; " class="paragraph_style_1"><span style="font-size: 14px; " class="Bullet">2.</span><span style="width: 4px; " class="inline-block"></span>Since delta is positive value above 110 and 0 before 110, gamma will change sign. Delta around 108 - 109 level is increasing but at 110 trader needs to sell the stock to fulfill the liability. If there is time remaining the delta won’t exactly be 0 above 110, but will decrease drastically above 110. Below 110 or around 105 levels there needs to be accumulation of stock. Due to both increase and decrease of delta, we notice a sign change in gamma. <br /></p>
+                    </li>
+                  </ol>
+                  <p class="paragraph_style_2">So we are Long gamma below barrier and Short gamma above the barrier<br /></p>
+                  <ol>
+                    <li style="line-height: 20px; padding-left: 15px; text-indent: -15px; " class="full-width" value="3">
+                      <p style="text-indent: -15px; " class="paragraph_style_1"><span style="font-size: 14px; " class="Bullet">3.</span><span style="width: 4px; " class="inline-block"></span>The same can be checked in the pricer by following fields <br /></p>
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div style="height: 100px; width: 129px;  height: 100px; left: 42px; position: absolute; top: 529px; width: 129px; z-index: 1; " class="tinyText">
+              <div style="position: relative; width: 129px; ">
+                <img src="Autocalls_files/shapeimage_1.png" alt="" style="height: 100px; left: 0px; position: absolute; top: 0px; width: 129px; " />
+              </div>
+            </div>
+            
+
+
+            <div id="id3" style="height: 168px; left: 168px; position: absolute; top: 503px; width: 513px; z-index: 1; " class="style_SkipStroke_1 shape-with-text">
+              <div class="text-content graphic_textbox_layout_style_default_External_513_168" style="padding: 0px; ">
+                <div class="graphic_textbox_layout_style_default">
+                  <ol>
+                    <li style="line-height: 20px; padding-left: 13px; text-indent: -13px; " class="full-width" value="1">
+                      <p style="padding-top: 0pt; text-indent: -13px; " class="paragraph_style_3"><span style="font-size: 14px; " class="Bullet">1.</span><span style="width: 2px; " class="inline-block"></span>Time to maturity = 0.07<br /></p>
+                    </li>
+                    <li style="line-height: 20px; padding-left: 13px; text-indent: -13px; " class="full-width" value="2">
+                      <p style="text-indent: -13px; " class="paragraph_style_3"><span style="font-size: 14px; " class="Bullet">2.</span><span style="width: 2px; " class="inline-block"></span>Coupons = 57,52<br /></p>
+                    </li>
+                    <li style="line-height: 20px; padding-left: 13px; text-indent: -13px; " class="full-width" value="3">
+                      <p style="text-indent: -13px; " class="paragraph_style_3"><span style="font-size: 14px; " class="Bullet">3.</span><span style="width: 2px; " class="inline-block"></span>Coupon time in years = 0.07,0.03<br /></p>
+                    </li>
+                    <li style="line-height: 20px; padding-left: 13px; text-indent: -13px; " class="full-width" value="4">
+                      <p style="text-indent: -13px; " class="paragraph_style_3"><span style="font-size: 14px; " class="Bullet">4.</span><span style="width: 2px; " class="inline-block"></span>Final Barrier = 110<br /></p>
+                    </li>
+                    <li style="line-height: 20px; padding-left: 13px; text-indent: -13px; " class="full-width" value="5">
+                      <p style="text-indent: -13px; " class="paragraph_style_3"><span style="font-size: 14px; " class="Bullet">5.</span><span style="width: 2px; " class="inline-block"></span>Change graph setting to “GraphWStock” or “DeltaWStock” or “Price” for different graphs<br /></p>
+                    </li>
+                    <li style="line-height: 20px; padding-left: 13px; text-indent: -13px; " class="full-width" value="6">
+                      <p style="text-indent: -13px; " class="paragraph_style_3"><span style="font-size: 14px; " class="Bullet">6.</span><span style="width: 2px; " class="inline-block"></span>Do refresh graph to change the graph only and not the price grid. <br /></p>
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div id="id4" style="height: 188px; left: 175px; position: absolute; top: 705px; width: 717px; z-index: 1; " class="style_SkipStroke_1 shape-with-text">
+              <div class="text-content graphic_textbox_layout_style_default_External_717_188" style="padding: 0px; ">
+                <div class="graphic_textbox_layout_style_default">
+                  <ol>
+                    <li style="line-height: 20px; padding-left: 13px; text-indent: -13px; " class="full-width" value="1">
+                      <p style="padding-top: 0pt; text-indent: -13px; " class="paragraph_style_3"><span style="font-size: 14px; " class="Bullet">1.</span><span style="width: 2px; " class="inline-block"></span>Introducing Time Effect<br /></p>
+                    </li>
+                  </ol>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style">If you draw the delta / gamma graphs from above theory for 1 day expiration you will get a peaked normal distribution type shape for delta and a two humped normal distribution for gamma. So positive peaked normal for below 110 and negative peaked normal above 110 for gamma. What if time to expiry is &gt; 1 day or, 1 year? The shape is similar but it expands around the barrier (110 in our case). Same can be checked in the pricer by increasing the time to maturity. <br /></p>
+                  <p class="paragraph_style"><br /></p>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div id="id5" style="height: 312px; left: 122px; position: absolute; top: 929px; width: 829px; z-index: 1; " class="style_SkipStroke_1 shape-with-text">
+              <div class="text-content graphic_textbox_layout_style_default_External_829_312" style="padding: 0px; ">
+                <div class="graphic_textbox_layout_style_default">
+                  <ol>
+                    <li style="line-height: 19px; padding-left: 13px; text-indent: -13px; " class="full-width" value="2">
+                      <p style="padding-top: 0pt; text-indent: -13px; " class="paragraph_style_4"><span style="font-size: 13px; " class="Bullet">2.</span><span style="width: 3px; " class="inline-block"></span>Introducing Volatility<br /></p>
+                    </li>
+                  </ol>
+                  <p class="paragraph_style_5"><br /></p>
+                  <p class="paragraph_style_5">Rather than mathematical definition, consider volatility as movement from either side from current spot. This crude version is enough for understanding the structure. Vega is defined as change in price due to change in volatility. Again let’s understand the behavior 1 day before expiry and spot is at or hovering around 109. If volatility is high, there is very high probability that stock cross the barrier or reach much below the barrier. Volatility generally has a smoothing effect on any curve. So if there is convex behavior then volatility will smoothen it out. This is also easy to understand intuitively<br /></p>
+                  <p class="paragraph_style_5"><br /></p>
+                  <ol>
+                    <li style="line-height: 19px; padding-left: 13px; text-indent: -13px; " class="full-width" value="1">
+                      <p style="text-indent: -13px; " class="paragraph_style_6"><span style="font-size: 13px; " class="Bullet">a)</span><span style="width: 3px; " class="inline-block"></span>If volatility is low then there is a high probability that spot will be at 111 and 108 and in between these values<br /></p>
+                    </li>
+                    <li style="line-height: 19px; padding-left: 13px; text-indent: -13px; " class="full-width" value="2">
+                      <p style="text-indent: -13px; " class="paragraph_style_6"><span style="font-size: 13px; " class="Bullet">b)</span><span style="width: 2px; " class="inline-block"></span>If volatility is high then there is high probability that spot will be at 105 or 115<br /></p>
+                    </li>
+                  </ol>
+                  <p class="paragraph_style_7"><br /></p>
+                  <p class="paragraph_style_7">Problem with case a) is that you will end up rebalancing the delta in positive and negative zones - remember gamma changes sign before expiry so it will cause problems. In short gamma you might end up making losses and in long gamma profits might not be that much high. In long gamma trader is hoping for big moves to make profit. So low volatility causes this gamma bleeding. <br /></p>
+                  <p class="paragraph_style_7"><br /></p>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div style="height: 100px; width: 112px;  height: 100px; left: 45px; position: absolute; top: 729px; width: 112px; z-index: 1; " class="tinyText">
+              <div style="position: relative; width: 112px; ">
+                <img src="Autocalls_files/shapeimage_2.png" alt="" style="height: 100px; left: 0px; position: absolute; top: 0px; width: 112px; " />
+              </div>
+            </div>
+            
+
+
+            <div style="height: 100px; width: 100px;  height: 100px; left: 14px; position: absolute; top: 1024px; width: 100px; z-index: 1; " class="tinyText">
+              <div style="position: relative; width: 100px; ">
+                <img src="Autocalls_files/shapeimage_3.png" alt="" style="height: 100px; left: 0px; position: absolute; top: 0px; width: 100px; " />
+              </div>
+            </div>
+            
+
+
+            <div style="height: 861px; width: 814px;  height: 861px; left: 118px; position: absolute; top: 1261px; width: 814px; z-index: 1; " class="tinyText style_SkipStrokeSkipFillSkipOpacity">
+              <div style="position: relative; width: 814px; ">
+                <img src="Autocalls_files/shapeimage_4.png" alt="Vega Behavior&#10;&#10;Below the barrier again 1 day before expiry the trader (or investor in this case) will prefer a low volatility near the barrier. So increasing the volatility below the barrier will increase the probability of structuring ending up the barrier and hence a payout. So price increases due to increasing volatility, Thus Long Vega. &#10;&#10;Above the barrier for volatility increase price decreases. Once I have crossed the hump I would prefer low volatility to avoid the crossover back to below barrier levels. Hence Short vega above the barrier. &#10;&#10;So I am Long vega below the barrier and Short vega above the barrier&#10;&#10;When I am long vega it seems I am long gamma and when I am short vega it I am short gamma.&#10;&#10;Long Vega &amp; Long Gamma: (Below the barrier)&#10;&#10;As spot increases the structure gets Longer  vega and then changes to Short Vega. After the barrier has passed Vega again decreases. This is natural as above the barrier say at 150 and 1 day before expiry naturally volatility can’t have any affect. It’s all delta play. &#10;&#10;Short Vega &amp; Short Gamma: (Above the barrier)&#10;&#10;As spot increases the structure gets Shorter vega for some time but again this affect decreases for higher spot levels as explained above. &#10;&#10;As a trader if I am selling then it’s opposite, I am Short Vega and Short Gamma (below barrier)&#10;Long Vega &amp; Long Gamma above barrier&#10;&#10;Hedging it using vanilla options can be done using....&#10;&#10; &#10;At spot levels of 90 structure is clearly Short Gamma, so let’s buy a put for Long gamma at around 90 strike. I sell a 95 strike put so it will contribute to Short Vega. Combining these two into a put spread let’s see the behavior&#10;           At 90 levels we have Short gamma hedged by 90 strike put (Buy). It will have higher gamma than 95 strike put, coz gamma is highest when spot is closer to the strike.  &#10;&#10;Vega of OTM options is higher than ATM. So buy adjusting the strikes we can generate a positive vega and hedge the negative vega below the barrier. &#10;&#10;Hence with adjusted strikes we can have a hedge with a putspread. Problem is like delta hedging you need to shift the strikes depending on the stability of the hedge. &#10;&#10;" style="height: 802px; left: 0px; margin-left: 2px; margin-top: 7px; position: absolute; top: 0px; width: 806px; " />
+              </div>
+            </div>
+            
+
+
+            <div style="height: 100px; width: 100px;  height: 100px; left: 14px; position: absolute; top: 1239px; width: 100px; z-index: 1; " class="tinyText">
+              <div style="position: relative; width: 100px; ">
+                <img src="Autocalls_files/shapeimage_5.png" alt="" style="height: 100px; left: 0px; position: absolute; top: 0px; width: 100px; " />
+              </div>
+            </div>
+            
+
+
+            <div id="id6" style="height: 218px; left: 120px; position: absolute; top: 2172px; width: 820px; z-index: 1; " class="style_SkipStroke_1 shape-with-text">
+              <div class="text-content graphic_textbox_layout_style_default_External_820_218" style="padding: 0px; ">
+                <div class="graphic_textbox_layout_style_default">
+                  <p style="padding-top: 0pt; " class="paragraph_style_8">Rebalancing<br /></p>
+                  <p class="paragraph_style_8"><br /></p>
+                  <p style="padding-bottom: 0pt; " class="paragraph_style">A question might be asked, why choose a putspread and not a callspread. Well putspread is cheaper since calls are ITM. Still as spot/time moves the peak of vega/gamma will keep shifting. As expiry approaches basically both peaks approach the barrier. So with this shifting, it requires our hedge to be shifted. Shifting upwards the put spread is ok, coz you make gains as the high strike short put makes money. Shifting downwards will register losses. The structure price allthough decreases and should make up for the losses in hedge, but if volatility is low the hedge hedge will have greater losses. Hedge was long gamma in the lower portion. Hedge will lose theta, and gamma won’t be able to make up for it due to lower volatility. Theta is the time effect, and it is loss of option value due to passage of time. Generally known as “RENT” paid by the option owner. </p>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div id="id7" style="height: 492px; left: 118px; position: absolute; top: 2422px; width: 814px; z-index: 1; " class="style_SkipStroke_1 shape-with-text">
+              <div class="text-content graphic_textbox_layout_style_default_External_814_492" style="padding: 0px; ">
+                <div class="graphic_textbox_layout_style_default">
+                  <p style="padding-top: 0pt; " class="paragraph_style_9">Introducing Vol of Vol<br /></p>
+                  <p class="paragraph_style_8"><br /></p>
+                  <p class="paragraph_style">Vol of vol as it says denotes volatility of volatility. If it’s high it simply means that volatility can cover a large range in a few days. If it’s low it means volatility is stable and doesn’t change much. So if volatility is high, trader will prefer a low vol of vol in long gamma range. High volatility of volatility might lead to losses in long gamma region. <br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style">Another issue is hedging, which till date I haven’t come across a hedge using vanilla’s for price changes in exotics due to vol of vol. This in-fact is the second derivative of structure price with sigma. Derivatives of the payoff which above a specific spot is positive and below that specific spot 0 (assume 1 day before expiry and spot at 109 for barrier 110), has very high sensitivity to volatility. A put spread of exactly the same expiry will replicate this behavior, but practically the put spread of same expiry might not be available in the market. <br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style">Another issue is that strikes are in steps of 10 or 20 or 100, but for replicating a specific barrier point we need very close strikes so it is just an approximation and can’t work at expiry. <br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style">One of the solutions generally used by traders is to simulate these greeks 5 - 10 days before expiry. These are priced into the structure. Another question might be why not use the heston model which automatically prices these greeks?<br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style">Problem with heston is that it assumes daily hedging and as usual the probability of the worst case happening is very low. Heston model or any other model is generating paths and averaging out the price for each of these paths. For traders an average case might not be a suitable answer to the manager - “Hey I made a loss, in one of the structures but rest assured out of 100, 60 will make money!”. <br /></p>
+                  <p class="paragraph_style"><br /></p>
+                </div>
+              </div>
+            </div>
+            <div style="height: 4000px; line-height: 4000px; " class="spacer"> </div>
+          </div>
+          <div style="height: 75px; margin-left: 0px; position: relative; width: 1100px; z-index: 15; " id="footer_layer">
+            <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+            <a href="http://apple.com/mac" title="http://apple.com/mac"><img src="Autocalls_files/mwmac.png" alt="Made on a Mac" style="border: none; height: 50px; left: 280px; opacity: 0.35; position: absolute; top: 8px; width: 139px; z-index: 1; " id="id8" />
+
+</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+

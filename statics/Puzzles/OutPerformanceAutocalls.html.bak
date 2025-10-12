@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    
+    <meta name="Generator" content="iWeb 3.0.4" />
+    <meta name="iWeb-Build" content="local-build-20120824" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <meta name="viewport" content="width=1000" />
+    <title>OutPerformance Autocallables</title>
+    <link rel="stylesheet" type="text/css" media="screen,print" href="OutPerformanceAutocalls_files/OutPerformanceAutocalls.css" />
+    <!--[if lt IE 8]><link rel='stylesheet' type='text/css' media='screen,print' href='OutPerformanceAutocalls_files/OutPerformanceAutocallsIE.css'/><![endif]-->
+    <!--[if gte IE 8]><link rel='stylesheet' type='text/css' media='screen,print' href='Media/IE8.css'/><![endif]-->
+    <script type="text/javascript" src="Scripts/iWebSite.js"></script>
+    <script type="text/javascript" src="Scripts/Widgets/SharedResources/WidgetCommon.js"></script>
+    <script type="text/javascript" src="Scripts/Widgets/Navbar/navbar.js"></script>
+    <script type="text/javascript" src="OutPerformanceAutocalls_files/OutPerformanceAutocalls.js"></script>
+  </head>
+  <body style="background: rgb(250, 255, 253); margin: 0pt; " onload="onPageLoad();" onunload="onPageUnload();">
+    <div style="text-align: center; ">
+      <div style="margin-bottom: 10px; margin-left: auto; margin-right: auto; margin-top: 10px; overflow: hidden; position: relative; word-wrap: break-word;  text-align: left; width: 1000px; " id="body_content">
+        <div style="background: transparent url(OutPerformanceAutocalls_files/backgroundimage_1.jpg) no-repeat scroll center center; width: 1000px; ">
+          <div style="margin-left: 0px; position: relative; width: 1000px; z-index: 0; " id="nav_layer">
+            <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+            <div class="com-apple-iweb-widget-navbar flowDefining" id="widget0" style="margin-left: 20px; margin-top: 0px; opacity: 1.00; position: relative; width: 660px; z-index: 1; ">
+    
+              <div id="widget0-navbar" class="navbar">
+
+      
+                <div id="widget0-bg" class="navbar-bg">
+
+        
+                  <ul id="widget0-navbar-list" class="navbar-list">
+ <li></li> 
+</ul>
+                  
+      
+</div>
+                
+    
+</div>
+            </div>
+            <script type="text/javascript"><!--//--><![CDATA[//><!--
+new NavBar('widget0', 'Scripts/Widgets/Navbar', 'Scripts/Widgets/SharedResources', '.', {"path-to-root": "", "navbar-css": ".navbar {\n\tfont-family: 'Helvetica Neue', Arial, sans-serif;\n\tfont-size: .8em;\n\tcolor: #666666;\n\tline-height: 30px;\n\tborder-bottom: 3px solid #ccc;\n}\n\n.navbar-bg {\n\ttext-align: right;}\n\n.navbar-bg ul {\n\tlist-style: none;\n\tmargin: 0px;\n\tpadding: 0px;\n}\n\n\nli {\n\tlist-style-type: none;\n\tdisplay: inline;\n\tpadding: 0px 5px 0px 0px;\n}\n\n\nli a {\n\ttext-decoration: none;\n\tpadding: 10px;\n\tcolor: #666666;\n\tfont-weight: bold;\n}\n\nli a:visited {\n\ttext-decoration: none;\n\tpadding: 10px;\n\tcolor: #666666;\n\tfont-weight: bold;\n}\n\nli a:hover\r{\r\n \tcolor: #999999;\n\ttext-decoration: none;\r}\n\n\nli.current-page a\r{\r\t color: #66ABC5;\n\ttext-decoration: none;\r}\n", "current-page-GUID": "A55E3C0F-25D9-4B1D-808C-5CF57E437980", "isCollectionPage": "NO"});
+//--><!]]></script>
+            <div style="clear: both; height: 0px; line-height: 0px; " class="spacer"> </div>
+          </div>
+          <div style="height: 75px; margin-left: 0px; position: relative; width: 1000px; z-index: 10; " id="header_layer">
+            <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+            <div id="id1" style="height: 43px; left: 20px; position: absolute; top: 20px; width: 515px; z-index: 1; " class="style_SkipStroke shape-with-text">
+              <div class="text-content Normal_External_515_43" style="padding: 0px; ">
+                <div class="Normal">
+                  <p style="padding-bottom: 0pt; padding-top: 0pt; " class="Header">OutPerformance Autocallables</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-left: 0px; position: relative; width: 1000px; z-index: 5; " id="body_layer">
+            <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+            <div id="id2" style="height: 372px; left: 10px; position: absolute; top: 22px; width: 988px; z-index: 1; " class="style_SkipStroke_1 shape-with-text">
+              <div class="text-content graphic_textbox_layout_style_default_External_988_372" style="padding: 0px; ">
+                <div class="graphic_textbox_layout_style_default">
+                  <p style="padding-top: 0pt; " class="paragraph_style">An outperformance autocallable has the payoff, Coupon on specific maturity if (A-B) &gt; Barrier. Snowballing and other details are not important. It’s similar to a normal autocallable, with the additional risk of correlation. Correlation risk can in general be hedged according to the expected maturity of the autocallable. <br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style">For an investor correlation should be positive initially and become negative sometime before the last observation date. Positive correlation reduces the chance of autocalling, and negative correlation increases this autocall probability. <br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style">Case 1) Positive Correlation (To keep it simple let’s say 99%) - Both stocks move upward or downward<br /></p>
+                  <p class="paragraph_style">      (A-B) decreases hence low chance of autocall<br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style">Case 2) Negative Correlation (To keep it simple, let’s say -99%): Both stocks move away, so either A-B = positive or B-A = positive. If both stocks have same volatility (another simplifying assumption) then there is a 50% chance of autocalling. <br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p style="padding-bottom: 0pt; " class="paragraph_style">So both cases demonstrate that bumping correlation is not a good idea when pricing these structures. </p>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div id="id3" style="height: 346px; left: 13px; position: absolute; top: 414px; width: 979px; z-index: 1; " class="style_SkipStroke_1 shape-with-text">
+              <div class="text-content graphic_textbox_layout_style_default_External_979_346" style="padding: 0px; ">
+                <div class="graphic_textbox_layout_style_default">
+                  <p style="padding-top: 0pt; " class="paragraph_style">Consider market rise/fall scenarios as a seller of the structure.<br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style">Case 1) Markets Fall - Correlation increases! <br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style">Since we are short correlation (long dip and short coupons) there is a loss. Another thing is that probability of autocalling is less in falling market conditions. <br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p class="paragraph_style">Case 2) Markets Rise - Correlation falls<br /></p>
+                  <p class="paragraph_style"><br /></p>
+                  <p style="padding-bottom: 0pt; " class="paragraph_style">Intuitively we should have made money on this, but since the structure is ITM the correlation exposure decreases in magnitude. Hence we don’t gain as much on correlation when market increases. Of course there is 50% chance of ITM as mentioned above since if vols are equal there is equal chance of (A-B) = +ve or (B-A) = +ve. The second part (B-A) will make money.</p>
+                </div>
+              </div>
+            </div>
+            
+
+
+            <div id="id4" style="height: 138px; left: 12px; position: absolute; top: 794px; width: 957px; z-index: 1; " class="style_SkipStroke_1 shape-with-text">
+              <div class="text-content graphic_textbox_layout_style_default_External_957_138" style="padding: 0px; ">
+                <div class="graphic_textbox_layout_style_default">
+                  <p style="padding-bottom: 0pt; padding-top: 0pt; " class="paragraph_style">Hedge: Apart from the usual hedges buy an “<span class="style">Option to Buy A COVARIANCE SWAP”. This </span>hedges our loses incase market falls since we are short correlation. Why not correlation swap? Covariance swap hedges cross gamma effectively. In case such complicated structure “Option on COVARIANCE Swap” is not available; these have to be bought as per the current exposure and expected time to maturity. Hedges would as usual require rebalance in case of market movements. </p>
+                </div>
+              </div>
+            </div>
+            <div style="height: 1000px; line-height: 1000px; " class="spacer"> </div>
+          </div>
+          <div style="height: 75px; margin-left: 0px; position: relative; width: 1000px; z-index: 15; " id="footer_layer">
+            <div style="height: 0px; line-height: 0px; " class="bumper"> </div>
+            <a href="http://apple.com/mac" title="http://apple.com/mac"><img src="OutPerformanceAutocalls_files/mwmac.png" alt="Made on a Mac" style="border: none; height: 50px; left: 280px; opacity: 0.35; position: absolute; top: 8px; width: 139px; z-index: 1; " id="id5" />
+
+</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+

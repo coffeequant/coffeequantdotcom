@@ -105,6 +105,8 @@ require(["dojo/parser", "dojox/layout/ContentPane"]);
 	</script>
 	</head>
 	<body class="claro">
+  <article id="cq-article" class="cq-article">
+
   <div data-dojo-type="dijit/form/Form" action="/quiz1" id="pricer" method="post">
         <textarea id="q1desc" locked="true"  readonly="true" name="desc" data-dojo-type="dijit/form/Textarea" style="width:100%;font-size:14px;color:blue"></textarea><br/>
       <select id="q1opt" multiple="true" size="0" name="ms4" store="readStore[0]" data-dojo-type="dojox.form.CheckedMultiSelect">
@@ -154,5 +156,7 @@ require(["dojo/parser", "dojox/layout/ContentPane"]);
       <textarea id="danswers" readonly="true" data-dojo-type="dijit/form/Textarea" style="width:100%;font-size:14px;color:blue"></textarea><br/>
   </div>
 
-	</body>
+	
+  </article>
+</body>
 </html>

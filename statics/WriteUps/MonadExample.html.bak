@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 4.4.2.2 (MacOSX)"/>
+	<meta name="created" content="00:00:00"/>
+	<meta name="changed" content="2015-05-16T01:00:44.695501000"/>
+</head>
+<body lang="en-US" dir="ltr">
+<p><font size="4" style="font-size: 14pt"><font color="#800000"><font face="Chalkduster"><span style="font-style: normal"><u><b><span style="background: transparent">List
+Monad</span></b></u></span></font></font></font></p>
+<p><font face="Andale Mono"><font size="4" style="font-size: 14pt">Here's
+a not so good analogy for the monad. The heart is wrapped inside the
+body which is a wrapper. A function like killing someone has to be
+done to the heart and finally the body will be returned! That was a
+true psychopath example, inspired by Dexter</font></font></p>
+<p><font face="Andale Mono"><font size="4" style="font-size: 14pt">[1,2,3,4,5]
+is a Monad which when shoved (some people say BIND) into a function
+for instance [1,2,3,4,5] `shove` (\x→[x,-x]) should return a monad.
+</font></font>
+</p>
+<p><font face="Andale Mono"><font size="4" style="font-size: 14pt">`shove`
+is defined this way, concat (map f xs), which we know just applies f
+over each item in the list and concatenates the results.</font></font></p>
+<p><font size="4" style="font-size: 14pt"><font face="Andale Mono">In
+actual terms haskell defines a class which we inherit, or to be more
+precise we declare an instance of this class</font></font></p>
+<table width="100%" cellpadding="5" cellspacing="0">
+	<col width="85*">
+	<col width="171*">
+	<tr valign="top">
+		<td width="33%" height="37" bgcolor="#eeeeee" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="left"><font face="Andale Mono"><font size="4" style="font-size: 14pt">Class
+			Monad m where</font></font></p>
+			<p align="left"><font face="Andale Mono"><font size="4" style="font-size: 14pt">return
+			:: a → m a</font></font></p>
+			<p align="left"><font face="Andale Mono"><font size="4" style="font-size: 14pt">(&gt;&gt;=)
+			:: m a → (a→ m b) → mb</font></font></p>
+			<p align="left"><font face="Andale Mono"><font size="4" style="font-size: 14pt">instance
+			is defined as</font></font></p>
+		</td>
+		<td width="67%" bgcolor="#eeeeee" style="border: 1px double #808080; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p><font face="Andale Mono"><font size="4" style="font-size: 14pt">Instance
+			Monad [] where</font></font></p>
+			<p><font face="Andale Mono"><font size="4" style="font-size: 14pt">return
+			x = [x]</font></font></p>
+			<p><font face="Andale Mono"><font size="4" style="font-size: 14pt">xs
+			&gt;&gt;= f = concat (map f xs)</font></font></p>
+			<p align="left"><font face="Andale Mono"><font size="4" style="font-size: 14pt">fail
+			_ = []</font></font></p>
+		</td>
+	</tr>
+</table>
+<p><br/>
+<br/>
+
+</p>
+<p><font face="Andale Mono"><font size="4" style="font-size: 14pt">With
+this out of the picture, the following operation becomes easy. </font></font>
+</p>
+<p><font face="Andale Mono"><font size="4" style="font-size: 14pt">Prelude&gt;
+[1,2,3,4] &gt;&gt;= (\x-&gt;[x,-x]) &gt;&gt;= (\x-&gt;[x*2]) &gt;&gt;=
+(\x-&gt; [x+1])</font></font></p>
+<p><font face="Andale Mono"><font size="4" style="font-size: 14pt">[3,-1,5,-3,7,-5,9,-7]</font></font></p>
+<p><font face="Andale Mono"><font size="4" style="font-size: 14pt">yes
+we can compose it in a chain of events! This simple concept is
+exceedingly powerful. This example was very simple and comes
+prepackaged with haskell. </font></font>
+</p>
+<p><font face="Andale Mono"><font size="4" style="font-size: 14pt">Let's
+see if I can extend this to our custom data. Presenting the coffee
+monad….</font></font></p>
+<p><img src="data:image/png;base64,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" name="Image1" align="bottom" width="400" height="381" border="0"/>
+</p>
+<table width="100%" cellpadding="4" cellspacing="0">
+	<col width="128*">
+	<col width="128*">
+	<tr valign="top">
+		<td width="50%" bgcolor="#dddddd" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p style="font-style: normal"><font face="Andale Mono"><font size="3" style="font-size: 12pt">data
+			Coffee a = Coffee {getCoffee :: (String -&gt; a)}</font></font></p>
+			<p><font face="Andale Mono"><font size="3" style="font-size: 12pt"><span style="background: transparent">--
+			(&gt;&gt;=) :: Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b</span></font></font></p>
+			<p><font color="#ff3333"><font face="Andale Mono"><font size="3" style="font-size: 12pt"><b><span style="background: transparent">instance
+			Monad Coffee where</span></b></font></font></font></p>
+			<p style="font-style: normal"><font color="#ff3333"><font face="Andale Mono"><font size="3" style="font-size: 12pt"><b><span style="background: transparent">return
+			x = Coffee (\_-&gt;x)</span></b></font></font></font></p>
+			<p style="font-style: normal"><font color="#ff3333"><font face="Andale Mono"><font size="3" style="font-size: 12pt"><b><span style="background: transparent">Coffee
+			ma &gt;&gt;= f = Coffee (\s -&gt; let oldcoffee = ma s</span></b></font></font></font></p>
+			<p style="font-style: normal"><font color="#ff3333"><font face="Andale Mono"><font size="3" style="font-size: 12pt"><b><span style="background: transparent">Coffee
+			newcoffee = f oldcoffee</span></b></font></font></font></p>
+			<p style="font-style: normal"><font color="#ff3333"><font face="Andale Mono"><font size="3" style="font-size: 12pt"><b><span style="background: transparent">in
+			(newcoffee s))</span></b></font></font></font></p>
+		</td>
+		<td width="50%" bgcolor="#dddddd" style="border: 1px double #808080; padding: 0.04in">
+			<p style="font-style: normal; page-break-before: auto; page-break-after: auto">
+			<font face="Andale Mono"><font size="3" style="font-size: 12pt">addSugar
+			q s = Coffee (\a -&gt; s ++ &quot; mixed with sugar&quot; ++ &quot;
+			&quot; ++ q ++ &quot; grams\n\t\t&quot;)</font></font></p>
+			<p style="font-style: normal"><font face="Andale Mono"><font size="3" style="font-size: 12pt">addMilk
+			q s = Coffee (\a -&gt; s ++ &quot; mixed with milk&quot; ++ &quot;
+			&quot; ++ q ++ &quot; litres\n\t\t&quot;)</font></font></p>
+			<p style="font-style: normal"><font face="Andale Mono"><font size="3" style="font-size: 12pt">addCinnamon
+			q s = Coffee (\a -&gt; s ++ &quot; mixed with cinnamon&quot; ++ &quot;
+			&quot; ++ q ++ &quot; grams\n\t\t&quot;)</font></font></p>
+		</td>
+	</tr>
+</table>
+<p style="page-break-before: auto; page-break-after: auto"><font size="4" style="font-size: 14pt">And
+how it all ties up</font></p>
+<p><font color="#800000"><font face="Chalkduster"><font size="4" style="font-size: 14pt">*Main&gt;
+putStrLn (getCoffee (Coffee (\s-&gt; s ++ &quot;Coffee&quot;) &gt;&gt;=
+(addSugar &quot;5&quot;) &gt;&gt;= (addMilk &quot;0.3&quot;) &gt;&gt;=
+(addCinnamon &quot;1&quot;)) &quot;Capucinno&quot;)</font></font></font></p>
+<p style="margin-left: 0.79in; font-weight: normal"><font color="#800000"><font face="Chalkduster"><font size="4" style="font-size: 14pt"><i>CapucinnoCoffee
+mixed with sugar 5 grams</i></font></font></font></p>
+<p style="margin-left: 0.79in; font-weight: normal"><font color="#800000"><font face="Chalkduster"><font size="4" style="font-size: 14pt"><i>mixed
+with milk 0.3 litres</i></font></font></font></p>
+<p style="margin-left: 0.79in; font-weight: normal"><font color="#800000"><font face="Chalkduster"><font size="4" style="font-size: 14pt"><i>mixed
+with cinnamon 1.0 grams</i></font></font></font></p>
+<p style="font-style: normal"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><font color="#000000"><span style="font-weight: normal">So
+what actually happened in the monadic construction of the coffee,
+let's try to understand piece by piece</span></font></font></font></p>
+<p style="font-style: normal; font-weight: normal"><font color="#000000"><font face="Andale Mono"><font size="4" style="font-size: 14pt">The
+datatype we declared is “data Coffee a = Coffee {getCoffee ::
+(String -&gt; a)}”. </font></font></font>
+</p>
+<p style="font-style: normal; font-weight: normal"><font color="#000000"><font face="Andale Mono"><font size="4" style="font-size: 14pt">All
+it says is that if I give it a string it will give me an output “a”.
+In imaginative terms its like giving a recipe to the coffee
+constructor and it collects the recipe and makes the coffee. So to
+make a coffee you need the steps to make a coffee which is the
+“String”. Note that different methods can make different kinds of
+coffee.</font></font></font></p>
+<p style="font-weight: normal"><font color="#000000"><font face="Chalkduster"><font size="4" style="font-size: 14pt"><i>Coffee
+(\s → s + “Coffee”) if initialized with s=”Capucinno” will
+make a plain Coffee</i></font></font></font></p>
+<p style="font-weight: normal"><font color="#000000"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><i>We
+can have a different starting function such as</i></font></font></font></p>
+<p style="font-weight: normal"><font color="#000000"><font face="Chalkduster"><font size="4" style="font-size: 14pt"><i>Coffee
+(\s → “Put some whiskey and then make ” ++ s ++ “Coffee”)</i></font></font></font></p>
+<p style="font-weight: normal"><font color="#000000"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><i>Now
+we want to add some extra components to our coffee pot. The
+components are inside the pot, to which we want to add extra Milk ,
+Sugar using functions like</i></font></font></font></p>
+<p style="font-weight: normal"><font color="#000000"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><i>addMilk,
+addSugar. Notice that these functions accept string, but will give
+out the coffee pot. Then the coffee pot can be passed to the next
+function!  </i><span style="font-style: normal">So in fact what we
+are doing is Coffee Pot with Stuff `shove` to milk function `shove`
+to sugar function. The `shove` operator is called Bind in haskell or
+(&gt;&gt;=) and it does exactly what we need, except that we need to
+write the definition. It's pretty simple if you understand above
+logic.</span></font></font></font></p>
+<p style="font-weight: normal"><font color="#000000"><font face="Chalkduster"><font size="4" style="font-size: 14pt"><i>Coffee
+ma &gt;&gt;= f = Coffee (\s -&gt; let oldcoffee = ma s</i></font></font></font></p>
+<p style="font-weight: normal"><font color="#000000"><font face="Chalkduster"><font size="4" style="font-size: 14pt"><i>Coffee
+newcoffee = f oldcoffee</i></font></font></font></p>
+<p style="font-weight: normal"><font color="#000000"><font face="Chalkduster"><font size="4" style="font-size: 14pt"><i>in
+(newcoffee s))</i></font></font></font></p>
+<p style="font-weight: normal"><font color="#000000"><font face="Chalkduster"><font size="4" style="font-size: 14pt"><i>let
+oldcoffee = ma s ===&gt; This just unwraps the coffee pot and gets
+the content.</i></font></font></font></p>
+<p style="font-weight: normal"><font color="#000000"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><i>We
+apply function “f” or milk etc to the oldcoffee contents and we
+get a new pot which is Coffee newcoffee</i></font></font></font></p>
+<p><font face="Andale Mono"><font size="4" style="font-size: 14pt"><font color="#000000"><i><span style="font-weight: normal">finally
+we return a pot containing the newcoffee, to pass around. </span></i></font></font></font>
+</p>
+<p style="font-weight: normal"><font color="#000000"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><i>Did
+you understand monads? If not do add comments for improvements! Hope
+this helps</i></font></font></font></p>
+<p><br/>
+<br/>
+
+</p>
+<div id="disqus_thread" dir="ltr">
+	<p><br/>
+<br/>
+
+	</p>
+</div>
+<p><script>
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'coffee.coffeequant.com';
+    var disqus_identifier = 9873;
+		var disqus_title = 'monadexample';
+    var disqus_url = 'http://localhost:8080/statics/WriteUps/MonadExample.html';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+</script><noscript><font size="4" style="font-size: 14pt">Please
+enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments
+powered by Disqus.</a></noscript> 
+<script>
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'coffeequant';
+    var disqus_identifier = 9873;
+		var disqus_title = 'monadexample';
+    var disqus_url = 'http://localhost:8080/statics/WriteUps/MonadExample.html';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+
+</script>
+</font></p>
+</body>
+</html>

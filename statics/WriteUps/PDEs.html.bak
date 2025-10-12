@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
+        "statics/WriteUps/HTMLFiles/xhtml-math11-f.dtd">
+
+<!-- Created with the Wolfram Language for Students - Personal Use Only : www.wolfram.com -->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ <title>
+  PDEs (the Wolfram Language for Students - Personal Use Only : www.wolfram.com)
+ </title>
+ <link href="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<p class="Section">
+ PDE&rsquo;s in Quant Finance
+</p>
+
+
+
+<p class="Text">
+ Many of the exotic options can be priced by simple PDE. A modified form of heat equation is black scholes PDE. The advantage of solving a PDE is easy visual analysis of various scenarios and edge cases. We consider the following PDE<br /><span><span><img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_1.png" alt="PDEs_1.png" width="647" height="78" style="vertical-align:middle" /></span></span>
+</p>
+
+
+
+<p class="Text">
+ Let&rsquo;s start with a simple boundary condition and then move on to complicated scenarios like autocallables. The simplest is a call option, where we consider the following params<br />1. Spot = 100, Strike = 100<br />2. Expiry = 1 Year<br />3. Volatility = 20%<br />So denoting T = 1 year<br />V[S,T] = Max(Spot - Strike, 0)<br />V[1000,t] = 1000 - Strike<br />V[0,t] = 0<br />Let&rsquo;s use NDSolve to price this option with above boundary conditions.
+</p>
+
+
+
+<p class="Text">
+ K=100;<br />
+</p>
+
+
+
+<p class="Text">
+ calloption = NDSolveValue[{D[V[S,t],t]+r*S*D[V[S,t],S]+1/2 sigma^2 S^2 D[V[S,t],{S,2}]-r V[S,t]==0,bc1,bc2,bc3},V,{S,0,500},{t,0,1},PrecisionGoal&rarr;10]&#8232;
+</p>
+
+
+
+<p class="Output">
+ <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_2.gif" alt="PDEs_2.gif" width="393" height="55" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_3.png" alt="PDEs_3.png" width="997" height="51" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_4.gif" alt="PDEs_4.gif" width="434" height="230" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ There is hardly any difference in analytical solution and PDE solution, but things are not so simple if we move to binary option. This has discontinuity and same feature is repeated in autocallables. To solve these scenarios we need a mesh. Let me first demonstrate the problem in case of binary options<br />
+</p>
+
+
+
+<p class="Text">
+ expiry = 1.0;
+</p>
+
+
+
+<p class="Text">
+ r = 0.0;<br />sigma = 0.20;<br />K=100;&#8232;
+</p>
+
+
+
+<p class="Text">
+ binarycall = NDSolveValue[{D[V[S,t],t]+r*S*D[V[S,t],S]+1/2 sigma^2 S^2 D[V[S,t],{S,2}]- r V[S,t]==0,DirichletCondition[V[S,t]==1,(S&ge; 100 &amp;&amp; t == expiry)],DirichletCondition[V[S,t]==0,( S&lt; 100 &amp;&amp; t==expiry)]},V,{S,60,120},{t,0,1.0}]
+</p>
+
+
+
+<p class="Output">
+ <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_5.gif" alt="PDEs_5.gif" width="367" height="49" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ Plot[{binarycall[S,0],<span><span><img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_6.png" alt="PDEs_6.png" width="455" height="51" style="vertical-align:middle" /></span></span>},{S,90,110},PlotTheme-&gt;&rdquo;Detailed&rdquo;]&#8232;
+</p>
+
+
+
+<p class="Output">
+ <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_7.gif" alt="PDEs_7.gif" width="680" height="224" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ As you can see there is a discontinuity, but thats not the worst part, it&rsquo;s very different from exact solution. I can try adjusting the solution space from S - (60,120) to a more finer space but again this tweaking won&rsquo;t get better results. It&rsquo;s not good to always adjust the boundaries of the solution for a specific problem. What we do is adjust the mesh. What&rsquo;s a mesh?<br />
+</p>
+
+
+
+<p class="Text">
+ &lt;&lt;NDSolve`FEM`<br />ToElementMesh[FullRegion[2],{{0,5},{0,1}}]
+</p>
+
+
+
+<p class="Output">
+ <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_8.png" alt="PDEs_8.png" width="378" height="13" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ %[&quot;Wireframe&quot;]&#8232;
+</p>
+
+
+
+<p class="Output">
+ <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_9.gif" alt="PDEs_9.gif" width="360" height="84" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ Since the discontinuity is around 100 we need a finer grid around that region. We can also make the mesh finer in the whole region and solve the pde only from 80 to 120. In this case let&rsquo;s just make a finer mesh and see if it improves our solution.<br />
+</p>
+
+
+
+<p class="Text">
+ <br />&omega; = ImplicitRegion[True,{{S,60,130},{t,0,expiry}}]
+</p>
+
+
+
+<p class="Output">
+ <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_10.png" alt="PDEs_10.png" width="316" height="14" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_11.png" alt="PDEs_11.png" width="441" height="13" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_12.png" alt="PDEs_12.png" width="453" height="14" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_13.png" alt="PDEs_13.png" width="1065" height="62" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_14.gif" alt="PDEs_14.gif" width="367" height="49" style="vertical-align:middle" />
+</p>
+
+<p class="Input">
+ <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_15.png" alt="PDEs_15.png" width="947" height="50" style="vertical-align:middle" />
+</p>
+
+<p class="Output">
+ <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_16.gif" alt="PDEs_16.gif" width="696" height="224" style="vertical-align:middle" />
+</p>
+
+<p class="Text">
+ Will take up autocallables in the next post. It&rsquo;s just a simple variation of above method.
+</p>
+
+
+
+<p class="Text">
+ If you want greeks, then once you have the solution here&rsquo;s an easy way to analyze them<br />
+</p>
+
+
+
+<p class="Text">
+ delta = D[barriersolution[S,t],S];<br />gamma = D[delta,S];<br />Plot3D[{delta},{S,97,105},{t,0,0.01},ColorFunction&rarr;&quot;TemperatureMap&quot;]
+</p>
+
+<p class="Output">
+ <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_17.gif" alt="PDEs_17.gif" width="360" height="247" style="vertical-align:middle" />
+</p>
+
+<div style="font-family:Helvetica; font-size:11px; width:100%; border:1px none #999999; border-top-style:solid; padding-top:2px; margin-top:20px;">
+ <a href="http://www.wolfram.com/language/" style="color:#000; text-decoration:none;">
+  <span style="color:#555555">Created with the Wolfram Language</span>
+ </a>
+</div>
+</body>
+
+</html>

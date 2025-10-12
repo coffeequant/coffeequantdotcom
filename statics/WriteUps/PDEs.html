@@ -1,190 +1,227 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN"
-        "statics/WriteUps/HTMLFiles/xhtml-math11-f.dtd">
-
-<!-- Created with the Wolfram Language for Students - Personal Use Only : www.wolfram.com -->
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!doctype html>
+<html lang="en">
 <head>
- <title>
-  PDEs (the Wolfram Language for Students - Personal Use Only : www.wolfram.com)
- </title>
- <link href="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs.css" rel="stylesheet" type="text/css" />
+  <meta charset="utf-8" />
+  <title>Old Lehman Story — 30-year Swap Spreads & the Non-Inversion Note</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- MathJax loads globally in index.html -->
+
+  <style>
+    .cq-article{max-width:920px;margin:0 auto;padding:1rem 1.25rem 2rem;line-height:1.6;color:inherit}
+    h1{font-size:1.9rem;margin:.2rem 0 .6rem;letter-spacing:-.01em}
+    h2{font-size:1.25rem;margin:1.2rem 0 .5rem}
+    .muted{opacity:.78}
+    .pill{display:inline-block;border:1px solid color-mix(in oklab,currentColor 30%,transparent);
+      border-radius:999px;padding:.15rem .6rem;font-size:.8rem;opacity:.9}
+    .card{background:color-mix(in oklab,currentColor 8%,transparent);
+      border:1px solid color-mix(in oklab,currentColor 24%,transparent);
+      border-radius:12px;padding:1rem}
+    .row{display:flex;gap:.75rem;flex-wrap:wrap;align-items:center}
+    .col{flex:1 1 260px}
+    .btn{background:#2563eb;color:#fff;border:0;border-radius:8px;padding:.55rem .9rem;cursor:pointer;font-size:.95rem}
+    .btn:hover{background:#1e40af}
+    .btn-ghost{background:transparent;border:1px solid color-mix(in oklab,currentColor 30%,transparent);color:inherit}
+    .slider{width:100%}
+    canvas{width:100%;height:240px;border:1px solid color-mix(in oklab,currentColor 24%,transparent);border-radius:12px;background:transparent}
+    .small{font-size:.92rem}
+    .note{border-left:3px solid;color:inherit;border-color:color-mix(in oklab,currentColor 45%,transparent);
+      background:color-mix(in oklab,currentColor 8%,transparent);padding:.6rem .8rem;border-radius:8px}
+    details{border:1px dashed color-mix(in oklab,currentColor 30%,transparent);border-radius:10px;padding:.6rem .8rem}
+    summary{cursor:pointer;font-weight:600}
+    @media (prefers-color-scheme: dark){.btn{background:#38bdf8;color:#0b1220}.btn:hover{background:#0284c7}}
+  </style>
 </head>
 
 <body>
-
-<p class="Section">
- PDE&rsquo;s in Quant Finance
-</p>
-
-
-
-<p class="Text">
- Many of the exotic options can be priced by simple PDE. A modified form of heat equation is black scholes PDE. The advantage of solving a PDE is easy visual analysis of various scenarios and edge cases. We consider the following PDE<br /><span><span><img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_1.png" alt="PDEs_1.png" width="647" height="78" style="vertical-align:middle" /></span></span>
-</p>
-
-
-
-<p class="Text">
- Let&rsquo;s start with a simple boundary condition and then move on to complicated scenarios like autocallables. The simplest is a call option, where we consider the following params<br />1. Spot = 100, Strike = 100<br />2. Expiry = 1 Year<br />3. Volatility = 20%<br />So denoting T = 1 year<br />V[S,T] = Max(Spot - Strike, 0)<br />V[1000,t] = 1000 - Strike<br />V[0,t] = 0<br />Let&rsquo;s use NDSolve to price this option with above boundary conditions.
-</p>
-
-
-
-<p class="Text">
- K=100;<br />
-</p>
-
-
-
-<p class="Text">
- calloption = NDSolveValue[{D[V[S,t],t]+r*S*D[V[S,t],S]+1/2 sigma^2 S^2 D[V[S,t],{S,2}]-r V[S,t]==0,bc1,bc2,bc3},V,{S,0,500},{t,0,1},PrecisionGoal&rarr;10]&#8232;
-</p>
-
-
-
-<p class="Output">
- <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_2.gif" alt="PDEs_2.gif" width="393" height="55" style="vertical-align:middle" />
-</p>
-
-<p class="Text">
- <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_3.png" alt="PDEs_3.png" width="997" height="51" style="vertical-align:middle" />
-</p>
-
-<p class="Output">
- <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_4.gif" alt="PDEs_4.gif" width="434" height="230" style="vertical-align:middle" />
-</p>
-
-<p class="Text">
- There is hardly any difference in analytical solution and PDE solution, but things are not so simple if we move to binary option. This has discontinuity and same feature is repeated in autocallables. To solve these scenarios we need a mesh. Let me first demonstrate the problem in case of binary options<br />
-</p>
-
-
-
-<p class="Text">
- expiry = 1.0;
-</p>
-
-
-
-<p class="Text">
- r = 0.0;<br />sigma = 0.20;<br />K=100;&#8232;
-</p>
-
-
-
-<p class="Text">
- binarycall = NDSolveValue[{D[V[S,t],t]+r*S*D[V[S,t],S]+1/2 sigma^2 S^2 D[V[S,t],{S,2}]- r V[S,t]==0,DirichletCondition[V[S,t]==1,(S&ge; 100 &amp;&amp; t == expiry)],DirichletCondition[V[S,t]==0,( S&lt; 100 &amp;&amp; t==expiry)]},V,{S,60,120},{t,0,1.0}]
-</p>
-
-
-
-<p class="Output">
- <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_5.gif" alt="PDEs_5.gif" width="367" height="49" style="vertical-align:middle" />
-</p>
-
-<p class="Text">
- Plot[{binarycall[S,0],<span><span><img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_6.png" alt="PDEs_6.png" width="455" height="51" style="vertical-align:middle" /></span></span>},{S,90,110},PlotTheme-&gt;&rdquo;Detailed&rdquo;]&#8232;
-</p>
-
-
-
-<p class="Output">
- <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_7.gif" alt="PDEs_7.gif" width="680" height="224" style="vertical-align:middle" />
-</p>
-
-<p class="Text">
- As you can see there is a discontinuity, but thats not the worst part, it&rsquo;s very different from exact solution. I can try adjusting the solution space from S - (60,120) to a more finer space but again this tweaking won&rsquo;t get better results. It&rsquo;s not good to always adjust the boundaries of the solution for a specific problem. What we do is adjust the mesh. What&rsquo;s a mesh?<br />
-</p>
-
-
-
-<p class="Text">
- &lt;&lt;NDSolve`FEM`<br />ToElementMesh[FullRegion[2],{{0,5},{0,1}}]
-</p>
-
-
-
-<p class="Output">
- <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_8.png" alt="PDEs_8.png" width="378" height="13" style="vertical-align:middle" />
-</p>
-
-<p class="Text">
- %[&quot;Wireframe&quot;]&#8232;
-</p>
-
-
-
-<p class="Output">
- <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_9.gif" alt="PDEs_9.gif" width="360" height="84" style="vertical-align:middle" />
-</p>
-
-<p class="Text">
- Since the discontinuity is around 100 we need a finer grid around that region. We can also make the mesh finer in the whole region and solve the pde only from 80 to 120. In this case let&rsquo;s just make a finer mesh and see if it improves our solution.<br />
-</p>
-
-
-
-<p class="Text">
- <br />&omega; = ImplicitRegion[True,{{S,60,130},{t,0,expiry}}]
-</p>
-
-
-
-<p class="Output">
- <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_10.png" alt="PDEs_10.png" width="316" height="14" style="vertical-align:middle" />
-</p>
-
-<p class="Input">
- <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_11.png" alt="PDEs_11.png" width="441" height="13" style="vertical-align:middle" />
-</p>
-
-<p class="Output">
- <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_12.png" alt="PDEs_12.png" width="453" height="14" style="vertical-align:middle" />
-</p>
-
-<p class="Input">
- <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_13.png" alt="PDEs_13.png" width="1065" height="62" style="vertical-align:middle" />
-</p>
-
-<p class="Output">
- <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_14.gif" alt="PDEs_14.gif" width="367" height="49" style="vertical-align:middle" />
-</p>
-
-<p class="Input">
- <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_15.png" alt="PDEs_15.png" width="947" height="50" style="vertical-align:middle" />
-</p>
-
-<p class="Output">
- <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_16.gif" alt="PDEs_16.gif" width="696" height="224" style="vertical-align:middle" />
-</p>
-
-<p class="Text">
- Will take up autocallables in the next post. It&rsquo;s just a simple variation of above method.
-</p>
-
-
-
-<p class="Text">
- If you want greeks, then once you have the solution here&rsquo;s an easy way to analyze them<br />
-</p>
-
-
-
-<p class="Text">
- delta = D[barriersolution[S,t],S];<br />gamma = D[delta,S];<br />Plot3D[{delta},{S,97,105},{t,0,0.01},ColorFunction&rarr;&quot;TemperatureMap&quot;]
-</p>
-
-<p class="Output">
- <img src="http://coffee.coffeequant.com/statics/WriteUps/statics/WriteUps/HTMLFiles/PDEs_17.gif" alt="PDEs_17.gif" width="360" height="247" style="vertical-align:middle" />
-</p>
-
-<div style="font-family:Helvetica; font-size:11px; width:100%; border:1px none #999999; border-top-style:solid; padding-top:2px; margin-top:20px;">
- <a href="http://www.wolfram.com/language/" style="color:#000; text-decoration:none;">
-  <span style="color:#555555">Created with the Wolfram Language</span>
- </a>
-</div>
+  <article id="cq-article" class="cq-article">
+    <header class="row" style="justify-content:space-between">
+      <div>
+        <h1>Old Lehman Story — 30-year Swap Spreads and the Non-Inversion Note</h1>
+        <div class="muted small">by <strong>Animesh Saxena</strong> — Head of Equity Pricing | Structured Products Asia</div>
+        <div class="muted small">March 5 2019</div>
+      </div>
+      <span class="pill">Rates • Curve • Options</span>
+    </header>
+
+    <p class="muted">
+      Back then, <strong>non-inversion notes</strong> — essentially digital puts on the 30y–10y curve —
+      were sold when everything looked stable and steep.  
+      When stress hit, they flipped in-the-money, hedging turned <em>short-gamma</em>,
+      and the flows themselves pushed swap spreads negative.
+      Let’s play with a simple model before we unpack the logic.
+    </p>
+
+    <!-- PLAYGROUND -->
+    <section class="card">
+      <h2>Playground — watch how hedging and flows move the curve</h2>
+      <div class="row">
+        <div class="col">
+          <label>Initial spread S₀: <span id="sOut">+60</span> bps</label>
+          <input id="s0" class="slider" type="range" min="-50" max="120" step="5" value="60" oninput="updUI()"/>
+        </div>
+        <div class="col">
+          <label>Noise per step: <span id="volOut">6</span> bps</label>
+          <input id="vol" class="slider" type="range" min="0" max="20" step="1" value="6" oninput="updUI()"/>
+        </div>
+        <div class="col">
+          <label>Replacement-flow strength: <span id="flowOut">1.0</span></label>
+          <input id="flow" class="slider" type="range" min="0" max="2" step="0.1" value="1.0" oninput="updUI()"/>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:.5rem">
+        <div class="col">
+          <label>Steps: <span id="stepsOut">120</span></label>
+          <input id="steps" class="slider" type="range" min="40" max="300" step="10" value="120" oninput="updUI()"/>
+        </div>
+        <div class="col">
+          <label>Hedging mode: <span id="modeOut">auto (digital put)</span></label>
+          <select id="mode" class="slider" onchange="updUI()">
+            <option value="auto" selected>auto (digital put on spread, K = 0)</option>
+            <option value="longGamma">force long-gamma hedging</option>
+            <option value="shortGamma">force short-gamma hedging</option>
+            <option value="off">no hedging</option>
+          </select>
+        </div>
+        <div class="col">
+          <button class="btn" onclick="runPath()">▶ Run path</button>
+          <button class="btn btn-ghost" onclick="resetChart()">Clear</button>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:.6rem">
+        <div class="col"><canvas id="chart"></canvas></div>
+        <div class="col">
+          <div class="note small">
+            <strong>Interpretation</strong><br>
+            • Spread S = 30y – 10y in bps.<br>
+            • When S ≫ 0 (OTM digital put): hedging is long-gamma → buy low / sell high → stabilizes.<br>
+            • Near 0 or below 0 (ITM): hedging turns short-gamma → sell low / buy high → amplifies inversion.<br>
+            • Replacement flows (receive 30y / pay 10y) push S down when stress rises.
+          </div>
+          <p id="readout" class="small muted" style="margin-top:.5rem"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- STORY -->
+    <h2>How it happened (in plain English)</h2>
+    <ul>
+      <li><strong>Non-inversion note</strong>: pays if the curve does not invert — a digital put on spread S with strike 0.</li>
+      <li><strong>Sold when steep</strong>: curve was steep → put looked cheap → dealers were long these floors → long-gamma.</li>
+      <li><strong>Then stress</strong>: S fell → options ITM → hedges flipped short-gamma → selling spreads accelerated the drop.</li>
+      <li><strong>Replacement trades</strong>: pension funds re-entered as receivers (30y) and payers (10y) → extra downward pressure on S.</li>
+      <li><strong>Result</strong>: swap spreads went negative (~ –60 bps). Many tried to fade it; few succeeded.</li>
+    </ul>
+
+    <!-- DERIVATION -->
+    <details id="mathBox" style="margin-top:1rem">
+      <summary>Show the math (brief and friendly)</summary>
+      <div style="margin-top:.5rem">
+        <h2>1 — Non-Inversion Note as a digital put on the curve</h2>
+        <p>
+          Let \(S = R_{30y} - R_{10y}\).  
+          Payoff of a “non-inversion note”:
+          \[
+            \text{Payoff} = \mathbf{1}\{S \le 0\}.
+          \]
+        </p>
+
+        <h2>2 — Gamma intuition</h2>
+        <p>
+          • Long binary put → long gamma when OTM → buy low / sell high.  
+          • Once ITM → short gamma → sell low / buy high.  
+          This sign flip around S ≈ 0 creates positive feedback as the curve flattens.
+        </p>
+
+        <h2>3 — Hedging direction rules</h2>
+        <p>
+          To <em>sell spread</em>: receive 30y, pay 10y.  
+          To <em>buy spread</em>: pay 30y, receive 10y.
+        </p>
+        <ul>
+          <li>Long-gamma hedger (flattening curve) → <em>buy spread</em> → stabilizes.</li>
+          <li>Short-gamma hedger (flattening curve) → <em>sell spread</em> → accelerates inversion.</li>
+        </ul>
+
+        <h2>4 — Replacement flow effect</h2>
+        <p>
+          Pension/insurance receivers added steady “sell-spread” pressure.  
+          Combined with short-gamma hedging, that flow drove the curve deeply negative.
+        </p>
+      </div>
+    </details>
+
+    <footer class="muted small" style="margin-top:.75rem">
+      Memory lane: dealers sold curve floors in a steep world, then their own hedges helped invert the curve.
+    </footer>
+  </article>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    function updUI(){
+      $("sOut").textContent = (+$("s0").value>=0?"+":"") + $("s0").value;
+      $("volOut").textContent = $("vol").value;
+      $("flowOut").textContent = (+$("flow").value).toFixed(1);
+      $("stepsOut").textContent = $("steps").value;
+      $("modeOut").textContent = $("mode").selectedOptions[0].textContent;
+    }
+    updUI();
+
+    function runPath(){
+      const S0 = +$("s0").value, vol = +$("vol").value, flow = +$("flow").value;
+      const steps = +$("steps").value, mode = $("mode").value, K = 0;
+      const S = new Float64Array(steps); S[0] = S0;
+      const flowCoef = -0.06 * flow, longG=0.18, shortG=-0.18;
+      for(let t=1;t<steps;t++){
+        let dW=(Math.random()*2-1)*vol, drift=0;
+        if(S[t-1]<30) drift+=flowCoef;
+        let hedge=0, gammaMode=mode;
+        if(gammaMode==="auto") gammaMode=(S[t-1]>20?"longGamma":"shortGamma");
+        const ref=S[Math.max(0,t-5)];
+        if(gammaMode==="longGamma") hedge=longG*(ref-S[t-1]);
+        else if(gammaMode==="shortGamma") hedge=shortG*(ref-S[t-1]);
+        S[t]=S[t-1]+dW+drift+hedge;
+      }
+      drawChart(S,K); 
+      $("readout").innerHTML=`Last spread: <strong>${S[S.length-1].toFixed(1)} bps</strong>`;
+    }
+
+    function resetChart(){
+      const c=$("chart"),ctx=c.getContext("2d");
+      ctx.clearRect(0,0,c.width,c.height);
+      $("readout").textContent="";
+    }
+
+    function drawChart(path,K){
+      const c=$("chart"),ctx=c.getContext("2d");
+      const W=c.width=c.clientWidth*devicePixelRatio,H=c.height=240*devicePixelRatio;
+      ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+      ctx.clearRect(0,0,c.width,c.height);
+      const left=36,top=14,bottom=26,right=10;
+      const w=c.clientWidth-left-right,h=240-top-bottom;
+      const minS=Math.min(...path,K)-10,maxS=Math.max(...path,K)+10;
+      const y=s=>top+h*(1-(s-minS)/(maxS-minS));
+      const x=i=>left+i*(w/(path.length-1));
+      ctx.strokeStyle=getComputedStyle(document.body).color;
+      ctx.globalAlpha=.3;
+      ctx.beginPath();ctx.moveTo(left,top);ctx.lineTo(left,top+h);ctx.lineTo(left+w,top+h);ctx.stroke();
+      ctx.globalAlpha=1;
+      ctx.beginPath();ctx.setLineDash([4,4]);ctx.moveTo(left,y(K));ctx.lineTo(left+w,y(K));ctx.stroke();ctx.setLineDash([]);
+      ctx.beginPath();ctx.lineWidth=2;ctx.moveTo(x(0),y(path[0]));
+      for(let i=1;i<path.length;i++)ctx.lineTo(x(i),y(path[i]));
+      ctx.stroke();
+      ctx.fillText("time →",left+w-40,top+h+18);
+      ctx.fillText("bps",left-28,top+10);
+      ctx.fillText("K = 0",left+6,y(K)-6);
+    }
+
+    // MathJax re-typeset when user opens formulas
+    const mathBox=document.getElementById("mathBox");
+    if(mathBox){mathBox.addEventListener("toggle",()=>{
+      if(mathBox.open&&window.MathJax&&MathJax.typesetPromise){MathJax.typesetPromise([mathBox]).catch(()=>{});}
+    });}
+  </script>
 </body>
-
 </html>
+

@@ -1,0 +1,410 @@
+
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+	<style type="text/css">
+
+html,body
+{
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+}
+
+	</style>
+        <style type="text/css">
+            @import "http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojox/grid/resources/tundraGrid.css";
+            @import "https://coffeequant.appspot.com/statics/statics/dojor/dijit/themes/tundra/tundra.css";
+            .dojoxGrid table { margin: 0; } html
+						body {
+						  background-image: url("https://coffeequant.appspot.com/statics/static/images/background.png");
+							overflow-x:hidden;
+
+						}
+
+
+
+        </style>
+		<meta charset="utf-8">
+		<title>Coffee Quant</title>
+
+		<!-- load dojo and provide config via data attribute -->
+		<script src="dojo.xd.js"
+				djConfig="parseOnLoad: true">
+		</script>
+		<script>
+
+
+	function formatSGrid(value)
+	{
+		if(dojo.number.format(value) == null)
+			return value;
+		var a = parseFloat(eval(value));
+		return a.toFixed(3);
+
+
+	}
+
+	function formatGrid(value)
+	{
+		if(dojo.number.format(value) == null)
+			return value;
+		var a = parseFloat(eval(value));
+		return a.toFixed(4);
+
+	}
+
+	function pressed(){
+	            //The parameters to pass to xhrPost, the message, and the url to send it to
+                    //Also, how to handle the return and callbacks.
+		    dojo.byId('loadingMessage').hidden=false;
+		    dojo.byId('gridContainer4').hidden=true;
+                    var xhrArgs = {
+                        form: dojo.byId("pricer"),
+                        handleAs: "text",
+                        load: function(datalis3t) {
+				//data_list is taken from perl script....
+//datalist = [{ Stock: 'normal', OP: false, Delta: 'new', Gamma: 'But are not followed by two hexadecimal', Theta: 29.91 },{ Stock: 'normal', OP: false,
+//Delta: 'new', Gamma: 'But are not followed by two hexadecimal', Theta: 29.91 }];
+dojo.byId('loadingMessage').hidden=true;
+dojo.byId('gridContainer4').hidden=false;
+
+datalist = eval(datalis3t);//[{ Stock: 'normal', OP: false, Delta: 'new', Gamma: 'But are not followed by two hexadecimal', Theta: 29.91 },{ Stock: 'normal', OP: false, Delta: 'new', Gamma: 'But are not followed by two hexadecimal', Theta: 29.91 }];
+
+			//assume it's there...now proceed
+			var data = {
+			identifier: 'id',
+			label: 'Stock',
+			items: []
+			};
+
+			//cleanup
+			var node = dojo.byId("gridContainer4");
+			while (node.hasChildNodes()) {
+			    node.removeChild(node.lastChild);
+			}
+
+
+
+			var rows = datalist.length;
+			for(var i=0, l=datalist.length; i<rows; i++){
+				data.items.push(dojo.mixin({ id: i }, datalist[i%l]));
+			}
+			var store4 = new dojo.data.ItemFileWriteStore({data: data});
+
+	                // set the layout structure:
+			var layout4 = [
+				[
+					{ name: 'Row', field: 'id'},
+					{ name: 'Stock Price', field: 'Stock',formatter: formatSGrid },
+					{ name: 'Option Price																														 ', field: 'OP',formatter: formatSGrid },
+					{ name: 'Delta', field: 'BestCase',formatter: formatSGrid },
+					{ name: 'Gamma', field: 'WorstCase',formatter: formatSGrid }
+				]
+			];
+			// create a fucking new grid:
+		        var grid4 = new dojox.grid.DataGrid({
+		            query: {
+		                id: '*'
+		            },
+		            store: store4,
+		            clientSort: true,
+		            rowSelector: '20px',
+		            structure: layout4
+		        },
+		        document.createElement('div'));
+
+		        // append the new grid to the div "gridContainer4":
+		        dojo.byId("gridContainer4").appendChild(grid4.domNode);
+
+		        // Call startup, in order to render the grid:
+		        grid4.startup();
+                        },
+                        error: function(error) {
+                            //We'll 404 in the demo, but that's okay.  We don't have a 'postIt' service on the
+                            //docs server.
+                            alert(error);
+                        }
+                    }
+                    //Call the asynchronous xhrPost
+                    var deferred = dojo.xhrPost(xhrArgs);
+                    pressed1();
+
+	}
+
+	function pressed1(){
+	            //The parameters to pass to xhrPost, the message, and the url to send it to
+                    //Also, how to handle the return and callbacks.
+		    dojo.byId('loadingMessage').hidden=false;
+		    dojo.byId('graphContainer9').hidden=true;
+
+                    var xhrArgs = {
+			url: '/rangeaccuralgraph',
+                        form: dojo.byId("pricer"),
+                        handleAs: "text",
+                        load: function(datalis3t) {
+		    dojo.byId('loadingMessage').hidden=true;
+		    dojo.byId('graphContainer9').hidden=false;
+
+datalist = eval(datalis3t);
+
+
+			//assume it's there...now proceed
+			var data = {
+			identifier: 'id',
+			label: 'Stock',
+			items: []
+			};
+
+
+			//cleanup
+			var node = dojo.byId("graphContainer9");
+			while (node.hasChildNodes()) {
+			    node.removeChild(node.lastChild);
+			}
+
+        var s1 = dojo.byId('graphsetting').value;
+        var graphchild = dojo.create(s1);
+        var newname = "default"+s1;
+
+
+        var chart1 = new dojox.charting.Chart2D(graphchild,{title:s1});
+        chart1.addPlot(newname, {
+            type: "Lines",
+            markers:true,
+            tension: 'S'
+        });
+
+       // setTheme(dojox.charting.themes.ThreeD);
+
+        chart1.addAxis("x");
+        chart1.addAxis("y", {
+            vertical: true
+        });
+        chart1.addSeries("Series 1", datalist);
+       // chart1.addSeries("Series 2", [2,3,5,1]);
+
+        var anim1a = new dojox.charting.action2d.Magnify(chart1, newname);
+        var anim1b = new dojox.charting.action2d.Tooltip(chart1, newname);
+
+
+
+
+        chart1.style="overflow:auto";
+
+        chart1.render();
+        node.insertBefore(graphchild,node.firstChild);
+
+
+                    }
+           }
+                    //Call the asynchronous xhrPost
+                    var deferred = dojo.xhrPost(xhrArgs);
+
+	}
+
+
+
+	dojo.require("dijit.form.CheckBox");
+	dojo.require("dijit.form.NumberTextBox");
+	dojo.require("dijit.form.ValidationTextBox");
+        dojo.require("dijit.form.ComboBox");
+        dojo.require("dojox.widget.FisheyeList");
+	dojo.require("dojox.widget.Roller");
+	dojo.require("dojox.form.RangeSlider");
+	dojo.require("dijit.form.Button");
+	dojo.require("dojox.grid.DataGrid");
+        dojo.require("dojo.data.ItemFileWriteStore");
+	dojo.require("dijit.layout.TabContainer");
+        dojo.require("dijit.layout.ContentPane");
+    dojo.require('dojox.charting.widget.Chart2D');
+    dojo.require('dojox.charting.themes.ThreeD');
+    dojo.require("dojox.charting.action2d.Magnify");
+    dojo.require("dojox.charting.themes.PlotKit.blue");
+
+
+	</script>
+
+	</head>
+	<body class="tundra">
+
+
+<form id="pricer" action="https://coffeequant.appspot.com/rangeaccural">
+<table width="90%" border="0" cellspacing="0" cellpadding="5">
+<tr>
+<TD>
+<table width=40%><TR><TD width=50% height=35%>
+<div style="width: 455px; height: 250px">
+            <div dojoType="dijit.layout.TabContainer" style="width: 555px; height: 400px;" >
+                <div dojoType="dijit.layout.ContentPane" title="Range Accrual Pricer" selected="true" style="background-color:white;">
+		Coding: This prices the range accrual using a finite difference framework. Grid has been set to a constant size, to avoid stability problems. The same pricer checks for gamma issues near the barriers and thus the worst case price can be much more than that reported by monte carlo pricer. It's not so simple to hedge using barrier shifting trick coz now we have a range or 2 double barriers.
+
+			<br/><br/>
+It's a simple product and is loved by investors in slow market scenarios. If market is range bound or some stock is rangebound rather than betting on direction they bet on some specified range. Coupons are moderate and it is a product for mildly risky investor. For traders trading this, the story is not so simple due to delta/gamma scenarios. If it becomes a one day digital then delta can be dangerously high!
+
+If you check the worst case price at the barriers they are very much apart from normal prices. This worst case price has been arrived at by taking sign change of gamma into account. So it always assumes that volatility changes between min and max (as given by the slider control). So depending on the sign of gamma we choose the min or max volatility. This allows us to use the worst case gamma pnl at each step in computing the grid. Grid computation is done using an implicit method, which involves solving a matrix set of equations.
+
+			<br/><br/>
+
+<br/>
+			There are many variations possible to this simple structure and one of them is priced by this finite difference pricer (written in python).
+			<br/><br/>
+		</div>
+		<div dojoType="dijit.layout.ContentPane" title="Mathematical Details" selected="true" style="background-color:white;">
+			<br/><br/>
+			I have used only the normal black scholes equation with some boundary conditions. Since you get a grid of prices it's easy to calculate delta, gamma greeks. Numerical greeks are more stable than monte carlo greeks.
+			<br/><br/>
+
+It's possible to do a worst case analysis since gamma will change sign near the barrier. Barrier shifting is not possible for this structure, and am not sure if breaking it into digitals and pricing it is such a good idea!
+
+		</div>
+	    </div>
+	</div>
+</TD></TR></table>
+</TD>
+
+<td width="300px">
+	<table width="300px" border="0" cellspacing="0" cellpadding="1">
+	<TR><TD width=100px>
+	Stock Price </TD><TD>
+	<input name="stockPrice" value="100.0" dojoType="dijit.form.NumberTextBox"
+		trim="true" id="stockPrice" style="width:80px;"/>
+	</TD><TD>
+
+
+	</TD>
+
+	</TR>
+	<TR><TD>
+	Time to Maturity (Years) &nbsp;&nbsp;&nbsp;</TD><TD><input type="text" name="mat" id="mat" value="1" dojoType="dijit.form.NumberTextBox" style="width:50px;"
+		trim="true" />
+
+	</TD></TR>
+	<TR><TD>
+	Interest Rate &nbsp;&nbsp;&nbsp;</TD><TD><input type="text" name="intRate" id="intRate" value="0.07" dojoType="dijit.form.NumberTextBox" style="width:50px;"
+		trim="true" />
+
+	</TD></TR>
+
+
+	<TR><TD>
+	Coupon (per Day Annualized) (Amount, In Cash) ;&nbsp;</TD><TD><input type="text" name="coupon1" id="coupon1" value="27" dojoType="dijit.form.NumberTextBox" style="width:100px;"
+		trim="true" />
+
+	</TD></TR>
+
+		<TR><TD>
+	Min Barrier ;&nbsp;</TD><TD><input type="text" name="minstock" id="minstock" value="90" dojoType="dijit.form.NumberTextBox" style="width:50px;"
+		trim="true" />
+
+	</TD></TR>
+
+		<TR><TD>
+	Max Barrier ;&nbsp;</TD><TD><input type="text" name="maxstock" id="maxstock" value="105" dojoType="dijit.form.NumberTextBox" style="width:50px;"
+		trim="true" />
+
+	</TD></TR>
+
+
+
+	<TR><TD>
+
+	Volatility (Min,Max)</li><br/></TD><TD><br/><br/>
+	<div id="rangeSlider" dojoType="dojox.form.HorizontalRangeSlider" value="0.1,0.30"
+		minimum="0" maximum="1.0" intermediateChanges="true" showButtons="false"
+		style="width:300px;">
+		<script type="dojo/method" event="onChange" args="value">
+			var a = String(value);
+			var numbers = a.split(',');
+			var n1 = parseFloat(numbers[0]).toFixed(2);
+			var n2 = parseFloat(numbers[1]).toFixed(2);
+
+			dojo.byId("sliderValue").value = n1.concat(',',n2);
+		</script>
+		</div>
+		<p>
+		<input type="text" value="0.20,0.25" id="sliderValue" readonly="false" name="volminmax" />
+		</p>
+	<p>
+	</TD></TR>
+	<TR><TD><strong>
+	---- Grid Settings ----</strong></TD></TR><TD>
+	Number of Spot Steps:
+	</TD>
+	<TD>
+	<input type='text' id='spotsteps' name='spotsteps' readonly="true" locked="true" value='200' dojoType="dijit.form.NumberTextBox" style="width:50px;"/>
+	</TD></TR>
+	<TR><TD>	Step Size: </TD><TD>
+	<input type='text' id='stepsetting' name='stepsetting' value='1' readonly="true" locked="true" dojoType="dijit.form.NumberTextBox" style="width:50px;"/></strong></TD></TR>
+
+
+<TR><TD>
+<br/>
+Graph Setting:
+<select dojoType="dijit.form.ComboBox" id="graphsetting" name="graphsetting">
+    <option selected>
+        Price
+    </option>
+    <option>
+        Delta
+    </option>
+    <option>
+        Gamma
+    </option>
+    <option>
+        Theta
+    </option>
+        <option>
+    DeltaWStock</option>
+            <option>
+    GammaWStock</option>
+            <option>
+    ThetaWStock</option>
+
+</select>
+</TD></TR>
+
+
+	</table>
+</TD>
+</tr>
+</table></td>
+</tr>
+</table>
+</strong>
+<br/><br/><br/><br/><br/><br/>
+
+<button dojoType="dijit.form.Button" onclick="pressed" Label="Pricing" timeout="1">
+            Price It
+        </button>
+
+        <button dojoType="dijit.form.Button" onclick="pressed1" Label="RefreshGraph" timeout="1">
+            Refresh It
+        </button>
+
+        </form>
+
+
+<!--Hidden Container Activated When Prices are sent -->
+<div id="loadingMessage"><h3>Calculating.....</h3>
+</div>
+
+<div style="overflow:auto;">
+<table cellpadding="4">
+<tr>
+<td><div id="gridContainer4" style="width:600px;height:600px"></div></td>
+<td><div id="graphContainer9"  style="width:600px;height:700px"></div></td>
+
+</tr>
+
+</table>
+</div>
+
+	<style type="text/css">
+            @import url('https://coffeequant.appspot.com/statics/statics/dojor/dojox/form/resources/RangeSlider.css');
+        </style>
+	<script>
+		dojo.addOnLoad(pressed);
+	</script>
+	</body>
+</html>

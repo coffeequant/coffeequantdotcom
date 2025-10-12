@@ -1,0 +1,431 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 4.4.3.2 (MacOSX)"/>
+	<meta name="created" content="00:00:00"/>
+	<meta name="changed" content="2015-06-01T15:59:40.148078000"/>
+	<meta name="created" content="00:00:00">
+	<meta name="changed" content="2015-06-01T10:09:48.073260000">
+	<meta name="created" content="2015-05-31T13:48:07.318507000">
+	<meta name="changed" content="2015-06-01T09:59:45.141158000">
+	<style type="text/css">
+		pre.cjk { font-family: "Courier New", monospace }
+		tt.cjk { font-family: "Courier New", monospace }
+	</style>
+</head>
+<body lang="en-US" dir="ltr">
+<p><font color="#800000"><u><span style="background: #ffff00"><font face="Andale Mono"><font size="5" style="font-size: 20pt">Sudoku
+Solver</span></u></font></font></font></p>
+<p><font color="#000000"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="background: transparent">Code
+comes from a very old link which has the code listed for haskell. I
+will explain the itchy components coz I came across this code few
+years back when I was a newbie in haskell. Let's start from the
+solution and try to functionally approach the problem.</span></font></font></font></p>
+<table width="301" cellpadding="4" cellspacing="0" style="page-break-inside: avoid">
+	<col width="26">
+	<col width="23">
+	<col width="30">
+	<col width="27">
+	<col width="23">
+	<col width="23">
+	<col width="23">
+	<col width="23">
+	<col width="26">
+	<tr valign="top">
+		<td width="26" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">5</font></span></font></font></p>
+		</td>
+		<td width="30" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="27" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">6</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.04in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="26" style="border: 1px double #808080; padding: 0.04in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">1</font></span></font></font></p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="26" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="30" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">4</font></span></font></font></p>
+		</td>
+		<td width="27" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">8</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">7</font></span></font></font></p>
+		</td>
+		<td width="26" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="26" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">8</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="30" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="27" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">5</font></span></font></font></p>
+		</td>
+		<td width="26" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">2</font></span></font></font></p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="26" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">2</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="30" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="27" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">5</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">7</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">3</font></span></font></font></p>
+		</td>
+		<td width="26" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="26" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="30" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="27" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="26" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="26" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">3</font></span></font></font></p>
+		</td>
+		<td width="30" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="27" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">6</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">9</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="26" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">5</font></span></font></font></p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="26" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">7</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">9</font></span></font></font></p>
+		</td>
+		<td width="30" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="27" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="26" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">8</font></span></font></font></p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="26" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">1</font></span></font></font></p>
+		</td>
+		<td width="30" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="27" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">6</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">5</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="26" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+	</tr>
+	<tr valign="top">
+		<td width="26" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">5</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="30" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="27" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">3</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+		<td width="23" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">6</font></span></font></font></p>
+		</td>
+		<td width="26" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0in; padding-bottom: 0.04in; padding-left: 0.04in; padding-right: 0.04in">
+			<p align="center"><font color="#ff3333"><font size="5" style="font-size: 20pt"><span style="background: #ffff00"><font face="Chalkduster">0</font></span></font></font></p>
+		</td>
+	</tr>
+</table>
+<p><br/>
+<br/>
+
+</p>
+<p><font color="#000000"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="background: transparent">Above
+is the sudoku which we need to solve. The input format is very simple
+and I have dumped this in the file “sudoku.txt”.</span></font></font></font></p>
+<p><font color="#ff3333"><font face="Al Bayan"><font size="3" style="font-size: 12pt"><span style="background: transparent">s
+&lt;- readFile &quot;sudoku.txt&quot;</span></font></font></font></p>
+<p><font color="#ff3333"><font face="Al Bayan"><font size="3" style="font-size: 12pt"><span style="background: transparent">&quot;0
+5 0 0 6 0 0 0 1\n0 0 4 8 0 0 0 7 0\n8 0 0 0 0 0 0 5 2\n2 0 0 0 5 7 0
+3 0\n0 0 0 0 0 0 0 0 0\n0 3 0 6 9 0 0 0 5\n7 9 0 0 0 0 0 0 8\n0 1 0 0
+0 6 5 0 0\n5 0 0 0 3 0 0 6 0\n\n&quot;</span></font></font></font></p>
+<p><font color="#000000"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="background: transparent">Our
+strategy is to first generate the possible positions and map each
+position to the actual sudoku given. We can zip the location index
+with the above input. Lastly we try to solve this in a searching
+fashion. Here are the steps in easy to read format</span></font></font></font></p>
+<p><font color="#000000"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="background: transparent">1.
+Generate location map as a 2D (x,y) system.</span></font></font></font></p>
+<p><font color="#000000"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="background: transparent">2.
+Zip input matrix with location map ==&gt; <font color="#ff3333"><font face="Andale Mono">zip
+[1,2,3] [(1,1),(1,2),(2,3)] = [(1,(1,1)),(2,(1,2)),(3,(2,3))]</font></font></span></font></font></font></p>
+<p><font color="#000000"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="background: transparent">3.
+Mark each of the locations with array of possible choices and
+eliminate those which are not possible</span></font></font></font></p>
+<pre class="western"><tt class="western"><span style="font-variant: normal"><font color="#ff3333"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: transparent">e x y = div (x-1) 3==div (y-1) 3</span></span></span></span></font></font></font></span></tt>
+
+<tt class="western"><span style="font-variant: normal"><font color="#000000"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: transparent">Above function checks weather its on the same row , column. So as we mark each location we check </span></span></span></span></font></font></font></span></tt>
+<tt class="western"><span style="font-variant: normal"><font color="#000000"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: transparent">using above function which choices are invalid.</span></span></span></span></font></font></font></span></tt>
+
+<tt class="western"><span style="font-variant: normal"><font color="#000000"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: transparent">4. Iterate all locations using and mark them</span></span></span></span></font></font></font></span></tt>
+
+<tt class="western"><span style="font-variant: normal"><font color="#000080"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: transparent">Let's start with step 1</span></span></span></span></font></font></font></span></tt>
+
+<tt class="western"><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: transparent">loc = [(i,j) | i ← [1..9] , j←[1..9]]</span></span></span></span></font></font></font></span></tt>
+<tt class="western"><span style="font-variant: normal"><font color="#ff3333"><span style="letter-spacing: normal"><span style="background: transparent">–</span></span></font></span></tt><tt class="western"><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: transparent">- Simple list comprehension for generating 2d array of 9x9</span></span></span></span></font></font></font></span></tt>
+
+<tt class="western"><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: transparent">[(p,n) | (p,n) ← zip loc $ map read $ lines s &gt;&gt;= words, n&gt;0]</span></span></span></span></font></font></font></span></tt>
+<tt class="western"><span style="font-variant: normal"><font color="#000080"><span style="letter-spacing: normal"><span style="background: transparent">– </span></span></font></span></tt><tt class="western"><span style="font-variant: normal"><font color="#000080"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: transparent">n&gt;0 is present to ignore all entries which are 0 in the sudoku input. So this makes a 2D array without the useless elements. </span></span></span></span></font></font></font></span></tt>
+
+<tt class="western"><span style="font-variant: normal"><font color="#000080"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: transparent">We know how to solve sudoku, we pick one element and choose the possible values it can get. Let's say the</span></span></span></span></font></font></font></span></tt>
+<tt class="western"><span style="font-variant: normal"><font color="#000080"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: transparent">values possible are </span></span></span></span></font></font></font></span></tt><tt class="western"><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: transparent">(const [1..9]). This function just ignores the next argument. </span></span></span></span></font></font></font></span></tt>
+<tt class="western"><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: transparent">So If I do (const [1..9]) (2,3) it will give [1..9].</span></span></span></span></font></font></font></span></tt>
+
+<tt class="western"><span style="font-variant: normal"><font color="#ff3333"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: transparent">So when we mark a position we use the above const function to make a decision.</span></span></span></span></font></font></font></span></tt>
+
+<tt class="western"><span style="font-variant: normal"><font color="#000080"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: transparent">mark :: ((Int,Int),Int) -&gt; ((Int,Int) -&gt; [Int])</span></span></span></span></font></font></span></tt></pre><p>
+<br/>
+<tt class="western"><span style="font-variant: normal"><font color="#000080"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: transparent">-&gt;
+(Int,Int) -&gt; [Int]</span></span></span></span></font></font></span></tt></p>
+<p><tt class="western"><span style="font-variant: normal"><font color="#000000"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: transparent">So
+in above function we have the data as this tuple ((positionx,
+positiony),value). The accumulator is a function which takes a tuple
+(x,y) and returns array of ints</span></span></span></span></font></font></font></span></tt><tt class="western"><span style="font-variant: normal"><font color="#000000"><span style="letter-spacing: normal"><span style="background: transparent">
+</span></span></font></span></tt><tt class="western"><span style="font-variant: normal"><font color="#ff3333"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><i><span style="font-weight: normal"><span style="background: #ffff66">(this
+is our const array 1..9)</span></span></i></span></font></font></font></span></tt><tt class="western"><span style="font-variant: normal"><font color="#000000"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><i><span style="font-weight: normal"><span style="background: transparent">.
+The final argument is the return value which is again a similar
+function. We are actually storing data inside the function. </span></span></i></span></font></font></font></span></tt>
+</p>
+<p><tt class="western"><span style="font-variant: normal"><font color="#000000"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><i><span style="font-weight: normal"><span style="background: transparent">Now
+that signature is a bit clearer, let's use type command to make it
+less lengthy to write.</span></span></i></span></font></font></font></span></tt></p>
+<p><tt class="western"><span style="font-variant: normal"><font color="#000000"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><i><span style="font-weight: normal"><span style="background: transparent">Type
+T = (Int,Int) → [Int]</span></span></i></span></font></font></font></span></tt></p>
+<p><tt class="western"><span style="font-variant: normal"><font color="#000000"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><i><span style="font-weight: normal"><span style="background: transparent">mark::((Int,Int),Int)
+→ T → T</span></span></i></span></font></font></font></span></tt></p>
+<pre class="western"><tt class="western"><span style="font-variant: normal"><font color="#000080"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: transparent">mark (p@(i,j),n) s q@(x,y) =</span></span></span></span></font></font></span></tt>
+<tt class="western"><span style="font-variant: normal"><font color="#000080"><span style="letter-spacing: normal">  </span></font></span></tt><tt class="western"><span style="font-variant: normal"><font color="#000080"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">if p==q then [n] else</span></span></span></font></span></tt>
+<tt class="western"><span style="font-variant: normal"><font color="#000080"><span style="letter-spacing: normal">  </span></font></span></tt><tt class="western"><span style="font-variant: normal"><font color="#000080"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">if x==i || y==j || e x i &amp;&amp; e y j then delete n $ s q else s q</span></span></span></font></span></tt>
+<tt class="western"><span style="font-variant: normal"><font color="#000080"><span style="letter-spacing: normal">  </span></font></span></tt><tt class="western"><span style="font-variant: normal"><font color="#000080"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">where e a b = div (a-1) 3==div (b-1) 3</span></span></span></font></span></tt></pre><p>
+<br/>
+<font face="Chalkduster">The return type of the function is
+T,but here we have done partial application. In haskell you can have
+a function call with incomplete arguments and it's an incomplete
+function. So “mark” is an incomplete function call which accepts
+q@(x,y). So we are making the function which carries out the checking
+but we are still waiting for the searching algo to start. The search
+will pass all possible choices and return correct valuues. Hope this
+makes sense, coz this is the most complicated part of this function.
+To understand it more clearly try this.</font></p>
+<p><font color="#ff3333"><font face="Andale Mono">:t (mark ((1,2),5)
+(const [1..9]) )</font></font></p>
+<p><font color="#ff3333"><font face="Andale Mono">(mark ((1,2),5)
+(const [1..9]) ) :: T</font></font></p>
+<p><tt class="western"><span style="font-variant: normal"><font color="#000000"><font face="Chalkduster"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: transparent">This
+makes sure that we are getting the function back. I have done partial
+application here to verify. At this point I can't print the result
+coz there's none. Missing part is to convert this array of functions
+to another array of functions, but this time with single values!</span></span></span></span></font></font></font></span></tt></p>
+<pre class="western"><tt class="western"><span style="font-variant: normal"><font color="#ff3333"><font size="3" style="font-size: 12pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: transparent">solve :: [T] -&gt; [T]</span></span></span></span></font></font></span></tt>
+<tt class="western"><span style="font-variant: normal"><font color="#ff3333"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">solve s = foldr search s loc</span></span></span></font></span></tt><tt class="western"><span style="font-variant: normal"><font color="#ff3333"><span style="letter-spacing: normal"> </span></font></span></tt><tt class="western"><span style="font-variant: normal"><font color="#ff3333"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">where</span></span></span></font></span></tt>
+<tt class="western"><span style="font-variant: normal"><font color="#ff3333"><span style="letter-spacing: normal">    </span></font></span></tt><tt class="western"><span style="font-variant: normal"><font color="#ff3333"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #ffff00">search p xs</span></span></span></span></font></span></tt><tt class="western"><span style="font-variant: normal"><font color="#ff3333"><span style="letter-spacing: normal"><span style="background: #ffff00"> </span></span></font></span></tt><tt class="western"><span style="font-variant: normal"><font color="#ff3333"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #ffff00">= [mark (p,n) s | s &lt;- xs, n &lt;- s p]</span></span></span></span></font></span></tt></pre><p>
+<font face="Chalkduster">And here's the missing part, the call to
+mark again with a tuple of Int's. This solves the sudoku but the
+result is still encoded inside functions. We need a special function
+to map these to actual print values. </font>
+</p>
+<pre class="western"><tt class="western"><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal">Rest of the code is pasted below.</span></span></span></font></font></span></tt>
+
+
+<span style="display: inline-block; border: 1px solid #c0c0c0; padding: 0.02in"><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">import List</span></span></span></span></span></font></font></font></span></tt>
+
+<span style="display: inline-block; border: 1px solid #c0c0c0; padding: 0.02in"><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">type T = (Int,Int) -&gt; [Int]</span></span></span></span></span></font></font></font></span></tt>
+
+<span style="display: inline-block; border: 1px solid #c0c0c0; padding: 0.02in"><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">main = do</span></span></span></span></span></font></font></font></span></tt>
+<span style="display: inline-block; border: 1px solid #c0c0c0; padding: 0.02in"><span style="font-variant: normal"><font color="#ff3333"><span style="letter-spacing: normal"><span style="background: #f4f4f4"><tt class="western">  </span></span></font></span></tt><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">s &lt;- getContents</span></span></span></span></span></font></font></font></span></tt>
+<span style="display: inline-block; border: 1px solid #c0c0c0; padding: 0.02in"><span style="font-variant: normal"><font color="#ff3333"><span style="letter-spacing: normal"><span style="background: #f4f4f4"><tt class="western">  </span></span></font></span></tt><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">putStr $ unlines $ map disp $ solve [input s]</span></span></span></span></span></font></font></font></span></tt>
+
+<span style="display: inline-block; border: 1px solid #c0c0c0; padding: 0.02in"><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">solve :: [T] -&gt; [T]</span></span></span></span></span></font></font></font></span></tt>
+<span style="display: inline-block; border: 1px solid #c0c0c0; padding: 0.02in"><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">solve s = foldr search s loc</span></span></span></span></font></font></font></span></tt><span style="font-variant: normal"><font color="#ff3333"><span style="letter-spacing: normal"><span style="background: #f4f4f4"><tt class="western"> </span></span></font></span></tt><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">where</span></span></span></span></span></font></font></font></span></tt>
+<span style="display: inline-block; border: 1px solid #c0c0c0; padding: 0.02in"><span style="font-variant: normal"><font color="#ff3333"><span style="letter-spacing: normal"><span style="background: #f4f4f4"><tt class="western">    </span></span></font></span></tt><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">search p xs</span></span></span></span></font></font></font></span></tt><span style="font-variant: normal"><font color="#ff3333"><span style="letter-spacing: normal"><span style="background: #f4f4f4"><tt class="western"> </span></span></font></span></tt><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">= [mark (p,n) s | s &lt;- xs, n &lt;- s p]</span></span></span></span></span></font></font></font></span></tt>
+
+<span style="display: inline-block; border: 1px solid #c0c0c0; padding: 0.02in"><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">mark :: ((Int,Int),Int) -&gt; T -&gt; T</span></span></span></span></span></font></font></font></span></tt>
+<span style="display: inline-block; border: 1px solid #c0c0c0; padding: 0.02in"><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">mark (p@(i,j),n) s q@(x,y) =</span></span></span></span></span></font></font></font></span></tt>
+<span style="display: inline-block; border: 1px solid #c0c0c0; padding: 0.02in"><span style="font-variant: normal"><font color="#ff3333"><span style="letter-spacing: normal"><span style="background: #f4f4f4"><tt class="western">  </span></span></font></span></tt><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">if p==q then [n] else</span></span></span></span></span></font></font></font></span></tt>
+<span style="display: inline-block; border: 1px solid #c0c0c0; padding: 0.02in"><span style="font-variant: normal"><font color="#ff3333"><span style="letter-spacing: normal"><span style="background: #f4f4f4"><tt class="western">  </span></span></font></span></tt><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">if x==i || y==j || e x i &amp;&amp; e y j then delete n $ s q else s q</span></span></span></span></span></font></font></font></span></tt>
+<span style="display: inline-block; border: 1px solid #c0c0c0; padding: 0.02in"><span style="font-variant: normal"><font color="#ff3333"><span style="letter-spacing: normal"><span style="background: #f4f4f4"><tt class="western">  </span></span></font></span></tt><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">where e a b = div (a-1) 3==div (b-1) 3</span></span></span></span></span></font></font></font></span></tt>
+
+<span style="display: inline-block; border: 1px solid #c0c0c0; padding: 0.02in"><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">disp :: T -&gt; String</span></span></span></span></span></font></font></font></span></tt>
+<span style="display: inline-block; border: 1px solid #c0c0c0; padding: 0.02in"><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">disp s  = unlines [unwords [show $ head $ s (i,j) | j &lt;- [1..9]] | i &lt;- [1..9]]</span></span></span></span></span></font></font></font></span></tt>
+
+<span style="display: inline-block; border: 1px solid #c0c0c0; padding: 0.02in"><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">input :: String -&gt; T</span></span></span></span></span></font></font></font></span></tt>
+<span style="display: inline-block; border: 1px solid #c0c0c0; padding: 0.02in"><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">input s = foldr mark (const [1..9]) $</span></span></span></span></span></font></font></font></span></tt>
+<span style="display: inline-block; border: 1px solid #c0c0c0; padding: 0.02in"><span style="font-variant: normal"><font color="#ff3333"><span style="letter-spacing: normal"><span style="background: #f4f4f4"><tt class="western">  </span></span></font></span></tt><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">[(p,n) | (p,n) &lt;- zip loc</span></span></span></span></font></font></font></span></tt><span style="font-variant: normal"><font color="#ff3333"><span style="letter-spacing: normal"><span style="background: #f4f4f4"><tt class="western"> </span></span></font></span></tt><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">$ map read $ lines s &gt;&gt;= words, n&gt;0]</span></span></span></span></span></font></font></font></span></tt>
+
+<span style="display: inline-block; border: 1px solid #c0c0c0; padding: 0.02in"><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">loc</span></span></span></span></font></font></font></span></tt><span style="font-variant: normal"><font color="#ff3333"><span style="letter-spacing: normal"><span style="background: #f4f4f4"><tt class="western"> </span></span></font></span></tt><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">:: [(Int,Int)]</span></span></span></span></span></font></font></font></span></tt>
+<span style="display: inline-block; border: 1px solid #c0c0c0; padding: 0.02in"><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">loc</span></span></span></span></font></font></font></span></tt><span style="font-variant: normal"><font color="#ff3333"><span style="letter-spacing: normal"><span style="background: #f4f4f4"><tt class="western"> </span></span></font></span></tt><span style="font-variant: normal"><font color="#ff3333"><font face="Andale Mono"><font size="4" style="font-size: 14pt"><span style="letter-spacing: normal"><span style="font-style: normal"><span style="font-weight: normal"><span style="background: #f4f4f4"><tt class="western">= [(i,j) | i &lt;- [1..9], j &lt;- [1..9]]</span></span></span></span></span></font></font></font></span></tt></pre><p style="margin-right: 0.58in">
+<br/>
+<br/>
+
+</p>
+</body>
+</html>

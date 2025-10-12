@@ -1,327 +1,284 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-	<title></title>
-	<meta name="generator" content="LibreOffice 4.4.2.2 (MacOSX)"/>
-	<meta name="created" content="00:00:00"/>
-	<meta name="changed" content="2015-05-23T00:00:53.866112000"/>
+  <meta charset="utf-8" />
+  <title>Dice Puzzle — Max of k Minimums from n Dice</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Load MathJax ONCE globally in index.html. No MathJax script tag here. -->
+
+  <style>
+    /* readable, theme-aware, lightweight */
+    .cq-article { max-width: 920px; margin: 0 auto; padding: 1rem 1.25rem 2rem; line-height: 1.6; color: inherit; }
+    h1 { font-size: 1.9rem; margin: .2rem 0 .6rem; letter-spacing: -.01em; }
+    h2 { font-size: 1.25rem; margin: 1.25rem 0 .5rem; }
+    .muted { opacity: .78; }
+    .card { background: color-mix(in oklab, currentColor 8%, transparent); border: 1px solid color-mix(in oklab, currentColor 24%, transparent);
+            border-radius: 12px; padding: 1rem; }
+    .row { display: flex; gap: .75rem; flex-wrap: wrap; align-items: center; }
+    .col { flex: 1 1 300px; }
+    .btn { background: #2563eb; color: #fff; border: 0; border-radius: 8px; padding: .55rem .9rem; cursor: pointer; font-size: .95rem; }
+    .btn:hover { background: #1e40af; }
+    .btn-ghost { background: transparent; border: 1px solid color-mix(in oklab, currentColor 30%, transparent); color: inherit; }
+    .slider { width: 100%; }
+    .pill { display:inline-block; border:1px solid color-mix(in oklab,currentColor 30%,transparent); border-radius:999px; padding:.15rem .6rem; font-size:.8rem; opacity:.9; }
+    .grid { display:grid; grid-template-columns: repeat(6, 34px); gap:.35rem; justify-content:start; align-items:center; }
+    .cell { width:34px; height:34px; border:1px solid color-mix(in oklab,currentColor 25%,transparent); border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:600; }
+    .min { background:#fde68a; }
+    .best { outline:2px solid #22c55e; outline-offset:2px; }
+    canvas { width:100%; height:220px; border:1px solid color-mix(in oklab,currentColor 24%,transparent); border-radius:12px; background: transparent; }
+    details { border:1px dashed color-mix(in oklab,currentColor 30%,transparent); border-radius:10px; padding:.6rem .8rem; }
+    summary { cursor: pointer; font-weight: 600; }
+    .center { text-align:center; }
+    .small { font-size: .92rem; }
+    @media (prefers-color-scheme: dark) {
+      .btn { background:#38bdf8; color:#0b1220; }
+      .btn:hover { background:#0284c7; }
+      .min { background:#78350f; }
+    }
+  </style>
 </head>
-<body lang="en-US" dir="ltr">
-<p><font face="Chalkduster"><font size="3" style="font-size: 12pt"><font color="#333399"><b>Problem
-Statement: </b></font>6 Dices tossed 6 times, and each time (or each
-set) a minimum is noted. What is expectation of maximum of these 6
-minimum values. It's a lot to take, but if we break down this puzzle,
-it's really simple. I will work out a generic solution for n dices
-tossed k times.<br/>
-<br/>
-<br/>
-Coin tossing puzzles are too simple
-sometimes, so I tried to make a puzzle with dices. Good thing with a
-simple puzzle is you can add more attributes to it to make it more
-complex, or a bit interesting. <br/>
-<font color="#ff3333"><font face="Andale Mono"><u><b>Discussion</b></u></font></font>
-<br/>
-Let's say I have 6 dices and I toss them once. I want to find
-the expectation of MINIMUM Value. This simply suggests that I need
-the following probabilities<br/>
-<br/>
-1 x P(X=1) + 2 x P(X=2) +
-..... 6 x P(X=6)<br/>
-<br/>
-X = 1 can only be obtained if in all 6
-dices I get at least one of the tosses to be 1. The hard path is to
-list out all combinations and that's where I look for the opposite
-path. P(X&gt;1) is simply 5/6, and so if in all tosses I get P(X&gt;1)
-= (5/6)^6. so P(X=1) is simply 1 - (5/6)^6.<br/>
-<br/>
-This was easy,
-now it's a bit complicated for X = 2<br/>
-If I proceed in a similar
-fashion I can get P(X &gt; 2) =&nbsp; 1 - (4/6)^6, but this includes
-the probability of P(X=1), so a simple modification is <br/>
-P(X=2) =
-1 - P(X&gt;2) - P(X=1)<br/>
-<br/>
-And so I have a simple pattern
-resulting in</font></font></p>
-<table width="162" cellpadding="2" cellspacing="0" bgcolor="#66cccc" style="page-break-before: auto; page-break-after: auto; page-break-inside: auto">
-	<col width="61">
-	<col width="91">
-	<tr valign="top">
-		<td width="61" bgcolor="#e6e6ff" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.02in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0in">
-			<p align="left"><font face="Apple Chancery"><font size="3" style="font-size: 12pt">P(X=1)</font></font></p>
-		</td>
-		<td width="91" bgcolor="#e6e6ff" style="border: 1px double #808080; padding: 0.02in">
-			<p align="left"><font face="Lucida Grande"><font size="3" style="font-size: 12pt">0.6651</font></font></p>
-		</td>
-	</tr>
-	<tr valign="top">
-		<td width="61" bgcolor="#e6e6ff" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0in">
-			<p align="left"><font face="Apple Chancery"><font size="3" style="font-size: 12pt">P(X=2)</font></font></p>
-		</td>
-		<td width="91" bgcolor="#ffffff" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0.02in">
-			<p align="left"><font face="Lucida Grande"><font size="3" style="font-size: 12pt">0.2471</font></font></p>
-		</td>
-	</tr>
-	<tr valign="top">
-		<td width="61" bgcolor="#e6e6ff" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0in">
-			<p align="left"><font face="Apple Chancery"><font size="3" style="font-size: 12pt">P(X=3)</font></font></p>
-		</td>
-		<td width="91" bgcolor="#ffffff" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0.02in">
-			<p align="left"><font face="Lucida Grande"><font size="3" style="font-size: 12pt">0.0721</font></font></p>
-		</td>
-	</tr>
-	<tr valign="top">
-		<td width="61" bgcolor="#e6e6ff" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0in">
-			<p align="left"><font face="Apple Chancery"><font size="3" style="font-size: 12pt">P(X=4)</font></font></p>
-		</td>
-		<td width="91" bgcolor="#ffffff" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0.02in">
-			<p align="left"><font face="Lucida Grande"><font size="3" style="font-size: 12pt">0.01425</font></font></p>
-		</td>
-	</tr>
-	<tr valign="top">
-		<td width="61" bgcolor="#e6e6ff" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0in">
-			<p align="left"><font face="Apple Chancery"><font size="3" style="font-size: 12pt">P(X=5)</font></font></p>
-		</td>
-		<td width="91" bgcolor="#ffffff" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0.02in">
-			<p align="left"><font face="Lucida Grande"><font size="3" style="font-size: 12pt">0.00135</font></font></p>
-		</td>
-	</tr>
-	<tr valign="top">
-		<td width="61" bgcolor="#e6e6ff" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0in">
-			<p align="left"><font face="Apple Chancery"><font size="3" style="font-size: 12pt">P(X=6)</font></font></p>
-		</td>
-		<td width="91" bgcolor="#ffffff" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0.02in">
-			<p align="left"><font face="Lucida Grande"><font size="3" style="font-size: 12pt">0.000021</font></font></p>
-		</td>
-	</tr>
-</table>
-<p><font face="Chalkduster"><font size="3" style="font-size: 12pt"><br/>
-<font color="#800000"><i>In
-each set I will take the minimum value as in the previous part. I
-will then take the maximum of these 6 minimum values. Now what is the
-expectation of this maximum value?</i></font><font color="#800000"><br/>
-</font><font color="#800000"><i>So
-another layer is added, and this can be continued for many times, but
-let's think of the second layer as of now. </i></font><br/>
-<br/>
-P(X=1)
-will simply be getting a 1 in all the minimums otherwise it won't get
-selected so it's easiest = 0.665102^6 = 0.0865.<br/>
-P(X=2) is not so
-simple, and can't be calculated by P(X&gt;2) logic, since it's a
-maximum I use P(X&lt;=2) and this time I use the probabilities
-calculated previously. <br/>
-<br/>
-P(X&lt;=2) = SUM(P(X=1) +
-P(X=2))^6<br/>
-Again this includes the case of P(X=1), so I subtract
-NOT 0.6651, but 0.0865 (calculated above)<br/>
-so P(X=2) (in this max
-case) becomes 0.48962<br/>
-<br/>
-Similarly P(X=3) becomes SUM(P(X=1)
-+ P(X=2) + P(X=3)^6&nbsp;&nbsp; - 0.48962 - 0.0865<br/>
-and we again
-have the following table<br/>
-</font></font><br/>
-<br/>
 
-</p>
-<table width="133" cellpadding="2" cellspacing="0" bgcolor="#66cccc" style="page-break-before: auto; page-break-after: auto; page-break-inside: auto">
-	<col width="61">
-	<col width="62">
-	<tr valign="top">
-		<td width="61" bgcolor="#e6e6ff" style="border-top: 1px double #808080; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0.02in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0in">
-			<p align="left" style="font-style: normal; text-decoration: none"><font color="#000000"><font face="Apple Chancery"><font size="3" style="font-size: 12pt"><b><span style="text-decoration: none">P(X=1)</span></b></font></font></font></p>
-		</td>
-		<td width="62" bgcolor="#e6e6ff" style="border: 1px double #808080; padding: 0.02in">
-			<p align="left" style="font-style: normal; text-decoration: none"><font color="#000000"><font face="Thorndale, serif"><font size="3" style="font-size: 12pt"><b><span style="text-decoration: none">0.0865</span></b></font></font></font></p>
-		</td>
-	</tr>
-	<tr valign="top">
-		<td width="61" bgcolor="#e6e6ff" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0in">
-			<p align="left" style="font-style: normal; text-decoration: none"><font color="#000000"><font face="Apple Chancery"><font size="3" style="font-size: 12pt"><b><span style="text-decoration: none">P(X=2)</span></b></font></font></font></p>
-		</td>
-		<td width="62" bgcolor="#ffffff" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0.02in">
-			<p align="left" style="font-style: normal; font-weight: normal; text-decoration: none">
-			<font color="#000000"><font face="Thorndale, serif"><font size="3" style="font-size: 12pt"><span style="text-decoration: none">0.4896</span></font></font></font></p>
-		</td>
-	</tr>
-	<tr valign="top">
-		<td width="61" bgcolor="#e6e6ff" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0in">
-			<p align="left" style="font-style: normal; text-decoration: none"><font color="#000000"><font face="Apple Chancery"><font size="3" style="font-size: 12pt"><b><span style="text-decoration: none">P(X=3)</span></b></font></font></font></p>
-		</td>
-		<td width="62" bgcolor="#ffffff" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0.02in">
-			<p align="left" style="font-style: normal; font-weight: normal; text-decoration: none">
-			<font color="#000000"><font face="Thorndale, serif"><font size="3" style="font-size: 12pt"><span style="text-decoration: none">0.3336</span></font></font></font></p>
-		</td>
-	</tr>
-	<tr valign="top">
-		<td width="61" bgcolor="#e6e6ff" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0in">
-			<p align="left" style="font-style: normal; text-decoration: none"><font color="#000000"><font face="Apple Chancery"><font size="3" style="font-size: 12pt"><b><span style="text-decoration: none">P(X=4)</span></b></font></font></font></p>
-		</td>
-		<td width="62" bgcolor="#ffffff" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0.02in">
-			<p align="left" style="font-style: normal; font-weight: normal; text-decoration: none">
-			<font color="#000000"><font face="Thorndale, serif"><font size="3" style="font-size: 12pt"><span style="text-decoration: none">0.0819</span></font></font></font></p>
-		</td>
-	</tr>
-	<tr valign="top">
-		<td width="61" bgcolor="#e6e6ff" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0in">
-			<p align="left" style="font-style: normal; text-decoration: none"><font color="#000000"><font face="Apple Chancery"><font size="3" style="font-size: 12pt"><b><span style="text-decoration: none">P(X=5)</span></b></font></font></font></p>
-		</td>
-		<td width="62" bgcolor="#ffffff" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0.02in">
-			<p align="left" style="font-style: normal; font-weight: normal; text-decoration: none">
-			<font color="#000000"><font face="Thorndale, serif"><font size="3" style="font-size: 12pt"><span style="text-decoration: none">0.00807</span></font></font></font></p>
-		</td>
-	</tr>
-	<tr valign="top">
-		<td width="61" bgcolor="#e6e6ff" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: none; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0in">
-			<p align="left" style="font-style: normal; text-decoration: none"><font color="#000000"><font face="Apple Chancery"><font size="3" style="font-size: 12pt"><b><span style="text-decoration: none">P(X=6)</span></b></font></font></font></p>
-		</td>
-		<td width="62" bgcolor="#ffffff" style="border-top: none; border-bottom: 1px double #808080; border-left: 1px double #808080; border-right: 1px double #808080; padding-top: 0in; padding-bottom: 0.02in; padding-left: 0.02in; padding-right: 0.02in">
-			<p align="left" style="font-style: normal; font-weight: normal; text-decoration: none">
-			<font color="#000000"><font face="Thorndale, serif"><font size="3" style="font-size: 12pt"><span style="text-decoration: none">0.00012</span></font></font></font></p>
-		</td>
-	</tr>
-</table>
-<p><font face="Chalkduster"><br/>
-</font><font color="#800000"><font face="Chalkduster">From
-these values if I calculate the expectation I get approx 2.435. This
-can be verified by doing a simple spreadsheet experiment. Use
-RANDBETWEEN function to generate random numbers between 1 and 6. Note
-down minimum for 6 sets. Calculate maximum. Repeat this calculation
-for another set, and do let's say 1000 sets. Sum/1000 =&gt; Approx
-2.43. So our reasoning was right, and we solved a puzzle by using
-normal kiddish arguments :)<br/>
-</font></font><font face="Chalkduster"><br/>
-Opposite
-of this might be first taking the MAX, and then taking the MIN
-value.<br/>
-<br/>
-The refined Problem statement was <br/>
-</font><font color="#ff3333"><font face="Andale Mono"><u><b>Refined
-Problem Statement</b></u></font></font><font face="Chalkduster"><br/>
-6
-Dices tossed 6 times, and each time a minimum is noted. What is
-expectation of maximum of these 6 minimum values.<br/>
-<br/>
-From a
-mathematical point of view it's fun to work this out. Let's try!<br/>
-<br/>
-Now
-to be more generic n dices tossed k times, and each time a minimum is
-noted. What is the expectation of maximum of these k tosses. <br/>
-<br/>
-P(X&gt;1)
-= (5/6)^(n)<br/>
-P(X&gt;2) = (4/6)^(n) and so on.....<br/>
-<br/>
-P(X=1)
-= 1 - (5/6)^n<br/>
-P(X=2) = 1 - (4/6)^n - (P(X=1))<br/>
-        = 1 -
-(4/6)^n - 1 + (5/6)^n  <br/>
-        = - (4/6)^n + (5/6)^n<br/>
-That's
-a nice pattern<br/>
-P(X=3) = 1 - (3/6)^n - (P(X=2)) - P(X=1)) <br/>
- 
-      = 1 - (3/6)^n + (4/6)^n - (5/6)^n - 1 + (5/6)^n<br/>
-        =
-- (3/6)^n + (4/6)^n<br/>
-so the pattern is...<br/>
-P(X=4) = - (2/6)^n
-+ (3/6)^n <br/>
-P(X=a) = - ((6-a)/6)^n + ((6-a+1)/6)^n<br/>
-<br/>
-Now
-again moving to k times tossing for maximum value we have...<br/>
-<br/>
-P(X=1)
-= (1-(5/6)^n)^k<br/>
-P(X=2) = (- (4/6)^n + (5/6)^n + 1 - (5/6)^n )^ k
-- (1-(5/6)^n)^k<br/>
-        = </font>
-<img src="data:image/png;base64,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" name="Image8" align="bottom" width="249" height="46" border="0"/>
-<font face="Chalkduster">
-<br/>
-<br/>
-P(X=3) = 
-<img src="data:image/png;base64,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" name="Image9" align="bottom" width="455" height="63" border="0"/>
-<br/>
-<br/>
-<br/>
-<br/>
+<body>
+  <article id="cq-article" class="cq-article">
+    <header class="row" style="justify-content:space-between">
+      <h1>Max of <em>k</em> minimums from <em>n</em> dice — play it, then understand it</h1>
+      <span class="pill">Dice • Probability • Combinatorics</span>
+    </header>
+    <p class="muted">Game: roll <strong>n</strong> dice, note the <em>minimum</em>. Do this <strong>k</strong> times. Keep the <strong>maximum</strong> of those minimums.</p>
 
-Simplifying<br/>
- = ( - (3/6)^n +1)^k - (1 - (4/6)^n)^k<br/>
-<br/>
-Let's
-verify for n = 6 and k = 6<br/>
-It's 0.3336 hence a perfect
-match!<br/>
-<br/>
-So pattern is<br/>
-<br/>
-<img src="data:image/png;base64,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" name="Image10" align="bottom" width="411" height="47" border="0"/>
-<br/>
-<br/>
-So
-expectation is<br/>
-<br/>
-<img src="data:image/png;base64,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" name="Image11" align="bottom" width="455" height="63" border="0"/>
-<br/>
-<br/>
-<br/>
-Which
-if calculated gives 2.43 for n=k=6, and hence a generic solution!<br/>
-<br/>
-<br/>
-</font><br/>
-<br/>
+    <!-- PLAY: controls + one-shot demo -->
+    <section class="card">
+      <div class="row">
+        <div class="col">
+          <label>Dice per set <strong>n</strong>: <span id="nOut">6</span></label>
+          <input id="nDice" class="slider" type="range" min="1" max="12" value="6" oninput="updateLabels()" />
+        </div>
+        <div class="col">
+          <label>Number of sets <strong>k</strong>: <span id="kOut">6</span></label>
+          <input id="nSets" class="slider" type="range" min="1" max="12" value="6" oninput="updateLabels()" />
+        </div>
+        <div class="col">
+          <button class="btn" onclick="stepOnce()">🎲 One run</button>
+        </div>
+      </div>
+      <div id="onceArea" style="margin-top:.75rem"></div>
+      <p id="onceText" class="small muted"></p>
+    </section>
 
-</p>
-<div id="disqus_thread" dir="ltr">
-	<p><br/>
-<br/>
+    <!-- EXPERIMENT: many trials + histogram -->
+    <section style="margin-top:1rem" class="card">
+      <div class="row">
+        <div class="col">
+          <label>Trials (simulated games): <span id="tOut">1000</span></label>
+          <input id="nTrials" class="slider" type="range" min="100" max="10000" step="100" value="1000" oninput="updateLabels()" />
+        </div>
+        <div class="col">
+          <button class="btn" onclick="runTrials()">🚀 Run simulation</button>
+          <button class="btn btn-ghost" onclick="clearSim()">Clear</button>
+        </div>
+      </div>
+      <div class="row" style="margin-top:.6rem">
+        <div class="col"><canvas id="hist"></canvas></div>
+        <div class="col">
+          <div id="stats"></div>
+          <p class="small muted">Tip: try larger <em>n</em> or <em>k</em> and see how the distribution shifts.</p>
+        </div>
+      </div>
+    </section>
 
-	</p>
-</div>
-<p><script>
-    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-    var disqus_shortname = 'coffee.coffeequant.com';
-    var disqus_identifier = 5461;
-		var disqus_title = 'dicepuzzle';
-    var disqus_url = 'http://localhost:8080/statics/WriteUps/Dice Puzzle.html';
+    <!-- INTUITION -->
+    <h2>What should you expect?</h2>
+    <p>
+      The minimum of many dice tends to be small (there’s usually at least one low die).
+      But when you repeat the set, sometimes one round is “lucky” (all dice are reasonably high),
+      so the <em>maximum</em> of the minimums nudges up. The tug-of-war usually lands near 2–3
+      for \(n=6,k=6\), with an average about <strong>2.43</strong>.
+    </p>
 
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    <!-- MATH (collapsible, explained) -->
+    <details id="mathBox" style="margin-top:1rem">
+      <summary>Show the math (gentle, step-by-step)</summary>
+      <div style="margin-top:.5rem">
+        <h2>1) Minimum of one set (no scary symbols first)</h2>
+        <p>
+          In one set of \(n\) dice, the minimum is at least \(a\) if <em>every</em> die is at least \(a\).
+          For fair dice that’s \(\big(\frac{7-a}{6}\big)^n\).
+          The chance the minimum is exactly \(a\) is “at least \(a\)” minus “at least \(a+1\)”.
+        </p>
+        <p>
+          In symbols (now that the idea is clear):
+        </p>
+        <p>
+          \[
+            \mathbb{P}(Y\ge a)=\Big(\tfrac{7-a}{6}\Big)^n,\quad
+            \mathbb{P}(Y=a)=\Big(\tfrac{7-a}{6}\Big)^{\!n}-\Big(\tfrac{6-a}{6}\Big)^{\!n},\quad a=1,\dots,6.
+          \]
+        </p>
+
+        <h2>2) Maximum of \(k\) such minimums</h2>
+        <p>
+          Let \(Z=\max(Y_1,\dots,Y_k)\) from \(k\) independent sets. The event \(Z\le a\) means
+          every set’s minimum is \(\le a\). If \(F_Y(a)=\mathbb{P}(Y\le a)\), then
+          \(\mathbb{P}(Z\le a)=[F_Y(a)]^k\). So:
+        </p>
+        <p>
+          \[
+            \mathbb{P}(Z=a)=[F_Y(a)]^k-[F_Y(a-1)]^k,\quad
+            F_Y(a)=1-\Big(\tfrac{6-a}{6}\Big)^{n}.
+          \]
+        </p>
+
+        <h2>3) Expected value (clean final)</h2>
+        <p>
+          Two equivalent ways:
+        </p>
+        <ul>
+          <li>\(\displaystyle \mathbb{E}[Z]=\sum_{a=1}^{6} a\,\mathbb{P}(Z=a)\)</li>
+          <li>\(\displaystyle \mathbb{E}[Z]=\sum_{a=1}^{6}\mathbb{P}(Z\ge a)\)
+            with \(\mathbb{P}(Z\ge a)=1-[F_Y(a-1)]^k=1-\big(1-(\tfrac{7-a}{6})^{n}\big)^k\)</li>
+        </ul>
+        <p class="muted small">Now the formulas are just a compact way to write the ideas you already played with.</p>
+      </div>
+    </details>
+
+    <footer class="muted small" style="margin-top:.75rem">
+      Origin: a 24-hour train ride watching kids play dice. Great puzzles are just simple ideas with extra layers.
+    </footer>
+  </article>
+
+  <script>
+    // --- utilities ---
+    function rollDie(){ return (Math.random()*6|0)+1; }
+
+    function oneRun(nDice, nSets){
+      const mins = [];
+      const perSet = [];
+      for(let s=0;s<nSets;s++){
+        const rolls = Array.from({length:nDice}, rollDie);
+        perSet.push(rolls);
+        mins.push(Math.min(...rolls));
+      }
+      return { perSet, mins, maxOfMins: Math.max(...mins) };
+    }
+
+    function drawGrid(container, perSet, mins, maxOfMins){
+      container.innerHTML = "";
+      perSet.forEach((rolls, i) => {
+        const row = document.createElement("div");
+        row.className = "grid";
+        if (mins[i] === maxOfMins) row.classList.add("best");
+        rolls.forEach(v => {
+          const cell = document.createElement("div");
+          cell.className = "cell" + (v === mins[i] ? " min" : "");
+          cell.textContent = v;
+          row.appendChild(cell);
+        });
+        container.appendChild(row);
+      });
+    }
+
+    // --- controls ---
+    function $(id){ return document.getElementById(id); }
+    function updateLabels(){
+      $("nOut").textContent = $("nDice").value;
+      $("kOut").textContent = $("nSets").value;
+      $("tOut").textContent = $("nTrials").value;
+    }
+    updateLabels();
+
+    // --- one interactive run ---
+    function stepOnce(){
+      const n = +$("nDice").value, k = +$("nSets").value;
+      const {perSet, mins, maxOfMins} = oneRun(n,k);
+      drawGrid($("onceArea"), perSet, mins, maxOfMins);
+      $("onceText").innerHTML = `Minimums per set: <strong>${mins.join(", ")}</strong><br>Max of minimums: <strong>${maxOfMins}</strong> (outlined)`;
+    }
+
+    // --- many trials + histogram ---
+    let histData = new Array(6).fill(0);
+
+    function runTrials(){
+      const n = +$("nDice").value, k = +$("nSets").value, T = +$("nTrials").value;
+      histData.fill(0);
+      for(let t=0;t<T;t++){
+        const {maxOfMins} = oneRun(n,k);
+        histData[maxOfMins-1]++;
+      }
+      drawHist(histData, T);
+      const mean = histData.reduce((s,c,i)=>s + (i+1)*c, 0)/T;
+      const probs = histData.map(c=> (c/T).toFixed(3));
+      $("stats").innerHTML =
+        `<p><strong>Average (empirical):</strong> ${mean.toFixed(3)}</p>`+
+        `<p class="small muted">Distribution for 1..6: [ ${probs.join(" , ")} ]</p>`;
+    }
+
+    function clearSim(){
+      histData.fill(0);
+      const c = $("hist");
+      const ctx = c.getContext("2d");
+      ctx.clearRect(0,0,c.width,c.height);
+      $("stats").innerHTML = "";
+    }
+
+    function drawHist(data, T){
+      const c = $("hist");
+      const ctx = c.getContext("2d");
+      const W = c.width = c.clientWidth * devicePixelRatio;
+      const H = c.height = 220 * devicePixelRatio;
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+      ctx.clearRect(0,0,W,H);
+
+      // axes
+      const left = 36, bottom = 24, top = 10, right = 10;
+      const plotW = c.clientWidth - left - right, plotH = 220 - top - bottom;
+
+      ctx.strokeStyle = getComputedStyle(document.body).color;
+      ctx.globalAlpha = 0.3;
+      ctx.beginPath();
+      ctx.moveTo(left, top); ctx.lineTo(left, top+plotH); ctx.lineTo(left+plotW, top+plotH);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      // bars for 1..6
+      const nBars = 6;
+      const gap = 10, bw = (plotW - (nBars+1)*gap)/nBars;
+      const maxP = Math.max(...data)/T || 1;
+
+      for(let i=0;i<nBars;i++){
+        const p = data[i]/T;
+        const h = p/maxP * plotH;
+        const x = left + gap + i*(bw+gap);
+        const y = top + plotH - h;
+
+        ctx.fillStyle = getComputedStyle(document.body).color;
+        ctx.globalAlpha = 0.15;
+        ctx.fillRect(x, y, bw, h);
+        ctx.globalAlpha = 1;
+        ctx.fillText(String(i+1), x+bw/2-3, top+plotH+14);
+        ctx.fillText(p.toFixed(2), x+bw/2-10, y-4);
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    // --- math typeset when opening the details ---
+    const mathBox = $("mathBox");
+    if (mathBox){
+      mathBox.addEventListener("toggle", function(){
+        if (mathBox.open && window.MathJax && MathJax.typesetPromise){
+          MathJax.typesetPromise([mathBox]).catch((e)=>console.error("MathJax:", e));
+        }
+      });
+    }
+
+    // typeset on load in case of prerender
+    (function(){
+      const root = $("cq-article");
+      if (window.MathJax && MathJax.typesetPromise && root){
+        MathJax.typesetPromise([root]).catch(()=>{});
+      }
     })();
-
-</script><noscript><font face="Chalkduster"><font size="3" style="font-size: 12pt">Please
-enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments
-powered by Disqus.</a></noscript> 
-<script>
-    /* * * CONFIGURATION VARIABLES * * */
-    var disqus_shortname = 'coffeequant';
-    var disqus_identifier = 5461;
-    var disqus_title = 'dicepuzzle';
-    var disqus_url = 'http://localhost:8080/statics/WriteUps/Dice Puzzle.html';
-
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function () {
-        var s = document.createElement('script'); s.async = true;
-        s.type = 'text/javascript';
-        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
-        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
-    }());
-
-</script>
-</font></font></p>
+  </script>
 </body>
 </html>
+
+
