@@ -1,0 +1,4 @@
+background-image:
+  url("statics/img/bg/cq-math.svg"),
+  radial-gradient(1200px 600px at 50% -10%, rgba(0,0,0,0.03), transparent 60%),
+  url("statics/img/bg/cq-bg-light.webp");

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <rect width="1200" height="800" fill="#0f1420"/>
+  <g stroke="#475569" stroke-width="0.5" opacity="0.25">
+    <path d="M0 400h1200M600 0v800"/>
+    <path d="M0 0L1200 800M0 800L1200 0"/>
+    <text x="40" y="140" font-size="36" fill="#64748b" opacity="0.3">∫ e^{−x²} dx = √π</text>
+    <text x="900" y="500" font-size="48" fill="#64748b" opacity="0.25">Σ Pn = 1</text>
+    <circle cx="400" cy="600" r="120" stroke="#64748b" stroke-width="8" opacity="0.15" fill="none"/>
+  </g>
+</svg>

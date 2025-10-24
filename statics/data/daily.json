@@ -8,12 +8,14 @@
       "link": "statics/WriteUps/DicePuzzle.html"
     },
     {
+      "date": "2025-10-22",	    
       "title": "Kelly’s whisper",
       "deck": "If your edge is p, the sweet spot is roughly f = 2p − 1. Too big kills you.",
       "html": "<p>Play first in the lab, then open the derivation. $g(f)=p\\ln(1+f)+(1-p)\\ln(1-f)$ peaks at $2p-1$.</p>",
       "link": "statics/WriteUps/BetSizing.html"
     },
     {
+      "date": "2025-10-24",	    
       "title": "Gamma flips near zero",
       "deck": "Binary curve notes: OTM stabilizes, ITM amplifies. Watch the $K=0$ line.",
       "html": "<p>Replacement flows (receive 30y / pay 10y) lean on the spread when stress rises.</p>",

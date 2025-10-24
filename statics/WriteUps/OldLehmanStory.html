@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>When 30y-2y Went Nuts: Lehman, Curve Notes, and Forced Hedging</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- site theme -->
+  <link rel="stylesheet" href="../css/cq.css" />
+
+  <!-- page-level layout tweaks (full width article style) -->
+  <style>
+    /* make article page breathe more than the default .cq-card helper */
+    .cq-article-shell {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 2rem 4rem;
+    }
+
+    .cq-article-hero {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      box-shadow: var(--panel-shadow);
+      backdrop-filter: blur(8px) saturate(1.15);
+      margin-bottom: 2rem;
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(360px,480px);
+      gap: 2rem;
+    }
+
+    @media (max-width: 900px){
+      .cq-article-hero {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .cq-article-hero-img {
+      background-size: cover;
+      background-position: center;
+      min-height: 260px;
+    }
+
+    .cq-article-hero-copy {
+      padding: 2rem 2rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .cq-article-hero h1 {
+      margin: 0 0 .6rem;
+      font-size: clamp(1.6rem,1.2rem + 1vw,2rem);
+      line-height: 1.2;
+      font-weight: 600;
+      color: var(--fg);
+    }
+
+    .cq-article-hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .cq-article-body {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(280px,360px);
+      gap: 2rem;
+    }
+
+    @media (max-width: 1100px){
+      .cq-article-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* main narrative column */
+    .cq-article-main {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      box-shadow: var(--panel-shadow);
+      backdrop-filter: blur(6px) saturate(1.1);
+      padding: 2rem 2rem 3rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--fg);
+    }
+
+    .cq-article-main h2 {
+      font-size: 1.15rem;
+      line-height: 1.3;
+      font-weight: 600;
+      color: var(--fg);
+      margin: 2rem 0 .5rem;
+    }
+
+    .cq-article-main p {
+      margin: .8rem 0 1rem;
+      color: var(--fg);
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .cq-article-main .aside {
+      background: rgba(0,0,0,0.03);
+      border: 1px solid var(--panel-border);
+      border-radius: 10px;
+      padding: .8rem 1rem;
+      font-size: .9rem;
+      line-height: 1.4;
+      color: var(--fg);
+      font-family: var(--font-mono);
+      overflow-x: auto;
+    }
+    @media (prefers-color-scheme: dark){
+      .cq-article-main .aside {
+        background: rgba(15,23,42,0.5);
+        border-color: rgba(255,255,255,0.08);
+        color: var(--fg);
+      }
+    }
+
+    .cq-article-main ul,
+    .cq-article-main ol {
+      color: var(--fg);
+      line-height: 1.5;
+      padding-left: 1.2rem;
+      margin: .8rem 0 1rem;
+    }
+
+    .cq-article-main li {
+      margin: .4rem 0 .6rem;
+    }
+
+    /* right rail: visual notes / diagrams / callouts / equations */
+    .cq-article-side {
+      display: grid;
+      gap: 1.5rem;
+      align-content: start;
+    }
+
+    .cq-side-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 14px;
+      box-shadow: var(--panel-shadow);
+      padding: 1rem 1rem 1.2rem;
+      font-size: .9rem;
+      line-height: 1.4;
+      color: var(--fg);
+    }
+
+    .cq-side-card h3 {
+      margin: 0 0 .4rem;
+      font-size: .9rem;
+      line-height: 1.3;
+      font-weight: 600;
+      color: var(--fg);
+      letter-spacing: .01em;
+    }
+
+    .cq-side-card p {
+      margin: .4rem 0 .6rem;
+      color: var(--fg);
+      font-size: .9rem;
+      line-height: 1.4;
+    }
+
+    .cq-side-card .mini-img {
+      border-radius: 8px;
+      width: 100%;
+      min-height: 140px;
+      background-size: cover;
+      background-position: center;
+      margin-bottom: .6rem;
+      box-shadow: 0 12px 32px rgba(15,23,42,0.2);
+    }
+
+    /* pseudo-diagram block for curve shape */
+    .curve-diagram {
+      background: rgba(0,0,0,0.03);
+      border: 1px solid var(--panel-border);
+      border-radius: 8px;
+      height: 140px;
+      font-family: var(--font-mono);
+      font-size: .8rem;
+      color: var(--fg);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding: .8rem;
+      line-height:1.4;
+    }
+    @media (prefers-color-scheme: dark){
+      .curve-diagram {
+        background: rgba(15,23,42,0.5);
+        border-color: rgba(255,255,255,0.08);
+        color: var(--fg);
+      }
+    }
+
+    /* footer link row */
+    .cq-article-footerlinks {
+      text-align:center;
+      font-size:.85rem;
+      color: var(--muted);
+      margin-top: 3rem;
+    }
+    .cq-article-footerlinks a {
+      color: var(--accent);
+      text-decoration:none;
+    }
+    .cq-article-footerlinks a:hover {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    /* inline math container tweaks for readability */
+    .math-inline {
+      font-family: var(--font-mono);
+      font-size: .9rem;
+      line-height: 1.4;
+      background: rgba(0,0,0,0.03);
+      border-radius: 4px;
+      padding: 0 .3rem;
+    }
+    @media (prefers-color-scheme: dark){
+      .math-inline {
+        background: rgba(15,23,42,0.5);
+      }
+    }
+  </style>
+
+  <!-- MathJax -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$','$$']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+
+<body>
+
+  <!-- top nav reused for consistency -->
+  <div class="cq-shell" style="padding-top:1rem;">
+    <nav class="cq-nav" style="justify-content:space-between;">
+      <a class="cq-logo" href="../../index.html">☕ CoffeeQuant</a>
+      <div class="cq-navlinks">
+        <a href="../../index.html#daily">Daily</a>
+        <a href="../../index.html#labs" class="is-active">Labs</a>
+        <a href="../../index.html#tools">Tools</a>
+        <a href="../../index.html#notes">Notes</a>
+        <a href="../../index.html#curios">Curios</a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Article wrapper -->
+  <div class="cq-article-shell">
+
+    <!-- Hero banner with visual -->
+    <section class="cq-article-hero">
+      <div class="cq-article-hero-copy">
+        <h1>When 30y-2y Went Nuts: Lehman, Curve Notes, and Forced Hedging</h1>
+        <p>
+          This is not “macro fear” theory.
+          This is what it feels like when the entire street is structurally short gamma on the curve,
+          and the long end starts moving in panic.
+          The punchline: people tried to fade an inversion that was literally being <em>driven</em>
+          by hedging pressure.
+        </p>
+        <p style="margin-top:1rem; font-size:.85rem; color:var(--muted); line-height:1.4;">
+          Desk memory. Not investment advice. Numbers are indicative, not audited.
+        </p>
+      </div>
+
+      <!-- hero image from your repo images -->
+      <div class="cq-article-hero-img"
+           style="background-image:url('../img/hero/image2.png');">
+      </div>
+    </section>
+
+    <!-- Body grid: main narrative + side rail -->
+    <section class="cq-article-body">
+
+      <!-- MAIN COLUMN -->
+      <article class="cq-article-main">
+
+        <h2>1. First, what “30y-2y spread” even means</h2>
+
+        <p>
+          Take two rates on the same curve. For simplicity:
+        </p>
+
+        <div class="aside">
+          Spread \(S = \text{30y rate} - \text{2y rate}\)<br/>
+          (Sometimes desks talk 30y minus 10y instead of 2y. Same idea: long minus short.)
+        </div>
+
+        <p>
+          When $S$ is big and positive, we say the curve is “steep.”
+          When $S$ goes to zero, long end and front end are basically on top of each other.
+          When $S$ goes negative, the long end is actually <em>below</em> the short end:
+          that’s called inversion.
+        </p>
+
+        <p>
+          In normal, happy years, people assume the long end should trade above the front end:
+          growth, inflation, term premium, blah blah.
+          So “30y-2y &lt; 0” is supposed to be rare / scary / “buy it, it’ll bounce.”
+        </p>
+
+        <h2>2. What banks were selling before the crisis</h2>
+
+        <p>
+          Banks sold a lot of notes with language like:
+          “You get a nice coupon as long as the curve doesn’t invert.”
+        </p>
+
+        <p>
+          Translate that: the investor is effectively short a <strong>binary put</strong> on $S$,
+          with strike $K$ somewhere near zero.
+        </p>
+
+        <div class="aside">
+          Binary put payoff at maturity:<br/>
+          \( \text{Payoff} = \max(0,\; K - S) \)<br/><br/>
+          If the curve <strong>stays steep</strong> ($S \gg K$), payoff ≈ 0.<br/>
+          If the curve <strong>inverts hard</strong> ($S \ll K$), payoff pops.
+        </div>
+
+        <p>
+          So the client says, “curve won’t invert, I’ll take that coupon.”
+          The dealer takes the other side. The dealer is <em>long</em> that binary put.
+        </p>
+
+        <p>
+          Before Lehman, this looked safe.
+          Curve was steep, world looked fine, and those binaries were way out-of-the-money.
+          So dealers were sitting on a book of long binary puts that, at the time,
+          didn’t feel dangerous.
+        </p>
+
+        <h2>3. Gamma 101 (don’t skip)</h2>
+
+        <p>
+          Binary options behave weird near the strike.
+          This is the one bit you have to internalize:
+        </p>
+
+        <ul>
+          <li>
+            When a dealer is long a binary put and that put is <em>out-of-the-money</em> (curve is healthy),
+            the dealer is effectively <strong>long gamma</strong> on $S$.
+          </li>
+          <li>
+            When that same binary goes <em>in-the-money</em> (curve is inverting),
+            the dealer flips to being effectively <strong>short gamma</strong> on $S$.
+          </li>
+        </ul>
+
+        <p>
+          Long gamma = you hedge by buying low / selling high → you calm moves.
+        </p>
+
+        <p>
+          Short gamma = you hedge by selling low / buying high → you worsen moves.
+        </p>
+
+        <div class="aside">
+          Dealer long binary put:<br/>
+          • Curve is steep (OTM) → long gamma → stabilizing hedges.<br/>
+          • Curve is near 0 / inverted (ITM) → short gamma → destabilizing hedges.
+        </div>
+
+        <p>
+          That flip is the entire story.
+          The same structure that felt safe in good times becomes gasoline in bad times.
+        </p>
+
+        <h2>4. What changed around Lehman</h2>
+
+        <p>
+          When stress hit (think: “is this bank going down?” levels of stress),
+          two forces smashed the long end:
+        </p>
+
+        <ol>
+          <li>
+            <strong>Replacement trades.</strong><br/>
+            People didn’t want exposure to a failing house.
+            So they tore up trades with that house and re-booked them with other dealers.
+            Now those other dealers inherit risk they didn’t want, fast, at size.
+            The street’s exposure got rebalanced violently.
+          </li>
+
+          <li>
+            <strong>Pension and insurance flow into the 30y point.</strong><br/>
+            Long-dated accounts (think lifers, pensions) tend to receive fixed in 30y swaps.
+            When panic hits, a wave of “receive 30y fixed” flow hits other dealers.
+            That flow leans directly on 30y swap spreads.
+          </li>
+        </ol>
+
+        <p>
+          Add to that: Treasuries out the curve were being dumped to raise cash and fund survival.
+          Selling long Treasuries pushes Treasury yields higher. Meanwhile,
+          receiving fixed in swaps tends to pull long-end swap rates lower.
+        </p>
+
+        <p>
+          Net effect: long-end swap spreads get crushed.
+          The 30y leg cheapens vs the front end → $S$ falls toward 0.
+          Exactly where all those “curve won’t invert” notes start to light up.
+        </p>
+
+        <h2>5. The flip to short gamma (this is where it accelerates)</h2>
+
+        <p>
+          As $S$ → $K$ (think “the curve is basically flat now”), all those binaries that felt harmless
+          are suddenly close to paying out.
+        </p>
+
+        <p>
+          At that point, the dealers’ position in those notes is no longer long gamma.
+          It’s now short gamma.
+        </p>
+
+        <p>
+          When you’re short gamma, you hedge in a way that <em>chases</em> the move.
+          You don’t slow the flattening — you <strong>add to it</strong>.
+        </p>
+
+        <div class="aside">
+          Short gamma hedge logic for the curve:<br/>
+          “Curve is already flattening? Cool, hedge by flattening it more.”<br/>
+          “Curve is already steepening? Cool, hedge by steepening it more.”<br/><br/>
+          You become part of the problem.
+        </div>
+
+        <p>
+          That’s why the move didn’t just touch zero and bounce.
+          The flow <em>wanted</em> it through zero.
+          The street was forced to keep pressing, because that’s what risk control looks like
+          when you’re short gamma in a stress regime.
+        </p>
+
+        <p>
+          You ended up with prints like “30y swap spreads through 0,”
+          then “−20bp,” “−40bp,” “−60bp,” and people on the bid screaming
+          “this is insane, it <em>has</em> to mean-revert.”
+        </p>
+
+        <p>
+          Spoiler: some of those people got torched trying to be the hero.
+        </p>
+
+        <h2>6. Why “this is an anomaly, buy it” was deadly</h2>
+
+        <p>
+          Research pieces came out saying:
+          “Negative long-end swap spreads are theoretically unsustainable.
+          This is a gift. Buy the spread, it’ll normalize.”
+        </p>
+
+        <p>
+          That logic ignores flow.
+        </p>
+
+        <ul>
+          <li>
+            The market wasn’t just “mispriced.”
+            The market was mechanically <em>self-forcing</em> the inversion because of
+            how the hedges were structured.
+          </li>
+
+          <li>
+            The more it inverted, the more short-gamma hedging flow slammed the same part
+            of the curve again.
+          </li>
+        </ul>
+
+        <p>
+          You weren’t trading valuation.
+          You were trading against a feedback loop.
+        </p>
+
+        <p>
+          And feedback loops don’t care about “this shouldn’t happen
+          in a textbook yield curve.”
+        </p>
+
+        <h2>7. Desk summary (keep this part)</h2>
+
+        <div class="aside">
+          • Pre-crisis: Dealers long “non-inversion” binaries → effectively long gamma.<br/>
+          • Curve starts collapsing toward flat → binaries move toward the strike.<br/>
+          • Lehman stress + replacement trades + pension receiving in 30y → crush 30y spreads.<br/>
+          • Curve actually inverts → those binaries are now ITM.<br/>
+          • Dealers flip to short gamma → hedging accelerates the inversion, not slows it.<br/>
+          • Spreads go deeply negative. People try to fade it. People get smoked.
+        </div>
+
+        <p>
+          That’s why the long end didn’t just drift.
+          It snapped, and then it stayed broken long enough to ruin people
+          who thought they were doing “value.”
+        </p>
+
+      </article>
+
+      <!-- SIDE RAIL / VISUALS -->
+      <aside class="cq-article-side">
+
+        <div class="cq-side-card">
+          <h3>The curve as one number</h3>
+          <div class="curve-diagram">
+            30y - 2y<br/><br/>
+            Steep = big positive<br/>
+            Flat = near 0<br/>
+            Inverted = negative<br/><br/>
+            In the crisis, that number went through 0 and stayed negative.
+          </div>
+          <p style="font-size:.8rem; color:var(--muted); line-height:1.4;">
+            Traders literally watched this like a heart monitor.
+          </p>
+        </div>
+
+        <div class="cq-side-card">
+          <h3>Binary put on the curve</h3>
+          <div class="mini-img"
+               style="background-image: radial-gradient(circle at 40% 40%, rgba(0,0,0,0.05) 0%, transparent 60%), radial-gradient(circle at 60% 70%, rgba(0,0,0,0.07) 0%, transparent 60%), linear-gradient(135deg, #e0e7ff 0%, #f4f8ff 60%);">
+          </div>
+          <p>
+            Payoff: \( \max(0,\; K - S) \).<br/>
+            If the curve $S$ drops below strike $K$, this thing “hits.”
+          </p>
+          <p>
+            Client is short the payoff → they get coupon as long as $S \gt K$.
+            Dealer is long the payoff → they have to hedge that risk.
+          </p>
+        </div>
+
+        <div class="cq-side-card">
+          <h3>OTM vs ITM = your gamma sign</h3>
+          <p>
+            • OTM binary put → dealer is long gamma → stabilizes moves.<br/>
+            • Deep ITM binary put → dealer is short gamma → amplifies moves.
+          </p>
+          <p class="math-inline" style="display:inline-block;">
+            Long γ ⇒ hedge = buy low / sell high<br/>
+            Short γ ⇒ hedge = sell low / buy high
+          </p>
+          <p style="margin-top:.6rem;">
+            That flip happened right when stress was max.
+          </p>
+        </div>
+
+        <div class="cq-side-card">
+          <h3>“Replacement” flow</h3>
+          <p>
+            When one big dealer looks like it’s dying,
+            clients novate or replace long-dated trades with other houses.
+            The receiving houses suddenly inherit huge 30y risk
+            they didn’t quote originally.
+          </p>
+          <p>
+            That rebooks massive “receive 30y fixed” flow into the rest of the street.
+            That’s one way you smash 30y spreads without any “macro speech.”
+          </p>
+        </div>
+
+      </aside>
+
+    </section>
+
+    <!-- footer nav -->
+    <div class="cq-article-footerlinks">
+      <div>☕ CoffeeQuant · Fast. Minimal. Curious. No ads.</div>
+      <div style="margin-top:.4rem;">
+        <a href="../../index.html#labs">← Back to Labs</a>
+        ·
+        <a href="../../index.html#curios">More curiosities</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MathJax touch-up just in case -->
+  <script>
+    (function () {
+      if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise().catch(console.error);
+      }
+    })();
+  </script>
+
+</body>
+</html>

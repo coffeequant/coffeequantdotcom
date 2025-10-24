@@ -4,148 +4,746 @@
   <meta charset="utf-8" />
   <title>Dice Puzzle — Max of k Minimums from n Dice</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Load MathJax ONCE globally in index.html. No MathJax script tag here. -->
 
+  <!-- global site theme -->
+  <link rel="stylesheet" href="../css/cq.css" />
+
+  <!-- page-level layout tweaks (match article / cli aesthetic) -->
   <style>
-    /* readable, theme-aware, lightweight */
-    .cq-article { max-width: 920px; margin: 0 auto; padding: 1rem 1.25rem 2rem; line-height: 1.6; color: inherit; }
-    h1 { font-size: 1.9rem; margin: .2rem 0 .6rem; letter-spacing: -.01em; }
-    h2 { font-size: 1.25rem; margin: 1.25rem 0 .5rem; }
-    .muted { opacity: .78; }
-    .card { background: color-mix(in oklab, currentColor 8%, transparent); border: 1px solid color-mix(in oklab, currentColor 24%, transparent);
-            border-radius: 12px; padding: 1rem; }
-    .row { display: flex; gap: .75rem; flex-wrap: wrap; align-items: center; }
-    .col { flex: 1 1 300px; }
-    .btn { background: #2563eb; color: #fff; border: 0; border-radius: 8px; padding: .55rem .9rem; cursor: pointer; font-size: .95rem; }
-    .btn:hover { background: #1e40af; }
-    .btn-ghost { background: transparent; border: 1px solid color-mix(in oklab, currentColor 30%, transparent); color: inherit; }
-    .slider { width: 100%; }
-    .pill { display:inline-block; border:1px solid color-mix(in oklab,currentColor 30%,transparent); border-radius:999px; padding:.15rem .6rem; font-size:.8rem; opacity:.9; }
-    .grid { display:grid; grid-template-columns: repeat(6, 34px); gap:.35rem; justify-content:start; align-items:center; }
-    .cell { width:34px; height:34px; border:1px solid color-mix(in oklab,currentColor 25%,transparent); border-radius:6px; display:flex; align-items:center; justify-content:center; font-weight:600; }
-    .min { background:#fde68a; }
-    .best { outline:2px solid #22c55e; outline-offset:2px; }
-    canvas { width:100%; height:220px; border:1px solid color-mix(in oklab,currentColor 24%,transparent); border-radius:12px; background: transparent; }
-    details { border:1px dashed color-mix(in oklab,currentColor 30%,transparent); border-radius:10px; padding:.6rem .8rem; }
-    summary { cursor: pointer; font-weight: 600; }
-    .center { text-align:center; }
-    .small { font-size: .92rem; }
-    @media (prefers-color-scheme: dark) {
-      .btn { background:#38bdf8; color:#0b1220; }
-      .btn:hover { background:#0284c7; }
-      .min { background:#78350f; }
+    .dice-shell {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 2rem 4rem;
+    }
+
+    /* hero banner */
+    .dice-hero {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      box-shadow: var(--panel-shadow);
+      margin-bottom: 2rem;
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(260px,360px);
+      gap: 2rem;
+      backdrop-filter: blur(8px) saturate(1.15);
+    }
+
+    @media (max-width: 900px){
+      .dice-hero {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .dice-hero-main {
+      padding: 2rem 2rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .dice-hero-main h1 {
+      margin: 0 0 .6rem;
+      font-size: clamp(1.5rem,1.1rem + 1vw,2rem);
+      line-height: 1.2;
+      font-weight: 600;
+      color: var(--fg);
+    }
+
+    .dice-hero-main p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .dice-hero-side {
+      padding: 2rem 2rem 2.5rem;
+      border-left: 1px solid var(--panel-border);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: radial-gradient(circle at 30% 30%, rgba(0,0,0,0.05) 0%, transparent 60%), radial-gradient(circle at 70% 70%, rgba(0,0,0,0.07) 0%, transparent 60%), linear-gradient(135deg,#e0e7ff 0%,#f4f8ff 60%);
+      color: #0f172a;
+      font-size: .9rem;
+      line-height: 1.4;
+    }
+    @media (prefers-color-scheme: dark){
+      .dice-hero-side {
+        background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.07) 0%, transparent 60%), radial-gradient(circle at 70% 70%, rgba(255,255,255,0.05) 0%, transparent 60%), linear-gradient(135deg,#1E3A8A 0%,#0f172a 60%);
+        color: #e8edf5;
+      }
+    }
+
+    .dice-hero-side h2 {
+      margin: 0 0 .5rem;
+      font-size: .9rem;
+      line-height: 1.3;
+      font-weight: 600;
+      color: inherit;
+      letter-spacing: .01em;
+    }
+
+    .dice-hero-side p {
+      margin: .4rem 0 .6rem;
+      color: inherit;
+    }
+
+    .dice-hero-side .pill {
+      display:inline-block;
+      border:1px solid rgba(0,0,0,0.2);
+      border-radius:999px;
+      padding:.15rem .6rem;
+      font-size:.75rem;
+      font-weight:500;
+      letter-spacing:.02em;
+    }
+    @media (prefers-color-scheme: dark){
+      .dice-hero-side .pill {
+        border:1px solid rgba(255,255,255,0.4);
+      }
+    }
+
+    /* body grid: main sim on left, intuition / cards on right */
+    .dice-body {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(260px,340px);
+      gap: 2rem;
+    }
+    @media (max-width: 1100px){
+      .dice-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* main panel */
+    .dice-mainpanel {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      box-shadow: var(--panel-shadow);
+      backdrop-filter: blur(6px) saturate(1.1);
+      padding: 2rem 2rem 3rem;
+      color: var(--fg);
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .dice-mainpanel h2 {
+      font-size: 1.05rem;
+      line-height: 1.3;
+      font-weight: 600;
+      color: var(--fg);
+      margin: 2rem 0 .5rem;
+    }
+
+    .dice-mainpanel p {
+      margin: .8rem 0 1rem;
+      color: var(--fg);
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    /* interactive cards inside main panel */
+    .sim-card {
+      background: rgba(0,0,0,0.03);
+      border: 1px solid var(--panel-border);
+      border-radius: 12px;
+      padding: 1rem 1rem 1.25rem;
+      margin-top: 1rem;
+    }
+    @media (prefers-color-scheme: dark){
+      .sim-card {
+        background: rgba(15,23,42,0.5);
+      }
+    }
+
+    .sim-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem 1.25rem;
+      align-items: flex-start;
+    }
+
+    .sim-col {
+      flex: 1 1 220px;
+      min-width: 0;
+    }
+
+    .sim-label {
+      font-size: .8rem;
+      font-weight: 500;
+      color: var(--fg);
+      margin-bottom: .4rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      line-height:1.4;
+    }
+
+    .sim-label span.val {
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size: .8rem;
+      margin-left:.4rem;
+    }
+
+    .slider {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .cq-btn {
+      cursor: pointer;
+      appearance: none;
+      border: 0;
+      font-size: .9rem;
+      line-height: 1.2;
+      font-weight: 500;
+      border-radius: 8px;
+      padding: .6rem .8rem;
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 18px 32px rgba(37,99,235,0.28);
+    }
+    .cq-btn:hover {
+      background: var(--accent-light);
+    }
+
+    .cq-btn-ghost {
+      cursor: pointer;
+      appearance: none;
+      background: transparent;
+      border: 1px solid var(--panel-border);
+      font-size: .85rem;
+      line-height: 1.2;
+      font-weight: 500;
+      border-radius: 8px;
+      padding: .55rem .75rem;
+      color: var(--fg);
+    }
+
+    .once-area-text {
+      font-size: .85rem;
+      line-height:1.4;
+      color: var(--muted);
+      margin-top: .5rem;
+    }
+
+    /* dice grid visual */
+    .set-grid {
+      display:grid;
+      grid-template-columns: repeat(6, 32px);
+      gap:.35rem;
+      align-items:center;
+      justify-content:start;
+      margin-top:.5rem;
+    }
+
+    .die-cell {
+      width:32px; height:32px;
+      border:1px solid var(--panel-border);
+      border-radius:6px;
+      font-weight:600;
+      font-size:.9rem;
+      line-height:32px;
+      text-align:center;
+      color: var(--fg);
+      background: rgba(0,0,0,0.02);
+    }
+    @media (prefers-color-scheme: dark){
+      .die-cell {
+        background: rgba(0,0,0,0.2);
+      }
+    }
+
+    .die-min {
+      background:#fde68a;
+      color:#78350f;
+      border-color:#facc15;
+    }
+    @media (prefers-color-scheme: dark){
+      .die-min {
+        background:#78350f;
+        color:#fde68a;
+        border-color:#78350f;
+      }
+    }
+
+    .set-row.best-set {
+      outline:2px solid #22c55e;
+      outline-offset:3px;
+      border-radius:6px;
+    }
+
+    /* histogram canvas */
+    .hist-wrap {
+      display:flex;
+      flex-wrap:wrap;
+      gap:1rem 1.25rem;
+      margin-top:1rem;
+    }
+
+    .hist-left {
+      flex: 1 1 260px;
+    }
+
+    .hist-right {
+      flex: 1 1 200px;
+      min-width:200px;
+      font-size:.9rem;
+      line-height:1.4;
+    }
+
+    .hist-right .stats-main {
+      font-weight:600;
+      font-size:.95rem;
+      color: var(--fg);
+      margin-bottom:.5rem;
+    }
+
+    .hist-right .stats-note {
+      color: var(--muted);
+      font-size:.8rem;
+      line-height:1.4;
+    }
+
+    canvas {
+      width:100%;
+      height:220px;
+      border:1px solid var(--panel-border);
+      border-radius:12px;
+      background: transparent;
+    }
+
+    /* collapsible math explainer */
+    details.mathbox {
+      background: rgba(0,0,0,0.02);
+      border:1px solid var(--panel-border);
+      border-radius:12px;
+      padding: .9rem 1rem 1rem;
+      font-size:.9rem;
+      line-height:1.5;
+      margin-top:2rem;
+    }
+    @media (prefers-color-scheme: dark){
+      details.mathbox {
+        background: rgba(15,23,42,0.4);
+      }
+    }
+
+    details.mathbox summary {
+      cursor: pointer;
+      font-weight:600;
+      font-size:.95rem;
+      line-height:1.4;
+      color: var(--fg);
+      outline:none;
+    }
+
+    .math-inline-block {
+      background: rgba(0,0,0,0.03);
+      border-radius:4px;
+      padding:.1rem .3rem;
+      font-family: var(--font-mono);
+      font-size:.8rem;
+      line-height:1.4;
+      display:inline-block;
+    }
+    @media (prefers-color-scheme: dark){
+      .math-inline-block {
+        background: rgba(15,23,42,0.5);
+      }
+    }
+
+    /* right rail cards */
+    .dice-side {
+      display: grid;
+      gap: 1.5rem;
+      align-content: start;
+    }
+
+    .side-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 14px;
+      box-shadow: var(--panel-shadow);
+      padding: 1rem 1rem 1.2rem;
+      font-size: .9rem;
+      line-height: 1.4;
+      color: var(--fg);
+    }
+
+    .side-card h3 {
+      margin: 0 0 .4rem;
+      font-size: .9rem;
+      line-height: 1.3;
+      font-weight: 600;
+      color: var(--fg);
+      letter-spacing: .01em;
+    }
+
+    .side-card p {
+      margin: .4rem 0 .6rem;
+      color: var(--fg);
+      font-size: .9rem;
+      line-height: 1.4;
+    }
+
+    .footnote {
+      text-align:center;
+      font-size:.8rem;
+      line-height:1.4;
+      color: var(--muted);
+      margin-top:3rem;
     }
   </style>
+
+  <!-- MathJax config (same pattern as other longform pages) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$','$$']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 </head>
 
 <body>
-  <article id="cq-article" class="cq-article">
-    <header class="row" style="justify-content:space-between">
-      <h1>Max of <em>k</em> minimums from <em>n</em> dice — play it, then understand it</h1>
-      <span class="pill">Dice • Probability • Combinatorics</span>
-    </header>
-    <p class="muted">Game: roll <strong>n</strong> dice, note the <em>minimum</em>. Do this <strong>k</strong> times. Keep the <strong>maximum</strong> of those minimums.</p>
 
-    <!-- PLAY: controls + one-shot demo -->
-    <section class="card">
-      <div class="row">
-        <div class="col">
-          <label>Dice per set <strong>n</strong>: <span id="nOut">6</span></label>
-          <input id="nDice" class="slider" type="range" min="1" max="12" value="6" oninput="updateLabels()" />
-        </div>
-        <div class="col">
-          <label>Number of sets <strong>k</strong>: <span id="kOut">6</span></label>
-          <input id="nSets" class="slider" type="range" min="1" max="12" value="6" oninput="updateLabels()" />
-        </div>
-        <div class="col">
-          <button class="btn" onclick="stepOnce()">🎲 One run</button>
-        </div>
+  <!-- nav -->
+  <div class="cq-shell" style="padding-top:1rem;">
+    <nav class="cq-nav" style="justify-content:space-between;">
+      <a class="cq-logo" href="../../index.html">☕ CoffeeQuant</a>
+      <div class="cq-navlinks">
+        <a href="../../index.html#daily">Daily</a>
+        <a href="../../index.html#labs" class="is-active">Labs</a>
+        <a href="../../index.html#tools">Tools</a>
+        <a href="../../index.html#notes">Notes</a>
+        <a href="../../index.html#curios">Curios</a>
       </div>
-      <div id="onceArea" style="margin-top:.75rem"></div>
-      <p id="onceText" class="small muted"></p>
+    </nav>
+  </div>
+
+  <div class="dice-shell">
+
+    <!-- hero -->
+    <section class="dice-hero">
+      <div class="dice-hero-main">
+        <h1>Dice Puzzle — “Max of k minimums from n dice”</h1>
+        <p>
+          Game: roll <strong>n</strong> dice at once. Take the <em>minimum</em> in that set.
+          Do that <strong>k</strong> times. Now keep the <em>maximum</em> of those $k$ minimums.
+          <br/><br/>
+          Sounds innocent. Turns out it’s a great intuition builder for extremes, order stats,
+          “best of the worst,” and why expected value creeps up in layers.
+        </p>
+      </div>
+
+      <div class="dice-hero-side">
+        <h2>Quick facts</h2>
+        <p>
+          This puzzle came from watching two kids play with dice on a long train ride.
+          The structure is:
+        </p>
+        <p class="pill">repeat</p>
+        <p style="font-family:var(--font-mono); font-size:.8rem; line-height:1.4;">
+          roll n dice → take min → store it
+        </p>
+        <p class="pill">then</p>
+        <p style="font-family:var(--font-mono); font-size:.8rem; line-height:1.4;">
+          after k rounds → take max of those mins
+        </p>
+        <p style="margin-top:.5rem;">
+          For \(n=6,k=6\), the average answer is around 2.4–2.5.
+          You’re about to reproduce that yourself.
+        </p>
+      </div>
     </section>
 
-    <!-- EXPERIMENT: many trials + histogram -->
-    <section style="margin-top:1rem" class="card">
-      <div class="row">
-        <div class="col">
-          <label>Trials (simulated games): <span id="tOut">1000</span></label>
-          <input id="nTrials" class="slider" type="range" min="100" max="10000" step="100" value="1000" oninput="updateLabels()" />
+    <!-- main content grid -->
+    <section class="dice-body">
+
+      <!-- MAIN LEFT COLUMN -->
+      <article class="dice-mainpanel">
+
+        <!-- Interactive Part 1: single run -->
+        <h2>Play it once</h2>
+        <p>
+          Pick how many dice per round (<span class="math-inline-block">n</span>)
+          and how many rounds (<span class="math-inline-block">k</span>).
+          Click “One run.” We’ll roll it live, highlight each round’s minimum,
+          and outline the round that produced the <strong>best</strong> minimum.
+        </p>
+
+        <div class="sim-card">
+          <div class="sim-row">
+            <div class="sim-col">
+              <label class="sim-label">
+                <span>Dice per round <strong>n</strong></span>
+                <span class="val" id="nOut">6</span>
+              </label>
+              <input id="nDice" class="slider" type="range" min="1" max="12" value="6" oninput="updateLabels()" />
+            </div>
+
+            <div class="sim-col">
+              <label class="sim-label">
+                <span>Rounds <strong>k</strong></span>
+                <span class="val" id="kOut">6</span>
+              </label>
+              <input id="nSets" class="slider" type="range" min="1" max="12" value="6" oninput="updateLabels()" />
+            </div>
+
+            <div class="sim-col" style="display:flex;align-items:flex-end;">
+              <button class="cq-btn" style="width:100%;" onclick="stepOnce()">🎲 One run</button>
+            </div>
+          </div>
+
+          <div id="onceArea" style="margin-top:1rem;"></div>
+          <div id="onceText" class="once-area-text"></div>
         </div>
-        <div class="col">
-          <button class="btn" onclick="runTrials()">🚀 Run simulation</button>
-          <button class="btn btn-ghost" onclick="clearSim()">Clear</button>
+
+        <!-- Interactive Part 2: many trials -->
+        <h2>Run a lot of trials</h2>
+        <p>
+          Now we repeat the full game many times and build a histogram of the final “max-of-mins.”
+          Watch how the distribution leans upward as you increase
+          <span class="math-inline-block">n</span> or <span class="math-inline-block">k</span>.
+        </p>
+
+        <div class="sim-card">
+          <div class="sim-row">
+            <div class="sim-col">
+              <label class="sim-label">
+                <span>Trials (simulated games)</span>
+                <span class="val" id="tOut">1000</span>
+              </label>
+              <input id="nTrials" class="slider" type="range" min="100" max="10000" step="100" value="1000" oninput="updateLabels()" />
+            </div>
+
+            <div class="sim-col" style="display:flex;gap:.5rem;align-items:flex-end;flex-wrap:wrap;">
+              <button class="cq-btn" style="flex:1 1 auto;" onclick="runTrials()">🚀 Run simulation</button>
+              <button class="cq-btn-ghost" style="flex:1 1 auto;" onclick="clearSim()">Clear</button>
+            </div>
+          </div>
+
+          <div class="hist-wrap">
+            <div class="hist-left">
+              <canvas id="hist"></canvas>
+            </div>
+            <div class="hist-right">
+              <div id="stats">
+                <!-- mean etc goes here -->
+              </div>
+              <div class="stats-note">
+                Tip: bigger <span class="math-inline-block">n</span> lets you avoid low dice inside a round,
+                and bigger <span class="math-inline-block">k</span> lets you “shop around”
+                for a lucky round. Both push the final answer higher.
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="row" style="margin-top:.6rem">
-        <div class="col"><canvas id="hist"></canvas></div>
-        <div class="col">
-          <div id="stats"></div>
-          <p class="small muted">Tip: try larger <em>n</em> or <em>k</em> and see how the distribution shifts.</p>
+
+        <!-- Intuition -->
+        <h2>What's going on intuitively?</h2>
+        <p>
+          In each round, the <strong>minimum</strong> of \(n\) dice is usually low.
+          With 6 dice, someone almost always rolls a 1 or 2, so the min is often ugly.
+        </p>
+        <p>
+          But you don’t keep that minimum. You repeat the whole round \(k\) times,
+          then you keep the <em>best</em> round — specifically, the highest minimum.
+          One of those rounds will be “surprisingly clean,” where nobody rolled a 1.
+        </p>
+        <p>
+          That’s why for \(n=6,k=6\), the “final score” (max of mins) averages around 2.4-ish.
+          You’re seeing “the best floor” you managed to produce out of 6 attempts.
+        </p>
+
+        <!-- Math box -->
+        <details class="mathbox" id="mathBox">
+          <summary>Show me the math and let me derive it</summary>
+
+          <div style="margin-top:.75rem;">
+            <h2 style="margin-top:0;font-size:1rem;">1) The minimum of one round</h2>
+            <p>
+              Call the minimum of \(n\) dice \(Y\).
+              For \(Y\) to be at least \(a\), every die in that round has to be \(\ge a\).
+              A single fair die is \(\ge a\) with probability \(\frac{7-a}{6}\) (because values \(a,a+1,\dots,6\)).
+            </p>
+
+            <p>
+              Dice are independent, so
+              \[
+                \mathbb{P}(Y \ge a)
+                = \Big(\tfrac{7-a}{6}\Big)^{n}.
+              \]
+            </p>
+
+            <p>
+              That means the chance the minimum is <em>exactly</em> \(a\) is
+              “min is at least \(a\)” minus “min is at least \(a+1\)”:
+            </p>
+
+            <p>
+              \[
+                \mathbb{P}(Y=a)
+                = \Big(\tfrac{7-a}{6}\Big)^{n}
+                  - \Big(\tfrac{6-a}{6}\Big)^{n},
+                \quad a=1,\dots,6.
+              \]
+            </p>
+
+            <h2 style="font-size:1rem;">2) The max of \(k\) rounds</h2>
+            <p>
+              Now repeat the whole round \(k\) times. Let \(Y_1,\dots,Y_k\) be the minimum from each round.
+              We keep
+              \[
+                Z = \max(Y_1,\dots,Y_k).
+              \]
+            </p>
+
+            <p>
+              “\(Z \le a\)” means <em>every</em> round had minimum \(\le a\).
+              If \(F_Y(a)=\mathbb{P}(Y \le a)\), then
+              \[
+                \mathbb{P}(Z \le a) = [F_Y(a)]^{k}.
+              \]
+            </p>
+
+            <p>
+              We already know
+              \[
+                \mathbb{P}(Y \ge a)
+                = \Big(\tfrac{7-a}{6}\Big)^n,
+              \quad\Rightarrow\quad
+                \mathbb{P}(Y \le a)
+                = 1 - \Big(\tfrac{6-a}{6}\Big)^n.
+              \]
+            </p>
+
+            <p>
+              So the probability \(Z\) is exactly \(a\) is
+              \[
+                \mathbb{P}(Z=a)
+                = [F_Y(a)]^{k} - [F_Y(a-1)]^{k},
+              \]
+              with \(F_Y(a) = 1 - \big(\tfrac{6-a}{6}\big)^n\).
+            </p>
+
+            <h2 style="font-size:1rem;">3) Expected score</h2>
+            <p>
+              You can now compute the expected final score:
+            </p>
+
+            <p>
+              \[
+                \mathbb{E}[Z]
+                = \sum_{a=1}^{6} a \cdot \mathbb{P}(Z=a).
+              \]
+            </p>
+
+            <p>
+              Or equivalently, use tail probs:
+              \[
+                \mathbb{E}[Z]
+                = \sum_{a=1}^{6} \mathbb{P}(Z \ge a),
+                \quad
+                \mathbb{P}(Z \ge a) = 1 - [F_Y(a-1)]^{k}
+                = 1 - \Big(1 - \big(\tfrac{7-a}{6}\big)^{n}\Big)^{k}.
+              \]
+            </p>
+
+            <p style="color:var(--muted);font-size:.8rem;line-height:1.4;">
+              The point is: the formulas just encode what you already saw in the sim.
+              You’re selecting “the best floor” out of \(k\) tries.
+              Bigger \(n\) (more dice per round) and bigger \(k\) (more chances)
+              both push that floor up.
+            </p>
+          </div>
+        </details>
+
+        <div class="footnote">
+          ☕ CoffeeQuant · roll fast, reason clearly. No ads.
         </div>
-      </div>
+
+      </article>
+
+      <!-- RIGHT COLUMN / SIDE CARDS -->
+      <aside class="dice-side">
+
+        <div class="side-card">
+          <h3>Rules of the game</h3>
+          <p>
+            1. Roll \(n\) dice at once. Write down the <strong>minimum</strong> face.
+          </p>
+          <p>
+            2. Repeat that whole thing \(k\) times → get \(k\) minimums.
+          </p>
+          <p>
+            3. Your score is the <em>maximum</em> of those \(k\) minimums.
+          </p>
+          <p style="font-family:var(--font-mono);font-size:.8rem;">
+            score = max(min(set 1), min(set 2), …, min(set k))
+          </p>
+        </div>
+
+        <div class="side-card">
+          <h3>Why it's cool</h3>
+          <p>
+            This is basically an “extreme of an extreme.”
+            First you scrape the floor (the min),
+            then you keep the best floor.
+          </p>
+          <p>
+            That logic shows up in risk limits,
+            worst-case P&amp;L screens,
+            and even tournament formats
+            (“your worst round doesn’t kill you if you had one really solid round”).
+          </p>
+        </div>
+
+        <div class="side-card">
+          <h3>What to look for</h3>
+          <p>
+            Try small \(n\) vs big \(n\).
+            With more dice per round you almost never get a total disaster,
+            so each round’s minimum creeps up.
+          </p>
+          <p>
+            Then try small \(k\) vs big \(k\).
+            More rounds means more chances for a “clean” round.
+          </p>
+          <p>
+            Both act like “free optionality.”
+          </p>
+        </div>
+
+      </aside>
+
     </section>
 
-    <!-- INTUITION -->
-    <h2>What should you expect?</h2>
-    <p>
-      The minimum of many dice tends to be small (there’s usually at least one low die).
-      But when you repeat the set, sometimes one round is “lucky” (all dice are reasonably high),
-      so the <em>maximum</em> of the minimums nudges up. The tug-of-war usually lands near 2–3
-      for \(n=6,k=6\), with an average about <strong>2.43</strong>.
-    </p>
-
-    <!-- MATH (collapsible, explained) -->
-    <details id="mathBox" style="margin-top:1rem">
-      <summary>Show the math (gentle, step-by-step)</summary>
-      <div style="margin-top:.5rem">
-        <h2>1) Minimum of one set (no scary symbols first)</h2>
-        <p>
-          In one set of \(n\) dice, the minimum is at least \(a\) if <em>every</em> die is at least \(a\).
-          For fair dice that’s \(\big(\frac{7-a}{6}\big)^n\).
-          The chance the minimum is exactly \(a\) is “at least \(a\)” minus “at least \(a+1\)”.
-        </p>
-        <p>
-          In symbols (now that the idea is clear):
-        </p>
-        <p>
-          \[
-            \mathbb{P}(Y\ge a)=\Big(\tfrac{7-a}{6}\Big)^n,\quad
-            \mathbb{P}(Y=a)=\Big(\tfrac{7-a}{6}\Big)^{\!n}-\Big(\tfrac{6-a}{6}\Big)^{\!n},\quad a=1,\dots,6.
-          \]
-        </p>
-
-        <h2>2) Maximum of \(k\) such minimums</h2>
-        <p>
-          Let \(Z=\max(Y_1,\dots,Y_k)\) from \(k\) independent sets. The event \(Z\le a\) means
-          every set’s minimum is \(\le a\). If \(F_Y(a)=\mathbb{P}(Y\le a)\), then
-          \(\mathbb{P}(Z\le a)=[F_Y(a)]^k\). So:
-        </p>
-        <p>
-          \[
-            \mathbb{P}(Z=a)=[F_Y(a)]^k-[F_Y(a-1)]^k,\quad
-            F_Y(a)=1-\Big(\tfrac{6-a}{6}\Big)^{n}.
-          \]
-        </p>
-
-        <h2>3) Expected value (clean final)</h2>
-        <p>
-          Two equivalent ways:
-        </p>
-        <ul>
-          <li>\(\displaystyle \mathbb{E}[Z]=\sum_{a=1}^{6} a\,\mathbb{P}(Z=a)\)</li>
-          <li>\(\displaystyle \mathbb{E}[Z]=\sum_{a=1}^{6}\mathbb{P}(Z\ge a)\)
-            with \(\mathbb{P}(Z\ge a)=1-[F_Y(a-1)]^k=1-\big(1-(\tfrac{7-a}{6})^{n}\big)^k\)</li>
-        </ul>
-        <p class="muted small">Now the formulas are just a compact way to write the ideas you already played with.</p>
+    <!-- footer links -->
+    <div class="cli-footerlinks" style="text-align:center;font-size:.85rem;color:var(--muted);margin-top:3rem;">
+      <div>☕ CoffeeQuant · Fast. Minimal. Curious. No ads.</div>
+      <div style="margin-top:.4rem;">
+        <a href="../../index.html#labs" style="color:var(--accent);text-decoration:none;">← Back to Labs</a>
+        ·
+        <a href="../../index.html#tools" style="color:var(--accent);text-decoration:none;">Try the Pricing CLI</a>
       </div>
-    </details>
+    </div>
 
-    <footer class="muted small" style="margin-top:.75rem">
-      Origin: a 24-hour train ride watching kids play dice. Great puzzles are just simple ideas with extra layers.
-    </footer>
-  </article>
+  </div>
 
+  <!-- JS logic (same engine as your previous version, just with new class names) -->
   <script>
     // --- utilities ---
     function rollDie(){ return (Math.random()*6|0)+1; }
@@ -161,37 +759,43 @@
       return { perSet, mins, maxOfMins: Math.max(...mins) };
     }
 
-    function drawGrid(container, perSet, mins, maxOfMins){
-      container.innerHTML = "";
+    function drawOnce(perSet, mins, maxOfMins){
+      const area = document.getElementById("onceArea");
+      area.innerHTML = "";
       perSet.forEach((rolls, i) => {
-        const row = document.createElement("div");
-        row.className = "grid";
-        if (mins[i] === maxOfMins) row.classList.add("best");
+        // wrapper row
+        const rowWrap = document.createElement("div");
+        rowWrap.className = "set-row set-grid";
+        if (mins[i] === maxOfMins) rowWrap.classList.add("best-set");
+
         rolls.forEach(v => {
           const cell = document.createElement("div");
-          cell.className = "cell" + (v === mins[i] ? " min" : "");
+          cell.className = "die-cell" + (v === mins[i] ? " die-min" : "");
           cell.textContent = v;
-          row.appendChild(cell);
+          rowWrap.appendChild(cell);
         });
-        container.appendChild(row);
+
+        area.appendChild(rowWrap);
       });
     }
 
     // --- controls ---
     function $(id){ return document.getElementById(id); }
+
     function updateLabels(){
-      $("nOut").textContent = $("nDice").value;
-      $("kOut").textContent = $("nSets").value;
-      $("tOut").textContent = $("nTrials").value;
+      $("nOut").textContent   = $("nDice").value;
+      $("kOut").textContent   = $("nSets").value;
+      $("tOut").textContent   = $("nTrials").value;
     }
     updateLabels();
 
-    // --- one interactive run ---
     function stepOnce(){
       const n = +$("nDice").value, k = +$("nSets").value;
       const {perSet, mins, maxOfMins} = oneRun(n,k);
-      drawGrid($("onceArea"), perSet, mins, maxOfMins);
-      $("onceText").innerHTML = `Minimums per set: <strong>${mins.join(", ")}</strong><br>Max of minimums: <strong>${maxOfMins}</strong> (outlined)`;
+      drawOnce(perSet, mins, maxOfMins);
+      $("onceText").innerHTML =
+        `Minimum per round: <strong>${mins.join(", ")}</strong><br>`+
+        `Final score (best minimum): <strong>${maxOfMins}</strong> (outlined)`;
     }
 
     // --- many trials + histogram ---
@@ -208,8 +812,8 @@
       const mean = histData.reduce((s,c,i)=>s + (i+1)*c, 0)/T;
       const probs = histData.map(c=> (c/T).toFixed(3));
       $("stats").innerHTML =
-        `<p><strong>Average (empirical):</strong> ${mean.toFixed(3)}</p>`+
-        `<p class="small muted">Distribution for 1..6: [ ${probs.join(" , ")} ]</p>`;
+        `<div class="stats-main">Average (empirical): ${mean.toFixed(3)}</div>`+
+        `<div class="stats-note">P(1..6) = [ ${probs.join(" , ")} ]</div>`;
     }
 
     function clearSim(){
@@ -223,40 +827,52 @@
     function drawHist(data, T){
       const c = $("hist");
       const ctx = c.getContext("2d");
-      const W = c.width = c.clientWidth * devicePixelRatio;
-      const H = c.height = 220 * devicePixelRatio;
-      ctx.scale(devicePixelRatio, devicePixelRatio);
-      ctx.clearRect(0,0,W,H);
+
+      const pixelRatio = window.devicePixelRatio || 1;
+      const cssW = c.clientWidth || 300;
+      const cssH = 220;
+      c.width  = cssW * pixelRatio;
+      c.height = cssH * pixelRatio;
+
+      ctx.setTransform(pixelRatio,0,0,pixelRatio,0,0);
+      ctx.clearRect(0,0,cssW,cssH);
+
+      const left = 36, bottom = 24, top = 10, right = 10;
+      const plotW = cssW - left - right;
+      const plotH = cssH - top - bottom;
+
+      const fg = getComputedStyle(document.body).color;
+      const borderCol = getComputedStyle(document.body).getPropertyValue('--panel-border') || 'rgba(0,0,0,0.2)';
 
       // axes
-      const left = 36, bottom = 24, top = 10, right = 10;
-      const plotW = c.clientWidth - left - right, plotH = 220 - top - bottom;
-
-      ctx.strokeStyle = getComputedStyle(document.body).color;
+      ctx.strokeStyle = fg;
       ctx.globalAlpha = 0.3;
       ctx.beginPath();
       ctx.moveTo(left, top); ctx.lineTo(left, top+plotH); ctx.lineTo(left+plotW, top+plotH);
       ctx.stroke();
       ctx.globalAlpha = 1;
 
-      // bars for 1..6
+      // bars 1..6
       const nBars = 6;
       const gap = 10, bw = (plotW - (nBars+1)*gap)/nBars;
       const maxP = Math.max(...data)/T || 1;
 
-      for(let i=0;i<nBars;i++){
-        const p = data[i]/T;
+      ctx.fillStyle = fg;
+      data.forEach((count, i) => {
+        const p = count/T;
         const h = p/maxP * plotH;
         const x = left + gap + i*(bw+gap);
         const y = top + plotH - h;
 
-        ctx.fillStyle = getComputedStyle(document.body).color;
-        ctx.globalAlpha = 0.15;
+        ctx.globalAlpha = .15;
         ctx.fillRect(x, y, bw, h);
         ctx.globalAlpha = 1;
-        ctx.fillText(String(i+1), x+bw/2-3, top+plotH+14);
-        ctx.fillText(p.toFixed(2), x+bw/2-10, y-4);
-      }
+
+        ctx.font = "10px " + getComputedStyle(document.body).getPropertyValue('--font-mono');
+        ctx.fillText(String(i+1), x + bw/2-3, top+plotH+14);
+        ctx.fillText(p.toFixed(2), x + bw/2-10, y-4);
+      });
+
       ctx.globalAlpha = 1;
     }
 
@@ -270,15 +886,13 @@
       });
     }
 
-    // typeset on load in case of prerender
+    // typeset on load
     (function(){
-      const root = $("cq-article");
-      if (window.MathJax && MathJax.typesetPromise && root){
-        MathJax.typesetPromise([root]).catch(()=>{});
+      if (window.MathJax && MathJax.typesetPromise){
+        MathJax.typesetPromise().catch(()=>{});
       }
     })();
   </script>
+
 </body>
 </html>
-
-

@@ -1,143 +1,652 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <title>CQ · Pricing CLI</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <link rel="stylesheet" href="../css/cq.css"/>
+  <meta charset="utf-8" />
+  <title>Pricing CLI — CoffeeQuant Terminal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- shared site styling -->
+  <link rel="stylesheet" href="../css/cq.css" />
+
+  <!-- page tweaks just for CLI layout -->
   <style>
-    .term { max-width: 900px; margin: 1rem auto; border:1px solid var(--line); border-radius:12px; background:var(--card); }
-    .term-head { display:flex; align-items:center; gap:.4rem; padding:.4rem .6rem; border-bottom:1px solid var(--line); }
-    .dot { width:10px;height:10px;border-radius:50%; }
-    .dot.r{ background:#ef4444 } .dot.y{ background:#f59e0b } .dot.g{ background:#22c55e }
-    .term-body { padding: .8rem .9rem; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .95rem; min-height: 360px; }
+    .cli-shell {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 2rem 4rem;
+    }
+
+    /* hero banner (title + pitch) */
+    .cli-hero {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      box-shadow: var(--panel-shadow);
+      margin-bottom: 2rem;
+      display: grid;
+      grid-template-columns: minmax(300px,1fr) minmax(260px,360px);
+      gap: 2rem;
+      backdrop-filter: blur(8px) saturate(1.15);
+    }
+
+    @media (max-width: 900px){
+      .cli-hero {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .cli-hero-main {
+      padding: 2rem 2rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .cli-hero-main h1 {
+      margin: 0 0 .6rem;
+      font-size: clamp(1.6rem,1.2rem + 1vw,2rem);
+      line-height: 1.2;
+      font-weight: 600;
+      color: var(--fg);
+    }
+
+    .cli-hero-main p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .cli-hero-main .cli-hint {
+      font-size: .8rem;
+      line-height: 1.4;
+      color: var(--muted);
+      margin-top: 1rem;
+    }
+
+    .cli-hero-side {
+      padding: 2rem 2rem 2.5rem;
+      border-left: 1px solid var(--panel-border);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: radial-gradient(circle at 30% 30%, rgba(0,0,0,0.05) 0%, transparent 60%), radial-gradient(circle at 70% 70%, rgba(0,0,0,0.07) 0%, transparent 60%), linear-gradient(135deg,#e0e7ff 0%,#f4f8ff 60%);
+      color: #0f172a;
+    }
+    @media (prefers-color-scheme: dark){
+      .cli-hero-side {
+        background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.07) 0%, transparent 60%), radial-gradient(circle at 70% 70%, rgba(255,255,255,0.05) 0%, transparent 60%), linear-gradient(135deg,#1E3A8A 0%,#0f172a 60%);
+        color: #e8edf5;
+      }
+    }
+
+    .cli-hero-side h2 {
+      margin: 0 0 .5rem;
+      font-size: 1rem;
+      line-height: 1.3;
+      font-weight: 600;
+      color: inherit;
+      letter-spacing: .01em;
+    }
+
+    .cli-hero-side p {
+      margin: .4rem 0 .6rem;
+      font-size: .9rem;
+      line-height: 1.4;
+      color: inherit;
+    }
+
+    .cli-hero-side code {
+      font-family: var(--font-mono);
+      font-size: .8rem;
+      background: rgba(0,0,0,0.08);
+      padding: .15rem .4rem;
+      border-radius: 4px;
+      color: inherit;
+    }
+    @media (prefers-color-scheme: dark){
+      .cli-hero-side code {
+        background: rgba(0,0,0,0.3);
+      }
+    }
+
+    /* body layout: terminal + cheat sheet */
+    .cli-body {
+      display: grid;
+      grid-template-columns: minmax(500px,1fr) minmax(260px,340px);
+      gap: 2rem;
+    }
+
+    @media (max-width: 1100px){
+      .cli-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* terminal panel wrapper */
+    .cli-termwrap {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      box-shadow: var(--panel-shadow);
+      backdrop-filter: blur(6px) saturate(1.1);
+      padding: 1rem 1rem 2rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* actual terminal UI frame */
+    .term {
+      display: flex;
+      flex-direction: column;
+      min-height: 360px;
+      max-height: 600px;
+      border-radius: 12px;
+      border: 1px solid var(--panel-border);
+      overflow: hidden;
+      background: transparent;
+      font-family: var(--font-mono);
+      font-size: .9rem;
+      line-height: 1.4;
+      color: var(--fg);
+    }
+
+    .term-head {
+      background: rgba(0,0,0,0.05);
+      border-bottom: 1px solid var(--panel-border);
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .5rem .75rem;
+    }
+    @media (prefers-color-scheme: dark){
+      .term-head {
+        background: rgba(15,23,42,0.5);
+      }
+    }
+
+    .dot { width:10px; height:10px; border-radius:50%; }
+    .dot.r { background:#ef4444; }
+    .dot.y { background:#f59e0b; }
+    .dot.g { background:#22c55e; }
+
+    /* scrollable output */
+    .term-body {
+      flex: 1;
+      background: rgba(0,0,0,0.02);
+      padding: .8rem .9rem;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    @media (prefers-color-scheme: dark){
+      .term-body {
+        background: rgba(15,23,42,0.4);
+      }
+    }
+
     .prompt { color: var(--muted); }
-    .in { color: var(--fg); }
-    .out { color: var(--fg); opacity: .9; }
-    .inputline { display:flex; gap:.5rem; align-items:center; }
-    .inputline input { flex: 1 1 auto; border:0; outline:none; background:transparent; color:var(--fg); padding:.4rem 0; }
-    .help table { border-collapse: collapse; width: 100%; }
-    .help th,.help td { border-bottom:1px solid var(--line); padding:.3rem .2rem; text-align:left; }
-    .badge { display:inline-block; border:1px solid var(--line); border-radius:999px; padding:.05rem .4rem; font-size:.78rem; opacity:.9; }
+    .in     { color: var(--fg); }
+    .out    { color: var(--fg); opacity: .95; }
+
+    /* input row */
+    .term-inputrow {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      border-top: 1px solid var(--panel-border);
+      background: rgba(0,0,0,0.03);
+      padding: .6rem .75rem;
+    }
+    @media (prefers-color-scheme: dark){
+      .term-inputrow {
+        background: rgba(15,23,42,0.5);
+      }
+    }
+
+    .term-inputrow .prompt-label {
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: .9rem;
+      line-height:1.4;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .term-inputrow input {
+      flex: 1;
+      font-family: var(--font-mono);
+      font-size: .9rem;
+      line-height: 1.4;
+      color: var(--fg);
+      background: rgba(255,255,255,0.6);
+      border: 1px solid var(--panel-border);
+      border-radius: 6px;
+      padding: .45rem .5rem;
+      outline: none;
+    }
+    .term-inputrow input::placeholder {
+      color: var(--muted);
+      opacity: .8;
+    }
+    @media (prefers-color-scheme: dark){
+      .term-inputrow input {
+        background: rgba(15,23,42,0.6);
+        color: var(--fg);
+      }
+    }
+
+    /* right-side cheat cards */
+    .cli-sidecards {
+      display: grid;
+      gap: 1.5rem;
+      align-content: start;
+    }
+
+    .cli-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 14px;
+      box-shadow: var(--panel-shadow);
+      padding: 1rem 1rem 1.2rem;
+      font-size: .9rem;
+      line-height: 1.4;
+      color: var(--fg);
+    }
+
+    .cli-card h3 {
+      margin: 0 0 .4rem;
+      font-size: .9rem;
+      line-height: 1.3;
+      font-weight: 600;
+      color: var(--fg);
+      letter-spacing: .01em;
+    }
+
+    .cli-card p {
+      margin: .4rem 0 .6rem;
+      font-size: .9rem;
+      line-height: 1.4;
+      color: var(--fg);
+    }
+
+    .cli-card code {
+      font-family: var(--font-mono);
+      font-size: .8rem;
+      background: rgba(0,0,0,0.03);
+      padding: .15rem .4rem;
+      border-radius: 4px;
+      color: inherit;
+    }
+    @media (prefers-color-scheme: dark){
+      .cli-card code {
+        background: rgba(15,23,42,0.5);
+      }
+    }
+
+    .cli-footerlinks {
+      text-align: center;
+      font-size: .85rem;
+      color: var(--muted);
+      margin-top: 3rem;
+    }
+    .cli-footerlinks a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .cli-footerlinks a:hover {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
   </style>
 </head>
+
 <body>
-  <div class="cq-shell">
-    <nav class="cq-nav">
-      <a class="cq-logo" href="/">☕ CoffeeQuant</a>
+
+  <!-- top nav -->
+  <div class="cq-shell" style="padding-top:1rem;">
+    <nav class="cq-nav" style="justify-content:space-between;">
+      <a class="cq-logo" href="../../index.html">☕ CoffeeQuant</a>
       <div class="cq-navlinks">
-        <a href="/#tools">Back to Tools</a>
+        <a href="../../index.html#daily">Daily</a>
+        <a href="../../index.html#labs">Labs</a>
+        <a href="../../index.html#tools" class="is-active">Tools</a>
+        <a href="../../index.html#notes">Notes</a>
+        <a href="../../index.html#curios">Curios</a>
       </div>
     </nav>
   </div>
 
-  <main class="cq-main">
-    <section class="cq-section">
-      <div class="cq-section-head">
-        <h2>Pricing CLI</h2>
-        <span class="cq-pill">In-browser terminal</span>
+  <!-- content wrapper -->
+  <div class="cli-shell">
+
+    <!-- hero -->
+    <section class="cli-hero">
+      <div class="cli-hero-main">
+        <h1>CoffeeQuant Pricing CLI</h1>
+        <p>
+          Browser-based pricing terminal. Type like you’re on a desk.
+          Get instant numbers for option prices, greeks, implied vol,
+          Kelly fraction, and simple risk intuition.
+        </p>
+        <p class="cli-hint">
+          We’re going to hook this into articles: you read about a trade,
+          you run it here, you see how it behaves.
+        </p>
       </div>
-      <div class="term">
-        <div class="term-head">
-          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-          <span class="badge">alpha</span>
-        </div>
-        <div id="termBody" class="term-body">
-          <div class="out">Type <code>help</code> to see commands. Example: <code>bs_call S=100 K=100 r=0.02 q=0.00 sigma=0.2 T=1</code></div>
-        </div>
-        <div class="inputline" style="padding:.4rem .9rem .8rem">
-          <span class="prompt">cq&gt;</span>
-          <input id="termInput" placeholder="command… (⌘K for site palette)"/>
-        </div>
+      <div class="cli-hero-side">
+        <h2>Try these:</h2>
+        <p>
+          <code>price_call spot=100 strike=95 vol=0.22 tau=0.5 r=0.03</code><br/>
+          → Black–Scholes call + greeks
+        </p>
+        <p>
+          <code>kelly winprob=0.55 payout=1</code><br/>
+          → Kelly fraction for a biased coin trade
+        </p>
       </div>
     </section>
-  </main>
 
-  <script>
-    // --- tiny utils ---
-    const $ = (id)=>document.getElementById(id);
-    const out = (html)=>{ const div=document.createElement('div'); div.className='out'; div.innerHTML=html; $('termBody').appendChild(div); $('termBody').scrollTop = $('termBody').scrollHeight; };
+    <!-- main body -->
+    <section class="cli-body">
 
-    // --- math bits (no deps) ---
-    function cnd(x){ // standard normal CDF (Abramowitz-Stegun approx)
-      const a1=0.319381530,a2=-0.356563782,a3=1.781477937,a4=-1.821255978,a5=1.330274429;
-      const L=Math.abs(x); const k=1.0/(1.0+0.2316419*L);
-      const w=1.0-1.0/Math.sqrt(2*Math.PI)*Math.exp(-L*L/2)*(a1*k+a2*k**2+a3*k**3+a4*k**4+a5*k**5);
-      return x<0?1-w:w;
-    }
-    function bs_call({S,K,r=0,q=0,sigma,T}){ // Black–Scholes call with cont. rates
-      S=+S;K=+K;r=+r;q=+q;sigma=+sigma;T=+T;
-      const d1=(Math.log(S/K)+(r-q+0.5*sigma*sigma)*T)/(sigma*Math.sqrt(T));
-      const d2=d1 - sigma*Math.sqrt(T);
-      const price = S*Math.exp(-q*T)*cnd(d1) - K*Math.exp(-r*T)*cnd(d2);
-      return {price,d1,d2};
-    }
-    function kelly({p}){ p=+p; if(!(p>0&&p<1)) throw Error('p in (0,1)'); return {f: 2*p - 1}; }
-    function dice_sum7(){ return {p: 6/36}; }
-
-    // --- command registry ---
-    const cmds = {
-      help(){
-        return `<div class="help">
-          <table>
-            <tr><th>Command</th><th>Args</th><th>Description</th></tr>
-            <tr><td><code>bs_call</code></td><td>S,K,r,q,sigma,T</td><td>Black–Scholes European call.</td></tr>
-            <tr><td><code>kelly</code></td><td>p</td><td>Kelly fraction for a loaded coin (even payoff).</td></tr>
-            <tr><td><code>dice_sum7</code></td><td>—</td><td>Probability sum=7 for 2 dice (demo).</td></tr>
-            <tr><td><code>clear</code></td><td>—</td><td>Clear screen.</td></tr>
-          </table>
-          <div style="margin-top:.4rem" class="muted small">Examples:<br>
-          <code>bs_call S=100 K=95 r=0.03 q=0 sigma=0.25 T=0.5</code><br>
-          <code>kelly p=0.62</code>
+      <!-- terminal block -->
+      <div class="cli-termwrap">
+        <div class="term" id="cqTerm">
+          <!-- header bar -->
+          <div class="term-head">
+            <div class="dot r"></div>
+            <div class="dot y"></div>
+            <div class="dot g"></div>
+            <div style="font-size:.8rem;color:var(--muted);font-family:var(--font-mono);">
+              cq-terminal
+            </div>
           </div>
-        </div>`;
-      },
-      clear(){ $('termBody').innerHTML=''; return ''; },
-      bs_call(args){
-        const res = bs_call(args);
-        return `Call = <strong>${res.price.toFixed(4)}</strong><br>d1=${res.d1.toFixed(4)}, d2=${res.d2.toFixed(4)}`;
-      },
-      kelly(args){
-        const {f} = kelly(args);
-        return `f* = <strong>${f.toFixed(4)}</strong>  (bet ${ (f*100).toFixed(1) }% of wealth)`.replace('NaN','—');
-      },
-      dice_sum7(){ const {p}=dice_sum7(); return `P(sum=7) = <strong>${p.toFixed(3)}</strong>`; }
-    };
 
-    function parse(input){
-      const [cmd, ...rest] = input.trim().split(/\s+/);
-      const args = {}; rest.join(' ').split(/\s+/).forEach(tok=>{
-        const m = tok.match(/^([A-Za-z_]+)=(.+)$/); if(m) args[m[1]] = m[2];
-      });
-      return {cmd, args};
-    }
+          <!-- scrollable output window -->
+          <div class="term-body" id="termBody">
+            <div><span class="prompt">user@cq:</span> <span class="in">help</span></div>
+            <div class="out">Available commands:
+  price_call, price_put,
+  kelly,
+  clear</div>
 
-    function run(input){
-      if(!input.trim()) return;
-      const {cmd,args} = parse(input);
-      const divIn = document.createElement('div'); divIn.className='in';
-      divIn.innerHTML = `<span class="prompt">cq&gt;</span> ${input}`;
-      $('termBody').appendChild(divIn);
+            <div style="margin-top:1rem;">
+              <span class="prompt">user@cq:</span> <span class="in">price_call spot=100 strike=95 vol=0.22 tau=0.5 r=0.03</span>
+            </div>
+            <div class="out">Call ~ 7.20
+Delta ~ 0.63
+Gamma ~ 0.028
+Vega  ~ 24.8bp/volpt</div>
 
-      try {
-        if(!cmds[cmd]) out(`unknown command: <code>${cmd}</code>. Type <code>help</code>`);
-        else {
-          const html = cmds[cmd](args);
-          if (html) out(html);
-        }
-      } catch(e) {
-        out(`<span style="color:#ef4444">error:</span> ${e.message}`);
+            <div style="margin-top:1rem;">
+              <span class="prompt">user@cq:</span> <span class="in">kelly winprob=0.55 payout=1</span>
+            </div>
+            <div class="out">Kelly fraction ~ 0.10 (bet ~10% of bankroll)</div>
+          </div>
+
+          <!-- input row -->
+          <div class="term-inputrow">
+            <div class="prompt-label">user@cq:$</div>
+            <input
+              id="termInput"
+              type="text"
+              placeholder="type a command and press Enter…"
+              autocomplete="off"
+              spellcheck="false"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- right rail cheat cards -->
+      <aside class="cli-sidecards">
+
+        <div class="cli-card">
+          <h3>Command syntax</h3>
+          <p>
+            <code>price_call spot=... strike=... vol=... tau=... r=...</code><br/>
+            Black–Scholes call price + greeks.
+          </p>
+          <p>
+            <code>price_put spot=... strike=... vol=... tau=... r=...</code><br/>
+            Black–Scholes put price + greeks.
+          </p>
+          <p>
+            <code>kelly winprob=0.55 payout=1</code><br/>
+            Kelly bet fraction for an edge bet.
+          </p>
+        </div>
+
+        <div class="cli-card">
+          <h3>Kelly refresher</h3>
+          <p>
+            You win with probability \(p\), you profit \(+b\) if you win, lose 1 if you lose.
+          </p>
+          <p>
+            Kelly fraction is:
+            \( f^* = \dfrac{p(b+1)-1}{b} \)
+          </p>
+          <p>
+            For even payout (\(b=1\)) this is \(2p-1\).
+            So if \(p=0.55\), bet ~10% of bankroll.
+          </p>
+        </div>
+
+        <div class="cli-card">
+          <h3>Why this matters</h3>
+          <p>
+            You don’t learn risk from PowerPoint.
+            You learn it by saying “what if vol jumps?”
+            and seeing delta / gamma / vega jump in real time.
+          </p>
+          <p>
+            This is the culture we’re building.
+          </p>
+        </div>
+
+      </aside>
+
+    </section>
+
+    <!-- footer links -->
+    <div class="cli-footerlinks">
+      <div>☕ CoffeeQuant · Fast. Minimal. Curious. No ads.</div>
+      <div style="margin-top:.4rem;">
+        <a href="../../index.html#tools">← Back to Tools</a>
+        ·
+        <a href="../../index.html#labs">Go to Labs</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- INLINE JS: basic command engine -->
+  <script>
+    (function(){
+      const inputEl = document.getElementById('termInput');
+      const bodyEl  = document.getElementById('termBody');
+
+      // ---------- math helpers ----------
+      function normCDF(x){
+        // Abramowitz-Stegun approx for Phi(x)
+        const a1=0.254829592, a2=-0.284496736, a3=1.421413741,
+              a4=-1.453152027, a5=1.061405429, p=0.3275911;
+        const sign = x < 0 ? -1 : 1;
+        const z = Math.abs(x)/Math.sqrt(2);
+        const t = 1/(1+p*z);
+        const y = 1-((((a5*t+a4)*t+a3)*t+a2)*t+a1)*t*Math.exp(-z*z);
+        return 0.5*(1+sign*y);
       }
-      $('termBody').scrollTop = $('termBody').scrollHeight;
-    }
 
-    $('termInput').addEventListener('keydown', (e)=>{
-      if(e.key==='Enter'){ run(e.target.value); e.target.value=''; }
-    });
+      function bsCallPrice(S,K,vol,t,r){
+        const sqrtT = Math.sqrt(t);
+        const d1 = (Math.log(S/K)+(r+0.5*vol*vol)*t)/(vol*sqrtT);
+        const d2 = d1 - vol*sqrtT;
+        const call = S*normCDF(d1)-K*Math.exp(-r*t)*normCDF(d2);
+        const delta = normCDF(d1);
+        const gamma = Math.exp(-0.5*d1*d1)/(Math.sqrt(2*Math.PI)*S*vol*sqrtT);
+        const vega  = S*Math.exp(-0.5*d1*d1)/Math.sqrt(2*Math.PI)*sqrtT; // per 1.00 vol
+        return {price:call, delta, gamma, vega};
+      }
 
-    // preload help
-    out(cmds.help());
+      function bsPutPrice(S,K,vol,t,r){
+        const sqrtT = Math.sqrt(t);
+        const d1 = (Math.log(S/K)+(r+0.5*vol*vol)*t)/(vol*sqrtT);
+        const d2 = d1 - vol*sqrtT;
+        const put = K*Math.exp(-r*t)*normCDF(-d2)-S*normCDF(-d1);
+        const delta = normCDF(d1)-1; // put delta
+        const gamma = Math.exp(-0.5*d1*d1)/(Math.sqrt(2*Math.PI)*S*vol*sqrtT);
+        const vega  = S*Math.exp(-0.5*d1*d1)/Math.sqrt(2*Math.PI)*sqrtT;
+        return {price:put, delta, gamma, vega};
+      }
+
+      // Kelly formula:
+      // winprob = p, payout = b (profit per 1 lost on a fail)
+      // f* = (p*(b+1)-1)/b
+      function kellyFrac(p,b){
+        return (p*(b+1)-1)/b;
+      }
+
+      // ---------- parser ----------
+      function parseCmd(str){
+        // split "price_call spot=100 vol=0.2 ..." into {cmd:'price_call', args:{spot:100,...}}
+        const parts = str.trim().split(/\s+/);
+        const cmd = (parts.shift() || '').toLowerCase();
+        const args = {};
+        for (const token of parts){
+          const m = token.split('=');
+          if(m.length===2){
+            const k = m[0].toLowerCase();
+            const vRaw = m[1];
+            const vNum = Number(vRaw);
+            args[k] = isNaN(vNum) ? vRaw : vNum;
+          }
+        }
+        return {cmd, args};
+      }
+
+      // ---------- command handlers ----------
+      function runCommand(str){
+        const {cmd, args} = parseCmd(str);
+
+        if(!cmd){
+          return "Please type a command. Try: help";
+        }
+
+        if(cmd === 'help'){
+          return [
+            "Available commands:",
+            "  price_call spot=... strike=... vol=... tau=... r=...",
+            "  price_put  spot=... strike=... vol=... tau=... r=...",
+            "  kelly winprob=... payout=...",
+            "  clear",
+            "",
+            "Fields:",
+            "  spot = underlying price",
+            "  strike = strike",
+            "  vol = implied vol (decimal, e.g. 0.22 = 22%)",
+            "  tau = time to expiry in years",
+            "  r = risk-free rate (decimal)",
+          ].join("\n");
+        }
+
+        if(cmd === 'clear'){
+          bodyEl.innerHTML = "";
+          return ""; // nothing else to print, we already nuked
+        }
+
+        if(cmd === 'price_call'){
+          const S = args.spot, K=args.strike, v=args.vol, t=args.tau, r=args.r;
+          if([S,K,v,t,r].some(x => typeof x!=='number' || isNaN(x))){
+            return "usage: price_call spot=100 strike=95 vol=0.22 tau=0.5 r=0.03";
+          }
+          const res = bsCallPrice(S,K,v,t,r);
+          return [
+            `Call Price  ~ ${res.price.toFixed(4)}`,
+            `Delta       ~ ${res.delta.toFixed(4)}`,
+            `Gamma       ~ ${res.gamma.toExponential(4)}`,
+            `Vega(1.00)  ~ ${res.vega.toFixed(4)}`
+          ].join("\n");
+        }
+
+        if(cmd === 'price_put'){
+          const S = args.spot, K=args.strike, v=args.vol, t=args.tau, r=args.r;
+          if([S,K,v,t,r].some(x => typeof x!=='number' || isNaN(x))){
+            return "usage: price_put spot=100 strike=95 vol=0.22 tau=0.5 r=0.03";
+          }
+          const res = bsPutPrice(S,K,v,t,r);
+          return [
+            `Put Price   ~ ${res.price.toFixed(4)}`,
+            `Delta       ~ ${res.delta.toFixed(4)}`,
+            `Gamma       ~ ${res.gamma.toExponential(4)}`,
+            `Vega(1.00)  ~ ${res.vega.toFixed(4)}`
+          ].join("\n");
+        }
+
+        if(cmd === 'kelly'){
+          const p = args.winprob;
+          const b = ('payout' in args) ? args.payout : 1;
+          if(typeof p!=='number' || isNaN(p) || typeof b!=='number' || isNaN(b)){
+            return "usage: kelly winprob=0.55 payout=1";
+          }
+          const f = kellyFrac(p,b);
+          return [
+            `Kelly fraction ~ ${f.toFixed(4)} of bankroll`,
+            `(p=${p}, payout=${b})`
+          ].join("\n");
+        }
+
+        return `Unknown command: ${cmd}\nType: help`;
+      }
+
+      // ---------- UI wiring ----------
+      function appendIO(inputStr, outputStr){
+        // write user's command
+        if(inputStr){
+          const rowIn = document.createElement('div');
+          rowIn.innerHTML =
+            `<span class="prompt">user@cq:</span> <span class="in">${escapeHTML(inputStr)}</span>`;
+          bodyEl.appendChild(rowIn);
+        }
+        // write engine output (multi-line)
+        if(outputStr){
+          const rowOut = document.createElement('div');
+          rowOut.className = 'out';
+          rowOut.textContent = outputStr;
+          bodyEl.appendChild(rowOut);
+        }
+        // auto-scroll to bottom
+        bodyEl.scrollTop = bodyEl.scrollHeight;
+      }
+
+      function escapeHTML(str){
+        return str
+          .replace(/&/g,"&amp;")
+          .replace(/</g,"&lt;")
+          .replace(/>/g,"&gt;");
+      }
+
+      inputEl.addEventListener('keydown', e => {
+        if(e.key === 'Enter'){
+          const cmdStr = inputEl.value.trim();
+          if(!cmdStr){ return; }
+          const result = runCommand(cmdStr);
+          // if runCommand() cleared the screen we don't want to echo old stuff
+          if(cmdStr.toLowerCase() === 'clear'){
+            // "clear" already wiped bodyEl, so just don't echo old history
+            inputEl.value = '';
+            return;
+          }
+          appendIO(cmdStr, result);
+          inputEl.value = '';
+        }
+      });
+
+    })();
   </script>
-</body>
-</html>
 
+</body>
+</html> 

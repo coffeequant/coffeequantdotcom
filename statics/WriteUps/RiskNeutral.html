@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Risk-Neutral Probability — Making a Rigged Game Fair</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- site theme -->
+  <link rel="stylesheet" href="../css/cq.css" />
+
+  <style>
+    .rn-shell {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 2rem 4rem;
+    }
+
+    /* hero */
+    .rn-hero {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      box-shadow: var(--panel-shadow);
+      margin-bottom: 2rem;
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(260px,360px);
+      gap: 2rem;
+      backdrop-filter: blur(8px) saturate(1.15);
+    }
+    @media (max-width: 900px){
+      .rn-hero {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .rn-hero-main {
+      padding: 2rem 2rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .rn-hero-main h1 {
+      margin: 0 0 .6rem;
+      font-size: clamp(1.5rem,1.1rem + 1vw,2rem);
+      line-height: 1.2;
+      font-weight: 600;
+      color: var(--fg);
+    }
+
+    .rn-hero-main p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .rn-hero-side {
+      padding: 2rem 2rem 2.5rem;
+      border-left: 1px solid var(--panel-border);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: radial-gradient(circle at 30% 30%, rgba(0,0,0,0.05) 0%, transparent 60%), radial-gradient(circle at 70% 70%, rgba(0,0,0,0.07) 0%, transparent 60%), linear-gradient(135deg,#e0e7ff 0%,#f4f8ff 60%);
+      color: #0f172a;
+      font-size: .9rem;
+      line-height: 1.4;
+    }
+    @media (prefers-color-scheme: dark){
+      .rn-hero-side {
+        background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.07) 0%, transparent 60%), radial-gradient(circle at 70% 70%, rgba(255,255,255,0.05) 0%, transparent 60%), linear-gradient(135deg,#1E3A8A 0%,#0f172a 60%);
+        color: #e8edf5;
+      }
+    }
+
+    .rn-hero-side h2 {
+      margin: 0 0 .5rem;
+      font-size: .9rem;
+      line-height: 1.3;
+      font-weight: 600;
+      color: inherit;
+      letter-spacing: .01em;
+    }
+
+    .rn-hero-side p {
+      margin: .4rem 0 .6rem;
+      color: inherit;
+    }
+
+    .rn-hero-side code {
+      font-family: var(--font-mono);
+      font-size: .8rem;
+      background: rgba(0,0,0,0.08);
+      padding: .15rem .4rem;
+      border-radius: 4px;
+      color: inherit;
+    }
+    @media (prefers-color-scheme: dark){
+      .rn-hero-side code {
+        background: rgba(0,0,0,0.3);
+      }
+    }
+
+    /* body layout */
+    .rn-body {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(260px,340px);
+      gap: 2rem;
+    }
+    @media (max-width:1100px){
+      .rn-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* left column main content */
+    .rn-mainpanel {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      box-shadow: var(--panel-shadow);
+      backdrop-filter: blur(6px) saturate(1.1);
+      padding: 2rem 2rem 3rem;
+      color: var(--fg);
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .rn-mainpanel h2 {
+      font-size: 1.05rem;
+      line-height:1.3;
+      font-weight:600;
+      color: var(--fg);
+      margin:2rem 0 .5rem;
+    }
+
+    .rn-mainpanel p {
+      margin:.8rem 0 1rem;
+      color:var(--fg);
+      font-size:1rem;
+      line-height:1.5;
+    }
+
+    .inline-mono {
+      background: rgba(0,0,0,0.03);
+      border-radius:4px;
+      padding:.15rem .4rem;
+      font-family: var(--font-mono);
+      font-size:.8rem;
+      line-height:1.4;
+      display:inline-block;
+    }
+    @media (prefers-color-scheme: dark){
+      .inline-mono {
+        background: rgba(15,23,42,0.5);
+      }
+    }
+
+    .rn-card {
+      background: rgba(0,0,0,0.03);
+      border: 1px solid var(--panel-border);
+      border-radius:12px;
+      padding:1rem 1rem 1.25rem;
+      font-size:.9rem;
+      line-height:1.4;
+    }
+    @media (prefers-color-scheme: dark){
+      .rn-card {
+        background: rgba(15,23,42,0.5);
+      }
+    }
+
+    .rn-card h3 {
+      margin:0 0 .4rem;
+      font-size:.9rem;
+      line-height:1.3;
+      font-weight:600;
+      color:var(--fg);
+    }
+
+    /* interactive widgets */
+    .rn-widget-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:1rem 1.25rem;
+      align-items:flex-start;
+      margin-top:1rem;
+    }
+    .rn-widget-col {
+      flex:1 1 200px;
+      min-width:0;
+    }
+    .rn-label {
+      font-size:.8rem;
+      font-weight:500;
+      color:var(--fg);
+      margin-bottom:.4rem;
+      line-height:1.4;
+      display:flex;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .rn-val {
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size:.8rem;
+      margin-left:.4rem;
+    }
+    .rn-slider {
+      width:100%;
+      accent-color: var(--accent);
+    }
+
+    .rn-result-block {
+      font-size:.9rem;
+      line-height:1.4;
+      color:var(--fg);
+      margin-top:.75rem;
+      font-family: var(--font-mono);
+      white-space:pre-wrap;
+    }
+
+    /* math details */
+    details.mathbox {
+      background: rgba(0,0,0,0.02);
+      border:1px solid var(--panel-border);
+      border-radius:12px;
+      padding:.9rem 1rem 1rem;
+      font-size:.9rem;
+      line-height:1.5;
+      margin-top:2rem;
+    }
+    @media (prefers-color-scheme: dark){
+      details.mathbox {
+        background: rgba(15,23,42,0.4);
+      }
+    }
+
+    details.mathbox summary {
+      cursor:pointer;
+      font-weight:600;
+      font-size:.95rem;
+      line-height:1.4;
+      color:var(--fg);
+      outline:none;
+    }
+
+    .math-inline-block {
+      background: rgba(0,0,0,0.03);
+      border-radius:4px;
+      padding:.1rem .3rem;
+      font-family:var(--font-mono);
+      font-size:.8rem;
+      line-height:1.4;
+      display:inline-block;
+    }
+    @media (prefers-color-scheme: dark){
+      .math-inline-block {
+        background: rgba(15,23,42,0.5);
+      }
+    }
+
+    .footnote {
+      text-align:center;
+      font-size:.8rem;
+      line-height:1.4;
+      color: var(--muted);
+      margin-top:3rem;
+    }
+
+    /* right column cards */
+    .rn-side {
+      display:grid;
+      gap:1.5rem;
+      align-content:start;
+    }
+    .side-card {
+      background: var(--panel-bg);
+      border:1px solid var(--panel-border);
+      border-radius:14px;
+      box-shadow: var(--panel-shadow);
+      padding:1rem 1rem 1.2rem;
+      font-size:.9rem;
+      line-height:1.4;
+      color:var(--fg);
+    }
+    .side-card h3 {
+      margin:0 0 .4rem;
+      font-size:.9rem;
+      line-height:1.3;
+      font-weight:600;
+      color:var(--fg);
+      letter-spacing:.01em;
+    }
+    .side-card p {
+      margin:.4rem 0 .6rem;
+      color:var(--fg);
+      font-size:.9rem;
+      line-height:1.4;
+    }
+  </style>
+
+  <!-- MathJax config -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$','$$']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+
+<body>
+
+  <!-- nav -->
+  <div class="cq-shell" style="padding-top:1rem;">
+    <nav class="cq-nav" style="justify-content:space-between;">
+      <a class="cq-logo" href="../../index.html">☕ CoffeeQuant</a>
+      <div class="cq-navlinks">
+        <a href="../../index.html#daily">Daily</a>
+        <a href="../../index.html#labs">Labs</a>
+        <a href="../../index.html#tools">Tools</a>
+        <a href="../../index.html#notes" class="is-active">Notes</a>
+        <a href="../../index.html#curios">Curios</a>
+      </div>
+    </nav>
+  </div>
+
+  <div class="rn-shell">
+
+    <!-- HERO -->
+    <section class="rn-hero">
+      <div class="rn-hero-main">
+        <h1>Risk-Neutral Probability: The Trick Desk Traders Use to Make Unfair Games Look Fair</h1>
+        <p>
+          A coin is biased. A stock can go up or down. Real life is not “50/50 fair”.
+          But when we price derivatives, we pretend it is.
+          That pretend world is called <strong>risk-neutral</strong>.
+          It’s not about predicting the future.
+          It’s about forcing “no free money.”
+        </p>
+      </div>
+
+      <div class="rn-hero-side">
+        <h2>TL;DR vibe</h2>
+        <p>
+          In the real world:<br/>
+          <code>P(up) ≠ P(down)</code>.
+        </p>
+        <p>
+          In pricing world we use <strong>fake</strong> probabilities
+          (risk-neutral probabilities) that make the trade fair:
+          no arbitrage, no free lunch.
+        </p>
+        <p>
+          That fake world is the only world you’re allowed to quote a price from on a desk.
+        </p>
+      </div>
+    </section>
+
+    <!-- BODY GRID -->
+    <section class="rn-body">
+
+      <!-- LEFT MAIN COLUMN -->
+      <article class="rn-mainpanel">
+
+        <!-- 1. COIN STORY -->
+        <h2>Step 1. Start with a coin in a casino</h2>
+        <p>
+          Imagine a coin game. You win ₹1 if it’s Heads, you lose ₹1 if it’s Tails.
+          If the coin is honest:
+        </p>
+
+        <p>
+          \[
+          \mathbb{P}(\text{Heads}) = 0.5,\quad
+          \mathbb{P}(\text{Tails}) = 0.5.
+          \]
+        </p>
+
+        <p>
+          The “expected gain” is
+          \[
+          0.5 \cdot (+1) \;+\; 0.5 \cdot (-1) \;=\; 0.
+          \]
+          So it’s “fair”: on average you don't win or lose.
+        </p>
+
+        <p>
+          Now suppose I quietly rig the coin.  
+          Heads only comes 33% of the time, Tails 67%.
+        </p>
+
+        <div class="rn-card">
+          <h3>This is now an <em>unfair</em> game</h3>
+          <p>
+            \[
+              p = \mathbb{P}(\text{Heads}) = 0.33,\quad
+              1-p = 0.67.
+            \]
+          </p>
+          <p>
+            Expected gain if payoff is still “+1 on Heads, −1 on Tails”:
+            \[
+              0.33\cdot(+1) \;+\; 0.67\cdot(-1)
+              = -0.34 \neq 0.
+            \]
+          </p>
+          <p style="color:var(--muted);font-size:.8rem;line-height:1.4;">
+            Translation: you’re getting robbed.
+          </p>
+        </div>
+
+        <p>
+          The casino hopes you are dumb and price the game using
+          the <em>real</em> probabilities \(0.33/0.67\).  
+          We don’t do that in finance.
+        </p>
+
+        <p>
+          Instead we ask:
+          <em>“What numbers would make this game fair again?”</em>
+        </p>
+
+        <p>
+          Option 1 (trader view):  
+          Keep the payoffs fixed (+1 for Heads, −1 for Tails),
+          but pretend the coin is 50/50.
+          Use those “pretend” probabilities to value the game.
+        </p>
+
+        <p>
+          Option 2 (risk manager view):  
+          Keep the <em>real</em> probabilities 0.33 / 0.67,
+          but <em>tweak the payoff per state</em> so the expected value is 0 again.
+          That tweak defines “how much 1 rupee in Heads-land is worth
+          relative to 1 rupee in Tails-land.”
+        </p>
+
+        <div class="rn-card">
+          <h3>Interactive intuition: bias → fair price</h3>
+
+          <div class="rn-widget-row">
+            <div class="rn-widget-col">
+              <label class="rn-label">
+                <span>Real-world P(Heads)</span>
+                <span class="rn-val" id="pHeadOut">0.33</span>
+              </label>
+              <input id="pHeadSlider" class="rn-slider" type="range" min="0.1" max="0.9" step="0.01" value="0.33" />
+            </div>
+
+            <div class="rn-widget-col" style="font-size:.8rem;line-height:1.4;color:var(--muted)">
+              <p style="margin-top:0;">
+                Payoff rule: +1 if Heads, −1 if Tails.
+              </p>
+              <p>
+                We’ll show:<br/>
+                • Real expected gain (unfair)<br/>
+                • “Risk-neutral” view (forced fair)
+              </p>
+            </div>
+          </div>
+
+          <div class="rn-result-block" id="coinMathBlock"></div>
+        </div>
+
+        <p>
+          The magical phrase:
+          <strong>risk-neutral probability</strong> =
+          “the probability I’m allowed to use for pricing so that nobody can
+          lock in free profit.”
+        </p>
+
+        <p>
+          Notice what we did <em>not</em> say:
+          “risk-neutral probability equals the true chance the coin lands Heads.”
+          We are not forecasting reality.  
+          We are engineering fairness.
+        </p>
+
+        <!-- 2. STOCK STORY -->
+        <h2>Step 2. Replace the coin with a stock</h2>
+        <p>
+          Now we’re one hop from option pricing.
+          Imagine a stock currently at ₹100.
+          In one minute, it will be either ₹101 or ₹99. No other paths.
+        </p>
+
+        <p>
+          In the real world maybe you believe:
+          \[
+            \mathbb{P}(101)=0.60,\quad \mathbb{P}(99)=0.40.
+          \]
+          You think “up” is more likely than “down.”
+        </p>
+
+        <p>
+          You want to price a call with strike 100 that expires in one minute:
+        </p>
+
+        <div class="rn-card">
+          <h3>Call payoff in each state</h3>
+          <p>
+            If stock ends at 101 → call pays 1.<br/>
+            If stock ends at 99 → call pays 0.
+          </p>
+        </div>
+
+        <p>
+          Here is the punchline of risk-neutral pricing:
+        </p>
+        <p>
+          <strong>We do NOT care that “up” is 60% likely in your head.</strong><br/>
+          We instead invent a fake probability \(q\) for “up” that makes the whole market consistent / hedgeable / no-arb.
+        </p>
+
+        <p>
+          Under that fake world:
+          \[
+            \text{Call Price} = q \cdot 1 + (1-q)\cdot 0 = q.
+          \]
+          So if we knew this special \(q\), we’d know the option price immediately.
+        </p>
+
+        <p>
+          How do we get \(q\)? We hedge.
+          We build a portfolio that replicates the call payoff using the stock itself.
+        </p>
+
+        <div class="rn-card">
+          <h3>Replication move (1-minute hedge)</h3>
+          <p>
+            Hold $\Delta$ shares of stock and <em>sell</em> one call.
+            Choose $\Delta$ so that whatever happens (up or down),
+            your net ending value is the <em>same constant number</em>.
+          </p>
+          <p>
+            If you can do that, you’ve built a riskless 1-minute trade.
+            That constant number is what the call must be worth now
+            (otherwise arbitrage).
+          </p>
+        </div>
+
+        <p>
+          Let’s do it quickly in numbers, ignoring interest for one minute:
+        </p>
+
+        <div class="rn-card">
+          <h3>Interactive one-step option price</h3>
+
+          <div class="rn-widget-row">
+            <div class="rn-widget-col">
+              <label class="rn-label">
+                <span>Spot $S_0$</span>
+                <span class="rn-val" id="spotOut">100</span>
+              </label>
+              <input id="spotSlider" class="rn-slider" type="range" min="50" max="150" step="1" value="100" />
+            </div>
+
+            <div class="rn-widget-col">
+              <label class="rn-label">
+                <span>Up state $S_u$</span>
+                <span class="rn-val" id="suOut">101</span>
+              </label>
+              <input id="suSlider" class="rn-slider" type="range" min="101" max="160" step="1" value="101" />
+            </div>
+
+            <div class="rn-widget-col">
+              <label class="rn-label">
+                <span>Down state $S_d$</span>
+                <span class="rn-val" id="sdOut">99</span>
+              </label>
+              <input id="sdSlider" class="rn-slider" type="range" min="40" max="99" step="1" value="99" />
+            </div>
+          </div>
+
+          <div class="rn-result-block" id="stockMathBlock">
+            <!-- filled by JS -->
+          </div>
+        </div>
+
+        <p>
+          What you’ll see above is:
+          - a hedge ratio \(\Delta\) (how many shares you need),
+          - the replicating portfolio value (which becomes the option price),
+          - and the implied <strong>risk-neutral “up” probability</strong> \(q\).
+        </p>
+
+        <p>
+          \(q\) is not “real chance of 101.”  
+          It’s “the fudge factor that makes the option price
+          equal to the cost of a hedge you can actually put on.”
+        </p>
+
+        <h2>Step 3. Say it out loud</h2>
+        <p>
+          <strong>Risk-neutral probability</strong> is:
+        </p>
+
+        <div class="rn-card">
+          <p style="font-weight:600;">
+            The probability you’re allowed to plug into expected-value pricing
+            so that nobody can lock in free arbitrage.
+          </p>
+          <p style="font-size:.9rem;line-height:1.4;color:var(--muted);">
+            It’s not “the true odds.”  
+            It’s “the odds in a world where assets grow at the risk-free rate
+            and every payoff can be replicated.”
+          </p>
+        </div>
+
+        <details class="mathbox" id="mathBox">
+          <summary>Show me the math version traders pretend they always knew</summary>
+
+          <div style="margin-top:.75rem;">
+            <p>
+              In a 1-step binomial world:
+            </p>
+
+            <p>
+              Current stock price $S_0$ can become $S_u$ (up) or $S_d$ (down).  
+              A call with strike $K$ will pay:
+              \[
+                C_u = \max(S_u - K, 0),
+                \quad
+                C_d = \max(S_d - K, 0).
+              \]
+            </p>
+
+            <p>
+              We look for a $\Delta$ (shares of stock) and cash $B$ (in bank)
+              such that the portfolio
+              \[
+                \Pi = \Delta S_0 + B
+              \]
+              will match the call in both states:
+              \[
+                \Delta S_u + B = C_u,\quad
+                \Delta S_d + B = C_d.
+              \]
+            </p>
+
+            <p>
+              Solve those two equations:
+              \[
+                \Delta = \frac{C_u - C_d}{S_u - S_d}.
+              \]
+              Once you know $\Delta$, you back out $B$.
+            </p>
+
+            <p>
+              The no-arbitrage price of the call right now is just
+              \[
+                \Pi_0 = \Delta S_0 + B,
+              \]
+              because $\Pi$ is literally a synthetic call.
+            </p>
+
+            <p>
+              You can rearrange the algebra and write the same price as
+              a “risk-neutral expectation”:
+              \[
+                \Pi_0
+                = \frac{S_0 - S_d}{S_u - S_d} \, C_u
+                + \frac{S_u - S_0}{S_u - S_d} \, C_d.
+              \]
+            </p>
+
+            <p>
+              Define
+              \[
+                q = \frac{S_0 - S_d}{S_u - S_d},
+                \quad
+                1-q = \frac{S_u - S_0}{S_u - S_d}.
+              \]
+              Then
+              \[
+                \Pi_0 = q \, C_u + (1-q)\,C_d.
+              \]
+            </p>
+
+            <p>
+              That $q$ is the <strong>risk-neutral probability of “up.”</strong>
+              Notice we never used your “60% bullish view.”  
+              We only used prices $S_0, S_u, S_d$.
+            </p>
+
+            <p style="color:var(--muted);font-size:.8rem;line-height:1.4;">
+              In continuous-time, this becomes “discounted expected payoff under
+              the risk-neutral measure.”  
+              On a desk you just say: “Price = risk-neutral expectation of payoff.”
+            </p>
+          </div>
+        </details>
+
+        <div class="footnote">
+          ☕ CoffeeQuant · Price what you can replicate. Don’t price your hopes. No ads.
+        </div>
+
+      </article>
+
+      <!-- RIGHT COLUMN -->
+      <aside class="rn-side">
+
+        <div class="side-card">
+          <h3>Why is this allowed?</h3>
+          <p>
+            Because if you and I disagree on “true” odds, we can still agree on a
+            price that doesn’t let either of us print free money with hedges.
+          </p>
+          <p>
+            That shared price is what the street will trade.
+            That’s what goes on your blotter.
+          </p>
+        </div>
+
+        <div class="side-card">
+          <h3>Street language</h3>
+          <p>
+            “Risk-neutral” ≠ “realistic.”
+            It just means “priced off hedgeability.”
+          </p>
+          <p>
+            Desk joke:  
+            “We don’t sell forecasts. We sell replication.”
+          </p>
+        </div>
+
+        <div class="side-card">
+          <h3>The mental model</h3>
+          <p>
+            Think of each future state (stock up / stock down) as a different
+            universe. A rupee in the ‘up’ universe and a rupee in the ‘down’
+            universe aren’t worth the same today.
+          </p>
+          <p>
+            Risk-neutral weights are how much you’ll pay today for ₹1
+            delivered in each universe without arbitrage.
+          </p>
+        </div>
+
+      </aside>
+
+    </section>
+
+    <!-- footer nav -->
+    <div class="cli-footerlinks" style="text-align:center;font-size:.85rem;color:var(--muted);margin-top:3rem;">
+      <div>☕ CoffeeQuant · Fast. Minimal. Curious. No ads.</div>
+      <div style="margin-top:.4rem;">
+        <a href="../../index.html#notes" style="color:var(--accent);text-decoration:none;">← Back to Notes</a>
+        ·
+        <a href="../../index.html#tools" style="color:var(--accent);text-decoration:none;">Play with the Pricing CLI</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- JS: coin fairness + binomial hedge demo -->
+  <script>
+    // helpers
+    function $(id){ return document.getElementById(id); }
+
+    // ----- COIN WIDGET -----
+    function updateCoinWidget(){
+      const p = parseFloat($("pHeadSlider").value); // real-world P(Heads)
+      const q = 0.5; // the "risk-neutral" we force for pricing a symmetric +1/-1 payoff
+
+      // real EV using real p:
+      // EV_real = p*(+1) + (1-p)*(-1)
+      const EVreal = p*1 + (1-p)*(-1);
+
+      // fair EV under risk-neutral:
+      // EV_RN = q*(+1) + (1-q)*(-1) = 0 if q=0.5
+      const EVrn = q*1 + (1-q)*(-1);
+
+      // alternate view: state prices that "fix" the unfair coin
+      // If real p != 0.5, you could adjust payoffs per state so EV = 0 under real p.
+      // Solve aH, aT s.t.  p*aH + (1-p)*aT = 0  and aH = -aT * (1-p)/p.
+      // We'll report aH (Heads payout) and aT (Tails payout) that make it fair with real p.
+      // We'll also try to keep them scaled to look like ±1-ish.
+      // Let's set aH = 1, solve aT for fairness:
+      // p*1 + (1-p)*aT = 0 => aT = -p/(1-p).
+      // We'll display that.
+      let aH = 1;
+      let aT = -p/(1-p);
+
+      // pretty stringify
+      function fmt(x){
+        if (Math.abs(x) >= 100) return x.toFixed(0);
+        if (Math.abs(x) >= 10) return x.toFixed(2);
+        if (Math.abs(x) >= 1) return x.toFixed(3);
+        return x.toFixed(4);
+      }
+
+      $("pHeadOut").textContent = p.toFixed(2);
+      $("coinMathBlock").textContent =
+`Real-world bias:
+  P(Heads) = ${p.toFixed(2)}, P(Tails) = ${(1-p).toFixed(2)}
+
+If payoff = +1 on Heads / -1 on Tails:
+  Expected gain (real world) = ${EVreal.toFixed(3)}  ← unfair
+
+Risk-neutral lens:
+  We IGNORE the ${p.toFixed(2)} / ${(1-p).toFixed(2)}.
+  We price using q = 0.50 / 0.50 instead.
+  Expected gain (RN) = ${EVrn.toFixed(3)}  ← fair
+
+Alternative view (state prices):
+  If we KEEP the real probabilities (${p.toFixed(2)}/${(1-p).toFixed(2)}),
+  the game is fair again if the payoffs are:
+    Heads pays  ${fmt(aH)}
+    Tails pays  ${fmt(aT)}
+  because  p*HeadsPay + (1-p)*TailsPay = 0.
+These are like "how much 1 rupee in each future state is worth today."`;
+    }
+
+    // ----- STOCK WIDGET -----
+    function updateStockWidget(){
+      const S0 = parseFloat($("spotSlider").value);
+      const Su = parseFloat($("suSlider").value);
+      const Sd = parseFloat($("sdSlider").value);
+      const K  = S0; // keep strike at current spot for clarity, like ATM-ish call
+
+      // call payoffs:
+      const Cu = Math.max(Su - K, 0);
+      const Cd = Math.max(Sd - K, 0);
+
+      // hedge ratio Delta from replication:
+      const Delta = (Cu - Cd) / (Su - Sd);
+
+      // Solve for B such that Delta*Su + B = Cu:
+      const B = Cu - Delta*Su;
+
+      // current cost of replicating portfolio:
+      const CallPrice = Delta*S0 + B;
+
+      // implied risk-neutral up probability q:
+      // q = (S0 - Sd)/(Su - Sd)
+      const qRN = (S0 - Sd)/(Su - Sd);
+
+      // we'll pretty print
+      function f2(x){
+        if (Math.abs(x)<1) return x.toFixed(4);
+        return x.toFixed(2);
+      }
+
+      $("spotOut").textContent = S0.toFixed(0);
+      $("suOut").textContent   = Su.toFixed(0);
+      $("sdOut").textContent   = Sd.toFixed(0);
+
+      $("stockMathBlock").textContent =
+`Stock now S0 = ${S0}
+Up node Su = ${Su}, Down node Sd = ${Sd}
+Strike K = ${K}
+
+Call payoff:
+  Up   Cu = ${f2(Cu)}
+  Down Cd = ${f2(Cd)}
+
+Replication:
+  Delta (shares)   = ${f2(Delta)}
+  Cash/Bond piece  = ${f2(B)}
+  Cost now (call)  = ${f2(CallPrice)}
+
+Risk-neutral probability:
+  q = (S0 - Sd)/(Su - Sd) = ${f2(qRN)}
+
+RN pricing view:
+  Call = q * Cu + (1-q) * Cd
+       = ${f2(qRN)} * ${f2(Cu)} + ${(1-qRN).toFixed(4)} * ${f2(Cd)}
+       = ${f2(qRN*Cu + (1-qRN)*Cd)}
+
+Notice we never used "real" beliefs like P(up)=60%.
+We only used prices and no-arb logic.`;
+    }
+
+    // init + listeners
+    $("pHeadSlider").addEventListener("input", updateCoinWidget);
+    $("spotSlider").addEventListener("input", updateStockWidget);
+    $("suSlider").addEventListener("input", updateStockWidget);
+    $("sdSlider").addEventListener("input", updateStockWidget);
+
+    updateCoinWidget();
+    updateStockWidget();
+
+    // MathJax typeset once loaded
+    (function(){
+      if (window.MathJax && MathJax.typesetPromise){
+        MathJax.typesetPromise().catch(()=>{});
+      }
+    })();
+
+    // typeset again if details opened
+    const mathBox = document.getElementById('mathBox');
+    if (mathBox) {
+      mathBox.addEventListener('toggle', function(){
+        if (mathBox.open && window.MathJax && MathJax.typesetPromise){
+          MathJax.typesetPromise([mathBox]).catch(()=>{});
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+{
+  "images": [
+    { "src": "statics/img/hero/hero-01.webp", "alt": "grainy desk with chart", "credit": "CQ" },
+    { "src": "statics/img/hero/hero-02.webp", "alt": "math scribbles", "credit": "CQ" },
+    { "src": "statics/img/hero/hero-03.webp", "alt": "curves and grids", "credit": "CQ" }
+  ]
+}

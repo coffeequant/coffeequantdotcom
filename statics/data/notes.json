@@ -1,7 +1,3 @@
 {
-  "items": [
-    { "date": "2025-09-15", "title": "A tiny Monte Carlo trick", "deck": "Sort, then slice. Order stats give better intuition than bare averages.", "href": "statics/WriteUps/DicePuzzle.html" },
-    { "date": "2025-09-07", "title": "Why Kelly feels aggressive", "deck": "It maximizes log growth, not your comfort. Half-Kelly exists for a reason.", "href": "statics/WriteUps/BetSizing.html" }
-  ]
 }
 

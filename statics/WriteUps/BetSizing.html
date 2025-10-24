@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Bet Sizing, Traders vs Gamblers, and Why Kelly Isn’t the Whole Story</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- global theme -->
+  <link rel="stylesheet" href="../css/cq.css" />
+
+  <!-- local layout -->
+  <style>
+    .betshell {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 2rem 4rem;
+    }
+
+    /* hero */
+    .bet-hero {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      box-shadow: var(--panel-shadow);
+      margin-bottom: 2rem;
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(260px,360px);
+      gap: 2rem;
+      backdrop-filter: blur(8px) saturate(1.15);
+    }
+
+    @media (max-width: 900px){
+      .bet-hero {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .bet-hero-main {
+      padding: 2rem 2rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .bet-hero-main h1 {
+      margin: 0 0 .6rem;
+      font-size: clamp(1.5rem,1.1rem + 1vw,2rem);
+      line-height: 1.2;
+      font-weight: 600;
+      color: var(--fg);
+    }
+
+    .bet-hero-main p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    .bet-hero-side {
+      padding: 2rem 2rem 2.5rem;
+      border-left: 1px solid var(--panel-border);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: radial-gradient(circle at 30% 30%, rgba(0,0,0,0.05) 0%, transparent 60%), radial-gradient(circle at 70% 70%, rgba(0,0,0,0.07) 0%, transparent 60%), linear-gradient(135deg,#e0e7ff 0%,#f4f8ff 60%);
+      color: #0f172a;
+      font-size: .9rem;
+      line-height: 1.4;
+    }
+    @media (prefers-color-scheme: dark){
+      .bet-hero-side {
+        background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.07) 0%, transparent 60%), radial-gradient(circle at 70% 70%, rgba(255,255,255,0.05) 0%, transparent 60%), linear-gradient(135deg,#1E3A8A 0%,#0f172a 60%);
+        color: #e8edf5;
+      }
+    }
+
+    .bet-hero-side h2 {
+      margin: 0 0 .5rem;
+      font-size: .9rem;
+      line-height: 1.3;
+      font-weight: 600;
+      color: inherit;
+      letter-spacing: .01em;
+    }
+
+    .bet-hero-side p {
+      margin: .4rem 0 .6rem;
+      color: inherit;
+    }
+
+    .bet-hero-side code {
+      font-family: var(--font-mono);
+      font-size: .8rem;
+      background: rgba(0,0,0,0.08);
+      padding: .15rem .4rem;
+      border-radius: 4px;
+      color: inherit;
+    }
+    @media (prefers-color-scheme: dark){
+      .bet-hero-side code {
+        background: rgba(0,0,0,0.3);
+      }
+    }
+
+    /* page body grid */
+    .bet-body {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(260px,340px);
+      gap: 2rem;
+    }
+    @media (max-width:1100px){
+      .bet-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* main column */
+    .bet-mainpanel {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      box-shadow: var(--panel-shadow);
+      backdrop-filter: blur(6px) saturate(1.1);
+      padding: 2rem 2rem 3rem;
+      color: var(--fg);
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .bet-mainpanel h2 {
+      font-size: 1.05rem;
+      line-height:1.3;
+      font-weight:600;
+      color: var(--fg);
+      margin:2rem 0 .5rem;
+    }
+
+    .bet-mainpanel p {
+      margin:.8rem 0 1rem;
+      color:var(--fg);
+      font-size:1rem;
+      line-height:1.5;
+    }
+
+    .inline-mono {
+      background: rgba(0,0,0,0.03);
+      border-radius:4px;
+      padding:.15rem .4rem;
+      font-family: var(--font-mono);
+      font-size:.8rem;
+      line-height:1.4;
+      display:inline-block;
+    }
+    @media (prefers-color-scheme: dark){
+      .inline-mono {
+        background: rgba(15,23,42,0.5);
+      }
+    }
+
+    .callout-card {
+      background: rgba(0,0,0,0.03);
+      border: 1px solid var(--panel-border);
+      border-radius:12px;
+      padding:1rem 1rem 1.25rem;
+      font-size:.9rem;
+      line-height:1.4;
+    }
+    @media (prefers-color-scheme: dark){
+      .callout-card {
+        background: rgba(15,23,42,0.5);
+      }
+    }
+
+    .callout-card h3 {
+      margin:0 0 .4rem;
+      font-size:.9rem;
+      line-height:1.3;
+      font-weight:600;
+      color:var(--fg);
+    }
+
+    .footnote {
+      text-align:center;
+      font-size:.8rem;
+      line-height:1.4;
+      color: var(--muted);
+      margin-top:3rem;
+    }
+
+    /* right rail cards */
+    .bet-side {
+      display:grid;
+      gap:1.5rem;
+      align-content:start;
+    }
+
+    .side-card {
+      background: var(--panel-bg);
+      border:1px solid var(--panel-border);
+      border-radius:14px;
+      box-shadow: var(--panel-shadow);
+      padding:1rem 1rem 1.2rem;
+      font-size:.9rem;
+      line-height:1.4;
+      color:var(--fg);
+    }
+
+    .side-card h3 {
+      margin:0 0 .4rem;
+      font-size:.9rem;
+      line-height:1.3;
+      font-weight:600;
+      color:var(--fg);
+      letter-spacing:.01em;
+    }
+
+    .side-card p {
+      margin:.4rem 0 .6rem;
+      color:var(--fg);
+      font-size:.9rem;
+      line-height:1.4;
+    }
+
+    /* details / math part */
+    details.mathbox {
+      background: rgba(0,0,0,0.02);
+      border:1px solid var(--panel-border);
+      border-radius:12px;
+      padding:.9rem 1rem 1rem;
+      font-size:.9rem;
+      line-height:1.5;
+      margin-top:2rem;
+    }
+    @media (prefers-color-scheme: dark){
+      details.mathbox {
+        background: rgba(15,23,42,0.4);
+      }
+    }
+
+    details.mathbox summary {
+      cursor:pointer;
+      font-weight:600;
+      font-size:.95rem;
+      line-height:1.4;
+      color:var(--fg);
+      outline:none;
+    }
+
+    .math-inline-block{
+      background: rgba(0,0,0,0.03);
+      border-radius:4px;
+      padding:.1rem .3rem;
+      font-family:var(--font-mono);
+      font-size:.8rem;
+      line-height:1.4;
+      display:inline-block;
+    }
+    @media (prefers-color-scheme: dark){
+      .math-inline-block{
+        background: rgba(15,23,42,0.5);
+      }
+    }
+  </style>
+
+  <!-- MathJax config -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$','$$']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+
+<body>
+
+  <!-- top nav -->
+  <div class="cq-shell" style="padding-top:1rem;">
+    <nav class="cq-nav" style="justify-content:space-between;">
+      <a class="cq-logo" href="../../index.html">☕ CoffeeQuant</a>
+      <div class="cq-navlinks">
+        <a href="../../index.html#daily">Daily</a>
+        <a href="../../index.html#labs">Labs</a>
+        <a href="../../index.html#tools">Tools</a>
+        <a href="../../index.html#notes" class="is-active">Notes</a>
+        <a href="../../index.html#curios">Curios</a>
+      </div>
+    </nav>
+  </div>
+
+  <div class="betshell">
+
+    <!-- HERO -->
+    <section class="bet-hero">
+      <div class="bet-hero-main">
+        <h1>Bet Sizing, Kelly, and Why Traders Aren’t Just “Gamblers With Suits”</h1>
+        <p>
+          You’ll hear this a lot: “Kelly criterion tells you how much to bet.”
+          Fine. But Kelly was built for gamblers who place a few binary bets,
+          not a desk trader spraying risk 200 times a day.
+          Let’s walk through a 2-trade toy world, get an intuition,
+          and then we’ll land on the math.
+        </p>
+      </div>
+
+      <div class="bet-hero-side">
+        <h2>What we’re solving</h2>
+        <p>
+          You’re going to choose <strong>size</strong> for each trade,
+          not just direction.
+        </p>
+        <p>
+          After two trades there are four possible outcomes:<br/>
+          <code>W W</code>, <code>W L</code>, <code>L W</code>, <code>L L</code><br/>
+          (W = win, L = lose)
+        </p>
+        <p>
+          We’ll assign a payoff to each of those four branches, rank which branches
+          are more likely, and then reverse-engineer what you should stake.
+        </p>
+        <p>
+          That’s already more honest than “always bet X% of bankroll because Kelly.”
+        </p>
+      </div>
+    </section>
+
+    <!-- BODY -->
+    <section class="bet-body">
+
+      <!-- MAIN COLUMN -->
+      <article class="bet-mainpanel">
+
+        <h2>Step 1. Think in outcomes, not trades</h2>
+        <p>
+          We’ll start with 2 trades (or 2 coin flips if you like the gambling story).
+          After two flips you can land in one of 4 branches:
+        </p>
+
+        <div class="callout-card">
+          <h3>Outcome branches</h3>
+          <p>
+            1. <span class="inline-mono">W W</span><br/>
+            2. <span class="inline-mono">W L</span><br/>
+            3. <span class="inline-mono">L W</span><br/>
+            4. <span class="inline-mono">L L</span>
+          </p>
+          <p style="color:var(--muted);font-size:.8rem;line-height:1.4;">
+            This is just $2^n$ paths with $n=2$ bets.
+          </p>
+        </div>
+
+        <p>
+          Now here’s the trick: instead of saying “I’ll bet \$X on trade 1 and \$Y on trade 2,”
+          we do it backwards.
+        </p>
+        <p>
+          We assign a <strong>final P&amp;L</strong> to each branch. For example:
+        </p>
+
+        <div class="callout-card">
+          <h3>Example target P&amp;L per branch</h3>
+          <p>
+            <span class="inline-mono">W W</span> → +5<br/>
+            <span class="inline-mono">W L</span> → +20<br/>
+            <span class="inline-mono">L W</span> → +15<br/>
+            <span class="inline-mono">L L</span> → −40
+          </p>
+        </div>
+
+        <p>
+          Why those numbers? Two things:
+        </p>
+        <p>
+          • We’re allowed to shape the payoff distribution the way a trader might engineer payoff with structures / hedges / overlays.<br/>
+          • We only care about <em>relative likelihood</em> of each branch. We don’t actually need exact probabilities yet — just which branch feels “more likely” than which.
+        </p>
+
+        <p>
+          Also note: we forced the total average payoff to sum to zero across all four branches.
+          That’s like saying “in expectation I don’t mint free money out of nowhere.”
+          Risk wants a fair book on paper.
+        </p>
+
+        <h2>Step 2. Turn that branch P&amp;L back into actual bet sizes</h2>
+        <p>
+          Let’s call the size of your <strong>first</strong> trade “Bet 1.”
+          Intuition first, then formula:
+        </p>
+
+        <p>
+          • Look at all paths that <strong>start with Win</strong> (so <span class="inline-mono">W W</span> and <span class="inline-mono">W L</span>).  
+          Take their average payoff.<br/>
+          • Look at all paths that <strong>start with Loss</strong> (so <span class="inline-mono">L W</span> and <span class="inline-mono">L L</span>).  
+          Take their average payoff.<br/>
+          • Subtract those two averages.  
+          • Take half of that difference. That’s the size of Bet 1.
+        </p>
+
+        <p>
+          Why “half”? Symmetry. First bet affects two branches on the win side and
+          two branches on the loss side. You’re splitting that P&amp;L impact evenly.
+        </p>
+
+        <p>
+          In symbols, if we name the payoffs:
+        </p>
+
+        <p>
+          \[
+          \text{Pay}(WW)=5,\quad
+          \text{Pay}(WL)=20,\quad
+          \text{Pay}(LW)=15,\quad
+          \text{Pay}(LL)=-40,
+          \]
+        </p>
+
+        <p>
+          then
+        </p>
+
+        <p>
+          \[
+          \text{Avg after Win first}=\frac{5+20}{2}=12.5,
+          \quad
+          \text{Avg after Loss first}=\frac{15+(-40)}{2}=-12.5.
+          \]
+        </p>
+
+        <p>
+          Difference is \(12.5-(-12.5)=25\).  
+          Half of that is \(12.5\).
+        </p>
+
+        <p>
+          So Bet&nbsp;1 size = <strong>12.5</strong> (positive means you’re long / putting risk on).
+        </p>
+
+        <p>
+          That’s already beautiful: the first trade size dropped out of the <em>target path payoffs</em>,
+          not from some fixed “use Kelly% of bankroll” rule.
+        </p>
+
+        <h2>Step 3. Conditional second bets</h2>
+        <p>
+          The second bet depends on what happened in the first one.
+          You’re effectively doing “Bet 2 if first trade was a win” and
+          “Bet 2 if first trade was a loss.”
+        </p>
+
+        <div class="callout-card">
+          <h3>Case A: first trade was WIN</h3>
+          <p>
+            Paths: <span class="inline-mono">W W</span> → +5,  
+            <span class="inline-mono">W L</span> → +20
+          </p>
+          <p>
+            If you’re already in “win first,” the second bet should move you between +5 and +20.
+            You size that conditional second bet from those two numbers.
+          </p>
+
+          <h3>Case B: first trade was LOSS</h3>
+          <p>
+            Paths: <span class="inline-mono">L W</span> → +15,  
+            <span class="inline-mono">L L</span> → −40
+          </p>
+          <p>
+            Now the second bet is rescuing you from −40 or pushing toward +15.
+            That’s a different size (and can even be negative, i.e. you’re shorting / hedging).
+          </p>
+        </div>
+
+        <p>
+          The point: you just backed out an execution policy:
+          how big the first bet is, and how aggressive / defensive you are on the second bet,
+          <em>without</em> ever saying “probability of win is exactly 0.57” or anything like that.
+        </p>
+
+        <p>
+          That’s closer to trading reality.  
+          The risk manager says “I’m comfortable with these scenario P&amp;Ls.”  
+          The trader says “Cool, I know how to size each step to produce those scenario P&amp;Ls.”
+        </p>
+
+        <div class="callout-card">
+          <h3>Why this matters</h3>
+          <p>
+            Kelly, in practice, mixes those two jobs.
+            It assumes you know both the odds and the sizing rule yourself.
+            On an actual desk those are two different people.
+          </p>
+        </div>
+
+        <h2>Step 4. OK, now bring in Kelly</h2>
+        <p>
+          Kelly’s classical pitch is:
+          choose bet sizes to maximize expected log wealth.
+        </p>
+
+        <p>
+          Say your initial wealth is \(W\).  
+          Each branch \(i\) happens with probability \(p(i)\)  
+          and leaves you with final wealth \(W + \eta(i)\),  
+          where \(\eta(i)\) is the P&amp;L in that branch.
+        </p>
+
+        <p>
+          Kelly says: maximize
+          \[
+            \sum_i p(i)\,\ln\!\big(W + \eta(i)\big).
+          \]
+        </p>
+
+        <p>
+          Take first-order conditions (derivative = 0), solve out \(\eta(i)\),
+          and one version you get looks like
+        </p>
+
+        <p>
+          \[
+            \eta(i) \;=\; \big(m\,p(i) - 1\big)\,W,
+          \]
+        </p>
+
+        <p>
+          where \(m\) is the number of branches (for 2 bets, \(m=4\)).
+          Read that slowly: Kelly is literally pushing more money
+          to branches you believe are more likely.
+        </p>
+
+        <p>
+          That’s the same vibe as what we did above:
+          “Rank scenarios by how likely they feel,
+          then allocate more P&amp;L to those.”
+        </p>
+
+        <details class="mathbox" id="mathBox">
+          <summary>Connect it to the classic single-bet Kelly fraction</summary>
+
+          <div style="margin-top:.75rem;">
+            <p>
+              Take one repeated bet with “win” probability \(p\).
+              If you win, you gain \(b\) units per 1 unit risked;
+              if you lose, you lose 1 unit.
+            </p>
+
+            <p>
+              Suppose you bet fraction \(f\) of your bankroll \(W\) each time.
+              After one round:
+            </p>
+
+            <p>
+              \[
+                W_\text{after} =
+                \begin{cases}
+                  W\,(1 + b f) & \text{with prob } p, \\
+                  W\,(1 - f)   & \text{with prob } 1-p.
+                \end{cases}
+              \]
+            </p>
+
+            <p>
+              Kelly maximizes the expected log:
+              \[
+                p \ln(1 + b f) + (1-p)\ln(1-f).
+              \]
+            </p>
+
+            <p>
+              Solve $\frac{d}{df}=0$, you get the famous Kelly fraction:
+              \[
+                f^* = \frac{p(b+1)-1}{b}.
+              \]
+            </p>
+
+            <p>
+              Special case: even-money payoff, \(b=1\). Then
+              \[
+                f^* = 2p - 1.
+              \]
+            </p>
+
+            <p>
+              So if you think you win 55% of the time (\(p=0.55\)) with 1:1 payoff,
+              Kelly says bet \(f^*=0.10\), i.e. about 10% of bankroll each round.
+            </p>
+
+            <p style="color:var(--muted);font-size:.8rem;line-height:1.4;">
+              That “\(2p-1\)” shape is exactly the “win paths vs loss paths” logic we used earlier
+              when we built Bet&nbsp;1 by comparing the average ‘Win-first’ branch
+              to the average ‘Loss-first’ branch.
+            </p>
+          </div>
+        </details>
+
+        <h2>Where traders break Kelly</h2>
+        <p>
+          Kelly pretends:
+        </p>
+        <p>
+          • you know \(p\) (your win probability),<br/>
+          • you know the payout \(b\),<br/>
+          • you bet once per “round,” then reset.
+        </p>
+
+        <p>
+          Trading reality:
+          you fire again and again and again, often correlated,
+          often resizing mid-path, often hedging path 2 based on result of path 1.
+          You’re dynamically reshaping \(\eta(i)\) after every branch.
+        </p>
+
+        <p>
+          That’s why saying “Traders and gamblers are the same, just use Kelly” is dangerous.
+          A gambler might place 10 meaningful lifetime bets.
+          A trader might put on 10 in the next hour.
+        </p>
+
+        <div class="footnote">
+          ☕ CoffeeQuant · bet sizing is culture, not folklore. No ads.
+        </div>
+      </article>
+
+      <!-- RIGHT RAIL -->
+      <aside class="bet-side">
+
+        <div class="side-card">
+          <h3>Cheat sheet: language</h3>
+          <p>
+            <strong>Branch / Path:</strong> one full sequence of wins/losses
+            across all trades in a scenario.
+          </p>
+          <p>
+            <strong>\(\eta(i)\):</strong> final P&amp;L in branch \(i\).
+          </p>
+          <p>
+            <strong>Kelly fraction:</strong> % of bankroll you stake each round
+            to maximize long-run growth.
+          </p>
+          <p>
+            <strong>“Conditional second bet”:</strong> sizing trade 2 based on
+            whether trade 1 just hit or missed.
+          </p>
+        </div>
+
+        <div class="side-card">
+          <h3>Trader vs Risk</h3>
+          <p>
+            Risk can say: “Across scenarios, I’m ok with
+            (+20, +15, +5, −40).”
+          </p>
+          <p>
+            Trader says: “Cool. Then Bet 1 is about 12.5,
+            and Bet 2 is different depending on whether I’m already up or down.”
+          </p>
+          <p>
+            Separation is healthy.
+            Kelly kind of jams both roles into one formula.
+          </p>
+        </div>
+
+        <div class="side-card">
+          <h3>Takeaways</h3>
+          <p>
+            • Sizing comes from how you want the <em>distribution</em> of outcomes to look,
+            not just “how confident you are.”
+          </p>
+          <p>
+            • Kelly is useful, but it’s not gospel.
+            It assumes clean coin flips.
+            You’re not flipping coins — you’re managing risk over paths.
+          </p>
+          <p>
+            • If you can’t size clean 2-bet trees, you’re not ready
+            to size 200-bet days.
+          </p>
+        </div>
+
+      </aside>
+
+    </section>
+
+    <!-- footer nav -->
+    <div class="cli-footerlinks" style="text-align:center;font-size:.85rem;color:var(--muted);margin-top:3rem;">
+      <div>☕ CoffeeQuant · Fast. Minimal. Curious. No ads.</div>
+      <div style="margin-top:.4rem;">
+        <a href="../../index.html#notes" style="color:var(--accent);text-decoration:none;">← Back to Notes</a>
+        ·
+        <a href="../../index.html#tools" style="color:var(--accent);text-decoration:none;">Play with the Pricing CLI</a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // re-typeset after load, just like other pages
+    (function(){
+      if (window.MathJax && MathJax.typesetPromise){
+        MathJax.typesetPromise().catch(()=>{});
+      }
+    })();
+
+    // also typeset when user opens the math details
+    const mathBox = document.getElementById('mathBox');
+    if (mathBox) {
+      mathBox.addEventListener('toggle', function(){
+        if (mathBox.open && window.MathJax && MathJax.typesetPromise){
+          MathJax.typesetPromise([mathBox]).catch(()=>{});
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

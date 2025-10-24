@@ -5,7 +5,7 @@
   <title>CoffeeQuant — Daily sparks, playful labs, sharp intuition</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Global MathJax v3 (once) -->
+  <!-- Global MathJax v3 (one time) -->
   <script>
     window.MathJax = {
       tex: {
@@ -20,148 +20,217 @@
   <script id="MathJax-script" async
     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 
+  <!-- Main theme CSS (contains SVG watermark bg and Dojo menus) -->
   <link rel="stylesheet" href="statics/css/cq.css">
 </head>
 
 <body>
-  <header class="cq-shell">
-    <nav class="cq-nav">
-      <a class="cq-logo" href="/">☕ CoffeeQuant</a>
+  <!-- Top shell + nav -->
+  <div class="cq-shell">
+    <nav class="cq-nav" role="navigation" aria-label="Main">
+      <a class="cq-logo" href="/" aria-label="CoffeeQuant Home">☕ CoffeeQuant</a>
       <div class="cq-navlinks">
+        <a href="#daily">Daily</a>
         <a href="#labs">Labs</a>
+        <a href="#tools">Tools</a>
         <a href="#notes">Notes</a>
-        <a href="#curios">Curiosities</a>
-        <a href="statics/WriteUps/">Archive</a>
+        <a href="#curios">Curios</a>
+        <!-- Archive hidden until articles are rewritten -->
+        <a href="statics/WriteUps/" class="cq-hide">Archive</a>
       </div>
     </nav>
 
-    <section class="cq-hero">
-      <h1>Daily sparks. Playful labs. Sharp intuition.</h1>
-      <p class="cq-muted">A fast, minimalist place where math, markets, and curiosity meet.</p>
-      <div class="cq-cta">
-        <a class="cq-btn" href="#labs">Explore Labs</a>
-        <a class="cq-btn-ghost" href="#daily">Today’s Spark</a>
-      </div>
-    </section>
-  </header>
-<main class="cq-main cq-maingrid">
-  <!-- Left dock -->
-  <aside class="cq-dock">
-    <h4>Navigate</h4>
-    <a href="#daily">📰 Daily</a>
-    <a href="#labs">🧪 Labs</a>
-    <a href="#tools">⌨️ Tools</a>
-    <a href="#notes">📝 Notes</a>
-    <a href="#curios">🔗 Curios</a>
-    <!-- Hide archive until ready -->
-    <a href="statics/WriteUps/" class="cq-hide">📚 Archive</a>
+    <!-- HERO -->
+    <section class="cq-hero" aria-labelledby="heroTitle">
+      <!-- Background is set by heroRotate() from statics/data/hero.json -->
+      <div class="cq-hero__bg" id="heroBg"></div>
+      <div class="cq-hero__overlay"></div>
 
-    <h4 style="margin-top:1rem">Shortcuts</h4>
-    <a href="#" id="openKbar">⌘K · Command palette</a>
-    <a href="statics/Tools/PricingCLI.html">▶ Pricing CLI</a>
-  </aside>
+      <!-- subtle steam animation -->
+      <div class="cq-steam" aria-hidden="true">
+        <svg viewBox="0 0 1200 400" preserveAspectRatio="none">
+          <path d="M200,340 C260,280 280,240 300,200" />
+          <path d="M420,340 C460,300 500,250 520,210" />
+          <path d="M740,340 C780,300 820,250 840,210" />
+        </svg>
+      </div>
 
-  <!-- Right content -->
-  <div>
-    <!-- Daily -->
-    <section id="daily" class="cq-section">
-      <div class="cq-section-head">
-        <h2>CoffeeQuant Daily</h2>
-        <span class="cq-pill">60-second reads</span>
-      </div>
-      <article id="dailyCard" class="cq-card cq-daily">
-        <div class="cq-skeleton">Loading today’s spark…</div>
-      </article>
-    </section>
-
-    <!-- Labs -->
-    <section id="labs" class="cq-section">
-      <div class="cq-section-head">
-        <h2>Playground Labs</h2>
-        <span class="cq-pill">Interactive</span>
-      </div>
-      <div class="cq-grid">
-        <a class="cq-tile" href="statics/WriteUps/DicePuzzle.html">
-          <h3>Dice Puzzle</h3>
-          <p class="cq-muted">Max of $k$ minimums from $n$ dice — play, then derive.</p>
-          <div class="cq-tags"><span>Probability</span><span>Order stats</span></div>
-        </a>
-        <a class="cq-tile" href="statics/WriteUps/BetSizing.html">
-          <h3>Bet Sizing</h3>
-          <p class="cq-muted">Loaded coin, compounding, Kelly sweet spot.</p>
-          <div class="cq-tags"><span>Kelly</span><span>Risk</span></div>
-        </a>
-        <a class="cq-tile" href="statics/WriteUps/OldLehmanStory.html">
-          <h3>30y Swap Spreads</h3>
-          <p class="cq-muted">Non-inversion notes, gamma flips, inversion risk.</p>
-          <div class="cq-tags"><span>Rates</span><span>Gamma</span></div>
-        </a>
-      </div>
-    </section>
-
-    <!-- Tools section -->
-    <section id="tools" class="cq-section">
-      <div class="cq-section-head">
-        <h2>Tools</h2>
-        <span class="cq-pill">Try in browser</span>
-      </div>
-      <div class="cq-grid">
-        <a class="cq-tile" href="statics/Tools/PricingCLI.html">
-          <h3>Pricing CLI</h3>
-          <p class="cq-muted">Terminal-style commands: Black–Scholes, Kelly, dice probs…</p>
-          <div class="cq-tags"><span>Options</span><span>Quick calc</span></div>
-        </a>
-      </div>
-    </section>
-
-    <!-- Notes -->
-    <section id="notes" class="cq-section">
-      <div class="cq-section-head">
-        <h2>Notes from the Desk</h2>
-        <span class="cq-pill">Short reflections</span>
-      </div>
-      <div id="notesList" class="cq-list">
-        <div class="cq-skeleton">Loading notes…</div>
-      </div>
-    </section>
-
-    <!-- Curios -->
-    <section id="curios" class="cq-section">
-      <div class="cq-section-head">
-        <h2>Quant Curiosities</h2>
-        <span class="cq-pill">Links & ideas</span>
-      </div>
-      <div id="curiosList" class="cq-list cq-list--compact">
-        <div class="cq-skeleton">Loading curiosities…</div>
+      <div class="cq-hero__content">
+        <h1 id="heroTitle">Daily sparks. Playful labs. Sharp intuition.</h1>
+        <p class="cq-muted">A fast, minimalist place where math, markets, and curiosity meet.</p>
+        <div class="cq-cta">
+          <a class="cq-btn" href="#labs">Explore Labs</a>
+          <a class="cq-btn-ghost" href="#daily">Today’s Spark</a>
+        </div>
       </div>
     </section>
   </div>
-</main>
 
-<!-- Command palette -->
-<div id="cqKbar" class="cq-kbar" aria-hidden="true">
-  <div class="cq-kbar-box">
-    <input id="kbarInput" placeholder="Type a command… (e.g., 'dice', 'kelly', 'pricing')" />
-    <div id="kbarList" class="cq-kbar-list"></div>
-  </div>
-</div>
+  <!-- Main grid: left dock + content -->
+  <main class="cq-main cq-maingrid">
+    <!-- Left dock -->
+    <aside class="cq-dock" aria-label="Section navigation">
+      <h4>Navigate</h4>
+      <a href="#daily">📰 Daily</a>
+      <a href="#labs">🧪 Labs</a>
+      <a href="#tools">⌨️ Tools</a>
+      <a href="#notes">📝 Notes</a>
+      <a href="#curios">🔗 Curios</a>
 
+      <h4 style="margin-top:1rem">Shortcuts</h4>
+      <a href="#" id="openKbar">⌘K · Command palette</a>
+      <a href="statics/Tools/PricingCLI.html">▶ Pricing CLI</a>
+    </aside>
 
+    <!-- Right content -->
+    <div>
+      <!-- Daily -->
+      <section id="daily" class="cq-section" aria-labelledby="sec-daily">
+        <div class="cq-strip" data-strip="daily"></div>
+        <div class="cq-section-head">
+          <h2 id="sec-daily">CoffeeQuant Daily</h2>
+          <span class="cq-pill">60-second reads</span>
+        </div>
+        <article id="dailyCard" class="cq-card cq-daily" aria-live="polite">
+          <div class="cq-skeleton">Loading today’s spark…</div>
+        </article>
+      </section>
+
+      <!-- Labs -->
+      <section id="labs" class="cq-section" aria-labelledby="sec-labs">
+        <div class="cq-strip" data-strip="labs"></div>
+        <div class="cq-section-head">
+          <h2 id="sec-labs">Playground Labs</h2>
+          <span class="cq-pill">Interactive</span>
+        </div>
+        <div class="cq-grid">
+          <a class="cq-tile" href="statics/WriteUps/DicePuzzle.html">
+            <div class="cq-img" data-cover="Dice Puzzle"></div>
+            <h3>Dice Puzzle</h3>
+            <p class="cq-muted">Max of $k$ minimums from $n$ dice — play, then derive.</p>
+            <div class="cq-tags"><span>Probability</span><span>Order stats</span></div>
+          </a>
+
+          <a class="cq-tile" href="statics/WriteUps/BetSizing.html">
+            <div class="cq-img" data-cover="Bet Sizing"></div>
+            <h3>Bet Sizing</h3>
+            <p class="cq-muted">Loaded coin, compounding, Kelly sweet spot.</p>
+            <div class="cq-tags"><span>Kelly</span><span>Risk</span></div>
+          </a>
+
+          <a class="cq-tile" href="statics/WriteUps/OldLehmanStory.html">
+            <div class="cq-img" data-cover="30y Swap Spreads"></div>
+            <h3>30y Swap Spreads</h3>
+            <p class="cq-muted">Non-inversion notes, gamma flips, inversion risk.</p>
+            <div class="cq-tags"><span>Rates</span><span>Gamma</span></div>
+          </a>
+        </div>
+      </section>
+
+      <!-- Tools -->
+      <section id="tools" class="cq-section" aria-labelledby="sec-tools">
+        <div class="cq-strip" data-strip="tools"></div>
+        <div class="cq-section-head">
+          <h2 id="sec-tools">Tools</h2>
+          <span class="cq-pill">Try in browser</span>
+        </div>
+        <div class="cq-grid">
+          <a class="cq-tile" href="statics/Tools/PricingCLI.html">
+            <div class="cq-img" data-cover="Pricing CLI"></div>
+            <h3>Pricing CLI</h3>
+            <p class="cq-muted">Terminal-style commands: Black–Scholes, Greeks, IV, Kelly…</p>
+            <div class="cq-tags"><span>Options</span><span>Quick calc</span></div>
+          </a>
+        </div>
+      </section>
+
+      <!-- Notes -->
+      <section id="notes" class="cq-section" aria-labelledby="sec-notes">
+        <div class="cq-strip" data-strip="notes"></div>
+        <div class="cq-section-head">
+          <h2 id="sec-notes">Notes from the Desk</h2>
+          <span class="cq-pill">Short reflections</span>
+        </div>
+ 	<div class="cq-grid">
+          <a class="cq-tile" href="statics/WriteUps/RiskNeutral.html">
+            <div class="cq-img" data-cover="Risk Neutral Probability"></div>
+            <h3>Risk Neutral Probability</h3>
+            <p class="cq-muted">Terminal-style commands: Black–Scholes, Greeks, IV, Kelly…</p>
+            <div class="cq-tags"><span>Options</span><span>Quick calc</span></div>
+          </a>
+        </div>
+
+        <div id="notesList" class="cq-list">
+          <div class="cq-skeleton">Loading notes…</div>
+        </div>
+      </section>
+
+      <!-- Curiosities -->
+      <section id="curios" class="cq-section" aria-labelledby="sec-curios">
+        <div class="cq-strip" data-strip="curios"></div>
+        <div class="cq-section-head">
+          <h2 id="sec-curios">Quant Curiosities</h2>
+          <span class="cq-pill">Links & ideas</span>
+        </div>
+        <div id="curiosList" class="cq-list cq-list--compact">
+          <div class="cq-skeleton">Loading curiosities…</div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
   <footer class="cq-footer">
-    <div class="cq-footer-inner">
-      <div>☕ CoffeeQuant</div>
-      <div class="cq-muted">Fast. Minimal. Curious. No ads.</div>
-      <div class="cq-footer-links">
-        <a href="rss.xml">RSS</a>
-        <a href="statics/WriteUps/">Archive</a>
+    <div class="cq-shell">
+      <div>☕ CoffeeQuant · Fast. Minimal. Curious. No ads.</div>
+      <div style="margin-top:.4rem">
+        <a href="rss.xml">RSS</a> ·
         <a href="mailto:hello@coffeequant.example">Contact</a>
       </div>
     </div>
   </footer>
 
+  <!-- Site scripts -->
   <script src="statics/js/cq.js"></script>
+  <script src="statics/js/cq-covers.js"></script>
 
-  <!-- If you still use a Dojo ContentPane, keep this hook: -->
+  <!-- Command palette (⌘K / Ctrl+K) -->
+  <div id="cqKbar" class="cq-kbar" aria-hidden="true">
+    <div class="cq-kbar-box" role="dialog" aria-label="Command palette">
+      <input id="kbarInput" placeholder="Type a command… (e.g., 'dice', 'kelly', 'pricing')" />
+      <div id="kbarList" class="cq-kbar-list"></div>
+    </div>
+  </div>
+
+  <!-- Initialize generated covers for tiles without images -->
+  <script>
+    (function(){
+      document.querySelectorAll('[data-cover]').forEach(div=>{
+        if (window.CQCover) CQCover.inject(div, div.getAttribute('data-cover'));
+      });
+    })();
+  </script>
+
+  <!-- Rotating hero background (from statics/data/hero.json) -->
+  <script>
+    (async function heroRotate(){
+      const slot = document.getElementById('heroBg'); if(!slot) return;
+      try{
+        const r = await fetch('statics/data/hero.json', {cache:'no-store'});
+        if(!r.ok) return;
+        const data = await r.json();
+        const list = (data && data.images) || [];
+        if(!list.length) return;
+        // Pick by weekday (stable, simple)
+        const idx = (new Date()).getDay() % list.length;
+        const it = list[idx];
+        slot.style.backgroundImage = `url("${it.src}")`;
+        slot.setAttribute('aria-label', it.alt || 'hero background');
+      }catch(e){}
+    })();
+  </script>
+
+  <!-- Optional: Dojo/DojoX ContentPane hook for MathJax after async loads -->
   <script>
     (function () {
       if (!window.dijit || !dijit.registry) return;
@@ -178,4 +247,5 @@
   </script>
 </body>
 </html>
+
 

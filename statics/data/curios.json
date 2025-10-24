@@ -1,7 +1,13 @@
-{
-  "items": [
-    { "date": "2025-08-01", "title": "A beautiful note on random walks", "href": "https://..." },
-    { "date": "2025-07-15", "title": "Visualizing order statistics", "href": "https://..." }
-  ]
-}
+[
+  {
+    "title": "Kelly criterion and sizing intuition",
+    "url": "https://en.wikipedia.org/wiki/Kelly_criterion",
+    "desc": "How fractional betting maximizes geometric growth."
+  },
+  {
+    "title": "Black–Scholes visualizer",
+    "url": "https://coffeequant.github.io/tools/cli",
+    "desc": "Try in-browser pricing CLI."
+  }
+]
 
