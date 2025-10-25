@@ -493,13 +493,34 @@ html::before {
   100% { background-position:0% 0%; }
 }
 
-.cq-strip[data-strip="daily"]  { background:linear-gradient(135deg, rgba(223,233,249,.7), rgba(244,248,255,.4)); }
-.cq-strip[data-strip="labs"]   { background:linear-gradient(135deg, rgba(243,220,255,.6), rgba(244,248,255,.4)); }
-.cq-strip[data-strip="tools"]  { background:linear-gradient(135deg, rgba(255,250,212,.6), rgba(244,248,255,.4)); }
-.cq-strip[data-strip="notes"]  { background:linear-gradient(135deg, rgba(231,226,255,.6), rgba(244,248,255,.4)); }
-.cq-strip[data-strip="curios"] { background:linear-gradient(135deg, rgba(214,255,231,.6), rgba(244,248,255,.4)); }
+.cq-strip[data-strip] {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 400px;
+  border-radius: var(--radius);
+  position: relative;
+  overflow: hidden;
+}
 
-@media (prefers-color-scheme: dark){
+/* Optional: subtle translucent overlay for readability */
+.cq-strip[data-strip]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(255,255,255,.5), rgba(255,255,255,.2));
+  pointer-events: none;
+}
+
+/* Section-specific images */
+.cq-strip[data-strip="daily"]  { background-image: url("../img/strips/strip-daily.webp"); }
+.cq-strip[data-strip="labs"]   { background-image: url("../img/strips/strip-labs.webp"); }
+.cq-strip[data-strip="tools"]  { background-image: url("../img/strips/strip-tools.webp"); }
+.cq-strip[data-strip="notes"]  { background-image: url("../img/strips/strip-notes.webp"); }
+.cq-strip[data-strip="curios"] { background-image: url("../img/strips/strip-curios.webp"); }
+
+
+@media (prefers-color-scheme: light){
   .cq-strip[data-strip="daily"]  { background:linear-gradient(135deg, rgba(12,74,110,.5), rgba(30,58,138,.3)); }
   .cq-strip[data-strip="labs"]   { background:linear-gradient(135deg, rgba(88,28,135,.5), rgba(49,46,129,.3)); }
   .cq-strip[data-strip="tools"]  { background:linear-gradient(135deg, rgba(113,63,18,.5), rgba(30,58,138,.3)); }
