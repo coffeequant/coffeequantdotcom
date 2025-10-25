@@ -1,35 +1,20 @@
-application: coffeequant
-version: 1
-runtime: python27
-api_version: 1
-threadsafe: false
+runtime: python312
 
 handlers:
+  # Serve all static files (HTML, CSS, JS, images, JSON, etc.)
+  - url: /(.*\.(html|css|js|json|png|jpg|jpeg|gif|webp|svg|ico|txt|pdf|woff2?))$
+    static_files: \1
+    upload: (.*\.(html|css|js|json|png|jpg|jpeg|gif|webp|svg|ico|txt|pdf|woff2?))$
+    secure: always
+    http_headers:
+      Access-Control-Allow-Origin: "*"
+      Cache-Control: "public, max-age=3600"
 
-- url: /statics
-  static_dir: statics
-  
-- url: /reverseconv/.*
-  script: reverseconv.app
- 
-- url: /portfolioanalyzer/.*
-  script: portfolio.app
-
-- url: /analytics/.*
-  script: analytics.app
- 
-- url: /pricer/.*
-  script: pricer.app
-
-- url: /baskets/.*
-  script: baskets.app
-
-- url: /.*
-  script: coffeequant.app
-  
-libraries:
-- name: jinja2
-  version: latest
-
-- name: numpy
-  version: latest
+  # Serve everything else (like /labs, /notes, /tools) as index.html
+  - url: /.*
+    static_files: index.html
+    upload: index.html
+    secure: always
+    http_headers:
+      Access-Control-Allow-Origin: "*"
+      Cache-Control: "no-cache"
