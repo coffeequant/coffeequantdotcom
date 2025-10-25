@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Cross Gamma, PRDCs, and Why “Long Convexity” Isn’t Just a Meme</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="../css/cq.css" />
+
+  <style>
+    .cg-shell { max-width: 1400px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+
+    .cg-hero {
+      background: var(--panel-bg);
+      border:1px solid var(--panel-border);
+      border-radius:16px;
+      box-shadow:var(--panel-shadow);
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(260px,360px);
+      gap:2rem;
+      margin-bottom:2rem;
+      backdrop-filter:blur(8px) saturate(1.15);
+    }
+    @media (max-width:900px){
+      .cg-hero{grid-template-columns:1fr;}
+    }
+
+    .cg-hero-main{
+      padding:2rem 2rem 2.5rem;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .cg-hero-main h1{
+      margin:0 0 .6rem;
+      font-size:clamp(1.5rem,1.1rem + 1vw,2rem);
+      line-height:1.2;
+      font-weight:600;
+      color:var(--fg);
+    }
+    .cg-hero-main p{
+      margin:0;
+      color:var(--muted);
+      font-size:1rem;
+      line-height:1.4;
+    }
+
+    .cg-hero-side{
+      padding:2rem 2rem 2.5rem;
+      border-left:1px solid var(--panel-border);
+      background:linear-gradient(135deg,#e0e7ff 0%,#f4f8ff 60%);
+      color:#0f172a;
+      font-size:.9rem;
+      line-height:1.4;
+    }
+    @media(prefers-color-scheme:dark){
+      .cg-hero-side{
+        background:linear-gradient(135deg,#1E3A8A 0%,#0f172a 60%);
+        color:#e8edf5;
+      }
+    }
+    .cg-hero-side h2{
+      margin:0 0 .5rem;
+      font-size:.9rem;
+      line-height:1.3;
+      font-weight:600;
+      letter-spacing:.01em;
+    }
+    .cg-hero-side p{margin:.4rem 0 .6rem;}
+
+    .cg-body{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(260px,340px);
+      gap:2rem;
+    }
+    @media (max-width:1100px){
+      .cg-body{grid-template-columns:1fr;}
+    }
+
+    .cg-mainpanel{
+      background:var(--panel-bg);
+      border:1px solid var(--panel-border);
+      border-radius:16px;
+      box-shadow:var(--panel-shadow);
+      padding:2rem 2rem 3rem;
+      line-height:1.6;
+      color:var(--fg);
+      font-size:1rem;
+    }
+
+    .cg-mainpanel h2{
+      font-size:1.05rem;
+      line-height:1.3;
+      font-weight:600;
+      color:var(--fg);
+      margin:2rem 0 .5rem;
+    }
+
+    .cg-mainpanel p{
+      margin:.8rem 0 1rem;
+      color:var(--fg);
+      font-size:1rem;
+      line-height:1.5;
+    }
+
+    .cg-card{
+      background:rgba(0,0,0,0.03);
+      border:1px solid var(--panel-border);
+      border-radius:12px;
+      box-shadow:var(--panel-shadow);
+      padding:1rem 1rem 1.25rem;
+      font-size:.9rem;
+      line-height:1.4;
+    }
+    @media(prefers-color-scheme:dark){
+      .cg-card{
+        background:rgba(15,23,42,0.5);
+      }
+    }
+    .cg-card h3{
+      margin:0 0 .4rem;
+      font-size:.9rem;
+      line-height:1.3;
+      font-weight:600;
+      color:var(--fg);
+    }
+
+    .inline-mono{
+      background:rgba(0,0,0,0.03);
+      border-radius:4px;
+      padding:.15rem .4rem;
+      font-family:var(--font-mono);
+      font-size:.8rem;
+      line-height:1.4;
+      display:inline-block;
+    }
+    @media(prefers-color-scheme:dark){
+      .inline-mono{
+        background:rgba(15,23,42,0.5);
+      }
+    }
+
+    .cg-side{
+      display:grid;
+      gap:1.5rem;
+      align-content:start;
+    }
+
+    .side-card{
+      background:var(--panel-bg);
+      border:1px solid var(--panel-border);
+      border-radius:14px;
+      box-shadow:var(--panel-shadow);
+      padding:1rem 1rem 1.2rem;
+      font-size:.9rem;
+      line-height:1.4;
+      color:var(--fg);
+    }
+    .side-card h3{
+      margin:0 0 .4rem;
+      font-size:.9rem;
+      line-height:1.3;
+      font-weight:600;
+      color:var(--fg);
+      letter-spacing:.01em;
+    }
+    .side-card p{margin:.4rem 0 .6rem;}
+
+    .cg-blockviz{
+      display:flex;
+      flex-wrap:wrap;
+      gap:1rem;
+      font-size:.8rem;
+      line-height:1.4;
+    }
+    .cg-boxcol{
+      flex:1 1 140px;
+      min-width:120px;
+      border:1px solid var(--panel-border);
+      border-radius:10px;
+      background:rgba(0,0,0,0.03);
+      padding:.75rem .75rem 1rem;
+      box-shadow:var(--panel-shadow);
+    }
+    @media(prefers-color-scheme:dark){
+      .cg-boxcol{
+        background:rgba(15,23,42,0.5);
+      }
+    }
+    .cg-boxhdr{
+      font-weight:600;
+      font-size:.8rem;
+      margin-bottom:.4rem;
+      display:flex;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .cg-boxbody{
+      font-family:var(--font-mono);
+      font-size:.75rem;
+      line-height:1.4;
+      color:var(--fg);
+      white-space:pre-wrap;
+    }
+
+    .footnote{
+      text-align:center;
+      font-size:.8rem;
+      line-height:1.4;
+      color:var(--muted);
+      margin-top:3rem;
+    }
+  </style>
+
+  <!-- MathJax -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$','$$']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+
+<body>
+
+  <!-- nav -->
+  <div class="cq-shell" style="padding-top:1rem;">
+    <nav class="cq-nav" style="justify-content:space-between;">
+      <a class="cq-logo" href="../../index.html">☕ CoffeeQuant</a>
+      <div class="cq-navlinks">
+        <a href="../../index.html#daily">Daily</a>
+        <a href="../../index.html#labs">Labs</a>
+        <a href="../../index.html#tools">Tools</a>
+        <a href="../../index.html#notes" class="is-active">Notes</a>
+        <a href="../../index.html#curios">Curios</a>
+      </div>
+    </nav>
+  </div>
+
+  <div class="cg-shell">
+
+    <!-- HERO -->
+    <section class="cg-hero">
+      <div class="cg-hero-main">
+        <h1>Cross Gamma, PRDCs, and the “How Did We Lose Money on Both Sides?” Problem</h1>
+        <p>
+          Desk folklore says “always be long convexity.”  
+          PRDCs were a lesson in what happens when you’re not.
+          The coupons looked genius, the marketing looked safe, and then the hedge
+          turned into a two-dimensional chainsaw:
+          FX on one axis, rates on the other.  
+          That pain is called <strong>short cross gamma</strong>.
+        </p>
+      </div>
+      <div class="cg-hero-side">
+        <h2>Snapshot</h2>
+        <p>
+          • PRDC coupons = FX-linked foreign rate minus home rate.<br/>
+          • Issuer added a callable feature “for investor protection” (lol).<br/>
+          • Dealers ended up short correlation between FX and rates.<br/>
+          • When both moved the “wrong” way in stress, hedge blew up.
+        </p>
+      </div>
+    </section>
+
+    <!-- BODY -->
+    <section class="cg-body">
+
+      <!-- MAIN ARTICLE -->
+      <article class="cg-mainpanel">
+
+        <h2>1. What is a PRDC coupon, in trader English?</h2>
+        <p>
+          PRDC = Power Reverse Dual Currency note.  
+          Translation: You’re selling the investor something that pays a juicy coupon
+          linked to USD rates, even though they live in JPY (or vice versa).
+        </p>
+
+        <p>
+          A cartoon version of the floating coupon at time \(t\) looks like:
+        </p>
+
+        <p>
+          \[
+            \text{Coupon}(t)
+            \approx
+            \text{Notional}
+            \times
+            \frac{\text{USDJPY}_t}{\text{USDJPY}_0}
+            \times
+            \big(\text{USD rate}(t) - \text{JPY rate}(t)\big).
+          \]
+        </p>
+
+        <p>
+          Read this slowly:
+        </p>
+        <p>
+          • If USD strengthens vs JPY (USDJPY goes up), coupon goes up.  
+          • If USD rates are higher than JPY rates, coupon goes up.  
+          • Investor is happy because “I’m getting this high USD-linked coupon in my boring JPY world.”  
+        </p>
+
+        <p>
+          But from the issuer side (the dealer who sold it), that’s like being short a mash-up
+          of FX and rate options at the same time.
+        </p>
+
+        <div class="cg-card">
+          <h3>Desk intuition</h3>
+          <p>
+            Think of it like this:<br/>
+            You promised the investor: “If USD stays strong and USD rates stay high,
+            I’ll keep paying you this elevated coupon.”  
+            That’s selling optionality on two markets at once.
+          </p>
+        </div>
+
+        <h2>2. Of course we added a callable</h2>
+        <p>
+          Because coupons could explode if USD is strong and USD yields stay rich,
+          we (the issuers) added a call feature:
+        </p>
+        <p class="cg-card">
+          <strong>Issuer call:</strong>
+          “If coupons get too good for you (the investor), we take the note back early.”
+        </p>
+
+        <p>
+          Everyone pitched that as “protection,” but this also stretched maturities out
+          to 20–30y so that we could offer a high first-year coupon and still make the economics work.
+        </p>
+
+        <p>
+          What that really did:
+        </p>
+        <p>
+          • You sold a callable structure with very long optionality.  
+          • You inherited <em>long-dated vega</em> (sensitivity to long-end volatility).  
+          • You inherited <em>cross gamma</em> between FX and rates.
+        </p>
+
+        <h2>3. Two risks that actually kill you</h2>
+
+        <div class="cg-card">
+          <h3>Risk A: Long-dated vega flip</h3>
+          <p>
+            When USDJPY goes <em>up</em> (USD strong), coupons balloon and you can call the note back.
+            That means effectively the optionality is getting knocked out soon.
+            Vega exposure (to very long-dated volatility) actually <em>falls</em>.
+          </p>
+          <p>
+            When USDJPY goes <em>down</em> (USD weak), coupons shrink, note doesn’t get called,
+            maturity behaves longer, and you are now stuck with huge long-dated vega.
+          </p>
+          <p>
+            So in bad scenarios (USD weak, safe-haven JPY bid) you suddenly become
+            <strong>short liquidity in ultra-long vol</strong> — along with every other issuer on the street.
+          </p>
+        </div>
+
+        <p>
+          If everyone needs 20y+ vega on the same day,
+          guess where implied vols go. They explode.  
+          That was one side of the pain.
+        </p>
+
+        <div class="cg-card">
+          <h3>Risk B: Cross gamma (a.k.a. “short correlation”)</h3>
+          <p>
+            Your P&amp;L is not just “if FX goes here I win.”  
+            It’s “if FX goes here AND the rate curve does this, I’m still OK.”
+          </p>
+          <p>
+            You’re effectively betting “these two markets will move in a coordinated,
+            friendly way,” and you’re short that bet.
+          </p>
+        </div>
+
+        <h2>4. Visualizing cross gamma with moving blocks</h2>
+        <p>
+          Let’s build a mental animation. Imagine two sliders:
+        </p>
+
+        <div class="cg-blockviz">
+          <div class="cg-boxcol">
+            <div class="cg-boxhdr">
+              <span>Slider 1</span>
+              <span>FX (USDJPY)</span>
+            </div>
+            <div class="cg-boxbody">
+              ↑ USDJPY up  
+              = USD stronger  
+              = “coupon richer”  
+              = deal more callable
+            </div>
+          </div>
+          <div class="cg-boxcol">
+            <div class="cg-boxhdr">
+              <span>Slider 2</span>
+              <span>Rates Curve</span>
+            </div>
+            <div class="cg-boxbody">
+              Steepening? Flattening?  
+              Think: long-term USD rate vs short-term JPY rate  
+              (funding vs carry)
+            </div>
+          </div>
+        </div>
+
+        <p style="margin-top:1rem;">
+          When you’re running this book, you’re not just sensitive to each slider.
+          You’re sensitive to the <em>combination</em>.
+        </p>
+
+        <p>
+          Cross gamma = “what happens to my P&amp;L if both sliders move at once?”
+        </p>
+
+        <p>
+          If you’re <strong>short cross gamma</strong>, your P&amp;L tends to be fine
+          when markets move in your ‘normal’ pattern  
+          (e.g. USD up goes hand-in-hand with certain curve behavior),
+          but gets wrecked when the relationship breaks.
+        </p>
+
+        <h2>5. Why “short correlation” is the same story</h2>
+        <p>
+          Quick analogy: take a worst-of put on two assets, A and B.
+          If correlation drops (assets diverge), worst-of puts get more valuable
+          for the buyer because typically one asset tanks more than the other.
+          The seller is effectively <em>short correlation</em>.
+        </p>
+
+        <p>
+          Same in PRDC space, just messier:
+          you are effectively short the “nice” correlation between FX levels
+          and long-end vs short-end rates.
+        </p>
+
+        <div class="cg-card">
+          <h3>Desk cartoon of the hedge</h3>
+          <p>
+            • If USDJPY rallies (USD strong), you tend to buy long-term bonds,
+            sell short-term bonds.  
+            • If USDJPY sells off (USD weak), you flip: sell long-term bonds,
+            buy short-term bonds.
+          </p>
+          <p>
+            You’re hoping that funding spreads / basis behave in a way that
+            offsets those flows.
+          </p>
+          <p>
+            But in stress, markets don’t politely offset. They reinforce.
+          </p>
+        </div>
+
+        <h2>6. The 2008-style stress scenario</h2>
+        <p>
+          What happens in a real crisis scenario like the classic stress:
+          USD funding stress, JPY as safe haven, basis dislocates?
+        </p>
+
+        <p>
+          • USDJPY falls hard (JPY strengthens).  
+          • Long-dated callability disappears → the note “lives longer.”
+            Now you’re stuck wearing massive long-term vega you didn’t want.  
+          • At the same time, cross-currency funding/basis moves in the “wrong” direction.
+            The curve move doesn’t hedge your FX move — it doubles the pain.
+        </p>
+
+        <p>
+          That is short cross gamma in plain language:
+          “Both sliders moved, but instead of cancelling, they teamed up against me.”
+        </p>
+
+        <div class="cg-card">
+          <h3>The lose/lose corner</h3>
+          <p>
+            • Investor: coupon collapses, call never triggers, note maturity effectively extends to 20y–30y.  
+            • Dealer: forced to hedge ultra-long vega at the worst time, and hedge rate/FX interaction
+              in a market where liquidity is one-way.  
+            • Everyone: “Wait, wasn’t this marketed as safe carry?”
+          </p>
+        </div>
+
+        <h2>7. Why desks say “be long convexity”</h2>
+        <p>
+          Convexity is the property that big moves help you instead of kill you.
+          In PRDC-style flow, issuers sold that convexity twice:
+          once in FX vs rates, and again across maturity (because of the callable feature).
+        </p>
+
+        <p>
+          Being short convexity in <em>two dimensions</em> is what made this lethal.
+          You weren’t just betting on where USDJPY goes or where long-end USD yields go.
+          You were betting that the <strong>relationship</strong> between the two
+          behaves “normally,” forever.
+        </p>
+
+        <p>
+          Spoiler: relationships don’t behave in panic.
+        </p>
+
+        <div class="footnote">
+          ☕ CoffeeQuant · Cross gamma = “what if two bad things happen together?”  
+          If you can’t point to who’s long that risk… it’s probably you.
+        </div>
+
+      </article>
+
+      <!-- SIDE COLUMN -->
+      <aside class="cg-side">
+
+        <div class="side-card">
+          <h3>Mini formula view</h3>
+          <p>
+            Cartoon coupon:
+          </p>
+          <p class="inline-mono">
+            Coupon ≈ Notional × [ FX_t / FX_0 ] × (USD rate − JPY rate)
+          </p>
+          <p>
+            You’re effectively short:<br/>
+            • an FX performance option, and<br/>
+            • a rate spread option.
+          </p>
+          <p>
+            Callability = barrier on coupon level.
+            When coupon “too good,” issuer autocalls.
+          </p>
+        </div>
+
+        <div class="side-card">
+          <h3>Vega story in one line</h3>
+          <p>
+            USDJPY up → coupons rich → product dies early → you shed long-dated vega.<br/>
+            USDJPY down → coupons cheap → product survives → you’re stuck holding
+            long-dated vega in size.  
+            Everyone else too. Liquidity vanishes exactly when you need it.
+          </p>
+        </div>
+
+        <div class="side-card">
+          <h3>Cross gamma intuition</h3>
+          <p>
+            Cross gamma = sensitivity to <em>joint</em> moves.  
+            You’re fine if FX↑ comes with curve shift A,  
+            and FX↓ comes with curve shift B,  
+            because those pairs were “supposed” to hedge.
+          </p>
+          <p>
+            You die when FX↓ shows up with curve shift A instead.
+            That’s short correlation.
+          </p>
+        </div>
+
+        <div class="side-card">
+          <h3>Is this coming back?</h3>
+          <p>
+            The structure never really disappears.
+            It just changes currencies and marketing language.
+            Anywhere investors want “enhanced coupon” in a low-rate home currency,
+            someone will try to sell a PRDC cousin.
+          </p>
+          <p>
+            Watch anything that mixes FX levels, rate differentials,
+            and long-dated callable language.  
+            That smell? That’s cross gamma.
+          </p>
+        </div>
+
+      </aside>
+
+    </section>
+
+    <div class="cli-footerlinks" style="text-align:center;font-size:.85rem;color:var(--muted);margin-top:3rem;">
+      <div>☕ CoffeeQuant · Fast. Minimal. Curious. No ads.</div>
+      <div style="margin-top:.4rem;">
+        <a href="../../index.html#notes" style="color:var(--accent);text-decoration:none;">← Back to Notes</a>
+        ·
+        <a href="../../index.html#tools" style="color:var(--accent);text-decoration:none;">Play with the Pricing CLI</a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // typeset MathJax on load
+    (function(){
+      if (window.MathJax && MathJax.typesetPromise){
+        MathJax.typesetPromise().catch(()=>{});
+      }
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,885 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Cross Gamma, PRDCs, and Why “Long Convexity” Isn’t Just a Meme</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="../css/cq.css" />
+
+  <style>
+    .cg-shell { max-width: 1400px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+
+    .cg-hero {
+      background: var(--panel-bg);
+      border:1px solid var(--panel-border);
+      border-radius:16px;
+      box-shadow:var(--panel-shadow);
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(260px,360px);
+      gap:2rem;
+      margin-bottom:2rem;
+      backdrop-filter:blur(8px) saturate(1.15);
+    }
+    @media (max-width:900px){
+      .cg-hero{grid-template-columns:1fr;}
+    }
+
+    .cg-hero-main{
+      padding:2rem 2rem 2.5rem;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .cg-hero-main h1{
+      margin:0 0 .6rem;
+      font-size:clamp(1.5rem,1.1rem + 1vw,2rem);
+      line-height:1.2;
+      font-weight:600;
+      color:var(--fg);
+    }
+    .cg-hero-main p{
+      margin:0;
+      color:var(--muted);
+      font-size:1rem;
+      line-height:1.4;
+    }
+
+    .cg-hero-side{
+      padding:2rem 2rem 2.5rem;
+      border-left:1px solid var(--panel-border);
+      background:linear-gradient(135deg,#e0e7ff 0%,#f4f8ff 60%);
+      color:#0f172a;
+      font-size:.9rem;
+      line-height:1.4;
+    }
+    @media(prefers-color-scheme:dark){
+      .cg-hero-side{
+        background:linear-gradient(135deg,#1E3A8A 0%,#0f172a 60%);
+        color:#e8edf5;
+      }
+    }
+    .cg-hero-side h2{
+      margin:0 0 .5rem;
+      font-size:.9rem;
+      line-height:1.3;
+      font-weight:600;
+      letter-spacing:.01em;
+    }
+    .cg-hero-side p{margin:.4rem 0 .6rem;}
+
+    .cg-body{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(260px,340px);
+      gap:2rem;
+    }
+    @media (max-width:1100px){
+      .cg-body{grid-template-columns:1fr;}
+    }
+
+    .cg-mainpanel{
+      background:var(--panel-bg);
+      border:1px solid var(--panel-border);
+      border-radius:16px;
+      box-shadow:var(--panel-shadow);
+      padding:2rem 2rem 3rem;
+      line-height:1.6;
+      color:var(--fg);
+      font-size:1rem;
+    }
+
+    .cg-mainpanel h2{
+      font-size:1.05rem;
+      line-height:1.3;
+      font-weight:600;
+      color:var(--fg);
+      margin:2rem 0 .5rem;
+    }
+
+    .cg-mainpanel p{
+      margin:.8rem 0 1rem;
+      color:var(--fg);
+      font-size:1rem;
+      line-height:1.5;
+    }
+
+    .cg-card{
+      background:rgba(0,0,0,0.03);
+      border:1px solid var(--panel-border);
+      border-radius:12px;
+      box-shadow:var(--panel-shadow);
+      padding:1rem 1rem 1.25rem;
+      font-size:.9rem;
+      line-height:1.4;
+    }
+    @media(prefers-color-scheme:dark){
+      .cg-card{
+        background:rgba(15,23,42,0.5);
+      }
+    }
+    .cg-card h3{
+      margin:0 0 .4rem;
+      font-size:.9rem;
+      line-height:1.3;
+      font-weight:600;
+      color:var(--fg);
+    }
+
+    .inline-mono{
+      background:rgba(0,0,0,0.03);
+      border-radius:4px;
+      padding:.15rem .4rem;
+      font-family:var(--font-mono);
+      font-size:.8rem;
+      line-height:1.4;
+      display:inline-block;
+    }
+    @media(prefers-color-scheme:dark){
+      .inline-mono{
+        background:rgba(15,23,42,0.5);
+      }
+    }
+
+    .cg-side{
+      display:grid;
+      gap:1.5rem;
+      align-content:start;
+    }
+
+    .side-card{
+      background:var(--panel-bg);
+      border:1px solid var(--panel-border);
+      border-radius:14px;
+      box-shadow:var(--panel-shadow);
+      padding:1rem 1rem 1.2rem;
+      font-size:.9rem;
+      line-height:1.4;
+      color:var(--fg);
+    }
+    .side-card h3{
+      margin:0 0 .4rem;
+      font-size:.9rem;
+      line-height:1.3;
+      font-weight:600;
+      color:var(--fg);
+      letter-spacing:.01em;
+    }
+    .side-card p{margin:.4rem 0 .6rem;}
+
+    .cg-blockviz{
+      display:flex;
+      flex-wrap:wrap;
+      gap:1rem;
+      font-size:.8rem;
+      line-height:1.4;
+    }
+    .cg-boxcol{
+      flex:1 1 140px;
+      min-width:120px;
+      border:1px solid var(--panel-border);
+      border-radius:10px;
+      background:rgba(0,0,0,0.03);
+      padding:.75rem .75rem 1rem;
+      box-shadow:var(--panel-shadow);
+    }
+    @media(prefers-color-scheme:dark){
+      .cg-boxcol{
+        background:rgba(15,23,42,0.5);
+      }
+    }
+    .cg-boxhdr{
+      font-weight:600;
+      font-size:.8rem;
+      margin-bottom:.4rem;
+      display:flex;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .cg-boxbody{
+      font-family:var(--font-mono);
+      font-size:.75rem;
+      line-height:1.4;
+      color:var(--fg);
+      white-space:pre-wrap;
+    }
+
+    .footnote{
+      text-align:center;
+      font-size:.8rem;
+      line-height:1.4;
+      color:var(--muted);
+      margin-top:3rem;
+    }
+
+    /* Stress map UI */
+    .cg-stresscard{
+      background:rgba(0,0,0,0.03);
+      border:1px solid var(--panel-border);
+      border-radius:12px;
+      box-shadow:var(--panel-shadow);
+      padding:1rem 1rem 1.25rem;
+      margin-top:2rem;
+      font-size:.9rem;
+      line-height:1.4;
+    }
+    @media(prefers-color-scheme:dark){
+      .cg-stresscard{
+        background:rgba(15,23,42,0.5);
+      }
+    }
+    .cg-stress-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:1rem 1.25rem;
+      align-items:flex-start;
+      margin-top:.75rem;
+    }
+    .cg-stress-col{
+      flex:1 1 200px;
+      min-width:0;
+    }
+    .cg-label{
+      font-size:.8rem;
+      font-weight:500;
+      color:var(--fg);
+      margin-bottom:.4rem;
+      line-height:1.4;
+      display:flex;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .cg-val{
+      color:var(--accent);
+      font-family:var(--font-mono);
+      font-size:.8rem;
+      margin-left:.4rem;
+    }
+    .cg-slider{
+      width:100%;
+      accent-color:var(--accent);
+    }
+    .cg-map-wrap{
+      display:flex;
+      flex-wrap:wrap;
+      gap:1rem;
+      margin-top:1rem;
+    }
+    .cg-map-canvas{
+      flex:1 1 260px;
+      min-width:240px;
+      border:1px solid var(--panel-border);
+      border-radius:10px;
+      overflow:hidden;
+      background:rgba(0,0,0,0.02);
+      box-shadow:var(--panel-shadow);
+    }
+    @media(prefers-color-scheme:dark){
+      .cg-map-canvas{
+        background:rgba(15,23,42,0.4);
+      }
+    }
+    .cg-map-legend{
+      flex:0 0 160px;
+      font-size:.8rem;
+      line-height:1.4;
+      color:var(--fg);
+    }
+    .cg-map-legend div{
+      margin-bottom:.5rem;
+    }
+    .cg-map-keyrow{
+      display:flex;
+      align-items:center;
+      gap:.5rem;
+      font-family:var(--font-mono);
+      font-size:.75rem;
+    }
+    .cg-colorbox{
+      width:40px;
+      height:12px;
+      border-radius:3px;
+      border:1px solid var(--panel-border);
+    }
+  </style>
+
+  <!-- MathJax -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$','$$']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+
+<body>
+
+  <!-- nav -->
+  <div class="cq-shell" style="padding-top:1rem;">
+    <nav class="cq-nav" style="justify-content:space-between;">
+      <a class="cq-logo" href="../../index.html">☕ CoffeeQuant</a>
+      <div class="cq-navlinks">
+        <a href="../../index.html#daily">Daily</a>
+        <a href="../../index.html#labs">Labs</a>
+        <a href="../../index.html#tools">Tools</a>
+        <a href="../../index.html#notes" class="is-active">Notes</a>
+        <a href="../../index.html#curios">Curios</a>
+      </div>
+    </nav>
+  </div>
+
+  <div class="cg-shell">
+
+    <!-- HERO -->
+    <section class="cg-hero">
+      <div class="cg-hero-main">
+        <h1>Cross Gamma, PRDCs, and the “How Did We Lose Money on Both Sides?” Problem</h1>
+        <p>
+          Desk folklore says “always be long convexity.”  
+          PRDCs were a lesson in what happens when you’re not.
+          The coupons looked genius, the marketing looked safe, and then the hedge
+          turned into a two-dimensional chainsaw:
+          FX on one axis, rates on the other.  
+          That pain is called <strong>short cross gamma</strong>.
+        </p>
+      </div>
+      <div class="cg-hero-side">
+        <h2>Snapshot</h2>
+        <p>
+          • PRDC coupons = FX-linked foreign rate minus home rate.<br/>
+          • Issuer adds a call feature “to protect investor returns.”<br/>
+          • Dealer ends up short correlation between FX and rates.<br/>
+          • When both move the wrong way together, hedge goes non-linear.
+        </p>
+      </div>
+    </section>
+
+    <!-- BODY -->
+    <section class="cg-body">
+
+      <!-- MAIN ARTICLE -->
+      <article class="cg-mainpanel">
+
+        <h2>1. What is a PRDC coupon, in trader English?</h2>
+        <p>
+          PRDC = Power Reverse Dual Currency note.  
+          You’re selling an investor a juicy USD-style coupon, even though their base
+          world is JPY. The cartoon payoff at time \(t\) looks like:
+        </p>
+
+        <p>
+          \[
+            \text{Coupon}(t)
+            \approx
+            \text{Notional}
+            \times
+            \frac{\text{USDJPY}_t}{\text{USDJPY}_0}
+            \times
+            \big(\text{USD rate}(t) - \text{JPY rate}(t)\big).
+          \]
+        </p>
+
+        <p>
+          Read that:
+          if USD strengthens vs JPY (USDJPY ↑), coupon goes up.
+          If USD rates &gt; JPY rates, coupon goes up.
+          Investor: “wow, carry machine.”
+          Dealer: “cool, I just sold optionality on FX and rates at once.”
+        </p>
+
+        <div class="cg-card">
+          <h3>Dealer view</h3>
+          <p>
+            You’re effectively short something like
+            <span class="inline-mono">Notional × (FX performance - Strike)</span>,
+            where the “strike” is set by the interest rate ratio.
+            Sometimes that’s in-the-money, sometimes out-of-the-money.
+            You sold both personalities.
+          </p>
+        </div>
+
+        <h2>2. Of course we added a callable</h2>
+        <p>
+          To stop coupons from going insane if USD stays strong and USD rates stay high,
+          we added an issuer call: if coupons get too good for the investor, we take the
+          note back early.
+        </p>
+
+        <p class="cg-card">
+          <strong>Issuer call in plain English:</strong><br/>
+          “If you’re winning too hard, we just end the game.”
+        </p>
+
+        <p>
+          The “small print”: maturities stretched to 20–30y to afford that first-year
+          sexy coupon. So now you’re warehousing super long-dated optionality.
+        </p>
+
+        <p>
+          Net result for the book:
+        </p>
+        <p>
+          • You’re long ultra-long vega (expensive to hedge).<br/>
+          • You’re short cross gamma between FX and rates (deadly in stress).
+        </p>
+
+        <h2>3. Two risks that actually kill you</h2>
+
+        <div class="cg-card">
+          <h3>Risk A: Long-dated vega flip</h3>
+          <p>
+            When USDJPY goes <em>up</em> (USD strong), coupons balloon,
+            call likely triggers soon, maturity shrinks.
+            Your exposure to 20y+ vol basically dies. That’s comfy.
+          </p>
+          <p>
+            When USDJPY goes <em>down</em> (USD weak), coupons collapse,
+            note <em>doesn’t</em> get called.
+            The thing behaves like a forever bond.
+            Now you’re <strong>stuck</strong> with long-dated vega in size,
+            and every other dealer is stuck too.
+          </p>
+        </div>
+
+        <p>
+          In ’08, JPY was the safety trade, USD funding was stressed, and everyone suddenly
+          needed long-dated USDJPY-ish vol at the same time. Liquidity was gone.
+        </p>
+
+        <div class="cg-card">
+          <h3>Risk B: Cross gamma (short correlation)</h3>
+          <p>
+            You’re not just sensitive to “where FX goes” or “where the curve goes.”
+            You’re sensitive to their <strong>combination</strong>.
+          </p>
+          <p>
+            Cross gamma asks:
+            “If FX moves AND rates move together in an unfriendly way,
+            does my hedge get wrecked or rescued?”
+          </p>
+          <p>
+            You were positioned assuming FX and curve would move in a
+            polite, ‘historical average’ relationship.  
+            You were effectively <strong>short that relationship</strong>.
+          </p>
+        </div>
+
+        <h2>4. Moving-blocks picture of cross gamma</h2>
+        <p>
+          Imagine two sliders:
+        </p>
+
+        <div class="cg-blockviz">
+          <div class="cg-boxcol">
+            <div class="cg-boxhdr">
+              <span>Slider 1</span>
+              <span>FX (USDJPY)</span>
+            </div>
+            <div class="cg-boxbody">
+              ↑ USD stronger  
+              ↓ USD weaker / JPY safe-haven  
+              (affects coupons &amp; callability)
+            </div>
+          </div>
+          <div class="cg-boxcol">
+            <div class="cg-boxhdr">
+              <span>Slider 2</span>
+              <span>Curve / Basis</span>
+            </div>
+            <div class="cg-boxbody">
+              Steep / flat, 10y vs 2y, funding basis.  
+              (affects cost to carry hedge and roll)
+            </div>
+          </div>
+        </div>
+
+        <p style="margin-top:1rem;">
+          Being <strong>short cross gamma</strong> means:
+          “I only survive if slider 1 and slider 2 move in the particular combo
+          my desk expected.”
+        </p>
+
+        <p>
+          In calm markets, that combo tends to hold.
+          In panics, FX and rates decouple.
+          Suddenly you’re losing money on <em>both</em> sliders at once.
+        </p>
+
+        <h2>5. Worst-of intuition (why this is ‘short correlation’)</h2>
+        <p>
+          Take a worst-of put on Asset A and Asset B.  
+          If correlation breaks and one asset crashes while the other doesn’t,
+          the worst-of put buyer is thrilled. The seller suffers.
+        </p>
+
+        <p>
+          Selling PRDC-style coupons + callability made dealers behave like
+          that worst-of seller in two dimensions:
+          “Please, FX and rates, crash in a <em>nice</em> way, not in a messy way.”
+        </p>
+
+        <p>
+          That is exactly being short correlation.
+        </p>
+
+        <h2>6. 2008 stress corner</h2>
+        <p>
+          Crisis template:
+        </p>
+        <p>
+          • USDJPY drops hard (JPY rockets stronger).  
+          • So coupons tank, call doesn’t trigger → maturity extends.  
+          • You are suddenly wearing monster long-dated vega.  
+          • Meanwhile USD funding blows out, basis goes weird, the curve move that
+            used to hedge you no longer hedges you.
+        </p>
+
+        <p class="cg-card">
+          <strong>Dealer experience:</strong><br/>
+          “Wait, I’m losing when FX moves… AND I’m losing when the curve moves…
+          and I’m <em>really</em> losing when both move together.
+          I thought I was diversified. I wasn’t. I was short cross gamma.”
+        </p>
+
+        <h2>7. Why desks preach “be long convexity”</h2>
+        <p>
+          Convexity means big moves help you, not kill you.
+          In PRDC land, dealers sold convexity twice:
+          - FX vs rates,
+          - and time-to-maturity via that long-dated callable structure.
+        </p>
+
+        <p>
+          You weren’t betting on one directional view.
+          You were betting that the <em>relationship</em> between two global macro
+          axes would behave forever. That’s fragile.
+        </p>
+
+        <p>
+          Now let’s actually <em>see</em> that fragility.
+        </p>
+
+        <!-- NEW SECTION 8: STRESS MAP -->
+        <h2>8. Play with stress: where do you die?</h2>
+
+        <div class="cg-stresscard">
+          <h3>Cross-gamma heatmap</h3>
+          <p style="margin-top:.4rem;">
+            Below is a toy P&amp;L surface.  
+            Horizontal axis = USDJPY % move from start.  
+            Vertical axis = curve/basis shift (10y–2y style).  
+            Color = dealer P&amp;L (green = okay, red = bleed).
+          </p>
+
+          <p style="margin-top:.4rem;">
+            Use the sliders to “break” the normal relationship between FX and
+            curve. When they de-couple, the red zone grows.  
+            That red wedge is what “short cross gamma” feels like.
+          </p>
+
+          <div class="cg-stress-row">
+
+            <div class="cg-stress-col">
+              <label class="cg-label">
+                <span>Expected coupling</span>
+                <span class="cg-val" id="corrOut">0.60</span>
+              </label>
+              <input id="corrSlider" class="cg-slider" type="range" min="-1" max="1" step="0.05" value="0.60" />
+              <div style="font-size:.75rem;line-height:1.4;color:var(--muted);margin-top:.4rem;">
+                +1 = FX &amp; curve always move “together” the way you planned.  
+                -1 = they move in the worst possible combo.
+              </div>
+            </div>
+
+            <div class="cg-stress-col">
+              <label class="cg-label">
+                <span>Stress scale</span>
+                <span class="cg-val" id="stressOut">1.00</span>
+              </label>
+              <input id="stressSlider" class="cg-slider" type="range" min="0.5" max="2" step="0.05" value="1.00" />
+              <div style="font-size:.75rem;line-height:1.4;color:var(--muted);margin-top:.4rem;">
+                Bigger = crisisy.  
+                Think “2008 liquidity seize-up.”
+              </div>
+            </div>
+
+          </div>
+
+          <div class="cg-map-wrap">
+            <div class="cg-map-canvas">
+              <canvas id="cgMap" width="360" height="260" style="display:block;width:100%;height:auto;"></canvas>
+            </div>
+            <div class="cg-map-legend">
+              <div><strong>Legend</strong></div>
+              <div class="cg-map-keyrow">
+                <div class="cg-colorbox" style="background:rgb(0,160,0);"></div>
+                <div>Green = hedge behaves</div>
+              </div>
+              <div class="cg-map-keyrow">
+                <div class="cg-colorbox" style="background:rgb(255,120,0);"></div>
+                <div>Orange = stress</div>
+              </div>
+              <div class="cg-map-keyrow">
+                <div class="cg-colorbox" style="background:rgb(180,0,0);"></div>
+                <div>Red = “why is risk calling me”</div>
+              </div>
+              <div style="margin-top:1rem;font-size:.7rem;line-height:1.4;color:var(--muted);">
+                You want to live in green. In 2008 we woke up in the bottom-right red corner.
+              </div>
+            </div>
+          </div>
+
+          <div style="font-size:.75rem;line-height:1.4;color:var(--muted);margin-top:1rem;">
+            This is stylized. It’s not your VAR report.  
+            It’s here to show the shape of the danger zone.
+          </div>
+        </div>
+
+        <div class="footnote">
+          ☕ CoffeeQuant · Cross gamma = “what if two bad things happen together?”  
+          If you can’t point to who’s long that risk… it’s probably you.
+        </div>
+
+      </article>
+
+      <!-- SIDE COLUMN -->
+      <aside class="cg-side">
+
+        <div class="side-card">
+          <h3>Mini formula view</h3>
+          <p>
+            Cartoon coupon:
+          </p>
+          <p class="inline-mono">
+            Coupon ≈ Notional × [ FX_t / FX_0 ] × (USD rate − JPY rate)
+          </p>
+          <p>
+            You’re effectively short:<br/>
+            • an FX performance option, and<br/>
+            • a rate spread option.
+          </p>
+          <p>
+            Callability = barrier on coupon level.
+            When coupon “too good,” issuer autocalls.
+          </p>
+        </div>
+
+        <div class="side-card">
+          <h3>Vega story in one line</h3>
+          <p>
+            USDJPY up → coupons rich → product dies early → you shed long-dated vega.<br/>
+            USDJPY down → coupons cheap → product survives → you’re stuck holding
+            20y+ vega <em>in size</em> when liquidity is worst.
+          </p>
+        </div>
+
+        <div class="side-card">
+          <h3>Cross gamma intuition</h3>
+          <p>
+            Cross gamma = sensitivity to <em>joint</em> moves.  
+            You’re fine if FX↑ comes with curve shift A,  
+            and FX↓ comes with curve shift B,  
+            because those pairs were supposed to hedge.
+          </p>
+          <p>
+            You die when FX↓ shows up with curve shift A instead.
+            That’s short correlation.
+          </p>
+        </div>
+
+        <div class="side-card">
+          <h3>Is this coming back?</h3>
+          <p>
+            Structures like this never really go away.
+            They just migrate currencies and get renamed.
+          </p>
+          <p>
+            Anywhere investors beg for “enhanced coupon” in a low-rate home
+            currency, someone will pitch a PRDC cousin.  
+            Smell for “FX-linked coupon, callable by issuer, long tenor.”
+            That smell is cross gamma.
+          </p>
+        </div>
+
+      </aside>
+
+    </section>
+
+    <div class="cli-footerlinks" style="text-align:center;font-size:.85rem;color:var(--muted);margin-top:3rem;">
+      <div>☕ CoffeeQuant · Fast. Minimal. Curious. No ads.</div>
+      <div style="margin-top:.4rem;">
+        <a href="../../index.html#notes" style="color:var(--accent);text-decoration:none;">← Back to Notes</a>
+        ·
+        <a href="../../index.html#tools" style="color:var(--accent);text-decoration:none;">Play with the Pricing CLI</a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ---- MathJax typeset on load
+    (function(){
+      if (window.MathJax && MathJax.typesetPromise){
+        MathJax.typesetPromise().catch(()=>{});
+      }
+    })();
+
+    // ---- Cross-gamma stress heatmap ----
+    // Idea:
+    // x-axis = FX move (% vs start), e.g. -10% ... +10%
+    // y-axis = curve/basis shift (in "arb" units) e.g. -2 ... +2
+    // We compute a toy PnL:
+    //
+    //   base hedge assumes curve_shift ~= corr * fx_move
+    //
+    // if actual curve_shift deviates, loss = stressScale * (deviation^2)
+    // plus cost when fx_move itself is bad for coupons (USD weaker).
+    //
+    // It's deliberately simple. We just want the shape: diagonal green band
+    // when correlation is stable, fat red blob when correlation breaks.
+
+    const canvas = document.getElementById('cgMap');
+    const ctx = canvas.getContext('2d');
+
+    const corrSlider = document.getElementById('corrSlider');
+    const corrOut    = document.getElementById('corrOut');
+
+    const stressSlider = document.getElementById('stressSlider');
+    const stressOut    = document.getElementById('stressOut');
+
+    // ranges we'll map to axes:
+    const FX_MIN = -0.10; // -10%
+    const FX_MAX =  0.10; // +10%
+    const CRV_MIN = -2.0; // curve/basis shift "down"
+    const CRV_MAX =  2.0; // curve/basis shift "up"
+
+    function pnlSurface(fxMove, crvShift, corr, stress){
+      // expected curve shift given fxMove, under trader's "normal world"
+      const crvExpected = corr * fxMove * 10.0;
+      // mismatch cost
+      const mismatch = crvShift - crvExpected;
+
+      // coupon pain when USDJPY falls (fxMove < 0)
+      // more negative fxMove -> more maturity extension -> more long vega pain
+      const couponPain = (fxMove < 0 ? (-fxMove)*4.0 : 0);
+
+      // total "loss"
+      const loss = stress * ( mismatch*mismatch + couponPain );
+
+      // flip sign because we want PnL (green good, red bad)
+      const pnl = -loss;
+
+      return pnl;
+    }
+
+    function colorFor(pnl, minPnl, maxPnl){
+      // normalize 0..1 where 0=worst red, 1=best green
+      const t = (pnl - minPnl)/(maxPnl - minPnl || 1);
+      // 0 -> red (180,0,0)
+      // 0.5 -> orange (255,120,0)
+      // 1 -> green (0,160,0)
+      let r,g,b;
+      if(t < 0.5){
+        // red -> orange
+        const k = t/0.5;
+        r = 180 + (255-180)*k;
+        g = 0   + (120-0)*k;
+        b = 0;
+      } else {
+        // orange -> green
+        const k = (t-0.5)/0.5;
+        r = 255 + (0-255)*k;
+        g = 120 + (160-120)*k;
+        b = 0   + (0-0)*k;
+      }
+      r = Math.max(0,Math.min(255,Math.round(r)));
+      g = Math.max(0,Math.min(255,Math.round(g)));
+      b = Math.max(0,Math.min(255,Math.round(b)));
+      return `rgb(${r},${g},${b})`;
+    }
+
+    function drawHeatmap(){
+      const corr = parseFloat(corrSlider.value);
+      const stress = parseFloat(stressSlider.value);
+
+      corrOut.textContent   = corr.toFixed(2);
+      stressOut.textContent = stress.toFixed(2);
+
+      const W = canvas.width;
+      const H = canvas.height;
+
+      // sample grid (coarse)
+      const cols = 60;
+      const rows = 40;
+      const cellW = W/cols;
+      const cellH = H/rows;
+
+      // first pass: evaluate pnl to find min/max for coloring
+      let minPnl = Infinity;
+      let maxPnl = -Infinity;
+      const vals = [];
+
+      for(let j=0;j<rows;j++){
+        const crv = CRV_MIN + (CRV_MAX-CRV_MIN)*(j/(rows-1));
+        for(let i=0;i<cols;i++){
+          const fx  = FX_MIN + (FX_MAX-FX_MIN)*(i/(cols-1));
+          const v = pnlSurface(fx, crv, corr, stress);
+          vals.push(v);
+          if(v<minPnl) minPnl = v;
+          if(v>maxPnl) maxPnl = v;
+        }
+      }
+
+      // second pass: paint
+      let idx=0;
+      for(let j=0;j<rows;j++){
+        for(let i=0;i<cols;i++){
+          const v = vals[idx++];
+          ctx.fillStyle = colorFor(v, minPnl, maxPnl);
+          ctx.fillRect(i*cellW, H-(j+1)*cellH, cellW+1, cellH+1);
+        }
+      }
+
+      // axis overlays
+      ctx.strokeStyle = getComputedStyle(document.body).color;
+      ctx.lineWidth = 1;
+      ctx.globalAlpha = 0.3;
+      ctx.strokeRect(0,0,W,H);
+      ctx.globalAlpha = 1;
+
+      ctx.font = "10px " + getComputedStyle(document.body).getPropertyValue('font-family');
+      ctx.fillStyle = getComputedStyle(document.body).color;
+      ctx.globalAlpha = 0.7;
+
+      // x labels: FX move
+      ctx.fillText("USDJPY move", 8, H-8);
+      ctx.fillText((FX_MIN*100).toFixed(0)+"%", 8, H-20);
+      ctx.fillText((FX_MAX*100).toFixed(0)+"%", W-30, H-20);
+
+      // y labels: curve shift
+      ctx.save();
+      ctx.translate(8,12);
+      ctx.rotate(-Math.PI/2);
+      ctx.fillText("Curve / basis shift",0,0);
+      ctx.restore();
+
+      ctx.fillText(CRV_MAX.toFixed(1), 8, 12);
+      ctx.fillText(CRV_MIN.toFixed(1), 8, H-4);
+
+      ctx.globalAlpha = 1;
+    }
+
+    corrSlider.addEventListener('input', drawHeatmap);
+    stressSlider.addEventListener('input', drawHeatmap);
+
+    drawHeatmap();
+  </script>
+
+</body>
+</html>

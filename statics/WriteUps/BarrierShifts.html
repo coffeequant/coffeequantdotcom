@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Barrier Shift — Turning Hedging Pain into Pricing Discipline</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../css/cq.css" />
+  <style>
+    .bshift-shell { max-width: 1400px; margin: 0 auto; padding: 2rem 2rem 4rem; }
+    .bshift-hero { 
+      background: var(--panel-bg); border:1px solid var(--panel-border);
+      border-radius:16px; box-shadow:var(--panel-shadow);
+      display:grid; grid-template-columns:minmax(0,1fr) minmax(260px,360px);
+      gap:2rem; margin-bottom:2rem; backdrop-filter:blur(8px) saturate(1.15);
+    }
+    @media (max-width:900px){ .bshift-hero{grid-template-columns:1fr;} }
+    .bshift-main{padding:2rem 2rem 2.5rem;}
+    .bshift-side{padding:2rem 2rem 2.5rem; border-left:1px solid var(--panel-border);
+      background:linear-gradient(135deg,#e0e7ff 0%,#f4f8ff 60%);
+      color:#0f172a; font-size:.9rem; line-height:1.4;}
+    @media(prefers-color-scheme:dark){
+      .bshift-side{background:linear-gradient(135deg,#1E3A8A 0%,#0f172a 60%);color:#e8edf5;}
+    }
+    .bshift-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,340px);gap:2rem;}
+    @media(max-width:1100px){.bshift-body{grid-template-columns:1fr;}}
+    .bshift-article{background:var(--panel-bg);border:1px solid var(--panel-border);
+      border-radius:16px;box-shadow:var(--panel-shadow);
+      padding:2rem 2rem 3rem;line-height:1.6;}
+    .side-card{background:var(--panel-bg);border:1px solid var(--panel-border);
+      border-radius:12px;box-shadow:var(--panel-shadow);padding:1rem 1rem 1.2rem;font-size:.9rem;}
+  </style>
+</head>
+<body>
+
+<div class="cq-shell" style="padding-top:1rem;">
+  <nav class="cq-nav" style="justify-content:space-between;">
+    <a class="cq-logo" href="../../index.html">☕ CoffeeQuant</a>
+    <div class="cq-navlinks">
+      <a href="../../index.html#daily">Daily</a>
+      <a href="../../index.html#labs">Labs</a>
+      <a href="../../index.html#tools">Tools</a>
+      <a href="../../index.html#notes" class="is-active">Notes</a>
+      <a href="../../index.html#curios">Curios</a>
+    </div>
+  </nav>
+</div>
+
+<div class="bshift-shell">
+
+  <section class="bshift-hero">
+    <div class="bshift-main">
+      <h1>Barrier Shift — Turning Hedging Pain into Pricing Discipline</h1>
+      <p>
+        Every barrier trader has lived this: spot dances near your knockout,
+        your delta explodes, liquidity dries up, and you’re bleeding hedge P&amp;L
+        faster than your commission covers.  
+        The quiet fix? You price your barriers a few ticks *away* from reality.  
+        That invisible offset is called the <strong>barrier shift</strong>.
+      </p>
+    </div>
+    <div class="bshift-side">
+      <h2>Desk Summary</h2>
+      <p>
+        • Barrier options = beautiful products, painful hedges.<br/>
+        • “Pin risk” near barrier → extreme gamma, thin liquidity.<br/>
+        • Desk trick: price with a shifted barrier (e.g. 120 → 122).<br/>
+        • Shift compensates for expected hedge slippage and market depth.
+      </p>
+    </div>
+  </section>
+
+  <section class="bshift-body">
+    <article class="bshift-article">
+
+      <h2>1. The trader’s version of pin risk</h2>
+      <p>
+        Consider a 1-year up-and-out call on a stock at 100, barrier 120, vol 20%.
+        The risk doesn’t live at inception — it comes alive when spot sits near 119
+        a month before expiry. Every tick is life or death for your gamma.
+      </p>
+
+      <p>
+        Around that region, delta can spike from 0.2 to nearly 1 in a matter of
+        hours, and gamma looks like a heart monitor. You’re forced to rebalance
+        thousands of futures for a few basis points of movement.
+      </p>
+
+      <div class="side-card">
+        <h3>Rule of thumb</h3>
+        <p>
+          When spot is within one day’s sigma of the barrier,
+          hedging P&amp;L dominates theoretical theta.
+          You’re trading the barrier, not the option.
+        </p>
+      </div>
+
+      <h2>2. Why barrier shifts exist</h2>
+      <p>
+        Books describe “barrier shift” as a mathematical trick.  
+        Traders use it as emotional self-defense.
+      </p>
+
+      <p>
+        You sell a 120 barrier to the client, but you price it as if the barrier
+        were 122. The payout still knocks out at 120, but your model thinks it’s
+        safer than it really is — effectively baking in the expected bleed from
+        delta hedging chaos.
+      </p>
+
+      <p>
+        Shifting up the barrier makes the option cheaper (client-friendly) but
+        protects you from the probability-weighted cost of “near barrier panic”.
+      </p>
+
+      <h2>3. What drives the amount of shift?</h2>
+      <p>
+        Desk rule: barrier shift ≈ function(volatility, liquidity).
+      </p>
+
+      <p>
+        - **Volatility:** higher vol → higher chance of touching the barrier → larger shift.  
+        - **Liquidity:** lower daily volume → costlier to hedge → larger shift.
+      </p>
+
+      <p>
+        For a basket, you always look at the *weakest link* — the least liquid
+        component drives the hedge cost.
+      </p>
+
+      <div class="side-card">
+        <h3>Back-of-envelope scaling</h3>
+        <p>
+          Barrier shift ∝ √volatility × illiquidity ratio  
+          (rough desk heuristic; calibrate empirically).
+        </p>
+      </div>
+
+      <h2>4. Translating pain into numbers</h2>
+      <p>
+        Take the same up-and-out call.  
+        At 119, 1-day sigma ≈ 1%.  
+        A 1% up move kills your option (knockout), a 1% down move revives it.  
+        That asymmetry gives you a massive local delta swing — roughly 17× compared to an ATM call.
+      </p>
+
+      <p>
+        For a $1m notional book, that might mean adjusting 10k–20k futures a day
+        just to keep the book flat. Every rebalance costs spread, slippage, and
+        sometimes reputation with the execution desk.
+      </p>
+
+      <p>
+        If you expect to lose, say, \$3k of hedge P&amp;L in the final month on a
+        \$10k commission, you’ll bias your price lower by about 30% of that
+        implied loss.  
+        That’s your <strong>empirical barrier shift</strong>.
+      </p>
+
+      <h2>5. Calibrating shift with volume</h2>
+      <p>
+        Another way to express it:
+        shift = f(vol, order-size ÷ avg-daily-volume).
+      </p>
+
+      <p>
+        If your daily hedge flow is 10% of market volume, you’ll move the market.
+        If it’s 0.1%, you won’t.  
+        You can estimate mean and standard deviation of daily volume, then ensure
+        your expected hedge lies within ±1σ of that mean — that gives you a
+        confidence interval for “safe” hedge execution.
+      </p>
+
+      <div class="side-card">
+        <h3>Empirical anchor</h3>
+        <p>
+          Order sizes: 500–5000 contracts/day → mean ≈ 3000.  
+          1σ range ≈ [2000, 4000].  
+          Keep hedge flow inside that band → small barrier shift.  
+          Outside → widen your shift.
+        </p>
+      </div>
+
+      <h2>6. Up vs Down shift</h2>
+      <p>
+        <strong>Shift Up (e.g., 120 → 122):</strong>  
+        Option cheaper, lower delta sensitivity near barrier, less bleed risk.
+      </p>
+      <p>
+        <strong>Shift Down (e.g., 120 → 118):</strong>  
+        Option richer, higher delta sensitivity, used when you *buy* barriers
+        and want to be conservative on payout value.
+      </p>
+
+      <p>
+        Either way, the “barrier shift” is the trader’s way of saying:
+        “I know my model lies about how smooth hedging will be — let me fix that
+        before it eats my P&amp;L.”
+      </p>
+
+      <h2>7. The summary that sticks</h2>
+      <p>
+        - Barrier shift = your no-bullshit markup for hedging chaos.  
+        - Calibrate it empirically: from past P&amp;L, vol, and liquidity.  
+        - You’re not fixing math; you’re fixing behavior under stress.  
+        - If your desk doesn’t log hedge loss vs distance-to-barrier, start doing it.
+      </p>
+
+      <div style="text-align:center;font-size:.85rem;color:var(--muted);margin-top:2rem;">
+        ☕ CoffeeQuant · Every shift hides a scar. Price what you bleed.
+      </div>
+
+    </article>
+
+    <aside class="bshift-side" style="border:none;background:none;color:var(--fg);">
+      <div class="side-card">
+        <h3>Quick example</h3>
+        <p>
+          Product: Up-and-Out Call<br/>
+          Spot: 100 | Barrier: 120 | Vol: 20% | r: 1% | q: 0
+        </p>
+        <p>
+          Real delta near 119 → ≈ +17× ATM call delta.<br/>
+          Hedge adjustment ≈ 10k–20k futures/day.<br/>
+          Hedge cost ≈ 0.3% notional over last month.
+        </p>
+        <p>
+          Barrier shift ≈ +2 points (≈ 1.7%).<br/>
+          Enough to recover expected hedge bleed.
+        </p>
+      </div>
+
+      <div class="side-card">
+        <h3>Desk heuristics</h3>
+        <p>
+          • Start with +1–2% shift for liquid underlyings.<br/>
+          • Add +1% per 10 vol points beyond 20%.<br/>
+          • Add +0.5% per halving of ADV vs your hedge flow.<br/>
+          • Round up — you’ll thank yourself on expiry week.
+        </p>
+      </div>
+    </aside>
+  </section>
+
+  <div class="cli-footerlinks" style="text-align:center;font-size:.85rem;color:var(--muted);margin-top:3rem;">
+    <div>☕ CoffeeQuant · Fast. Minimal. Curious. No ads.</div>
+    <div style="margin-top:.4rem;">
+      <a href="../../index.html#notes" style="color:var(--accent);text-decoration:none;">← Back to Notes</a>
+      ·
+      <a href="../../index.html#tools" style="color:var(--accent);text-decoration:none;">Try the Pricing CLI</a>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
