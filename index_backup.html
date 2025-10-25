@@ -36,6 +36,8 @@
         <a href="#tools">Tools</a>
         <a href="#notes">Notes</a>
         <a href="#curios">Curios</a>
+        <!-- future -->
+        <a href="statics/WriteUps/" class="cq-hide">Archive</a>
       </div>
     </nav>
 
@@ -45,7 +47,7 @@
       <div class="cq-hero__bg" id="heroBg"></div>
       <div class="cq-hero__overlay"></div>
 
-      <!-- subtle animated steam -->
+      <!-- floating steam lines / vibe -->
       <div class="cq-steam" aria-hidden="true">
         <svg viewBox="0 0 1200 400" preserveAspectRatio="none">
           <path d="M200,340 C260,280 280,240 300,200" />
@@ -56,7 +58,7 @@
 
       <div class="cq-hero__content">
         <h1 id="heroTitle">Daily sparks. Playable math. Real desk intuition.</h1>
-        <p class="cq-muted cq-hero-tagline">
+        <p class="cq-muted">
           Fast, no-bull takes on risk, optionality, and weird market edges.
           Built for people who actually trade risk, not just talk about it.
         </p>
@@ -69,8 +71,7 @@
   </div>
 
   <!-- ====== MAIN GRID LAYOUT ====== -->
-  <main class="cq-main cq-maingrid" role="main">
-
+  <main class="cq-main cq-maingrid">
     <!-- LEFT DOCK / NAV PANEL -->
     <aside class="cq-dock" aria-label="Section navigation">
       <h4>Navigate</h4>
@@ -86,7 +87,7 @@
     </aside>
 
     <!-- RIGHT CONTENT COLUMN -->
-    <div class="cq-content-col">
+    <div>
 
       <!-- ====== DAILY ====== -->
       <section id="daily" class="cq-section" aria-labelledby="sec-daily">
@@ -97,7 +98,7 @@
         </div>
 
         <!-- one featured card from daily.json -->
-        <article id="dailyCard" class="cq-card cq-card-block cq-daily" aria-live="polite">
+        <article id="dailyCard" class="cq-card cq-daily" aria-live="polite">
           <div class="cq-skeleton">Loading today’s spark…</div>
         </article>
       </section>
@@ -110,8 +111,8 @@
           <span class="cq-pill">Interactive</span>
         </div>
 
-        <!-- cards injected from labs.json -->
-        <div id="labsList" class="cq-grid cq-card-block">
+        <!-- cards get injected from labs.json -->
+        <div id="labsList" class="cq-grid">
           <div class="cq-skeleton">Loading labs…</div>
         </div>
       </section>
@@ -124,8 +125,8 @@
           <span class="cq-pill">Try in browser</span>
         </div>
 
-        <!-- cards injected from tools.json -->
-        <div id="toolsList" class="cq-grid cq-card-block">
+        <!-- cards get injected from tools.json -->
+        <div id="toolsList" class="cq-grid">
           <div class="cq-skeleton">Loading tools…</div>
         </div>
       </section>
@@ -138,8 +139,8 @@
           <span class="cq-pill">Readable depth</span>
         </div>
 
-        <!-- cards injected from notes.json -->
-        <div id="notesList" class="cq-grid cq-card-block cq-notes-tight">
+        <!-- cards get injected from notes.json -->
+        <div id="notesList" class="cq-grid">
           <div class="cq-skeleton">Loading notes…</div>
         </div>
       </section>
@@ -152,8 +153,8 @@
           <span class="cq-pill">Links & ideas</span>
         </div>
 
-        <!-- compact list from curios.json -->
-        <div id="curiosList" class="cq-list cq-list--compact cq-card-block">
+        <!-- simple list from curios.json -->
+        <div id="curiosList" class="cq-list cq-list--compact">
           <div class="cq-skeleton">Loading curiosities…</div>
         </div>
       </section>
@@ -180,15 +181,10 @@
     </div>
   </div>
 
-  <!-- ====== SUPPORT SCRIPTS ====== -->
-  <!-- Cover generator for tiles missing 'thumb' -->
-  <script src="statics/js/cq-covers.js"></script>
-
-  <!-- PAGE BOOTSTRAP / RENDER LOGIC -->
+  <!-- ====== RENDER LOGIC / BOOTSTRAP SCRIPTS ====== -->
   <script>
-  // ---------- helpers ----------
+  // super tiny helpers
   const $ = (sel, root=document) => root.querySelector(sel);
-
   async function loadJSON(path){
     try {
       const r = await fetch(path, {cache:'no-store'});
@@ -196,30 +192,28 @@
       return await r.json();
     } catch(e){ return null; }
   }
-
   function fmtDate(iso){
     try {
-      return new Date(iso).toLocaleDateString(undefined,{
-        year:'numeric',month:'short',day:'numeric'
-      });
+      return new Date(iso).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});
     } catch(e){ return ''; }
   }
 
-  // ---------- DAILY ----------
+  // RENDER: daily spark
   async function renderDaily(){
     const data = await loadJSON('statics/data/daily.json');
     const host = $('#dailyCard');
     if(!host) return;
-
     if(!data || !data.items || !data.items.length){
       host.innerHTML = '<div class="cq-skeleton">No daily item yet.</div>';
       return;
     }
 
-    // pick today's item if exists, else rotate by weekday
+    // choose an item to surface
+    // rule: match today's date exactly if present, else rotate by weekday
+    let pick = 0;
     const today = new Date().toISOString().slice(0,10);
-    const exactIdx = data.items.findIndex(i => i.date === today);
-    const pick = exactIdx >= 0 ? exactIdx : (new Date().getDay() % data.items.length);
+    const exact = data.items.findIndex(i=>i.date === today);
+    pick = exact >=0 ? exact : (new Date().getDay() % data.items.length);
     const it = data.items[pick];
 
     host.innerHTML = `
@@ -236,20 +230,20 @@
       </div>
     `;
 
-    // typeset math inside daily card if present
+    // MathJax in case there’s inline math
     if (window.MathJax && MathJax.typesetPromise) {
       MathJax.typesetPromise([host]).catch(console.error);
     }
   }
 
-  // ---------- generic grid renderer (labs / tools / notes) ----------
+  // generic card grid renderer for labs/tools/notes
   function renderGrid(listEl, items){
     listEl.innerHTML = items.map(it => `
       <a class="cq-tile" href="${it.link}">
         <div class="cq-imgwrap">
           ${ it.thumb
-             ? `<img src="${it.thumb}" alt="" class="cq-imgthumb" />`
-             : `<div class="cq-imggen" data-cover="${it.title}"></div>`
+            ? `<img src="${it.thumb}" alt="" class="cq-imgthumb" />`
+            : `<div class="cq-imggen" data-cover="${it.title}"></div>`
           }
         </div>
         <h3>${it.title}</h3>
@@ -261,6 +255,7 @@
     `).join('');
   }
 
+  // labs
   async function renderLabs(){
     const data = await loadJSON('statics/data/labs.json');
     const host = $('#labsList'); if(!host) return;
@@ -271,6 +266,7 @@
     renderGrid(host, data.items);
   }
 
+  // tools
   async function renderTools(){
     const data = await loadJSON('statics/data/tools.json');
     const host = $('#toolsList'); if(!host) return;
@@ -281,6 +277,7 @@
     renderGrid(host, data.items);
   }
 
+  // notes
   async function renderNotes(){
     const data = await loadJSON('statics/data/notes.json');
     const host = $('#notesList'); if(!host) return;
@@ -288,10 +285,10 @@
       host.innerHTML = '<div class="cq-skeleton">No notes yet.</div>';
       return;
     }
-    // slice(0,6) so it doesn't get huge
     renderGrid(host, data.items.slice(0,6));
   }
 
+  // curios
   async function renderCurios(){
     const data = await loadJSON('statics/data/curios.json');
     const host = $('#curiosList'); if(!host) return;
@@ -312,7 +309,7 @@
     `).join('');
   }
 
-  // ---------- HERO BACKGROUND ----------
+  // rotating hero background
   async function renderHeroBg(){
     const slot = $('#heroBg'); if(!slot) return;
     const data = await loadJSON('statics/data/hero.json');
@@ -325,7 +322,7 @@
     }
   }
 
-  // ---------- INIT ----------
+  // init all sections
   (async function initPage(){
     await renderHeroBg();
     await renderDaily();
@@ -334,11 +331,12 @@
     await renderNotes();
     await renderCurios();
 
-    // generate fallback covers *before* typeset
+    // fallback cover generator for any tiles missing thumb images
     document.querySelectorAll('.cq-imggen[data-cover]').forEach(div=>{
       if (window.CQCover) {
         CQCover.inject(div, div.getAttribute('data-cover'));
       } else {
+        // low-effort fallback: just put initials
         const txt = div.getAttribute('data-cover') || '';
         const parts = txt.trim().split(/\s+/);
         const initials = (parts[0]?.[0]||'').toUpperCase() + (parts[1]?.[0]||'');
@@ -346,13 +344,18 @@
       }
     });
 
+    // typeset MathJax that might have appeared
     if (window.MathJax && MathJax.typesetPromise){
       MathJax.typesetPromise().catch(()=>{});
     }
   })();
   </script>
 
+  <!-- OPTIONAL: CQCover generator (your existing cq-covers.js) -->
+  <script src="statics/js/cq-covers.js"></script>
+
+  <!-- OPTIONAL: command palette logic can live in cq.js or inline later -->
+
 </body>
 </html>
-
 

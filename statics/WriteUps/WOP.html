@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Worst-of Put — Correlation, Cross Gamma, and Hedge Pain</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- MathJax (needed here so LaTeX renders even if we open this page directly) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['\\[','\\]'], ['$$','$$']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <style>
+    /* ---- Shared site vibe ---------------------------------- */
+    :root {
+      --fg:#0f172a;
+      --muted:#6b7280;
+      --panel-bg:rgba(255,255,255,.65);
+      --panel-border:rgba(15,23,42,.08);
+      --panel-shadow:0 18px 40px -12px rgba(15,23,42,.28);
+      --radius:12px;
+      --accent:#2563eb;
+      --bg-page:radial-gradient(circle at 20% 20%, #eef2ff 0%, #f8fafc 60%);
+    }
+    @media (prefers-color-scheme: dark){
+      :root {
+        --fg:#e8edf5;
+        --muted:#9aa3af;
+        --panel-bg:rgba(30,41,59,.6);
+        --panel-border:rgba(255,255,255,.12);
+        --panel-shadow:0 30px 60px -10px rgba(0,0,0,.9);
+        --bg-page:radial-gradient(circle at 20% 20%, #0f172a 0%, #1e2538 60%);
+        --accent:#38bdf8;
+      }
+    }
+
+    body {
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height:1.55;
+      color:var(--fg);
+      background:var(--bg-page);
+      background-attachment:fixed;
+    }
+
+    /* ---- Layout shell ------------------------------------- */
+    .page-wrap {
+      max-width:1100px;
+      margin:0 auto;
+      padding:2rem 1rem 4rem;
+    }
+
+    header.article-head {
+      max-width:850px;
+      margin:0 auto 1.5rem;
+    }
+
+    header.article-head h1 {
+      margin:0 0 .5rem;
+      font-size:clamp(1.3rem,0.5vw+1rem,1.8rem);
+      line-height:1.25;
+      font-weight:600;
+      letter-spacing:-0.03em;
+      color:var(--fg);
+    }
+
+    .meta-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:.5rem;
+      font-size:.8rem;
+      color:var(--muted);
+      margin-bottom:.75rem;
+    }
+
+    .pill {
+      background:rgba(255,255,255,.5);
+      border:1px solid var(--panel-border);
+      border-radius:999px;
+      padding:.2rem .6rem;
+      box-shadow:0 2px 4px rgba(0,0,0,.05);
+      font-size:.75rem;
+      color:var(--fg);
+    }
+    @media (prefers-color-scheme: dark){
+      .pill {
+        background:rgba(15,23,42,.6);
+        box-shadow:0 2px 4px rgba(0,0,0,.7);
+      }
+    }
+
+    .intro {
+      color:var(--muted);
+      font-size:.95rem;
+      max-width:65ch;
+      line-height:1.5;
+    }
+
+    /* ---- Article sections --------------------------------- */
+    .section-card {
+      background:var(--panel-bg);
+      border:1px solid var(--panel-border);
+      box-shadow:var(--panel-shadow);
+      border-radius:var(--radius);
+      padding:1rem 1.25rem 1.25rem;
+      max-width:850px;
+      margin:1rem auto;
+    }
+
+    .section-card h2 {
+      margin:0 0 .5rem;
+      font-size:1.05rem;
+      line-height:1.3;
+      font-weight:600;
+      color:var(--fg);
+      letter-spacing:-0.02em;
+      display:flex;
+      align-items:flex-start;
+      gap:.5rem;
+    }
+
+    .section-card h3 {
+      margin:1rem 0 .4rem;
+      font-size:.95rem;
+      font-weight:600;
+      color:var(--fg);
+    }
+
+    p, li {
+      font-size:.93rem;
+      line-height:1.5;
+      color:var(--fg);
+      margin:.5rem 0;
+    }
+
+    .muted { color:var(--muted); }
+
+    /* ---- sim / controls block ----------------------------- */
+    .sim-wrap {
+      display:flex;
+      flex-wrap:wrap;
+      gap:1rem;
+      margin-top:.75rem;
+    }
+    .sim-left,
+    .sim-right {
+      flex:1 1 270px;
+      min-width:0;
+    }
+
+    .sim-box {
+      background:rgba(255,255,255,.6);
+      border:1px solid var(--panel-border);
+      border-radius:var(--radius);
+      padding:1rem;
+      box-shadow:0 12px 28px -8px rgba(15,23,42,.25);
+    }
+    @media (prefers-color-scheme: dark){
+      .sim-box {
+        background:rgba(15,23,42,.5);
+        box-shadow:0 20px 40px -6px rgba(0,0,0,.9);
+      }
+    }
+
+    canvas#simCanvas{
+      width:100%;
+      max-width:360px;
+      height:220px;
+      border-radius:var(--radius);
+      border:1px solid var(--panel-border);
+      background:radial-gradient(circle at 20% 20%,rgba(255,255,255,.6),rgba(200,210,240,.3) 60%,rgba(180,190,220,.15) 100%);
+      display:block;
+    }
+    @media (prefers-color-scheme: dark){
+      canvas#simCanvas{
+        background:radial-gradient(circle at 20% 20%,rgba(50,60,80,.6),rgba(30,36,50,.3) 60%,rgba(10,14,25,.1) 100%);
+      }
+    }
+
+    .ctrl-grid {
+      display:flex;
+      flex-wrap:wrap;
+      gap:1rem;
+      margin-top:.75rem;
+      font-size:.8rem;
+    }
+    .ctrl-block {
+      min-width:120px;
+    }
+    label {
+      display:block;
+      font-size:.7rem;
+      font-weight:500;
+      color:var(--fg);
+      margin-bottom:.25rem;
+    }
+    input[type=range] {
+      width:140px;
+    }
+    .metric-line {
+      font-size:.8rem;
+      line-height:1.4;
+      color:var(--muted);
+    }
+    .metric-line strong {
+      color:var(--fg);
+      font-weight:600;
+    }
+
+    details {
+      border:1px dashed var(--panel-border);
+      border-radius:var(--radius);
+      padding:.75rem .9rem;
+      background:rgba(255,255,255,.4);
+      font-size:.85rem;
+      line-height:1.45;
+      margin-top:1rem;
+    }
+    @media (prefers-color-scheme: dark){
+      details{
+        background:rgba(15,23,42,.4);
+      }
+    }
+    summary{
+      cursor:pointer;
+      font-weight:600;
+      color:var(--fg);
+    }
+
+    code {
+      font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size:.8rem;
+      background:rgba(0,0,0,.06);
+      border-radius:4px;
+      padding:.1rem .3rem;
+    }
+    @media (prefers-color-scheme: dark){
+      code{
+        background:rgba(255,255,255,.07);
+      }
+    }
+
+    footer.bottom-note {
+      font-size:.8rem;
+      line-height:1.4;
+      color:var(--muted);
+      margin-top:2rem;
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-wrap" id="cq-article">
+
+    <!-- HEADER -->
+    <header class="article-head">
+      <h1>Worst-of Put — correlation, cross gamma, and “why is my hedge on fire?”</h1>
+      <div class="meta-row">
+        <span class="pill">Worst-of</span>
+        <span class="pill">Correlation</span>
+        <span class="pill">Cross Gamma</span>
+        <span class="pill">Desk Hedging</span>
+      </div>
+      <p class="intro">
+        A worst-of put pays based on whoever is dying the most in your basket.
+        If you’re short it, you’re basically betting that <em>none</em> of the names will fall apart on their own.
+        That sounds safe — until correlation breaks, the “worst name” keeps switching, and your delta hedge whipsaws.
+      </p>
+    </header>
+
+    <!-- 1. Definition -->
+    <section class="section-card">
+      <h2>1. What is a worst-of put?</h2>
+      <p>
+        Suppose we have two stocks, $S_1$ and $S_2$, and a strike $K$.
+        At expiry the payoff is:
+      </p>
+      <p>
+        \[
+          V = \max\bigl(K - \min(S_1, S_2),\,0\bigr).
+        \]
+      </p>
+      <ul>
+        <li>If both finishes are above $K$, payoff = 0.</li>
+        <li>If at least one finishes below $K$, payoff is how far the <strong>weaker one</strong> is below $K$.</li>
+      </ul>
+      <p>
+        So this contract only cares about <em>the loser</em>.
+        It doesn’t reward you for the strong stock. It punishes you for the weak stock.
+      </p>
+      <p class="muted">
+        That’s why investors like buying these (“I just need one blow-up and I get paid”)
+        and why desks charge fat premium to sell them.
+      </p>
+    </section>
+
+    <!-- 2. Interactive intuition -->
+    <section class="section-card">
+      <h2>2. Visual intuition — move two names around</h2>
+
+      <div class="sim-wrap">
+        <!-- explanation -->
+        <div class="sim-left">
+          <p>
+            Think of a grid. $S_1$ is the x-axis. $S_2$ is the y-axis.
+            Strike $K$ is a cutoff line at 100.
+          </p>
+          <p>
+            Each point $(S_1,S_2)$ = “where the two stocks end up at expiry.”
+          </p>
+          <ul>
+            <li>Top-right zone (both $\ge K$): payoff is 0 → you’re safe.</li>
+            <li>Bottom or left “L” zone (at least one $<K$): payoff turns on → you’re in trouble.</li>
+          </ul>
+          <p class="muted">
+            Slide the sliders. Watch who’s the loser and how big the hit is.
+          </p>
+        </div>
+
+        <!-- sim widget -->
+        <div class="sim-right sim-box">
+          <canvas id="simCanvas"></canvas>
+
+          <div class="ctrl-grid">
+            <div class="ctrl-block">
+              <label for="s1Slider">S₁ terminal</label>
+              <input type="range" id="s1Slider" min="50" max="150" value="100">
+              <div class="metric-line"><strong>S₁:</strong> <span id="s1Val">100</span></div>
+            </div>
+
+            <div class="ctrl-block">
+              <label for="s2Slider">S₂ terminal</label>
+              <input type="range" id="s2Slider" min="50" max="150" value="100">
+              <div class="metric-line"><strong>S₂:</strong> <span id="s2Val">100</span></div>
+            </div>
+
+            <div class="ctrl-block">
+              <label for="kSlider">Strike K</label>
+              <input type="range" id="kSlider" min="60" max="120" value="100">
+              <div class="metric-line"><strong>K:</strong> <span id="kVal">100</span></div>
+            </div>
+          </div>
+
+          <div class="metric-line" style="margin-top:.75rem">
+            Payoff now:
+            <strong><span id="payoffNow">0</span></strong><br/>
+            Worst name:
+            <strong><span id="worstName">–</span></strong>
+          </div>
+        </div>
+      </div>
+
+      <p style="margin-top:1rem;">
+        Key observation:
+      </p>
+      <ol>
+        <li>If only one stock melts, you still owe. You don’t get to say “but the other name rallied”.</li>
+        <li>The identity of “the weak one” can flip. When it flips, your hedge has to flip too.</li>
+      </ol>
+    </section>
+
+    <!-- 3. Correlation story -->
+    <section class="section-card">
+      <h2>3. Correlation = “do they fall together, or take turns failing?”</h2>
+      <p>
+        People say “short worst-of means you’re short correlation.” Here’s what that actually means.
+      </p>
+      <ul>
+        <li>
+          <strong>High correlation ($\rho \approx 1$):</strong>
+          names move together. Either both hold up, or both die.
+          You mostly worry about one big scenario.
+        </li>
+        <li>
+          <strong>Low / negative correlation ($\rho \to 0$ or $<0$):</strong>
+          they take turns being weak.
+          You get a lot of states where <em>at least one</em> is below strike.
+          That triggers the payoff again and again.
+        </li>
+      </ul>
+      <p class="muted">
+        So if you sold this note, you basically promised:
+        “These names will behave like a team.”
+        When they stop behaving like a team, you bleed.
+      </p>
+    </section>
+
+    <!-- 4. Delta -->
+    <section class="section-card">
+      <h2>4. Delta: who are you short right now?</h2>
+
+      <p>
+        Near expiry, the payoff is essentially
+      </p>
+      <p>
+        \[
+          V \approx (K - S_1)^+ \mathbf{1}_{S_1 \le S_2} \;+\;
+               (K - S_2)^+ \mathbf{1}_{S_2 < S_1}.
+        \]
+      </p>
+
+      <p>
+        Read that in plain language:
+      </p>
+      <ul>
+        <li>If stock 1 is the weaker name (it’s below both $S_2$ and $K$), the note behaves like a plain put on $S_1$.</li>
+        <li>If stock 2 is the weaker name, it behaves like a plain put on $S_2$ instead.</li>
+      </ul>
+
+      <p>
+        That means the deltas are almost binary:
+      </p>
+      <p>
+        \[
+        \Delta_1 \equiv \frac{\partial V}{\partial S_1} \approx
+        \begin{cases}
+        -1 & \text{if } S_1 \le S_2 \text{ and } S_1 < K,\\
+         0 & \text{otherwise}
+        \end{cases}
+        \]
+      </p>
+
+      <p>
+        \[
+        \Delta_2 \equiv \frac{\partial V}{\partial S_2} \approx
+        \begin{cases}
+         0 & \text{if } S_1 \le S_2,\\
+        -1 & \text{if } S_2 < S_1 \text{ and } S_2 < K.
+        \end{cases}
+        \]
+      </p>
+
+      <p>
+        Translation:
+        <strong>the option “attaches” itself to whichever stock is in more pain, and ignores the other.</strong>
+        Your hedge must be short that name.
+      </p>
+
+      <h3>Numerical check</h3>
+      <p>
+        Let $K = 100$, $S_1 = 90$, $S_2 = 105$ (expiry).
+      </p>
+      <ul>
+        <li>Payoff $= 100 - \min(90,105) = 10$.</li>
+        <li>Stock 1 is the loser.</li>
+        <li>Small bump: $S_1$ from 90 → 91 (keep $S_2$ = 105).</li>
+        <li>New payoff $= 100-\min(91,105)=9$.</li>
+      </ul>
+
+      <p>
+        Change is −1 for a +1 move in $S_1$.  
+        So $\Delta_1 \approx -1,\ \Delta_2 \approx 0.$  
+        Exactly like “I’m short a put on $S_1$.”
+      </p>
+
+      <p class="muted">
+        Now imagine tomorrow $S_2$ tanks instead and becomes the new loser.
+        Overnight your delta has to jump from “short $S_1$” to “short $S_2$.”
+      </p>
+    </section>
+
+    <!-- 5. Cross gamma -->
+    <section class="section-card">
+      <h2>5. Cross gamma: the violent handoff</h2>
+
+      <p>
+        Gamma is how fast delta changes when spot moves.
+        In a vanilla put, gamma spikes near strike. Annoying but hedgeable.
+      </p>
+
+      <p>
+        In a worst-of put, gamma is nastier:
+        the “active” underlier can <em>switch names</em>.
+        One minute the risk is mostly $S_1$. Next minute, it jumps to $S_2$.
+      </p>
+
+      <h3>Picture this:</h3>
+      <ul>
+        <li>$K = 100$</li>
+        <li>$S_1 = 98$</li>
+        <li>$S_2 = 99$</li>
+        <li>1 day to expiry</li>
+      </ul>
+
+      <p>
+        Right now $S_1$ is slightly worse (98 &lt; 99), so the note trades like a put on $S_1$.
+        Hedge: you’re short $S_1$.
+      </p>
+
+      <p>
+        Now $S_2$ gaps lower to 95 while $S_1$ stays 98.
+        Instantly $S_2$ is the problem name.  
+        Hedge flips: you should really be short $S_2$ now, not $S_1$.
+      </p>
+
+      <p class="muted">
+        That jump in “who you need to be short” is cross gamma.
+        You’re not just long/short one gamma —
+        you’re exposed to the <em>switching</em> of gamma across names.
+      </p>
+
+      <details>
+        <summary>Why it's so hard to hedge in live markets</summary>
+        <p>
+          Near expiry and near strike, both stocks might sit around $K$,
+          and they're close to each other.
+          Tiny relative moves decide which name is “the loser.”
+        </p>
+        <p>
+          The Greeks behave almost like:
+          \[
+          \nabla V \approx
+          \begin{cases}
+          (-1,0) & \text{if } S_1 \le S_2 \text{ and } S_1 < K, \\
+          (0,-1) & \text{if } S_2 < S_1 \text{ and } S_2 < K, \\
+          (0,0)  & \text{otherwise.}
+          \end{cases}
+          \]
+        </p>
+        <p>
+          That’s not smooth.  
+          It’s a cliff.  
+          You can't “half delta-hedge both”.
+        </p>
+      </details>
+    </section>
+
+    <!-- 6. Correlation shock with numbers -->
+    <section class="section-card">
+      <h2>6. Correlation shock (numbers structurers care about)</h2>
+
+      <p>
+        Let’s say at trade start:
+      </p>
+      <ul>
+        <li>$S_1 = 100$, $S_2 = 100$</li>
+        <li>$K = 100$</li>
+        <li>vols $\sigma_1 = \sigma_2 = 20\%$</li>
+        <li>time to expiry $T = 0.5$y (6 months)</li>
+      </ul>
+
+      <p>
+        If the two names are highly correlated, e.g. $\rho = 0.8$:
+      </p>
+      <ul>
+        <li>Scenario is usually “both fine” or “both down together.”</li>
+        <li>The worst-of put might price around, say, 4.2% of notional.</li>
+      </ul>
+
+      <p>
+        Now shock correlation down to $\rho = -0.2$:
+      </p>
+      <ul>
+        <li>One name can puke while the other rallies.</li>
+        <li>You get many more “exactly one disaster” outcomes.</li>
+        <li>Same vols, same strikes — now it might price more like 6.0% of notional.</li>
+      </ul>
+
+      <p class="muted">
+        That jump from 4.2% → 6.0% is not because vol exploded.
+        It's because we're not assuming they die together anymore.
+        We’re assuming “somebody will be the loser.”
+      </p>
+
+      <p>
+        Desk translation: short worst-of ≈ short correlation.
+      </p>
+    </section>
+
+    <!-- 7. Final desk view -->
+    <section class="section-card">
+      <h2>7. What the desk is actually scared of</h2>
+      <ul>
+        <li>You keep selling downside in whichever name is currently worst.</li>
+        <li>The “worst” name can flip on you with no warning, so your hedge whipsaws stock-to-stock.</li>
+        <li>In stress, liquidity is worst exactly where you need to adjust.</li>
+        <li>If correlation collapses, “someone is always in trouble” → constant bleeding.</li>
+      </ul>
+
+      <p class="muted">
+        This is why worst-of puts look “overpriced” to buyers.
+        You’re not just buying a vanilla put on one name.
+        You’re buying my correlation headache and my cross-gamma panic.
+      </p>
+    </section>
+
+    <footer class="bottom-note">
+      If you’re selling this structure: you are betting two names won’t decouple,
+      and that you can hedge the loser faster than it can fall.
+      That’s not a spreadsheet assumption. That’s a belief about market microstructure under stress.
+    </footer>
+
+  </div>
+
+  <!-- ========== INTERACTIVE CANVAS SCRIPT ========== -->
+  <script>
+    // Simple geometric picture:
+    // Axes: S1 (x), S2 (y). Strike K. We color:
+    //  - Safe zone (both >= K) light green
+    //  - Danger "L" zone (any < K) light red
+    //  - Current (S1,S2) point
+    //  We show payoff = max(K - min(S1,S2), 0)
+    (function(){
+      const c   = document.getElementById('simCanvas');
+      const ctx = c.getContext('2d');
+
+      const s1Slider = document.getElementById('s1Slider');
+      const s2Slider = document.getElementById('s2Slider');
+      const kSlider  = document.getElementById('kSlider');
+
+      const s1Val    = document.getElementById('s1Val');
+      const s2Val    = document.getElementById('s2Val');
+      const kVal     = document.getElementById('kVal');
+      const payoffEl = document.getElementById('payoffNow');
+      const worstEl  = document.getElementById('worstName');
+
+      function payoffWorstOfPut(S1,S2,K){
+        const m = Math.min(S1,S2);
+        return Math.max(K - m, 0);
+      }
+
+      function draw(){
+        const W = c.width  = c.clientWidth  * window.devicePixelRatio;
+        const H = c.height = c.clientHeight * window.devicePixelRatio;
+        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+        const S1 = parseFloat(s1Slider.value);
+        const S2 = parseFloat(s2Slider.value);
+        const K  = parseFloat(kSlider.value);
+
+        s1Val.textContent = S1.toFixed(0);
+        s2Val.textContent = S2.toFixed(0);
+        kVal.textContent  = K.toFixed(0);
+
+        const P = payoffWorstOfPut(S1,S2,K);
+        payoffEl.textContent = P.toFixed(2);
+
+        if (P === 0){
+          worstEl.textContent = "none (both ≥ K)";
+        } else {
+          worstEl.textContent = (S1 <= S2 ? "S₁" : "S₂");
+        }
+
+        // coordinate transform
+        const minP = 50, maxP = 150;
+        const pad  = 28;
+        const spanX = c.clientWidth  - 2*pad;
+        const spanY = c.clientHeight - 2*pad;
+
+        function xCoord(v){
+          return pad + (v - minP)/(maxP-minP)*spanX;
+        }
+        function yCoord(v){
+          return pad + (1 - (v - minP)/(maxP-minP))*spanY;
+        }
+
+        ctx.clearRect(0,0,c.clientWidth,c.clientHeight);
+
+        // compute strike lines
+        const kx = xCoord(K);
+        const ky = yCoord(K);
+
+        // SAFE region (both >= K): top-right rectangle
+        ctx.fillStyle = 'rgba(34,197,94,0.15)'; // green-ish
+        ctx.fillRect(kx, pad, c.clientWidth - pad - kx, ky - pad);
+
+        // DANGER region: bottom band (S2 < K)
+        ctx.fillStyle = 'rgba(239,68,68,0.15)'; // red-ish
+        ctx.fillRect(pad, ky, c.clientWidth - 2*pad, c.clientHeight - pad - ky);
+
+        // DANGER region: left band (S1 < K)
+        ctx.fillRect(pad, pad, kx - pad, c.clientHeight - 2*pad);
+
+        // axes lines at K
+        ctx.strokeStyle = 'rgba(15,23,42,0.6)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        // vertical x=K
+        ctx.moveTo(kx, pad);
+        ctx.lineTo(kx, c.clientHeight - pad);
+        // horizontal y=K
+        ctx.moveTo(pad, ky);
+        ctx.lineTo(c.clientWidth - pad, ky);
+        ctx.stroke();
+
+        // labels
+        ctx.fillStyle = 'rgba(15,23,42,0.8)';
+        ctx.font = '11px system-ui,-apple-system,BlinkMacSystemFont';
+        ctx.fillText("S₁", c.clientWidth - pad - 14, c.clientHeight - pad + 12);
+        ctx.save();
+        ctx.translate(pad-16, pad+12);
+        ctx.rotate(-Math.PI/2);
+        ctx.fillText("S₂", 0, 0);
+        ctx.restore();
+
+        ctx.fillText("K", kx+4, c.clientHeight - pad + 12);
+        ctx.fillText("K", pad-14, ky-4);
+
+        // current point
+        const px = xCoord(S1);
+        const py = yCoord(S2);
+
+        ctx.fillStyle = 'rgba(15,23,42,1)';
+        ctx.beginPath();
+        ctx.arc(px, py, 4, 0, Math.PI*2);
+        ctx.fill();
+
+        ctx.fillStyle = 'rgba(15,23,42,0.8)';
+        ctx.fillText(`(${S1.toFixed(0)}, ${S2.toFixed(0)})`, px+6, py-6);
+
+        // guide lines
+        ctx.setLineDash([4,3]);
+        ctx.strokeStyle = 'rgba(15,23,42,0.4)';
+        ctx.beginPath();
+        ctx.moveTo(px, py);
+        ctx.lineTo(px, c.clientHeight - pad);
+        ctx.moveTo(px, py);
+        ctx.lineTo(pad, py);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      s1Slider.addEventListener('input', draw);
+      s2Slider.addEventListener('input', draw);
+      kSlider.addEventListener('input', draw);
+      window.addEventListener('resize', draw);
+
+      draw();
+
+      // typeset math when ready (MathJax may load async)
+      if (window.MathJax && MathJax.typesetPromise){
+        MathJax.typesetPromise([document.getElementById('cq-article')]).catch(()=>{});
+      }
+    })();
+  </script>
+</body>
+</html>
+

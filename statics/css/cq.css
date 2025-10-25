@@ -227,16 +227,27 @@ html::before {
 .cq-hero__bg {
   position:absolute;
   inset:0;
-  background: center/cover no-repeat;
-  opacity:.16;
-  filter: contrast(.9) saturate(.8) brightness(.95);
+    background-color: #e9eef7;         /* fallback color */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: brightness(1.05) saturate(1.05);
 }
 .cq-hero__overlay {
   position:absolute;
   inset:0;
-  background: radial-gradient(60% 60% at 50% 35%, rgba(255,255,255,.6), transparent 60%);
-  opacity:.6;
+  background: radial-gradient(
+    ellipse at 30% 30%,
+    rgba(255,255,255,.6) 0%,
+    rgba(255,255,255,.1) 60%,
+    rgba(0,0,0,0) 80%
+  );
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  pointer-events: none;
 }
+
+
 @media (prefers-color-scheme: dark){
   .cq-hero__overlay {
     background: radial-gradient(60% 60% at 50% 35%, rgba(15,23,42,.55), transparent 60%);

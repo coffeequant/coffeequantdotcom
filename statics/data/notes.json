@@ -8,6 +8,14 @@
       "tags": ["Options","Pricing"],
       "date": "2025-10-24"
     },
+     {
+      "title": "Worst-of Put: Cross Gamma in Real Life",
+      "deck": "Why short worst-of means you’re secretly short correlation, and why the hedge snaps.",
+      "link": "statics/WriteUps/WOP.html",
+      "thumb": "statics/img/thumbs/worstof.webp",
+      "tags": ["Cross gamma", "Correlation", "Exotics"],
+      "date": "2025-10-26"
+    },
     {
       "title": "Barrier Shift Intuition",
       "deck": "Why barrier traders quietly move the barrier before quoting you.",
