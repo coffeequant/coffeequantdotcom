@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Dice Lab — CoffeeQuant Tools</title>
+<link rel="stylesheet" href="../css/cq.css" />
+
+<style>
+  .tool-wrap {
+    max-width: 1100px;
+    margin: 2rem auto;
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+    box-shadow: var(--panel-shadow);
+    padding: 1rem 1.25rem 2rem;
+  }
+  .tool-head {
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:1rem;
+    margin-bottom:1rem;
+  }
+  .tool-head h1 {
+    margin:0;
+    font-size:1.2rem;
+    line-height:1.3;
+  }
+  .tool-form {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:0.75rem 1rem;
+    margin-bottom:1rem;
+  }
+  .tool-form label {
+    font-size:.8rem;
+    color:var(--muted);
+    display:block;
+    margin-bottom:.25rem;
+  }
+  .tool-form input {
+    width:100%;
+    font-size:.9rem;
+    padding:.5rem .6rem;
+    border-radius:8px;
+    border:1px solid var(--panel-border);
+    background:var(--card-bg);
+    color:var(--fg);
+  }
+  .tool-actions {
+    display:flex;
+    flex-wrap:wrap;
+    gap:.5rem;
+    margin-bottom:1rem;
+  }
+  .tool-results {
+    display:flex;
+    flex-wrap:wrap;
+    gap:1rem;
+  }
+  .tool-left,
+  .tool-right {
+    flex:1 1 250px;
+    min-width:250px;
+  }
+  .dice-grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(28px,1fr));
+    gap:.4rem;
+    font-size:.8rem;
+    line-height:1.2;
+  }
+  .die-cell {
+    border:1px solid var(--panel-border);
+    border-radius:6px;
+    text-align:center;
+    padding:.4rem 0;
+    background:var(--card-bg);
+    font-weight:600;
+  }
+  .die-min {
+    background:rgba(255,210,90,.3);
+  }
+  .die-best {
+    outline:2px solid #22c55e;
+    outline-offset:2px;
+  }
+  .chartbox {
+    border:1px solid var(--panel-border);
+    border-radius:var(--radius);
+    background:var(--card-bg);
+    overflow:hidden;
+  }
+  canvas {
+    width:100%;
+    height:240px;
+    display:block;
+  }
+  .stats {
+    font-size:.8rem;
+    line-height:1.4;
+    margin-top:.75rem;
+    color:var(--fg);
+  }
+  a.cq-logo-mini {
+    text-decoration:none;
+    color:var(--fg);
+    font-size:.8rem;
+    font-weight:600;
+  }
+</style>
+</head>
+<body>
+
+<div class="tool-wrap">
+  <div class="tool-head">
+    <div>
+      <h1>Dice Lab</h1>
+      <div class="cq-muted" style="font-size:.8rem;max-width:480px;">
+        Roll n dice per round, write down the min. Do this k rounds. Keep the best min.
+        That final number is weirdly important in trading-style “worst-case / best draw” logic.
+      </div>
+    </div>
+    <div>
+      <a class="cq-logo-mini" href="../../index.html">☕ CoffeeQuant Home →</a>
+    </div>
+  </div>
+
+  <form class="tool-form" onsubmit="return false;">
+    <div>
+      <label>Dice per round (n)</label>
+      <input id="d_n" type="number" value="6" min="1" max="20">
+    </div>
+    <div>
+      <label>Rounds (k)</label>
+      <input id="d_k" type="number" value="6" min="1" max="20">
+    </div>
+    <div>
+      <label>Trials (simulated games)</label>
+      <input id="d_T" type="number" value="1000" min="10" step="10">
+    </div>
+  </form>
+
+  <div class="tool-actions">
+    <button class="cq-btn" onclick="runDiceOnce()">🎲 Show one game</button>
+    <button class="cq-btn" onclick="runDiceSim()">🚀 Run sim</button>
+    <button class="cq-btn-ghost" onclick="clearDice()">Clear</button>
+  </div>
+
+  <div class="tool-results">
+    <div class="tool-left">
+      <h3 style="font-size:.9rem;margin:.25rem 0;">Single game view</h3>
+      <div id="dice_single"></div>
+      <div class="stats cq-muted" id="dice_single_text"></div>
+    </div>
+
+    <div class="tool-right">
+      <h3 style="font-size:.9rem;margin:.25rem 0;">Simulation result</h3>
+      <div class="chartbox"><canvas id="dice_hist"></canvas></div>
+      <div class="stats" id="dice_stats"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function rollDie(){ return (Math.random()*6|0)+1; }
+
+function oneDiceGame(n,k){
+  const allRounds = [];
+  const mins = [];
+  for(let r=0;r<k;r++){
+    const rolls = Array.from({length:n}, rollDie);
+    const m = Math.min(...rolls);
+    allRounds.push({rolls, m});
+    mins.push(m);
+  }
+  const maxOfMins = Math.max(...mins);
+  return { rounds: allRounds, mins, maxOfMins };
+}
+
+function renderOneGame(out){
+  const host = document.getElementById('dice_single');
+  host.innerHTML = '';
+  out.rounds.forEach(round=>{
+    const wrap = document.createElement('div');
+    wrap.className = 'dice-grid';
+
+    const bestClass = (round.m === out.maxOfMins) ? ' die-best' : '';
+    round.rolls.forEach(v=>{
+      const isMin = (v === round.m);
+      const cell = document.createElement('div');
+      cell.className = 'die-cell' + (isMin?' die-min':'') + bestClass;
+      cell.textContent = v;
+      wrap.appendChild(cell);
+    });
+    host.appendChild(wrap);
+  });
+
+  document.getElementById('dice_single_text').innerHTML =
+    `Round minimums: <strong>${out.mins.join(', ')}</strong><br>`+
+    `Max of those minimums: <strong>${out.maxOfMins}</strong> (outlined in green).`;
+}
+
+function runDiceOnce(){
+  const n = parseInt(document.getElementById('d_n').value)||6;
+  const k = parseInt(document.getElementById('d_k').value)||6;
+  const game = oneDiceGame(n,k);
+  renderOneGame(game);
+}
+
+function runDiceSim(){
+  const n = parseInt(document.getElementById('d_n').value)||6;
+  const k = parseInt(document.getElementById('d_k').value)||6;
+  const T = parseInt(document.getElementById('d_T').value)||1000;
+
+  const counts = [0,0,0,0,0,0]; // for 1..6
+  for(let t=0;t<T;t++){
+    const g = oneDiceGame(n,k);
+    counts[g.maxOfMins-1]++;
+  }
+
+  drawDiceHist(counts,T);
+  const mean = counts.reduce((s,c,i)=>s+(i+1)*c,0)/T;
+  document.getElementById('dice_stats').innerHTML =
+    `<strong>Average final value:</strong> ${mean.toFixed(3)}<br>`+
+    `<span class="cq-muted">Empirical probs [1..6]: ${
+      counts.map(c=>(c/T).toFixed(3)).join(' , ')
+    }</span>`;
+}
+
+function clearDice(){
+  document.getElementById('dice_single').innerHTML='';
+  document.getElementById('dice_single_text').innerHTML='';
+  const c = document.getElementById('dice_hist');
+  const ctx = c.getContext('2d');
+  c.width = c.clientWidth * devicePixelRatio;
+  c.height = 240 * devicePixelRatio;
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  ctx.clearRect(0,0,c.width,c.height);
+  document.getElementById('dice_stats').innerHTML='';
+}
+
+function drawDiceHist(counts,T){
+  const c = document.getElementById('dice_hist');
+  const ctx = c.getContext('2d');
+
+  const W = c.width  = c.clientWidth * devicePixelRatio;
+  const H = c.height = 240 * devicePixelRatio;
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  ctx.clearRect(0,0,c.width,c.height);
+
+  const left=32, right=10, top=10, bottom=20;
+  const plotW = c.clientWidth - left - right;
+  const plotH = 240 - top - bottom;
+
+  // axes
+  ctx.strokeStyle = getComputedStyle(document.body).color;
+  ctx.globalAlpha=0.3;
+  ctx.beginPath();
+  ctx.moveTo(left, top);
+  ctx.lineTo(left, top+plotH);
+  ctx.lineTo(left+plotW, top+plotH);
+  ctx.stroke();
+  ctx.globalAlpha=1;
+
+  const gap=10;
+  const nBars=6;
+  const bw = (plotW - (nBars+1)*gap)/nBars;
+  const maxP = Math.max(...counts)/T || 1;
+
+  ctx.fillStyle = getComputedStyle(document.body).color;
+  ctx.font = "10px sans-serif";
+
+  for(let i=0;i<nBars;i++){
+    const p = counts[i]/T;
+    const h = p/maxP * plotH;
+    const x = left + gap + i*(bw+gap);
+    const y = top + plotH - h;
+
+    ctx.globalAlpha = 0.15;
+    ctx.fillRect(x,y,bw,h);
+
+    ctx.globalAlpha = 1;
+    ctx.fillText(String(i+1), x+bw/2-3, top+plotH+14);
+    ctx.fillText(p.toFixed(2), x+bw/2-12, y-4);
+  }
+}
+
+clearDice();
+</script>
+
+</body>
+</html>
+

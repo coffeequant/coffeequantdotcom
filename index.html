@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>CoffeeQuant — Daily sparks, playful labs, sharp intuition</title>
+  <title>CoffeeQuant — Daily sparks, playground labs, and desk truth</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Global MathJax v3 (one time) -->
+  <!-- MathJax (global, once) -->
   <script>
     window.MathJax = {
       tex: {
@@ -20,12 +20,13 @@
   <script id="MathJax-script" async
     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 
-  <!-- Main theme CSS (contains SVG watermark bg and Dojo menus) -->
-  <link rel="stylesheet" href="statics/css/cq.css">
+  <!-- Theme / layout / dojo-flavored nav -->
+  <link rel="stylesheet" href="statics/css/cq.css" />
 </head>
 
 <body>
-  <!-- Top shell + nav -->
+
+  <!-- ====== NAV WRAPPER ====== -->
   <div class="cq-shell">
     <nav class="cq-nav" role="navigation" aria-label="Main">
       <a class="cq-logo" href="/" aria-label="CoffeeQuant Home">☕ CoffeeQuant</a>
@@ -35,18 +36,18 @@
         <a href="#tools">Tools</a>
         <a href="#notes">Notes</a>
         <a href="#curios">Curios</a>
-        <!-- Archive hidden until articles are rewritten -->
+        <!-- future -->
         <a href="statics/WriteUps/" class="cq-hide">Archive</a>
       </div>
     </nav>
 
-    <!-- HERO -->
+    <!-- ====== HERO SECTION ====== -->
     <section class="cq-hero" aria-labelledby="heroTitle">
-      <!-- Background is set by heroRotate() from statics/data/hero.json -->
+      <!-- background image gets injected from hero.json -->
       <div class="cq-hero__bg" id="heroBg"></div>
       <div class="cq-hero__overlay"></div>
 
-      <!-- subtle steam animation -->
+      <!-- floating steam lines / vibe -->
       <div class="cq-steam" aria-hidden="true">
         <svg viewBox="0 0 1200 400" preserveAspectRatio="none">
           <path d="M200,340 C260,280 280,240 300,200" />
@@ -56,8 +57,11 @@
       </div>
 
       <div class="cq-hero__content">
-        <h1 id="heroTitle">Daily sparks. Playful labs. Sharp intuition.</h1>
-        <p class="cq-muted">A fast, minimalist place where math, markets, and curiosity meet.</p>
+        <h1 id="heroTitle">Daily sparks. Playable math. Real desk intuition.</h1>
+        <p class="cq-muted">
+          Fast, no-bull takes on risk, optionality, and weird market edges.
+          Built for people who actually trade risk, not just talk about it.
+        </p>
         <div class="cq-cta">
           <a class="cq-btn" href="#labs">Explore Labs</a>
           <a class="cq-btn-ghost" href="#daily">Today’s Spark</a>
@@ -66,9 +70,9 @@
     </section>
   </div>
 
-  <!-- Main grid: left dock + content -->
+  <!-- ====== MAIN GRID LAYOUT ====== -->
   <main class="cq-main cq-maingrid">
-    <!-- Left dock -->
+    <!-- LEFT DOCK / NAV PANEL -->
     <aside class="cq-dock" aria-label="Section navigation">
       <h4>Navigate</h4>
       <a href="#daily">📰 Daily</a>
@@ -82,104 +86,83 @@
       <a href="statics/Tools/PricingCLI.html">▶ Pricing CLI</a>
     </aside>
 
-    <!-- Right content -->
+    <!-- RIGHT CONTENT COLUMN -->
     <div>
-      <!-- Daily -->
+
+      <!-- ====== DAILY ====== -->
       <section id="daily" class="cq-section" aria-labelledby="sec-daily">
         <div class="cq-strip" data-strip="daily"></div>
         <div class="cq-section-head">
           <h2 id="sec-daily">CoffeeQuant Daily</h2>
-          <span class="cq-pill">60-second reads</span>
+          <span class="cq-pill">60-second spark</span>
         </div>
+
+        <!-- one featured card from daily.json -->
         <article id="dailyCard" class="cq-card cq-daily" aria-live="polite">
           <div class="cq-skeleton">Loading today’s spark…</div>
         </article>
       </section>
 
-      <!-- Labs -->
+      <!-- ====== LABS ====== -->
       <section id="labs" class="cq-section" aria-labelledby="sec-labs">
         <div class="cq-strip" data-strip="labs"></div>
         <div class="cq-section-head">
           <h2 id="sec-labs">Playground Labs</h2>
           <span class="cq-pill">Interactive</span>
         </div>
-        <div class="cq-grid">
-          <a class="cq-tile" href="statics/WriteUps/DicePuzzle.html">
-            <div class="cq-img" data-cover="Dice Puzzle"></div>
-            <h3>Dice Puzzle</h3>
-            <p class="cq-muted">Max of $k$ minimums from $n$ dice — play, then derive.</p>
-            <div class="cq-tags"><span>Probability</span><span>Order stats</span></div>
-          </a>
 
-          <a class="cq-tile" href="statics/WriteUps/BetSizing.html">
-            <div class="cq-img" data-cover="Bet Sizing"></div>
-            <h3>Bet Sizing</h3>
-            <p class="cq-muted">Loaded coin, compounding, Kelly sweet spot.</p>
-            <div class="cq-tags"><span>Kelly</span><span>Risk</span></div>
-          </a>
-
-          <a class="cq-tile" href="statics/WriteUps/OldLehmanStory.html">
-            <div class="cq-img" data-cover="30y Swap Spreads"></div>
-            <h3>30y Swap Spreads</h3>
-            <p class="cq-muted">Non-inversion notes, gamma flips, inversion risk.</p>
-            <div class="cq-tags"><span>Rates</span><span>Gamma</span></div>
-          </a>
+        <!-- cards get injected from labs.json -->
+        <div id="labsList" class="cq-grid">
+          <div class="cq-skeleton">Loading labs…</div>
         </div>
       </section>
 
-      <!-- Tools -->
+      <!-- ====== TOOLS ====== -->
       <section id="tools" class="cq-section" aria-labelledby="sec-tools">
         <div class="cq-strip" data-strip="tools"></div>
         <div class="cq-section-head">
           <h2 id="sec-tools">Tools</h2>
           <span class="cq-pill">Try in browser</span>
         </div>
-        <div class="cq-grid">
-          <a class="cq-tile" href="statics/Tools/PricingCLI.html">
-            <div class="cq-img" data-cover="Pricing CLI"></div>
-            <h3>Pricing CLI</h3>
-            <p class="cq-muted">Terminal-style commands: Black–Scholes, Greeks, IV, Kelly…</p>
-            <div class="cq-tags"><span>Options</span><span>Quick calc</span></div>
-          </a>
+
+        <!-- cards get injected from tools.json -->
+        <div id="toolsList" class="cq-grid">
+          <div class="cq-skeleton">Loading tools…</div>
         </div>
       </section>
 
-      <!-- Notes -->
+      <!-- ====== NOTES ====== -->
       <section id="notes" class="cq-section" aria-labelledby="sec-notes">
         <div class="cq-strip" data-strip="notes"></div>
         <div class="cq-section-head">
           <h2 id="sec-notes">Notes from the Desk</h2>
-          <span class="cq-pill">Short reflections</span>
-        </div>
- 	<div class="cq-grid">
-          <a class="cq-tile" href="statics/WriteUps/RiskNeutral.html">
-            <div class="cq-img" data-cover="Risk Neutral Probability"></div>
-            <h3>Risk Neutral Probability</h3>
-            <p class="cq-muted">Terminal-style commands: Black–Scholes, Greeks, IV, Kelly…</p>
-            <div class="cq-tags"><span>Options</span><span>Quick calc</span></div>
-          </a>
+          <span class="cq-pill">Readable depth</span>
         </div>
 
-        <div id="notesList" class="cq-list">
+        <!-- cards get injected from notes.json -->
+        <div id="notesList" class="cq-grid">
           <div class="cq-skeleton">Loading notes…</div>
         </div>
       </section>
 
-      <!-- Curiosities -->
+      <!-- ====== CURIOS ====== -->
       <section id="curios" class="cq-section" aria-labelledby="sec-curios">
         <div class="cq-strip" data-strip="curios"></div>
         <div class="cq-section-head">
           <h2 id="sec-curios">Quant Curiosities</h2>
           <span class="cq-pill">Links & ideas</span>
         </div>
+
+        <!-- simple list from curios.json -->
         <div id="curiosList" class="cq-list cq-list--compact">
           <div class="cq-skeleton">Loading curiosities…</div>
         </div>
       </section>
+
     </div>
   </main>
 
-  <!-- Footer -->
+  <!-- ====== FOOTER ====== -->
   <footer class="cq-footer">
     <div class="cq-shell">
       <div>☕ CoffeeQuant · Fast. Minimal. Curious. No ads.</div>
@@ -190,11 +173,7 @@
     </div>
   </footer>
 
-  <!-- Site scripts -->
-  <script src="statics/js/cq.js"></script>
-  <script src="statics/js/cq-covers.js"></script>
-
-  <!-- Command palette (⌘K / Ctrl+K) -->
+  <!-- ====== COMMAND PALETTE OVERLAY (⌘K / Ctrl+K) ====== -->
   <div id="cqKbar" class="cq-kbar" aria-hidden="true">
     <div class="cq-kbar-box" role="dialog" aria-label="Command palette">
       <input id="kbarInput" placeholder="Type a command… (e.g., 'dice', 'kelly', 'pricing')" />
@@ -202,50 +181,181 @@
     </div>
   </div>
 
-  <!-- Initialize generated covers for tiles without images -->
+  <!-- ====== RENDER LOGIC / BOOTSTRAP SCRIPTS ====== -->
   <script>
-    (function(){
-      document.querySelectorAll('[data-cover]').forEach(div=>{
-        if (window.CQCover) CQCover.inject(div, div.getAttribute('data-cover'));
-      });
-    })();
+  // super tiny helpers
+  const $ = (sel, root=document) => root.querySelector(sel);
+  async function loadJSON(path){
+    try {
+      const r = await fetch(path, {cache:'no-store'});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      return await r.json();
+    } catch(e){ return null; }
+  }
+  function fmtDate(iso){
+    try {
+      return new Date(iso).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});
+    } catch(e){ return ''; }
+  }
+
+  // RENDER: daily spark
+  async function renderDaily(){
+    const data = await loadJSON('statics/data/daily.json');
+    const host = $('#dailyCard');
+    if(!host) return;
+    if(!data || !data.items || !data.items.length){
+      host.innerHTML = '<div class="cq-skeleton">No daily item yet.</div>';
+      return;
+    }
+
+    // choose an item to surface
+    // rule: match today's date exactly if present, else rotate by weekday
+    let pick = 0;
+    const today = new Date().toISOString().slice(0,10);
+    const exact = data.items.findIndex(i=>i.date === today);
+    pick = exact >=0 ? exact : (new Date().getDay() % data.items.length);
+    const it = data.items[pick];
+
+    host.innerHTML = `
+      <div class="cq-card-thumb">
+        ${ it.thumb ? `<img src="${it.thumb}" alt="">` : '' }
+      </div>
+      <div class="cq-card-body">
+        <h3 class="cq-card-title">
+          ${ it.link ? `<a href="${it.link}">${it.title}</a>` : it.title }
+        </h3>
+        <p class="cq-card-deck cq-muted">${it.deck || ''}</p>
+        ${it.html ? `<div>${it.html}</div>` : ''}
+        <div class="cq-card-meta cq-muted">${fmtDate(it.date) || ''}</div>
+      </div>
+    `;
+
+    // MathJax in case there’s inline math
+    if (window.MathJax && MathJax.typesetPromise) {
+      MathJax.typesetPromise([host]).catch(console.error);
+    }
+  }
+
+  // generic card grid renderer for labs/tools/notes
+  function renderGrid(listEl, items){
+    listEl.innerHTML = items.map(it => `
+      <a class="cq-tile" href="${it.link}">
+        <div class="cq-imgwrap">
+          ${ it.thumb
+            ? `<img src="${it.thumb}" alt="" class="cq-imgthumb" />`
+            : `<div class="cq-imggen" data-cover="${it.title}"></div>`
+          }
+        </div>
+        <h3>${it.title}</h3>
+        <p class="cq-muted">${it.deck || ''}</p>
+        <div class="cq-tags">
+          ${(it.tags||[]).map(t=>`<span>${t}</span>`).join('')}
+        </div>
+      </a>
+    `).join('');
+  }
+
+  // labs
+  async function renderLabs(){
+    const data = await loadJSON('statics/data/labs.json');
+    const host = $('#labsList'); if(!host) return;
+    if(!data || !data.items || !data.items.length){
+      host.innerHTML = '<div class="cq-skeleton">No labs yet.</div>';
+      return;
+    }
+    renderGrid(host, data.items);
+  }
+
+  // tools
+  async function renderTools(){
+    const data = await loadJSON('statics/data/tools.json');
+    const host = $('#toolsList'); if(!host) return;
+    if(!data || !data.items || !data.items.length){
+      host.innerHTML = '<div class="cq-skeleton">No tools yet.</div>';
+      return;
+    }
+    renderGrid(host, data.items);
+  }
+
+  // notes
+  async function renderNotes(){
+    const data = await loadJSON('statics/data/notes.json');
+    const host = $('#notesList'); if(!host) return;
+    if(!data || !data.items || !data.items.length){
+      host.innerHTML = '<div class="cq-skeleton">No notes yet.</div>';
+      return;
+    }
+    renderGrid(host, data.items.slice(0,6));
+  }
+
+  // curios
+  async function renderCurios(){
+    const data = await loadJSON('statics/data/curios.json');
+    const host = $('#curiosList'); if(!host) return;
+    if(!data || !data.items || !data.items.length){
+      host.innerHTML = '<div class="cq-skeleton">No curios yet.</div>';
+      return;
+    }
+    host.innerHTML = data.items.map(it => `
+      <div class="cq-list-item">
+        <div class="cq-list-main">
+          <div class="cq-list-title">
+            ${it.link ? `<a href="${it.link}">${it.title}</a>` : it.title}
+          </div>
+          <div class="cq-list-desc cq-muted">${it.deck || ''}</div>
+        </div>
+        <div class="cq-list-meta cq-muted">${fmtDate(it.date) || ''}</div>
+      </div>
+    `).join('');
+  }
+
+  // rotating hero background
+  async function renderHeroBg(){
+    const slot = $('#heroBg'); if(!slot) return;
+    const data = await loadJSON('statics/data/hero.json');
+    if(!data || !data.images || !data.images.length) return;
+    const idx = (new Date()).getDay() % data.images.length;
+    const it = data.images[idx];
+    if(it && it.src){
+      slot.style.backgroundImage = `url("${it.src}")`;
+      slot.setAttribute('aria-label', it.alt || 'hero background');
+    }
+  }
+
+  // init all sections
+  (async function initPage(){
+    await renderHeroBg();
+    await renderDaily();
+    await renderLabs();
+    await renderTools();
+    await renderNotes();
+    await renderCurios();
+
+    // fallback cover generator for any tiles missing thumb images
+    document.querySelectorAll('.cq-imggen[data-cover]').forEach(div=>{
+      if (window.CQCover) {
+        CQCover.inject(div, div.getAttribute('data-cover'));
+      } else {
+        // low-effort fallback: just put initials
+        const txt = div.getAttribute('data-cover') || '';
+        const parts = txt.trim().split(/\s+/);
+        const initials = (parts[0]?.[0]||'').toUpperCase() + (parts[1]?.[0]||'');
+        div.textContent = initials || 'CQ';
+      }
+    });
+
+    // typeset MathJax that might have appeared
+    if (window.MathJax && MathJax.typesetPromise){
+      MathJax.typesetPromise().catch(()=>{});
+    }
+  })();
   </script>
 
-  <!-- Rotating hero background (from statics/data/hero.json) -->
-  <script>
-    (async function heroRotate(){
-      const slot = document.getElementById('heroBg'); if(!slot) return;
-      try{
-        const r = await fetch('statics/data/hero.json', {cache:'no-store'});
-        if(!r.ok) return;
-        const data = await r.json();
-        const list = (data && data.images) || [];
-        if(!list.length) return;
-        // Pick by weekday (stable, simple)
-        const idx = (new Date()).getDay() % list.length;
-        const it = list[idx];
-        slot.style.backgroundImage = `url("${it.src}")`;
-        slot.setAttribute('aria-label', it.alt || 'hero background');
-      }catch(e){}
-    })();
-  </script>
+  <!-- OPTIONAL: CQCover generator (your existing cq-covers.js) -->
+  <script src="statics/js/cq-covers.js"></script>
 
-  <!-- Optional: Dojo/DojoX ContentPane hook for MathJax after async loads -->
-  <script>
-    (function () {
-      if (!window.dijit || !dijit.registry) return;
-      var pane = dijit.registry.byId('myContentPane');
-      if (!pane) return;
-      var oldOnLoad = pane.onLoad || function(){};
-      pane.onLoad = function () {
-        oldOnLoad.apply(this, arguments);
-        if (window.MathJax && MathJax.typesetPromise) {
-          MathJax.typesetPromise([this.domNode]).catch(console.error);
-        }
-      };
-    })();
-  </script>
+  <!-- OPTIONAL: command palette logic can live in cq.js or inline later -->
+
 </body>
 </html>
-
 

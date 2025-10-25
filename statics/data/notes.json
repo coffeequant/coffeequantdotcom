@@ -1,3 +1,37 @@
 {
+  "items": [
+    {
+      "title": "Risk-Neutral Probability",
+      "deck": "Turning messy market odds into fair pricing odds.",
+      "link": "statics/WriteUps/RiskNeutral.html",
+      "thumb": "statics/img/thumbs/cli.webp",
+      "tags": ["Options","Pricing"],
+      "date": "2025-10-24"
+    },
+    {
+      "title": "Barrier Shift Intuition",
+      "deck": "Why barrier traders quietly move the barrier before quoting you.",
+      "link": "statics/WriteUps/BarrierShift.html",
+      "thumb": "statics/img/thumbs/betsizing.webp",
+      "tags": ["Exotics","Hedging"],
+      "date": "2025-10-22"
+    },
+    {
+      "title": "Cross Gamma / PRDC",
+      "deck": "When FX and rates both punch you at the same time.",
+      "link": "statics/WriteUps/CrossGammaPRDC.html",
+      "thumb": "statics/img/thumbs/lehman.webp",
+      "tags": ["Rates","Convexity","Correlation"],
+      "date": "2025-10-21"
+    },
+    {
+      "title": "Lehman Swap Spreads",
+      "deck": "Curve inversion, callable notes, and accidental short gamma.",
+      "link": "statics/WriteUps/OldLehmanSpreads.html",
+      "thumb": "statics/img/thumbs/dice.webp",
+      "tags": ["Credit","History"],
+      "date": "2019-03-05"
+    }
+  ]
 }
 

@@ -1,0 +1,26 @@
+{
+  "items": [
+   {
+      "title": "Random Walk Lab",
+      "deck": "Simulate price paths with drift and vol. See possible futures.",
+      "link": "statics/Tools/RandomWalkLab.html",
+      "thumb": "statics/img/thumbs/randomwalk.webp",
+      "tags": ["GBM","Monte Carlo"]
+    },
+    {
+      "title": "Dice Lab",
+      "deck": "Roll n dice, repeat k rounds, keep the best ‘worst roll’. Distribution explorer.",
+      "link": "statics/Tools/DiceLab.html",
+      "thumb": "statics/img/thumbs/dice.webp",
+      "tags": ["Probability","Intuition"]
+    },
+   {
+      "title": "Kelly Bet Size Helper",
+      "deck": "How big should I go on a trade with edge? Full/Half Kelly sizing.",
+      "link": "statics/Tools/KellyTool.html",
+      "thumb": "statics/img/thumbs/betsizing.webp",
+      "tags": ["Risk","Sizing"]
+    }
+  ]
+}
+      
