@@ -1,0 +1,728 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>CoffeeQuant Structurer CLI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<style>
+  :root {
+    --fg:#0f172a;
+    --muted:#6b7280;
+    --panel-bg:rgba(15,23,42,.9);
+    --panel-border:rgba(0,0,0,.8);
+    --panel-shadow:0 30px 60px -10px rgba(0,0,0,.9);
+    --radius:12px;
+    --accent:#38bdf8;
+    --term-bg:#0a0f1d;
+    --term-fg:#e8edf5;
+    --term-dim:#6b7280;
+    --term-green:#4ade80;
+    --term-red:#f87171;
+    --term-yellow:#fde047;
+  }
+  @media (prefers-color-scheme: light){
+    :root {
+      --fg:#0f172a;
+      --muted:#6b7280;
+      --panel-bg:rgba(255,255,255,.8);
+      --panel-border:rgba(15,23,42,.15);
+      --panel-shadow:0 24px 48px -12px rgba(15,23,42,.25);
+      --accent:#2563eb;
+
+      --term-bg:#0a0f1d;
+      --term-fg:#e8edf5;
+      --term-dim:#6b7280;
+      --term-green:#4ade80;
+      --term-red:#f87171;
+      --term-yellow:#fde047;
+    }
+  }
+
+  body {
+    margin:0;
+    background:radial-gradient(circle at 20% 20%, #eef2ff 0%, #f8fafc 60%);
+    background-attachment:fixed;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color:var(--fg);
+    line-height:1.5;
+  }
+
+  .wrap {
+    max-width:900px;
+    margin:2rem auto 4rem;
+    padding:0 1rem;
+  }
+
+  header {
+    max-width:780px;
+    margin:0 auto 1rem;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color:var(--fg);
+  }
+  header h1 {
+    font-size:1.2rem;
+    margin:0 0 .5rem;
+    font-weight:600;
+    letter-spacing:-0.03em;
+  }
+  header p {
+    font-size:.9rem;
+    color:var(--muted);
+    margin:.25rem 0;
+    max-width:60ch;
+    line-height:1.4;
+  }
+
+  .panel {
+    background:var(--panel-bg);
+    border:1px solid var(--panel-border);
+    box-shadow:var(--panel-shadow);
+    border-radius:var(--radius);
+    padding:1rem;
+    color:var(--term-fg);
+  }
+
+  .term-head {
+    display:flex;
+    align-items:center;
+    gap:.4rem;
+    font-size:.7rem;
+    color:var(--term-dim);
+    margin-bottom:.5rem;
+  }
+  .dot {
+    width:.7rem;
+    height:.7rem;
+    border-radius:50%;
+    background:#ef4444;
+  }
+  .dot.yellow { background:#eab308; }
+  .dot.green { background:#10b981; }
+
+  .term-body {
+    background:var(--term-bg);
+    border-radius:var(--radius);
+    padding:1rem;
+    min-height:360px;
+    max-height:480px;
+    overflow-y:auto;
+    font-size:.8rem;
+    line-height:1.4;
+    position:relative;
+  }
+
+  .line {
+    white-space:pre-wrap;
+    word-break:break-word;
+    margin:0 0 .4rem;
+  }
+  .prompt-line { color:var(--term-green); }
+  .error-line  { color:var(--term-red); }
+  .info-line   { color:var(--term-yellow); }
+  .dim         { color:var(--term-dim); }
+
+  .input-row {
+    display:flex;
+    align-items:center;
+    flex-wrap:nowrap;
+    column-gap:.5rem;
+    margin-top:.75rem;
+    font-size:.8rem;
+    line-height:1.4;
+    color:var(--term-fg);
+    font-family:inherit;
+  }
+
+  .prompt-label {
+    color:var(--term-green);
+    flex:0 0 auto;
+  }
+
+  #cliInput {
+    flex:1 1 auto;
+    background:transparent;
+    border:0;
+    outline:none;
+    font-family:inherit;
+    font-size:inherit;
+    color:var(--term-fg);
+    line-height:inherit;
+    padding:.4rem .5rem;
+    border-radius:6px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.2);
+  }
+
+  .help-card {
+    background:rgba(0,0,0,.4);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:8px;
+    padding:.75rem .9rem;
+    font-size:.75rem;
+    line-height:1.4;
+    margin-top:1rem;
+    color:var(--term-fg);
+  }
+  .help-card strong { color:var(--term-yellow); }
+
+  @media (prefers-color-scheme: light){
+    .help-card {
+      background:rgba(255,255,255,.08);
+      color:#f8fafc;
+    }
+  }
+
+  a.back-link {
+    display:inline-block;
+    font-size:.75rem;
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color:var(--accent);
+    text-decoration:none;
+    margin-top:1rem;
+  }
+  a.back-link:hover { text-decoration:underline; }
+</style>
+</head>
+
+<body>
+<div class="wrap">
+  <header>
+    <h1>Structurer CLI</h1>
+    <p>
+      A browser terminal for desk math:
+      vanillas, implied vols, barrier touch risk, worst-of correlation tax, range accrual coupon feel,
+      Kelly sizing, and quick P&amp;L shocks.
+    </p>
+    <p class="muted" style="font-size:.8rem">
+      Type a command and hit Enter. Try <code>help</code>.
+    </p>
+  </header>
+
+  <section class="panel">
+    <div class="term-head">
+      <div class="dot"></div><div class="dot yellow"></div><div class="dot green"></div>
+      <div class="dim">coffeequant ~/desk</div>
+    </div>
+
+    <div id="termBody" class="term-body" aria-live="polite"></div>
+
+    <div class="input-row">
+      <div class="prompt-label">cq&gt;</div>
+      <input id="cliInput" autocomplete="off" spellcheck="false" />
+    </div>
+
+    <div class="help-card">
+      <div><strong>bs</strong> &nbsp; Black–Scholes price / greeks</div>
+      <div><strong>iv</strong> &nbsp; Implied vol solve</div>
+      <div><strong>shock</strong> &nbsp; Spot/vol P&amp;L sanity</div>
+      <div><strong>kelly</strong> &nbsp; Fraction to bet (edge sizing)</div>
+      <div><strong>fw</strong> &nbsp; Simple forward pricing</div>
+      <div><strong>barrier</strong> &nbsp; First-touch risk on a down barrier</div>
+      <div><strong>worstof</strong> &nbsp; 2-name worst-of put fair-ish value vs correlation</div>
+      <div><strong>range</strong> &nbsp; % time in corridor → coupon feel</div>
+      <div class="dim" style="margin-top:.4rem">
+        Examples:<br/>
+        <code>bs call s=100 k=95 vol=22% t=0.5 r=3bp div=0</code><br/>
+        <code>barrier spot=100 barrier=80 vol=25% t=1y</code><br/>
+        <code>worstof s1=100 s2=100 k=90 vol1=25% vol2=22% rho=0.5 t=0.5</code>
+      </div>
+    </div>
+
+    <a class="back-link" href="../../index.html">&larr; Back to CoffeeQuant</a>
+  </section>
+</div>
+
+<script>
+(function(){
+  // ------------ DOM / helpers ------------
+  const termBody = document.getElementById('termBody');
+  const cliInput = document.getElementById('cliInput');
+
+  function addLine(text, cls){
+    const div = document.createElement('div');
+    div.className = 'line' + (cls ? ' '+cls : '');
+    div.textContent = text;
+    termBody.appendChild(div);
+    termBody.scrollTop = termBody.scrollHeight;
+  }
+
+  function fmtNum(x){
+    if (!isFinite(x)) return String(x);
+    return (Math.abs(x) >= 1000 ? x.toFixed(2) : x.toPrecision(5));
+  }
+
+  // ------------ Math utils ------------
+  function normPdf(x){
+    return Math.exp(-0.5*x*x)/Math.sqrt(2*Math.PI);
+  }
+  function normCdf(x){
+    // Abramowitz-Stegun approx
+    const sign = x < 0 ? -1 : 1;
+    x = Math.abs(x)/Math.sqrt(2);
+    const a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429;
+    const p=0.3275911;
+    const t=1/(1+p*x);
+    const y=1-((((a5*t+a4)*t+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);
+    return 0.5*(1+sign*y);
+  }
+
+  // Black–Scholes
+  function bsPriceGreeks(type, s, k, vol, t, r, q){
+    if (t<=0 || vol<=0 || s<=0 || k<=0){
+      return {err:"Bad inputs"};
+    }
+    const sqrtT = Math.sqrt(t);
+    const d1 = (Math.log(s/k)+(r-q+0.5*vol*vol)*t)/(vol*sqrtT);
+    const d2 = d1 - vol*sqrtT;
+
+    let price, delta;
+    if (type==="call"){
+        price = s*Math.exp(-q*t)*normCdf(d1) - k*Math.exp(-r*t)*normCdf(d2);
+        delta = Math.exp(-q*t)*normCdf(d1);
+    } else {
+        price = k*Math.exp(-r*t)*normCdf(-d2) - s*Math.exp(-q*t)*normCdf(-d1);
+        delta = -Math.exp(-q*t)*normCdf(-d1);
+    }
+    const vega  = s*Math.exp(-q*t)*sqrtT*normPdf(d1); // value change per +1.00 (i.e. 100 vol pts!)
+    const gamma = Math.exp(-q*t)*normPdf(d1)/(s*vol*sqrtT);
+    const theta = - (s*Math.exp(-q*t)*normPdf(d1)*vol/(2*sqrtT))
+                  - (type==="call"
+                      ? - (r*k*Math.exp(-r*t)*normCdf(d2)) + (q*s*Math.exp(-q*t)*normCdf(d1))
+                      :   (r*k*Math.exp(-r*t)*normCdf(-d2)) - (q*s*Math.exp(-q*t)*normCdf(-d1)));
+
+    return {price, delta, gamma, vega, theta, d1, d2};
+  }
+
+  // implied vol via bisection
+  function impliedVol(type, s, k, t, r, q, mktPx){
+    if (mktPx<=0) return {err:"price must be >0"};
+    let lo=1e-4, hi=5.0;
+    for(let iter=0;iter<60;iter++){
+      const mid=(lo+hi)/2;
+      const out=bsPriceGreeks(type,s,k,mid,t,r,q);
+      if (out.err) return {err:out.err};
+      if (out.price>mktPx) hi=mid; else lo=mid;
+    }
+    return {iv:(lo+hi)/2};
+  }
+
+  function fwdCalc(s,r,q,t){
+    return s*Math.exp((r-q)*t);
+  }
+
+  // Kelly sizing approximation
+  // p = prob win
+  // win = profit per 1 risked (e.g. +1)
+  // lose = loss per 1 risked (positive number, e.g. 1 means -1)
+  // f* ~ (p*win - (1-p)*lose) / (win*lose)
+  function kellyCalc(p, up, down){
+    const num = p*up - (1-p)*down;
+    const den = up*down;
+    if (den===0) return {err:"bad up/down"};
+    const f = num/den;
+    return {f, f_clamped: Math.max(0, Math.min(1,f))};
+  }
+
+  // simple pnl shock on greeks:
+  // ds% = spot move in %
+  // dvol% = vol move in vol points
+  // dV ≈ delta*ds + 0.5*gamma*ds^2 + vega*dvol
+  function pnlShock(s, delta, gamma, vega, dsPct, dvolPct){
+    const dsAbs = s * (dsPct/100.0);  // absolute spot change
+    const dvol  = dvolPct/100.0;      // vol points -> decimal
+    const dV = delta*dsAbs + 0.5*gamma*(dsAbs*dsAbs) + vega*dvol;
+    return {dV};
+  }
+
+  // Barrier first-touch approximation (down-and-out style intuition).
+  // We approximate hitting probability for a LOWER barrier B < S0 in Black-Scholes world.
+  // For drift ~0, prob(hit before T) ≈ exp( -2 * ln(S0/B) * ln(S0/B) / (vol^2 * T) )
+  // This comes from reflection principle intuition. It's not a desk-quality number,
+  // but it's good intuition: closer barrier, longer time, higher vol -> higher touch prob.
+  function barrierTouchProb(spot, barrier, vol, tYears){
+    if (barrier>=spot) return 1.0; // already "through"
+    const logRatio = Math.log(spot/barrier);
+    const denom = vol*vol * tYears;
+    if (denom<=0) return 0;
+    const p = Math.exp( (-2 * logRatio * logRatio) / denom );
+    // clamp
+    return Math.max(0, Math.min(1,p));
+  }
+
+  // Worst-of put approx.
+  // We'll do a super-light approximation:
+  // We say each name is roughly like a down-and-in put on itself. The chance that "at least one name ends far below K"
+  // grows when correlation is low. We'll cheat:
+  //   basePut ~ max(K - S,0) with ATM-ish vol
+  //   effective prob any name breaches ~ p1 + p2 - rho*min(p1,p2)
+  // Very hand-wavy, but gives traders a feel: lower rho -> higher price.
+  function worstOfApprox(s1,s2,K,vol1,vol2,rho,t){
+    // crude "individual put value" as if vanilla at-the-money-ish-ish
+    function indivPut(s, vol){
+      const kEff = K;
+      const out = bsPriceGreeks("put", s, kEff, vol, t, 0, 0);
+      return out.err ? 0 : out.price;
+    }
+    const p1 = barrierTouchProb(s1, K, vol1, t); // "chance name1 under K-ish"
+    const p2 = barrierTouchProb(s2, K, vol2, t);
+    const base1 = indivPut(s1,vol1);
+    const base2 = indivPut(s2,vol2);
+
+    // effective "one of them hurts me" probability.
+    // if rho=1, they move together, so prob ~ max(p1,p2)
+    // if rho=0, prob ~ p1+p2 (cap at 1)
+    // if rho<0, allow even bigger than p1+p2 (clamped)
+    const rawCombo = p1 + p2 - rho*Math.min(p1,p2);
+    const effProb  = Math.max(0, Math.min(1, rawCombo));
+
+    // scale: worst-of put is like "max of the two pains".
+    // ballpark it as weighted avg of the standalone put values, tilted by effProb.
+    const avgBase = 0.5*(base1+base2);
+    const est = effProb * avgBase;
+
+    return {
+      p1, p2, effProb, base1, base2, est
+    };
+  }
+
+  // Range accrual intuition:
+  // We assume the underlying "rate" is mean ~fwd, vol sigma, and we ask:
+  // what's the probability it stays in [L,H] on any given day?
+  // Under normal approx, daily distribution ~ N(fwd, sigma*sqrt(dt)).
+  // We return that in-range probability, then annualize coupon ~ inRangeProb * leverage.
+  function rangeAccrualProb(low, high, fwd, vol, tYears, leverage){
+    // treat 1 year ~ 252 days, dt = tYears/252 per "day"
+    const days = Math.max(1, Math.round(252*tYears));
+    const dt = tYears/days;
+    const dailySigma = vol*Math.sqrt(dt);
+
+    function dailyProb(){
+      const zLow = (low - fwd)/dailySigma;
+      const zHigh= (high - fwd)/dailySigma;
+      return normCdf(zHigh) - normCdf(zLow);
+    }
+    const pDay = (dailySigma>0 ? dailyProb() : (fwd>=low && fwd<=high ? 1:0));
+    const couponPct = pDay * leverage; // rough coupon fraction of notional
+
+    return {pDay, couponPct, days};
+  }
+
+  // ------------ arg parsing ------------
+  // turn s=100 vol=22% r=3bp into object
+  function parseArgs(tokens){
+    const out={};
+    for (const tok of tokens){
+      const eq=tok.indexOf("=");
+      if(eq<0) continue;
+      const key=tok.slice(0,eq).toLowerCase();
+      let val=tok.slice(eq+1);
+
+      // 22% -> 0.22
+      if(/%$/.test(val)){
+        const num=parseFloat(val.replace("%",""));
+        if(!isNaN(num)) val = String(num/100.0);
+      }
+      // 3bp -> 0.0003
+      else if(/bp$/i.test(val)){
+        const num=parseFloat(val.replace(/bp/i,""));
+        if(!isNaN(num)) val = String(num*1e-4);
+      }
+      // 1y -> 1.0, 0.5y -> 0.5 etc
+      else if(/y$/i.test(val)){
+        const num=parseFloat(val.replace(/y/i,""));
+        if(!isNaN(num)) val = String(num);
+      }
+
+      const num = parseFloat(val);
+      out[key] = isNaN(num) ? val : num;
+    }
+    return out;
+  }
+
+  // ------------ command handlers ------------
+
+  function cmd_help(){
+    addLine("Commands:", "info-line");
+    addLine("  bs <call|put> s= k= vol= t= r= div=", "info-line");
+    addLine("     Black–Scholes price + greeks", "info-line");
+    addLine("  iv <call|put> s= k= t= r= div= px=", "info-line");
+    addLine("     Implied vol", "info-line");
+    addLine("  fw s= r= div= t=", "info-line");
+    addLine("     Forward price = s*exp((r-div)*t)", "info-line");
+    addLine("  kelly p= win= lose=", "info-line");
+    addLine("     Kelly fraction of bankroll", "info-line");
+    addLine("  shock s= delta= gamma= vega= ds%=? dvol%=?", "info-line");
+    addLine("     PnL approx under move in spot/vol", "info-line");
+    addLine("  barrier spot= barrier= vol= t=", "info-line");
+    addLine("     Down-touch risk intuition", "info-line");
+    addLine("  worstof s1= s2= k= vol1= vol2= rho= t=", "info-line");
+    addLine("     Worst-of put feel vs correlation", "info-line");
+    addLine("  range low= high= fwd= vol= t= lev=", "info-line");
+    addLine("     Range accrual coupon feel", "info-line");
+  }
+
+  function cmd_bs(args, flavor){
+    const {s,k,vol,t,r,div} = args;
+    if([s,k,vol,t].some(v => v===undefined)){
+      addLine("bs error: need s,k,vol,t (and optional r,div)", "error-line");
+      return;
+    }
+    const out = bsPriceGreeks(
+      flavor, Number(s), Number(k),
+      Number(vol), Number(t),
+      r!==undefined?Number(r):0,
+      div!==undefined?Number(div):0
+    );
+    if(out.err){ addLine("bs error: "+out.err, "error-line"); return; }
+
+    addLine("Black–Scholes ("+flavor+")", "prompt-line");
+    addLine("  price : "+fmtNum(out.price));
+    addLine("  delta : "+fmtNum(out.delta));
+    addLine("  gamma : "+fmtNum(out.gamma));
+    addLine("  vega  : "+fmtNum(out.vega)+"  (per +1.00 abs vol)");
+    addLine("  theta : "+fmtNum(out.theta)+"  (/year)");
+    addLine("  d1,d2 : "+fmtNum(out.d1)+", "+fmtNum(out.d2));
+  }
+
+  function cmd_iv(args, flavor){
+    const {s,k,t,r,div,px} = args;
+    if([s,k,t,px].some(v => v===undefined)){
+      addLine("iv error: need s,k,t,px (and optional r,div)", "error-line");
+      return;
+    }
+    const res = impliedVol(
+      flavor,
+      Number(s), Number(k), Number(t),
+      r!==undefined?Number(r):0,
+      div!==undefined?Number(div):0,
+      Number(px)
+    );
+    if(res.err){
+      addLine("iv error: "+res.err, "error-line");
+      return;
+    }
+    addLine("implied vol ("+flavor+"): "+(res.iv*100).toFixed(3)+" %","prompt-line");
+  }
+
+  function cmd_fw(args){
+    const {s,r,div,t} = args;
+    if([s,t].some(v => v===undefined)){
+      addLine("fw error: need s,t (and optional r,div)", "error-line");
+      return;
+    }
+    const ans = fwdCalc(
+      Number(s),
+      r!==undefined?Number(r):0,
+      div!==undefined?Number(div):0,
+      Number(t)
+    );
+    addLine("forward: "+fmtNum(ans),"prompt-line");
+  }
+
+  function cmd_kelly(args){
+    const {p,win,lose} = args;
+    if([p,win,lose].some(v => v===undefined)){
+      addLine("kelly error: need p, win, lose", "error-line");
+      addLine("  p = prob win; win = +$ per $1 risked; lose = +$ you LOSE per $1 risked","error-line");
+      return;
+    }
+    const out = kellyCalc(Number(p), Number(win), Number(lose));
+    if(out.err){
+      addLine("kelly error: "+out.err,"error-line");
+      return;
+    }
+    addLine("kelly fraction f*: "+fmtNum(out.f),"prompt-line");
+    addLine("clamped 0..1   : "+fmtNum(out.f_clamped));
+  }
+
+  function cmd_shock(args){
+    const {s,delta,gamma,vega} = args;
+    const dsPct  = args["ds%"];
+    const dvolPt = args["dvol%"];
+    if([s,delta,gamma,vega,dsPct,dvolPt].some(v=>v===undefined)){
+      addLine("shock error: need s,delta,gamma,vega, ds% , dvol%","error-line");
+      addLine("ex: shock s=100 delta=-0.4 gamma=0.02 vega=12 ds%=+2 dvol%=+1","error-line");
+      return;
+    }
+    const r = pnlShock(
+      Number(s),
+      Number(delta),
+      Number(gamma),
+      Number(vega),
+      Number(dsPct),
+      Number(dvolPt)
+    );
+    addLine("approx dV: "+fmtNum(r.dV),"prompt-line");
+  }
+
+  function cmd_barrier(args){
+    // spot= barrier= vol= t=
+    const {spot,barrier,vol,t} = args;
+    if([spot,barrier,vol,t].some(v=>v===undefined)){
+      addLine("barrier error: need spot, barrier, vol, t","error-line");
+      addLine("ex: barrier spot=100 barrier=80 vol=25% t=1y","error-line");
+      return;
+    }
+    const p = barrierTouchProb(Number(spot), Number(barrier), Number(vol), Number(t));
+    addLine("rough first-touch prob: "+(p*100).toFixed(2)+" %","prompt-line");
+    addLine("intuition: higher vol / longer time / barrier closer => higher KO risk","info-line");
+  }
+
+  function cmd_worstof(args){
+    // s1= s2= k= vol1= vol2= rho= t=
+    const {s1,s2,k,vol1,vol2,rho,t} = args;
+    if([s1,s2,k,vol1,vol2,rho,t].some(v=>v===undefined)){
+      addLine("worstof error: need s1,s2,k,vol1,vol2,rho,t","error-line");
+      addLine("ex: worstof s1=100 s2=100 k=90 vol1=25% vol2=22% rho=0.5 t=0.5","error-line");
+      return;
+    }
+    const out = worstOfApprox(
+      Number(s1),Number(s2),Number(k),
+      Number(vol1),Number(vol2),
+      Number(rho),Number(t)
+    );
+    addLine("worst-of approx (not tradable, intuition only)", "prompt-line");
+    addLine("  indiv stress p1,p2: "+(out.p1*100).toFixed(1)+"%, "+(out.p2*100).toFixed(1)+"%");
+    addLine("  put feel base1/base2: "+fmtNum(out.base1)+", "+fmtNum(out.base2));
+    addLine("  effective combo prob: "+(out.effProb*100).toFixed(1)+"%");
+    addLine("  est worst-of premium: "+fmtNum(out.est)+" (model units)", "prompt-line");
+    addLine("desk read: lower rho -> combo prob ↑ -> premium ↑","info-line");
+  }
+
+  function cmd_range(args){
+    // low= high= fwd= vol= t= lev=
+    const {low,high,fwd,vol,t,lev} = args;
+    if([low,high,fwd,vol,t,lev].some(v=>v===undefined)){
+      addLine("range error: need low,high,fwd,vol,t,lev","error-line");
+      addLine("ex: range low=2% high=4% fwd=3% vol=1% t=1y lev=4","error-line");
+      return;
+    }
+    const out = rangeAccrualProb(
+      Number(low),Number(high),Number(fwd),
+      Number(vol),Number(t),Number(lev)
+    );
+    addLine("range accrual feel", "prompt-line");
+    addLine("  est daily in-range prob: "+(out.pDay*100).toFixed(2)+"%");
+    addLine("  leverage factor: "+fmtNum(lev));
+    addLine("  rough coupon (annualized-ish): "+(out.couponPct*100).toFixed(2)+"%","prompt-line");
+    addLine("caveat: ignores smile, callable terms, fixing conventions.","info-line");
+  }
+
+  // ------------ router ------------
+  function handleCommand(raw){
+    const line = raw.trim();
+    if(!line) return;
+    addLine("cq> "+line,"prompt-line");
+
+    const tokens = line.split(/\s+/);
+    const cmd = tokens[0].toLowerCase();
+
+    if(cmd==="help"){ cmd_help(); return; }
+
+    if(cmd==="bs"){
+      if(tokens.length<2){
+        addLine("usage: bs <call|put> s= k= vol= t= r= div=","error-line");
+        return;
+      }
+      const flavor=tokens[1].toLowerCase();
+      const args=parseArgs(tokens.slice(2));
+      cmd_bs(args,flavor);
+      return;
+    }
+
+    if(cmd==="iv"){
+      if(tokens.length<2){
+        addLine("usage: iv <call|put> s= k= t= r= div= px=","error-line");
+        return;
+      }
+      const flavor=tokens[1].toLowerCase();
+      const args=parseArgs(tokens.slice(2));
+      cmd_iv(args,flavor);
+      return;
+    }
+
+    if(cmd==="fw"){
+      const args=parseArgs(tokens.slice(1));
+      cmd_fw(args);
+      return;
+    }
+
+    if(cmd==="kelly"){
+      const args=parseArgs(tokens.slice(1));
+      cmd_kelly(args);
+      return;
+    }
+
+    if(cmd==="shock"){
+      const args=parseArgs(tokens.slice(1));
+      cmd_shock(args);
+      return;
+    }
+
+    if(cmd==="barrier"){
+      const args=parseArgs(tokens.slice(1));
+      cmd_barrier(args);
+      return;
+    }
+
+    if(cmd==="worstof"){
+      const args=parseArgs(tokens.slice(1));
+      cmd_worstof(args);
+      return;
+    }
+
+    if(cmd==="range"){
+      const args=parseArgs(tokens.slice(1));
+      cmd_range(args);
+      return;
+    }
+
+    addLine("unknown command: "+cmd,"error-line");
+    addLine("type 'help' for available cmds","info-line");
+  }
+
+  // ------------ history / input UX ------------
+  const history=[];
+  let histPos=0;
+
+  cliInput.addEventListener('keydown',(e)=>{
+    if(e.key==="Enter"){
+      const cmd=cliInput.value;
+      if(cmd){
+        history.push(cmd);
+        histPos=history.length;
+      }
+      handleCommand(cmd);
+      cliInput.value="";
+    } else if(e.key==="ArrowUp"){
+      if(histPos>0){
+        histPos--;
+        cliInput.value=history[histPos]||"";
+        setTimeout(()=>cliInput.setSelectionRange(cliInput.value.length,cliInput.value.length),0);
+      }
+      e.preventDefault();
+    } else if(e.key==="ArrowDown"){
+      if(histPos < history.length-1){
+        histPos++;
+        cliInput.value=history[histPos]||"";
+      } else {
+        histPos=history.length;
+        cliInput.value="";
+      }
+      setTimeout(()=>cliInput.setSelectionRange(cliInput.value.length,cliInput.value.length),0);
+      e.preventDefault();
+    }
+  });
+
+  // greet
+  addLine("CoffeeQuant Structurer CLI","prompt-line");
+  addLine("Type 'help' for commands.","info-line");
+  addLine("","");
+
+  cliInput.focus();
+})();
+</script>
+</body>
+</html>
+

@@ -13,6 +13,13 @@
       "link": "statics/Tools/BarrierShiftTool.html",
       "thumb": "statics/img/thumbs/betsizing.webp",
       "tags": ["Exotics","Hedging"]
+    },
+     {
+      "title": "Structurer CLI",
+      "deck": "Black–Scholes, IV, Kelly, quick PnL shocks — in a browser terminal.",
+      "link": "statics/Tools/CMDNew.html",
+      "thumb": "statics/img/thumbs/quant...webp",
+      "tags": ["Options", "Greeks", "PnL"]
     }
  ]
 }
