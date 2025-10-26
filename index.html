@@ -32,6 +32,7 @@
       <a class="cq-logo" href="/" aria-label="CoffeeQuant Home">☕ CoffeeQuant</a>
       <div class="cq-navlinks">
         <a href="#daily">Daily</a>
+        <a href="statics/WriteUps/DailyMacro.html">Macro</a> <!-- NEW -->
         <a href="#labs">Labs</a>
         <a href="#tools">Tools</a>
         <a href="#notes">Notes</a>
@@ -75,6 +76,7 @@
     <aside class="cq-dock" aria-label="Section navigation">
       <h4>Navigate</h4>
       <a href="#daily">📰 Daily</a>
+      <a href="statics/WriteUps/DailyMacro.html">📉 Daily Macro Tape</a> <!-- NEW -->
       <a href="#labs">🧪 Labs</a>
       <a href="#tools">⌨️ Tools</a>
       <a href="#notes">📝 Notes</a>
@@ -100,6 +102,21 @@
         <article id="dailyCard" class="cq-card cq-card-block cq-daily" aria-live="polite">
           <div class="cq-skeleton">Loading today’s spark…</div>
         </article>
+
+        <!-- NEW: little inline pointer to macro tape -->
+        <div class="cq-card cq-card-block" style="margin-top:.75rem;">
+          <div class="cq-card-body" style="padding:.5rem .75rem;">
+            <div class="cq-card-title" style="font-size:.9rem; font-weight:600;">
+              Market tape in plain English
+            </div>
+            <div class="cq-card-deck cq-muted" style="font-size:.8rem; line-height:1.4;">
+              Rates are screaming slowdown, equities are still partying.
+              See the latest:
+              <a href="statics/WriteUps/DailyMacro.html">Daily Macro Tape →</a>
+            </div>
+          </div>
+        </div>
+        <!-- /NEW -->
       </section>
 
       <!-- ====== LABS ====== -->
@@ -354,5 +371,3 @@
 
 </body>
 </html>
-
-

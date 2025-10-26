@@ -1,5 +1,14 @@
 {
   "items": [
+
+   {
+   "date": "2025-10-26",
+   "title": "Rates say slowdown. Equities say party.",
+  "deck": "10y UST < 4%. Tech still euphoric. One of them is lying.",
+  "link": "statics/WriteUps/DailyMacro.html",
+  "thumb": "statics/img/hero/hero-01.webp",
+  "html": "<p>Bond market is quietly screaming \"growth is fading\". Stocks are still in 'soft landing forever' mode. This is the tension.</p>"
+    },
     {
       "date": "2025-10-24",
       "title": "A 6×6 thought: why sum=7 feels special",

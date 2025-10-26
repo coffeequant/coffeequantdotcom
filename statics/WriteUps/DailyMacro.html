@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CoffeeQuant · Daily Macro Tape</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- site theme -->
+  <link rel="stylesheet" href="../css/cq.css" />
+
+  <!-- MathJax for light inline math like 10y < 4% -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$','$$']],
+        processEscapes: true
+      }
+    };
+  </script>
+  <script async id="MathJax-script"
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <style>
+    /* page frame */
+    .cq-article-shell {
+      max-width: 1100px;
+      margin: 2rem auto 4rem;
+      padding: 1.5rem 1rem 3rem;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--card-shadow);
+      display: grid;
+      grid-template-columns: minmax(0,1fr);
+      gap: 2rem;
+    }
+
+    @media(min-width: 900px){
+      .cq-article-shell {
+        grid-template-columns: minmax(0,2fr) minmax(260px,1fr);
+      }
+    }
+
+    /* header block */
+    .mq-head h1 {
+      margin: 0 0 .4rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--fg);
+      letter-spacing: -.03rem;
+    }
+    .mq-date {
+      font-size: .9rem;
+      color: var(--muted);
+      margin-bottom: .5rem;
+    }
+    .mq-tagline {
+      font-size: .95rem;
+      line-height: 1.5;
+      color: var(--fg);
+    }
+
+    /* section titles */
+    .mq-section-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--fg);
+      margin: 1.5rem 0 .5rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .mq-section-title .pill {
+      font-size: .7rem;
+      border-radius: 999px;
+      padding: .15rem .5rem;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-soft-line);
+      color: var(--accent);
+      line-height: 1.2;
+    }
+
+    /* narrative cards */
+    .mq-card {
+      background: color-mix(in srgb, var(--card) 92%, var(--bg) 8%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: .9rem 1rem;
+      line-height: 1.5;
+      font-size: .95rem;
+      color: var(--fg);
+      box-shadow: var(--card-shadow);
+    }
+    .mq-card + .mq-card {
+      margin-top: .8rem;
+    }
+
+    .mq-muted {
+      color: var(--muted);
+      font-size: .8rem;
+      line-height: 1.4;
+      margin-top: .6rem;
+    }
+
+    /* data table (market snapshot) */
+    .mq-tablewrap {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--bg);
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+    }
+    table.mq-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .85rem;
+      line-height: 1.4;
+      color: var(--fg);
+    }
+    .mq-table thead {
+      background: var(--panel-bg);
+    }
+    .mq-table th {
+      text-align: left;
+      font-weight: 600;
+      padding: .6rem .75rem;
+      border-bottom: 1px solid var(--line);
+      font-size: .75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .03em;
+    }
+    .mq-table td {
+      padding: .6rem .75rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .mq-table tr:last-child td {
+      border-bottom: 0;
+    }
+    .mq-dir-up {
+      color: #16a34a;
+      font-weight: 600;
+      font-size: .8rem;
+    }
+    .mq-dir-down {
+      color: #dc2626;
+      font-weight: 600;
+      font-size: .8rem;
+    }
+
+    /* mini chart block */
+    .mq-chartbox {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--bg);
+      box-shadow: var(--card-shadow);
+      padding: .75rem .75rem 1rem;
+    }
+    .mq-chart-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: .5rem;
+    }
+    .mq-chart-head .label {
+      font-size: .8rem;
+      color: var(--muted);
+    }
+    .mq-chart-head .value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--fg);
+    }
+
+    .mq-chart-foot {
+      font-size: .75rem;
+      color: var(--muted);
+      line-height: 1.4;
+      margin-top: .5rem;
+    }
+
+    canvas#y10Chart {
+      width: 100%;
+      height: 120px;
+      display: block;
+      background: transparent;
+    }
+
+    /* sidebar callouts */
+    .mq-side-block {
+      display: grid;
+      gap: 1rem;
+      align-content: start;
+    }
+
+    .mq-watchlist {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--card);
+      box-shadow: var(--card-shadow);
+      padding: .9rem 1rem;
+    }
+    .mq-watchlist h3 {
+      margin:0 0 .5rem;
+      font-size: .9rem;
+      font-weight:600;
+      color: var(--fg);
+      display:flex;
+      align-items:center;
+      gap:.5rem;
+    }
+    .mq-watchlist ul {
+      margin:0;
+      padding-left:1.2rem;
+      font-size:.8rem;
+      color:var(--fg);
+      line-height:1.4;
+    }
+    .mq-watchlist li+li { margin-top:.4rem; }
+
+    footer.mq-footer {
+      font-size:.75rem;
+      line-height:1.4;
+      color: var(--muted);
+      text-align:center;
+      margin-top:2rem;
+    }
+
+    /* accent vars that work in light/dark */
+    :root {
+      --accent-soft: rgba(37,99,235,0.08);
+      --accent-soft-line: rgba(37,99,235,0.25);
+    }
+    @media(prefers-color-scheme:dark){
+      :root {
+        --accent-soft: rgba(56,189,248,0.08);
+        --accent-soft-line: rgba(56,189,248,0.4);
+      }
+    }
+  </style>
+</head>
+
+<body class="cq-body">
+  <main class="cq-article-shell">
+
+    <!-- MAIN COLUMN -->
+    <article>
+
+      <!-- HEADER / SUMMARY -->
+      <header class="mq-head">
+        <h1>Daily Macro Tape</h1>
+        <div class="mq-date">26 Oct 2025 · built for traders, not tourists</div>
+        <div class="mq-tagline">
+          Rates are flashing slowdown (10y UST < 4%). Equities and credit still act like
+          “soft landing + Fed will bail us out.” These two stories can’t both be right forever.
+        </div>
+      </header>
+
+      <!-- SECTION: MARKET STORY -->
+      <section>
+        <div class="mq-section-title">
+          <span>1. What just happened</span>
+          <span class="pill">Narrative</span>
+        </div>
+
+        <div class="mq-card">
+          US inflation cooled again (around ~3% y/y). Traders now expect more Fed cuts,
+          not just a one-off. Stocks loved it: US big-cap tech and even FTSE in the UK
+          pushed toward highs because “cheaper money = higher valuations.” 
+        </div>
+
+        <div class="mq-card">
+          Bonds told a different story. 10-year US Treasury yield is now under 4%, the lowest
+          close in more than a year. 2-year yields dropped to levels last seen in Aug 2022.
+          Translation: “Growth is fading. The Fed will have to ease more than they admit.” 
+        </div>
+
+        <div class="mq-card">
+          Credit spreads (the extra yield corporates pay vs Treasuries) are still tight.
+          That means credit desks are basically saying “calm down, we’re not in stress.”
+          Usually, credit widens early in a real slowdown. So either bonds are overreacting
+          or credit is asleep. 
+        </div>
+
+        <div class="mq-card">
+          Powell’s tone has shifted from “kill inflation no matter what” to
+          “we also care about jobs.” Markets hear that as a soft promise of rescue:
+          if the labour data cracks, cuts come fast.
+          Equities translate that as free upside.
+          Rates translate that as “the cycle is tired.” 
+        </div>
+
+        <div class="mq-muted">
+          Desk summary: Equities are pricing “slowdown is gentle.”
+          Rates are pricing “slowdown is real.”
+          Credit is shrugging.
+        </div>
+      </section>
+
+      <!-- SECTION: SNAPSHOT TABLE -->
+      <section>
+        <div class="mq-section-title">
+          <span>2. Snapshot board</span>
+          <span class="pill">Numbers</span>
+        </div>
+
+        <div class="mq-tablewrap">
+          <table class="mq-table">
+            <thead>
+              <tr>
+                <th>Asset</th>
+                <th>Level / Move</th>
+                <th>Desk read</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>US 10y yield</td>
+                <td><strong>3.95%</strong> <span class="mq-dir-down">▼ -0.40%</span></td>
+                <td>Bond market saying “growth is tiring.”</td>
+              </tr>
+              <tr>
+                <td>US 2y yield</td>
+                <td><strong>4.05%</strong> <span class="mq-dir-down">▼ multi-month lows</span></td>
+                <td>Pricing aggressive Fed cuts again.</td>
+              </tr>
+              <tr>
+                <td>US CPI (y/y)</td>
+                <td><strong>~3.0%</strong></td>
+                <td>Below the scary 2022 prints, fuels “Fed can chill.”</td>
+              </tr>
+              <tr>
+                <td>Credit spreads (IG/HY)</td>
+                <td><strong>Still tight</strong></td>
+                <td>Credit not stressed = “no default wave (yet).”</td>
+              </tr>
+              <tr>
+                <td>FTSE / US Mega-cap</td>
+                <td><strong>Near highs</strong> <span class="mq-dir-up">▲ risk-on</span></td>
+                <td>Equities still betting on “soft landing”.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mq-card">
+          Tiny math:  
+          In July, 10y UST was about 4.4%. Now it’s ~3.95%.  
+          That drop is 0.45 percentage points = 45 basis points = 0.45%.  
+          For rates people, a ~45 bp rally in the 10y with no “Lehman moment” headline
+          basically means: “future growth got marked down.”
+        </div>
+      </section>
+
+      <!-- SECTION: MINI CHART -->
+      <section>
+        <div class="mq-section-title">
+          <span>3. Chart of the day: 10y US yield</span>
+          <span class="pill">Drift lower</span>
+        </div>
+
+        <div class="mq-chartbox">
+          <div class="mq-chart-head">
+            <div class="label">US 10y Treasury Yield</div>
+            <div class="value" id="y10Latest">3.95%</div>
+          </div>
+          <canvas id="y10Chart"></canvas>
+          <div class="mq-chart-foot">
+            Lower yield = bonds bid = “people are buying safety / expecting cuts.”
+            When this line dives without a crisis headline, it usually means the
+            bond market thinks growth is quietly rolling over.
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: WATCH NEXT -->
+      <section>
+        <div class="mq-section-title">
+          <span>4. Watch next</span>
+          <span class="pill">24h risk</span>
+        </div>
+
+        <div class="mq-card">
+          <ul style="margin:0;padding-left:1.2rem;">
+            <li>If US labour data softens → Powell cuts faster → yields keep falling → equities may actually like that (for a while).</li>
+            <li>If inflation refuses to keep dropping → yields can snap back ↑ fast → that usually slaps high-multiple tech first.</li>
+            <li>If HY credit spread finally widens, that’s when the “everything is fine” mood breaks.</li>
+          </ul>
+        </div>
+      </section>
+
+      <footer class="mq-footer">
+        CoffeeQuant Macro · built from public market data (Reuters, etc.).  
+        This is not investment advice. It’s how to read the tape when you actually have risk on.
+      </footer>
+
+    </article>
+
+    <!-- SIDEBAR -->
+    <aside class="mq-side-block">
+
+      <section class="mq-watchlist">
+        <h3>Desk radar <span style="font-size:.7rem;color:var(--muted);font-weight:400;">(plain English)</span></h3>
+        <ul>
+          <li><strong>Rates</strong>: Curve says slowdown → long end bid.</li>
+          <li><strong>Equities</strong>: Still “soft landing, Fed put”.</li>
+          <li><strong>Credit</strong>: Too calm? If HY cracks, mood flips.</li>
+          <li><strong>FX</strong>: If USD weakens alongside falling yields, that reinforces “Fed easier soon.”</li>
+        </ul>
+      </section>
+
+      <section class="mq-card">
+        <strong>Quick intuition:</strong><br/>
+        Equities lie loudly (hope).<br/>
+        Credit whispers early (stress).<br/>
+        Rates panic first (cycle turn).
+      </section>
+
+      <section class="mq-card">
+        <strong>How to read the 10y:</strong><br/>
+        Yield down = market thinks growth slows → Fed cuts → duration wins.<br/>
+        Yield up = either inflation problem or “actually we’re fine, chill.”
+      </section>
+
+    </aside>
+
+  </main>
+
+  <!-- simple inline chart script -->
+  <script>
+    // Tiny sparkline painter (no libs, canvas only).
+    // Update this array daily with latest yields.
+    // numbers are in percent (e.g. 4.35 means 4.35%)
+    const y10Series = [
+      4.40, 4.38, 4.32, 4.28, 4.25,
+      4.20, 4.15, 4.12, 4.05, 3.98,
+      3.95
+    ];
+
+    (function drawSpark(){
+      const c = document.getElementById('y10Chart');
+      if(!c) return;
+      const ctx = c.getContext('2d');
+
+      // size canvas for crisp lines
+      const cssW = c.clientWidth || 300;
+      const cssH = 120;
+      const dpr = window.devicePixelRatio || 1;
+      c.width  = cssW * dpr;
+      c.height = cssH * dpr;
+      ctx.scale(dpr,dpr);
+
+      ctx.clearRect(0,0,cssW,cssH);
+
+      // axes style
+      const getColor = () => getComputedStyle(document.body).color;
+      ctx.strokeStyle = getColor();
+      ctx.globalAlpha = 0.2;
+      ctx.beginPath();
+      ctx.moveTo(30,10);
+      ctx.lineTo(30,cssH-20);
+      ctx.lineTo(cssW-10,cssH-20);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      // scale
+      const minV = Math.min(...y10Series);
+      const maxV = Math.max(...y10Series);
+      const pad = 0.05; // add small visual padding
+      const lo = minV - pad;
+      const hi = maxV + pad;
+      const W  = cssW-40;
+      const H  = cssH-30;
+
+      function xFor(i){
+        return 30 + (i/(y10Series.length-1))*W;
+      }
+      function yFor(v){
+        const t = (v-lo)/(hi-lo); // 0..1
+        return 10 + (1-t)*H;
+      }
+
+      // line
+      ctx.beginPath();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = getColor();
+      ctx.globalAlpha = 0.8;
+      y10Series.forEach((v,i)=>{
+        const x = xFor(i), y = yFor(v);
+        if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      });
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      // latest marker
+      const lastX = xFor(y10Series.length-1);
+      const lastY = yFor(y10Series[y10Series.length-1]);
+      ctx.beginPath();
+      ctx.arc(lastX,lastY,3,0,Math.PI*2);
+      ctx.fillStyle = getColor();
+      ctx.fill();
+
+      // label latest in the DOM
+      const latest = y10Series[y10Series.length-1].toFixed(2) + '%';
+      const lab = document.getElementById('y10Latest');
+      if(lab) lab.textContent = latest;
+    })();
+  </script>
+</body>
+</html>
