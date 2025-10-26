@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CoffeeQuant — Video Library</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../css/cq.css" />
+  <style>
+    .cq-video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .cq-video-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+    iframe {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border: 0;
+    }
+    .cq-video-info {
+      padding: 0.8rem 1rem;
+    }
+    .cq-video-info h3 {
+      margin: 0 0 0.3rem;
+      font-size: 1rem;
+    }
+    .cq-video-info p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <article class="cq-article">
+    <h1>CoffeeQuant Video Library</h1>
+    <p class="cq-muted">
+      A growing set of short, intuitive explainers — from convexity to Kelly, from hedging intuition to structuring math.
+      You can also <a href="https://www.youtube.com/@CoffeeQuant" target="_blank">visit the full YouTube channel</a>.
+    </p>
+
+    <section class="cq-video-grid">
+
+      <!-- Example videos -->
+      <div class="cq-video-card">
+        <iframe src="https://www.youtube.com/embed/V0sLK3haJPU" allowfullscreen></iframe>
+        <div class="cq-video-info">
+          <h3>Long vs Short Explained Simply</h3>
+          <p>Intuitive visual analogy for directional exposure.</p>
+        </div>
+      </div>
+
+      <div class="cq-video-card">
+        <iframe src="https://www.youtube.com/embed/ikK0qL0XZcI?si=0-cS00RFu0NzenPH" allowfullscreen></iframe>
+        <div class="cq-video-info">
+          <h3>CMS Convexity Basics</h3>
+          <p>Visualizing CMS Convexity</p>
+        </div>
+      </div>
+
+      <div class="cq-video-card">
+        <iframe src="https://www.youtube.com/embed/dgDPA32bio0?si=BhoY-7VViaUzM05S" allowfullscreen></iframe>
+        <div class="cq-video-info">
+          <h3>Volatility + Correlation</h3>
+          <p>Volatility Correlation Intuition</p>
+        </div>
+      </div>
+
+      <div class="cq-video-card">
+        <iframe src="https://www.youtube.com/embed/TGPDKd6JHPM?si=Q0uJ4Lrjxja9PwEu" allowfullscreen></iframe>
+        <div class="cq-video-info">
+          <h3>Risk Neutral</h3>
+          <p>Risk Neutral Pricing Concepts</p>
+        </div>
+      </div>
+
+    </section>
+  </article>
+
+</body>
+</html>
