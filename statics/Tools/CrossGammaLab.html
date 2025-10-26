@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Cross Gamma Lab — CoffeeQuant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Reuse site styling -->
+  <link rel="stylesheet" href="../css/cq.css" />
+
+  <!-- MathJax for inline notation -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']],
+        processEscapes: true
+      }
+    };
+  </script>
+  <script async id="MathJax-script"
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <style>
+    /* page wrapper */
+    .lab-shell {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem 4rem;
+      color: var(--fg);
+    }
+
+    .lab-header h1 {
+      margin: 0 0 .5rem;
+      font-size: 1.6rem;
+      line-height: 1.3;
+      font-weight: 600;
+      color: var(--fg);
+    }
+    .lab-header p {
+      max-width: 800px;
+      color: var(--muted);
+      font-size: .95rem;
+      line-height: 1.5;
+    }
+
+    .lab-grid {
+      display: grid;
+      grid-template-columns: minmax(260px, 300px) 1fr;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    @media (max-width: 900px){
+      .lab-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .lab-panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      padding: 1rem 1.25rem;
+    }
+    .lab-panel h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0 0 .75rem;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+    .lab-panel h2 .pill {
+      background: rgba(37,99,235,0.07);
+      color: var(--accent);
+      border-radius: 999px;
+      font-size: .7rem;
+      line-height: 1;
+      padding: .25rem .5rem;
+      border: 1px solid rgba(37,99,235,0.3);
+    }
+
+    .form-row {
+      margin-bottom: .9rem;
+      font-size: .9rem;
+    }
+    .form-row label {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 500;
+      margin-bottom: .3rem;
+    }
+    .form-row input[type=number] {
+      width: 6rem;
+      font-size: .9rem;
+      padding: .4rem .5rem;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      color: var(--fg);
+    }
+    .form-row input[type=range] {
+      width: 100%;
+    }
+    .form-inline {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .radio-row {
+      display: flex;
+      gap: .75rem;
+      flex-wrap: wrap;
+      font-size: .85rem;
+    }
+
+    .btn-run {
+      background: var(--accent);
+      color: #fff;
+      border: 0;
+      border-radius: 8px;
+      padding: .55rem .9rem;
+      font-size: .9rem;
+      cursor: pointer;
+    }
+    .btn-run:hover {
+      background: var(--accent-light);
+      color: #0f1a2a;
+    }
+
+    /* canvas / heatmap area */
+    .viz-wrapper {
+      display: grid;
+      grid-template-columns: 1fr minmax(220px, 260px);
+      gap: 1rem;
+    }
+    @media (max-width: 750px){
+      .viz-wrapper {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .viz-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      padding: .75rem 1rem 1rem;
+    }
+    .viz-card h3 {
+      margin: 0 0 .5rem;
+      font-size: .9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      line-height: 1.3;
+    }
+
+    canvas#heatmap {
+      width: 100%;
+      max-width: 600px;
+      height: 360px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: radial-gradient(circle at 20% 20%, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0) 60%);
+    }
+
+    .stat-line {
+      font-size: .8rem;
+      margin-bottom: .4rem;
+      line-height: 1.4;
+    }
+
+    .explain-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      padding: 1rem 1.25rem;
+      font-size: .9rem;
+      line-height: 1.5;
+      color: var(--fg);
+    }
+    .explain-card h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0 0 .75rem;
+    }
+    .explain-card p {
+      margin: 0 0 .8rem;
+      color: var(--fg);
+    }
+    .muted {
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    code.inline {
+      font-family: var(--font-mono);
+      font-size: .8rem;
+      background: rgba(0,0,0,0.06);
+      color: var(--fg);
+      border-radius: 4px;
+      padding: 0 .3rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      code.inline {
+        background: rgba(255,255,255,0.08);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="lab-shell">
+  <header class="lab-header">
+    <h1>Cross Gamma Lab</h1>
+    <p>
+      This is the intuition behind “short cross gamma = short correlation”.
+      You’re looking at a <strong>worst-of put</strong> on two underlyings.
+      You can shock both names, change their correlation,
+      and see how the P&amp;L surface behaves.
+    </p>
+    <p class="muted">
+      Desk story: 2008-style moves killed people not just on direction,
+      but because FX, rates, credit, and correlation all moved
+      in the <em>worst possible</em> combination.
+      That’s cross gamma pain.
+    </p>
+  </header>
+
+  <section class="lab-grid">
+    <!-- ===== CONTROL PANEL ===== -->
+    <div class="lab-panel">
+      <h2>
+        Scenario
+        <span class="pill">Inputs</span>
+      </h2>
+
+      <div class="form-row">
+        <label>
+          Spot A <span>S<sub>A</sub> =
+            <input id="spotA" type="number" step="1" value="100">
+          </span>
+        </label>
+      </div>
+
+      <div class="form-row">
+        <label>
+          Spot B <span>S<sub>B</sub> =
+            <input id="spotB" type="number" step="1" value="100">
+          </span>
+        </label>
+      </div>
+
+      <div class="form-row">
+        <label>
+          Strike K (worst-of put)
+          <span>
+            <input id="strikeK" type="number" step="1" value="80">
+          </span>
+        </label>
+        <div class="muted">
+          Payoff at expiry ≈ max(0, K − min(A,B)).
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label>
+          Vol A (%)
+          <span>
+            <input id="volA" type="number" step="1" value="25">
+          </span>
+        </label>
+      </div>
+
+      <div class="form-row">
+        <label>
+          Vol B (%)
+          <span>
+            <input id="volB" type="number" step="1" value="25">
+          </span>
+        </label>
+      </div>
+
+      <div class="form-row">
+        <label>
+          Correlation ρ
+          <span id="rhoOut">0.50</span>
+        </label>
+        <input id="rho" type="range" min="-1" max="1" step="0.05" value="0.5"
+               oninput="rhoOut.textContent=parseFloat(this.value).toFixed(2)">
+        <div class="muted">
+          ρ &lt; 0 ⇒ names move opposite.  
+          ρ &gt; 0 ⇒ they sell off together.
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label>Horizon (T in years)</label>
+        <div class="form-inline">
+          <input id="tenor" type="number" step="0.01" value="0.25">
+          <span class="muted">e.g. 0.25 ≈ 3 months</span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label>Position</label>
+        <div class="radio-row">
+          <label>
+            <input type="radio" name="pos" value="long" checked>
+            Long Worst-of Put
+          </label>
+          <label>
+            <input type="radio" name="pos" value="short">
+            Short Worst-of Put
+          </label>
+        </div>
+        <div class="muted">
+          Long = client usually.  
+          Short = dealer.
+        </div>
+      </div>
+
+      <div class="form-row">
+        <button class="btn-run" onclick="runSim()">Run / Refresh</button>
+      </div>
+
+      <div class="form-row">
+        <div class="muted">
+          We shock both underlyings simultaneously across a grid and
+          estimate P&amp;L for the position.  
+          We also Monte Carlo a “joint move” using your vols + ρ.
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== VIZ / OUTPUT ===== -->
+    <div class="viz-wrapper">
+
+      <div class="viz-card">
+        <h3>
+          P&amp;L heatmap
+          <span class="muted">(% shocks)</span>
+        </h3>
+        <canvas id="heatmap"></canvas>
+        <div class="muted" style="font-size:.7rem; margin-top:.5rem;">
+          X-axis = shock in A (%).  
+          Y-axis = shock in B (%).  
+          Color = your P&amp;L (per unit notional).  
+          Red = you’re losing. Blue = you’re happy.
+        </div>
+      </div>
+
+      <div class="viz-card">
+        <h3>
+          Snapshot
+          <span class="muted">Monte Carlo</span>
+        </h3>
+        <div id="statsBox">
+          <div class="stat-line">Expected P&amp;L: …</div>
+          <div class="stat-line">5% worst loss: …</div>
+          <div class="stat-line">ρ used: …</div>
+          <div class="stat-line">Comment: …</div>
+        </div>
+        <div class="muted" style="margin-top:.75rem;font-size:.7rem;">
+          We draw joint moves for A,B using your vols and ρ.
+          Then we reprice the worst-of put and see how ugly it gets.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section style="margin-top:2rem">
+    <div class="explain-card">
+      <h2>Why “short cross gamma” hurts dealers</h2>
+
+      <p>
+        Payoff is roughly:
+        <span class="inline">P = max(0, K − min(S<sub>A</sub>, S<sub>B</sub>)).</span><br>
+        That means you only really bleed when <em>both</em> names are down,
+        especially the weaker one.
+      </p>
+
+      <p>
+        If you’re <strong>short</strong> this payoff (dealer side),
+        then “bad” = “both go down together”.
+        That’s basically <em>positive correlation in a selloff</em>.
+        So as a dealer, you are effectively <strong>short correlation</strong>.
+      </p>
+
+      <p>
+        Gamma intuition:<br>
+        - Long gamma = you like big moves (you buy low/sell high).<br>
+        - Short gamma = moves force you to hedge in the worst direction.<br>
+        - <strong>Short cross gamma</strong> = you get hurt when they move
+          <em>together</em> in the bad direction.
+      </p>
+
+      <p>
+        In stressed markets (2008, 2020, etc.) you don’t just get “one name down”.
+        You get <em>all your bad factors lining up at once</em>:
+        equity down, FX funding stress, curve dislocated.
+        That’s why dealers blew up: not vanilla delta —
+        <strong>correlated convexity</strong>.
+      </p>
+
+      <p class="muted">
+        Translation for sales: “When I’m short this structure,
+        I’m effectively betting the world won’t go wrong all at once.
+        When it <em>does</em>, I lose fast.”
+      </p>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/*
+Core logic:
+1. Price worst-of put approx as max(0, K - min(SA,SB)).
+   We treat it like intrinsic-at-expiry to keep intuition simple.
+2. Shock both SA, SB across a grid of returns (-30% ... +10%).
+   Compute PnL = (position_sign)*(price_shocked - price_now).
+3. Draw a heatmap of PnL.
+4. Monte Carlo: draw joint shocks using vols & rho to summarize tail risk.
+This is not production pricing. It's an intuition lab.
+*/
+
+// helper: normal sampler via Box-Muller
+function randn() {
+  const u = Math.random() || 1e-9;
+  const v = Math.random() || 1e-9;
+  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+
+// price of worst-of put (intrinsic-style proxy)
+function worstOfPut(SA, SB, K) {
+  const worst = Math.min(SA, SB);
+  return Math.max(0, K - worst);
+}
+
+// grid drawing
+function drawHeatmap(ctx, gridX, gridY, pnlMatrix) {
+  const W = ctx.canvas.width = ctx.canvas.clientWidth * window.devicePixelRatio;
+  const H = ctx.canvas.height = 360 * window.devicePixelRatio;
+  const dpr = window.devicePixelRatio;
+  ctx.scale(dpr, dpr);
+
+  const wPlot = ctx.canvas.clientWidth;
+  const hPlot = 360;
+
+  // compute min/max pnl for color scale
+  let pmin = Infinity, pmax = -Infinity;
+  for (let j=0; j<gridY.length; j++){
+    for (let i=0; i<gridX.length; i++){
+      const v = pnlMatrix[j][i];
+      if (v < pmin) pmin = v;
+      if (v > pmax) pmax = v;
+    }
+  }
+  // small guard
+  if (pmin === pmax) { pmin -= 1; pmax += 1; }
+
+  // draw cells
+  const cellW = wPlot / gridX.length;
+  const cellH = hPlot / gridY.length;
+
+  for (let j=0; j<gridY.length; j++){
+    for (let i=0; i<gridX.length; i++){
+      const v = pnlMatrix[j][i];
+      const t = (v - pmin)/(pmax - pmin); // 0..1
+
+      // color scale: red (loss) -> white -> blue (gain)
+      // t<0.5 means loss-ish, t>0.5 means gain-ish
+      // quick 2-stop blend
+      let r,g,b;
+      if (t < 0.5){
+        // red(220,50,47) -> white(240,240,240)
+        const k = t/0.5;
+        r = 220 + (240-220)*k;
+        g = 50  + (240-50)*k;
+        b = 47  + (240-47)*k;
+      } else {
+        // white(240,240,240) -> blue(37,99,235)
+        const k = (t-0.5)/0.5;
+        r = 240 + (37-240)*k;
+        g = 240 + (99-240)*k;
+        b = 240 + (235-240)*k;
+      }
+      ctx.fillStyle = `rgb(${r|0},${g|0},${b|0})`;
+      ctx.fillRect(i*cellW, j*cellH, cellW, cellH);
+    }
+  }
+
+  // axes annotations
+  ctx.strokeStyle = getComputedStyle(document.body).color;
+  ctx.globalAlpha = 0.4;
+  ctx.strokeRect(0,0,wPlot,hPlot);
+  ctx.globalAlpha = 1;
+
+  ctx.fillStyle = getComputedStyle(document.body).color;
+  ctx.font = "11px " + getComputedStyle(document.body).fontFamily;
+  ctx.fillText("Shock A (%) →", wPlot-90, hPlot-8);
+  ctx.save();
+  ctx.translate(8, 20);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText("Shock B (%) →", 0,0);
+  ctx.restore();
+
+  // tick labels: min/mid/max
+  const ax = [0, (gridX.length/2)|0, gridX.length-1];
+  const ay = [0, (gridY.length/2)|0, gridY.length-1];
+  ax.forEach(ix=>{
+    const x = ix*cellW + 2;
+    const label = (gridX[ix]*100).toFixed(0)+"%";
+    ctx.fillText(label, x, hPlot-20);
+  });
+  ay.forEach(iy=>{
+    const y = iy*cellH + 12;
+    const label = (gridY[iy]*100).toFixed(0)+"%";
+    ctx.fillText(label, 4, y);
+  });
+}
+
+// run sim: build pnl heatmap + monte carlo stats
+function runSim(){
+  // read inputs
+  const SA0 = parseFloat(document.getElementById('spotA').value);
+  const SB0 = parseFloat(document.getElementById('spotB').value);
+  const K   = parseFloat(document.getElementById('strikeK').value);
+  const volA= parseFloat(document.getElementById('volA').value)/100;
+  const volB= parseFloat(document.getElementById('volB').value)/100;
+  const rho = parseFloat(document.getElementById('rho').value);
+  const T   = parseFloat(document.getElementById('tenor').value);
+
+  const pos = Array.from(document.querySelectorAll('input[name="pos"]'))
+    .find(r => r.checked)?.value || 'long';
+  const sign = (pos === 'long' ? 1 : -1);
+
+  // base option value (at spot)
+  const baseVal = worstOfPut(SA0, SB0, K);
+
+  // build grid of shocks, e.g. -30% .. +10%
+  const shocksA = [];
+  const shocksB = [];
+  for (let s=-0.30; s<=0.10+1e-9; s+=0.05) shocksA.push(s);
+  for (let s=-0.30; s<=0.10+1e-9; s+=0.05) shocksB.push(s);
+
+  const pnlMatrix = [];
+  for (let j=0; j<shocksB.length; j++){
+    const row = [];
+    for (let i=0; i<shocksA.length; i++){
+      const SA = SA0*(1+shocksA[i]);
+      const SB = SB0*(1+shocksB[j]);
+      const vNow = worstOfPut(SA,SB,K);
+      const pnl = sign*(vNow - baseVal);
+      row.push(pnl);
+    }
+    pnlMatrix.push(row);
+  }
+
+  // draw heatmap
+  const ctx = document.getElementById('heatmap').getContext('2d');
+  drawHeatmap(ctx, shocksA, shocksB, pnlMatrix);
+
+  // monte carlo joint shocks
+  // correlated normals: X ~ N(0,1), Y = rho X + sqrt(1-rho^2) Z
+  const Npaths = 2000;
+  const pnlArr = [];
+  for (let n=0; n<Npaths; n++){
+    const z1 = randn();
+    const z2 = randn();
+    const zB = rho*z1 + Math.sqrt(Math.max(0,1-rho*rho))*z2;
+
+    const retA = z1 * volA * Math.sqrt(T);
+    const retB = zB * volB * Math.sqrt(T);
+
+    const SA = SA0*(1+retA);
+    const SB = SB0*(1+retB);
+
+    const vNow = worstOfPut(SA,SB,K);
+    const pnl  = sign*(vNow - baseVal);
+    pnlArr.push(pnl);
+  }
+
+  pnlArr.sort((a,b)=>a-b);
+  const avg   = pnlArr.reduce((s,x)=>s+x,0)/pnlArr.length;
+  const idx5  = Math.floor(0.05*pnlArr.length);
+  const tail5 = pnlArr[idx5];
+
+  // comment heuristic
+  let comment;
+  if (pos === 'short'){
+    // dealer short worst-of put:
+    // hurt when correlation is high and downside is joint
+    if (rho > 0.5) comment = "Short wo put + high ρ => classic dealer pain. Joint selloff kills you.";
+    else if (rho < -0.2) comment = "ρ < 0: diversification helps you. This is where dealers breathe.";
+    else comment = "Moderate ρ. Still short convexity in downside clusters.";
+  } else {
+    // client long
+    if (rho > 0.5) comment = "Client long wo put + high ρ: you benefit most when both crack together.";
+    else if (rho < -0.2) comment = "Low/negative ρ: you’re buying protection that might not fire together.";
+    else comment = "You’re long stress. You like systemic downside.";
+  }
+
+  // print stats
+  const statsBox = document.getElementById('statsBox');
+  statsBox.innerHTML = `
+    <div class="stat-line"><strong>Expected P&L:</strong> ${avg.toFixed(4)} (per unit notional)</div>
+    <div class="stat-line"><strong>5% worst loss:</strong> ${tail5.toFixed(4)}</div>
+    <div class="stat-line"><strong>ρ (corr):</strong> ${rho.toFixed(2)}</div>
+    <div class="stat-line"><strong>Read:</strong> ${comment}</div>
+  `;
+}
+
+// run once on load
+runSim();
+</script>
+
+</body>
+</html>

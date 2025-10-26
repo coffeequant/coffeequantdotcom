@@ -7,6 +7,15 @@
       "thumb": "statics/img/thumbs/cli.webp",
       "tags": ["Options","Fast"]
     },
+    {
+      "title": "Cross Gamma Lab",
+      "deck": "Worst-of put stress map. Watch correlation turn into pain.",
+      "thumb": "statics/img/thumbs/crossgamma.webp",
+      "link": "statics/Tools/CrossGammaLab.html",
+      "tags": ["Correlation","Risk"]
+    },
+
+
    {
       "title": "Barrier Shift Estimator",
       "deck": "How far do I move the barrier so I don't bleed my fee in hedge panic.",
