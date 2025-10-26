@@ -1,7 +1,6 @@
 runtime: python312
 
 handlers:
-  # Serve all static files (HTML, CSS, JS, images, JSON, etc.)
   - url: /(.*\.(html|css|js|json|png|jpg|jpeg|gif|webp|svg|ico|txt|pdf|woff2?))$
     static_files: \1
     upload: (.*\.(html|css|js|json|png|jpg|jpeg|gif|webp|svg|ico|txt|pdf|woff2?))$
@@ -10,7 +9,6 @@ handlers:
       Access-Control-Allow-Origin: "*"
       Cache-Control: "public, max-age=3600"
 
-  # Serve everything else (like /labs, /notes, /tools) as index.html
   - url: /.*
     static_files: index.html
     upload: index.html

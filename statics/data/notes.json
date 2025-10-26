@@ -35,7 +35,7 @@
     {
       "title": "Lehman Swap Spreads",
       "deck": "Curve inversion, callable notes, and accidental short gamma.",
-      "link": "statics/WriteUps/OldLehmanSpreads.html",
+      "link": "statics/WriteUps/OldLehmanStory.html",
       "thumb": "statics/img/thumbs/dice.webp",
       "tags": ["Credit","History"],
       "date": "2019-03-05"
