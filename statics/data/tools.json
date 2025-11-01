@@ -3,7 +3,7 @@
 	  {
   "title": "IUL Vol-Target Builder",
   "deck": "Price annual crediting on a vol-target excess-return index. Caps, floors, participation, distribution.",
-  "thumb": "statics/img/thumbs/iul.webp",
+  "thumb": "statics/img/thumbs/iul.jpeg",
   "tags": ["IUL","VolTarget","Pricing"],
   "link": "statics/Tools/IULLab.html"
 },
