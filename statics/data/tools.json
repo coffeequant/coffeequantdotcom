@@ -1,5 +1,13 @@
 {
   "items": [
+	  {
+  "title": "IUL Vol-Target Builder",
+  "deck": "Price annual crediting on a vol-target excess-return index. Caps, floors, participation, distribution.",
+  "thumb": "statics/img/thumbs/iul.webp",
+  "tags": ["IUL","VolTarget","Pricing"],
+  "link": "statics/Tools/IULLab.html"
+},
+
     {
       "title": "Pricing CLI",
       "deck": "Terminal-style calculator: Black–Scholes, Greeks, IV, Kelly…",

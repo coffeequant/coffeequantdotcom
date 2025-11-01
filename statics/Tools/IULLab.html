@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>CoffeeQuant IUL Lab — VolTarget Crediting</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="../css/cq.css"/>
+  <style>
+    .lab { max-width: 1080px; margin: 0 auto; padding: 1rem 1.25rem 2rem; }
+    .row { display:flex; gap:1rem; flex-wrap:wrap; align-items:flex-end; }
+    .col { flex:1 1 240px; min-width:240px; }
+    .card { background: var(--card); border:1px solid var(--line); border-radius: var(--radius); padding:1rem; }
+    label { font-weight:600; font-size:.95rem; }
+    input[type=number] { width:100%; padding:.5rem .6rem; border:1px solid var(--line); border-radius:8px; background:transparent; color:inherit; }
+    .btn { background: var(--accent); color:#fff; border:0; border-radius:10px; padding:.6rem .9rem; cursor:pointer; }
+    .btn:hover { filter:brightness(.95); }
+    canvas { width:100%; height:220px; border:1px solid var(--line); border-radius:12px; background:transparent; }
+    .muted { color: var(--muted); }
+    .grid2 { display:grid; grid-template-columns: 1fr 1fr; gap:.75rem; }
+    .pill { display:inline-block; padding:.15rem .5rem; border:1px solid var(--line); border-radius:999px; font-size:.8rem; }
+    .small { font-size:.92rem; }
+  </style>
+</head>
+<body>
+  <article class="lab">
+    <header style="margin-bottom:.6rem">
+      <h1>IUL Vol-Target Crediting — Builder</h1>
+      <p class="muted">Point-to-point annual credit on a vol-target (excess-return) index with <em>cap</em>, <em>participation</em>, and <em>floor</em>. Free now; Pro later.</p>
+    </header>
+
+    <section class="card">
+      <div class="row">
+        <div class="col">
+          <label>Initial level (S₀)</label>
+          <input id="s0" type="number" step="0.01" value="100">
+        </div>
+        <div class="col">
+          <label>Tenor (years)</label>
+          <input id="tenor" type="number" step="0.25" value="1">
+        </div>
+        <div class="col">
+          <label>Vol target (ann.)</label>
+          <input id="vtvol" type="number" step="0.005" value="0.10">
+        </div>
+        <div class="col">
+          <label>Participation</label>
+          <input id="part" type="number" step="0.05" value="1.00">
+        </div>
+        <div class="col">
+          <label>Cap (blank = none)</label>
+          <input id="cap" type="number" step="0.005" placeholder="e.g. 0.095">
+        </div>
+        <div class="col">
+          <label>Floor</label>
+          <input id="floor" type="number" step="0.005" value="0.00">
+        </div>
+        <div class="col">
+          <label>Simulations</label>
+          <input id="sims" type="number" step="1000" value="20000">
+        </div>
+        <div class="col">
+          <button class="btn" id="runBtn">Run</button>
+        </div>
+      </div>
+      <p class="small muted" style="margin:.5rem 0 0">
+        Assumptions: risk-neutral drift ≈ 0 on excess-return VT index; one-step GBM to credit date.
+      </p>
+    </section>
+
+    <section class="row" style="margin-top:1rem">
+      <div class="col card">
+        <h3 style="margin:.2rem 0 .5rem">Distribution (credit)</h3>
+        <canvas id="hist"></canvas>
+      </div>
+      <div class="col card">
+        <h3 style="margin:.2rem 0 .5rem">Summary</h3>
+        <div id="stats" class="grid2"></div>
+        <div style="margin-top:.6rem">
+          <button class="btn" id="downloadJson">Download JSON</button>
+          <button class="btn" id="downloadCsv" style="margin-left:.5rem">Download CSV</button>
+        </div>
+        <p class="muted small" style="margin-top:.5rem">
+          “Fair cost” here ≈ expected credit (transparent proxy). You can add admin/hedge buffers later.
+        </p>
+      </div>
+    </section>
+  </article>
+
+  <script>
+    const $ = (s, r=document)=>r.querySelector(s);
+
+    async function vtPrice(req){
+      const r = await fetch('/api/iul/vt_price', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(req)
+      });
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      return await r.json();
+    }
+
+    function drawHist(value, mean, p5, p50, p95){
+      const canvas = $('#hist');
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width = canvas.clientWidth * devicePixelRatio;
+      const H = canvas.height = 220 * devicePixelRatio;
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+      ctx.clearRect(0,0,W,H);
+
+      // Create synthetic bars from quantiles (3 buckets)
+      const left = 36, right = 10, top = 10, bottom = 24;
+      const plotW = canvas.clientWidth - left - right, plotH = 220 - top - bottom;
+
+      ctx.strokeStyle = getComputedStyle(document.body).color;
+      ctx.globalAlpha = .3;
+      ctx.beginPath();
+      ctx.moveTo(left, top); ctx.lineTo(left, top+plotH); ctx.lineTo(left+plotW, top+plotH);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      const labels = ['P5','P50','P95','Mean'];
+      const vals   = [p5, p50, p95, mean];
+      const maxV = Math.max(...vals.map(v=>Math.abs(v)), 0.01);
+      const gap = 12, bw = (plotW - gap*(labels.length+1))/labels.length;
+
+      for(let i=0;i<labels.length;i++){
+        const x = left + gap + i*(bw+gap);
+        const h = (vals[i]/(maxV*1.2)) * plotH;
+        const y = top + plotH - Math.max(0,h);
+        ctx.globalAlpha = .15;
+        ctx.fillStyle = getComputedStyle(document.body).color;
+        ctx.fillRect(x, y, bw, Math.abs(h));
+        ctx.globalAlpha = 1;
+        ctx.fillText(labels[i], x+bw/2-10, top+plotH+14);
+        ctx.fillText((vals[i]*100).toFixed(2)+'%', x+bw/2-22, y-4);
+      }
+    }
+
+    function toCsv(resp){
+      const f = resp.est_fair_cost;
+      const c = resp.credit_stats;
+      const rows = [
+        ['field','value'],
+        ['mean_credit', c.mean_credit],
+        ['p5', c.p5],
+        ['p50', c.p50],
+        ['p95', c.p95],
+        ['hit_cap_ratio', c.hit_cap_ratio],
+        ['hit_floor_ratio', c.hit_floor_ratio],
+        ['stdev', c.raw_moments.stdev],
+        ['est_fair_cost', f]
+      ];
+      return rows.map(r=>r.join(',')).join('\n');
+    }
+
+    $('#runBtn').addEventListener('click', async ()=>{
+      const req = {
+        s0: parseFloat($('#s0').value),
+        tenor_years: parseFloat($('#tenor').value),
+        vt_vol: parseFloat($('#vtvol').value),
+        participation: parseFloat($('#part').value),
+        cap: $('#cap').value ? parseFloat($('#cap').value) : null,
+        floor: parseFloat($('#floor').value),
+        sims: parseInt($('#sims').value,10)
+      };
+      try{
+        const resp = await vtPrice(req);
+        const c = resp.credit_stats;
+        $('#stats').innerHTML = `
+          <div><span class="pill">Mean</span><div><strong>${(c.mean_credit*100).toFixed(2)}%</strong></div></div>
+          <div><span class="pill">Median</span><div>${(c.p50*100).toFixed(2)}%</div></div>
+          <div><span class="pill">P5 / P95</span><div>${(c.p5*100).toFixed(2)}% — ${(c.p95*100).toFixed(2)}%</div></div>
+          <div><span class="pill">Cap / Floor hits</span><div>${(c.hit_cap_ratio*100).toFixed(1)}% / ${(c.hit_floor_ratio*100).toFixed(1)}%</div></div>
+          <div><span class="pill">Stdev</span><div>${(c.raw_moments.stdev*100).toFixed(2)}%</div></div>
+          <div><span class="pill">Fair cost (proxy)</span><div>${(resp.est_fair_cost*100).toFixed(2)}%</div></div>
+        `;
+        drawHist(c.mean_credit, c.mean_credit, c.p5, c.p50, c.p95);
+
+        // downloads
+        $('#downloadJson').onclick = ()=>{
+          const blob = new Blob([JSON.stringify(resp,null,2)], {type:'application/json'});
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'CoffeeQuant_IUL_VT.json';
+          a.click();
+        };
+        $('#downloadCsv').onclick = ()=>{
+          const blob = new Blob([toCsv(resp)], {type:'text/csv'});
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'CoffeeQuant_IUL_VT.csv';
+          a.click();
+        };
+      }catch(e){
+        alert('Error: '+e.message);
+      }
+    });
+  </script>
+</body>
+</html>
+
+
