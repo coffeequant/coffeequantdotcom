@@ -1,37 +1,4 @@
 runtime: python312
-entrypoint: uvicorn api.app:app --host 0.0.0.0 --port $PORT
-
-# Optional: set a service name if you use multiple services
-# service: default
-
-handlers:
-  # 1) Serve the whole /statics directory (css/js/img/json, etc.)
-  - url: /statics
-    static_dir: statics
-    secure: always
-    http_headers:
-      Access-Control-Allow-Origin: "*"
-      Cache-Control: "public, max-age=3600"
-
-  # 2) Favicon (top-level)
-  - url: /favicon\.ico
-    static_files: statics/favicon.ico
-    upload: statics/favicon\.ico
-    secure: always
-    http_headers:
-      Cache-Control: "public, max-age=86400"
-
-  # 3) API goes to your FastAPI app (uvicorn). MUST be above the catch-all.
-  - url: /api/.*
-    script: auto
-    secure: always
-    redirect_http_response_code: 301
-
-  # 4) SPA fallback: any other route returns index.html
-  - url: /.*
-    static_files: index.html
-    upload: index.html
-    secure: always
-    http_headers:
-      Cache-Control: "no-cache"
+service: default
+entrypoint: uvicorn main:app --host 0.0.0.0 --port $PORT
 

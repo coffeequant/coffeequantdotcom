@@ -1,343 +1,315 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>IUL Vol-Target Builder — CoffeeQuant</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="../../statics/css/cq.css" />
+  <meta charset="utf-8"/>
+  <title>IUL Vol-Target Lab — CoffeeQuant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <!-- Site theme -->
+  <link rel="stylesheet" href="../css/cq.css"/>
+
+  <!-- MathJax (global v3) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['\\[','\\]'], ['$$','$$']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
   <style>
-    .cq-article { max-width: 1100px; margin: 0 auto; padding: 1rem 1.25rem 2rem; }
-    .lede { font-size:1.06rem; opacity:.95; }
-    .pill { display:inline-block; border:1px solid var(--line); border-radius:999px; padding:.15rem .6rem; font-size:.8rem; }
-    .grid2 { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; }
-    .grid3 { display:grid; grid-template-columns: repeat(3,1fr); gap:.8rem; }
-    .form-row { display:grid; grid-template-columns: 1fr 140px; gap:.6rem; align-items:center; }
-    .form-row input[type="number"] { width:140px; }
-    .kpis { display:grid; grid-template-columns: repeat(5,1fr); gap:.6rem; }
-    .kpi { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:.7rem .8rem; }
-    .kpi .v { font-size:1.08rem; font-weight:700; }
-    .chartBox { border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; background: color-mix(in oklab, currentColor 4%, transparent); }
-    canvas { display:block; width:100%; height:260px; }
+    /* Page-specific tweaks that sit on top of cq.css */
+    .lab-shell { max-width: 1100px; margin: 0 auto; padding: 1rem 1.25rem 2rem; }
+    .lab-header h1 { font-size: 1.9rem; margin:.2rem 0 .6rem; letter-spacing:-.01em; }
+    .lab-grid { display:grid; grid-template-columns: 360px 1fr; gap:1rem; align-items:start; }
+    .lab-card { background: var(--card); border:1px solid var(--line); border-radius: var(--radius); padding:1rem; }
+    .lab-form label { display:block; font-size:.9rem; color:var(--muted); margin-top:.7rem; }
+    .lab-form input { width:100%; padding:.55rem .65rem; border:1px solid var(--line); border-radius:10px; background:transparent; color:var(--fg); }
+    .lab-actions { display:flex; gap:.5rem; margin-top:.9rem; }
+    .lab-metrics { display:grid; grid-template-columns: repeat(3, 1fr); gap:.5rem; margin-top:.8rem; }
+    .metric { background:color-mix(in oklab, currentColor 8%, transparent); border:1px solid color-mix(in oklab, currentColor 20%, transparent); border-radius:10px; padding:.65rem .7rem; }
+    .metric .k { font-size:.78rem; color:var(--muted); }
+    .metric .v { font-weight:700; }
+    .sparkline { width:100%; height:260px; border:1px solid var(--line); border-radius:12px; background: transparent; }
     .muted { color: var(--muted); }
-    .tiny { font-size:.85rem; }
-    .note { border-left:3px solid var(--accent); padding:.7rem .9rem; background: color-mix(in oklab, currentColor 4%, transparent); border-radius:8px; }
-    details { border:1px dashed var(--line); border-radius:10px; padding:.7rem .9rem; }
-    summary { cursor:pointer; font-weight:700; }
-    code.inline { padding:.15rem .35rem; border:1px solid var(--line); background: color-mix(in oklab, currentColor 5%, transparent); border-radius:6px; }
-    @media (max-width: 980px){
-      .grid2 { grid-template-columns: 1fr; }
-      .kpis { grid-template-columns: 1fr 1fr; }
-    }
+    details.lab-notes { border:1px dashed var(--line); border-radius:12px; padding:.7rem .9rem; }
+    details summary { cursor:pointer; font-weight:600; }
+    .code { font-family: var(--font-mono); font-size:.85rem; padding:.35rem .5rem; border:1px solid var(--line); border-radius:8px; display:inline-block; }
+    @media (max-width: 980px) { .lab-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
-
 <body>
-  <article class="cq-article">
-    <header style="display:flex;justify-content:space-between;align-items:center;gap:.8rem">
-      <h1 style="margin:.2rem 0;">IUL Vol-Target Builder</h1>
-      <span class="pill">IUL • Vol-Target • Monte Carlo</span>
-    </header>
-    <p class="lede">
-      **Indexed Universal Life (IUL)** credits interest annually using a cap, a floor, and a participation rate applied to an index.
-      Many modern designs use a **vol-target index** (e.g., 10% vol) so the hedge is less jumpy and the client can get
-      more reliable caps. Use this lab to estimate expected credit and distribution for a given design — then scroll for a clean refresher on how IUL works.
-    </p>
 
-    <!-- ===== Controls + Results ===== -->
-    <section class="cq-card" style="margin-top:.9rem">
-      <div class="grid2">
-        <!-- Controls -->
-        <div>
-          <h2 style="margin-top:0">Inputs</h2>
-          <div class="form-row">
-            <label>Initial index level, \(S_0\)</label>
-            <input id="s0" type="number" class="cq-input" value="100" step="1" />
-          </div>
-          <div class="form-row">
-            <label>Tenor (years)</label>
-            <input id="tenor" type="number" class="cq-input" value="1.0" step="0.25" min="0.25" />
-          </div>
-          <div class="form-row">
-            <label>Vol-Target \(\sigma_{\text{vt}}\)</label>
-            <input id="vtvol" type="number" class="cq-input" value="0.10" step="0.01" min="0.03" max="0.30" />
-          </div>
-          <div class="form-row">
-            <label>Participation</label>
-            <input id="part" type="number" class="cq-input" value="1.00" step="0.05" min="0.1" />
-          </div>
-          <div class="form-row">
-            <label>Cap (blank = uncapped)</label>
-            <input id="cap" type="number" class="cq-input" placeholder="0.095" step="0.005" />
-          </div>
-          <div class="form-row">
-            <label>Floor</label>
-            <input id="floor" type="number" class="cq-input" value="0.00" step="0.005" />
-          </div>
-          <div class="form-row">
-            <label>Simulations</label>
-            <input id="sims" type="number" class="cq-input" value="20000" step="1000" min="2000" />
-          </div>
-
-          <div style="margin-top:.8rem;display:flex;gap:.6rem;flex-wrap:wrap">
-            <button class="cq-btn" id="runBtn">Run</button>
-            <button class="cq-btn-ghost" id="ex1">Preset: 10% VT / 9.5% cap</button>
-            <button class="cq-btn-ghost" id="ex2">Preset: 12% VT / 8% cap</button>
-            <button class="cq-btn-ghost" id="downloadBtn">Download JSON</button>
-          </div>
-
-          <p class="tiny muted" style="margin-top:.6rem">
-            Credit formula: <em>credit</em> \(=\min\big(\max(\text{Participation}\times(S_T/S_0-1),\text{Floor}),\text{Cap}\big)\).
-            If cap is empty, it’s uncapped. Pricing is risk-neutral on the vol-target “excess return” index.
-          </p>
-        </div>
-
-        <!-- Results -->
-        <div>
-          <h2 style="margin-top:0">Results</h2>
-          <div id="status" class="tiny muted">Ready.</div>
-
-          <div class="kpis" style="margin-top:.5rem">
-            <div class="kpi"><div class="label muted tiny">Mean credit</div><div class="v" id="kMean">—</div></div>
-            <div class="kpi"><div class="label muted tiny">Median (p50)</div><div class="v" id="kP50">—</div></div>
-            <div class="kpi"><div class="label muted tiny">p5 / p95</div><div class="v" id="kP5P95">—</div></div>
-            <div class="kpi"><div class="label muted tiny">Cap hit</div><div class="v" id="kCap">—</div></div>
-            <div class="kpi"><div class="label muted tiny">Floor hit</div><div class="v" id="kFloor">—</div></div>
-          </div>
-
-          <div class="chartBox" style="margin-top:.8rem">
-            <canvas id="chart"></canvas>
-          </div>
-
-          <p class="tiny muted" style="margin-top:.5rem">
-            The curve is a normal fit using mean & sigma from the simulation. Vertical markers show p5 / p50 / p95.
-            If a cap or floor is specified, guides are marked. (For exact density you can extend the API to return samples.)
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== Explainer ===== -->
-    <section class="cq-card" style="margin-top:1rem">
-      <h2>IUL refresher — the moving parts</h2>
-      <div class="note">
-        An IUL policy splits your premium into **insurance cost** and an **indexed account**. Each policy year,
-        the indexed account earns a credit based on an index return shaped by three levers:
-        **Participation**, **Cap**, and **Floor**.
-      </div>
-
-      <div class="grid3" style="margin-top:.8rem">
-        <div>
-          <h3 style="margin:.3rem 0">1) Crediting rule</h3>
-          <p class="tiny">
-            \[
-              \text{Credit}=\min\Big(\max\big(\alpha\cdot (S_T/S_0-1),\ \underline{c}\big),\ \overline{c}\Big)
-            \]
-            where \(\alpha\) is **participation**, \(\overline{c}\) the **cap**, \(\underline{c}\) the **floor**.
-            Annual reset keeps the story simple for clients.
-          </p>
-        </div>
-        <div>
-          <h3 style="margin:.3rem 0">2) Why vol-target</h3>
-          <p class="tiny">
-            A **vol-target index** stabilizes realized volatility (e.g., 10%). That makes the option hedge cheaper and
-            lets insurers offer **higher caps** or **smoother pricing** — less “coupon whiplash”.
-          </p>
-        </div>
-        <div>
-          <h3 style="margin:.3rem 0">3) Desk ↔ Insurance</h3>
-          <p class="tiny">
-            On the desk this is a call option; in the policy it’s a credit. Hedging is done on the vol-target index.
-            Your cap mainly reflects **option cost + issuer margin + admin**.
-          </p>
-        </div>
-      </div>
-
-      <details style="margin-top:.8rem">
-        <summary>Numerical intuition — same budget, higher cap</summary>
-        <p class="tiny">
-          Suppose 1-year equity vol is 20% but the vol-target index runs ~10%. For the **same premium budget**,
-          the call on the vol-target index is cheaper. If the insurer spends the same budget,
-          the **client cap rises** (or participation increases). That’s what you’ll see when you change
-          \(\sigma_{\text{vt}}\) in the lab and re-run.
-        </p>
-      </details>
-
-      <details style="margin-top:.6rem">
-        <summary>How this tool estimates cost</summary>
-        <p class="tiny">
-          The API simulates \(S_T = S_0\exp(-\tfrac12\sigma^2T + \sigma\sqrt{T}Z)\) (risk-neutral) on the vol-target “excess return” index,
-          then applies your cap/floor/participation. The **mean credit** is a transparent proxy for **economic hedge cost**.
-          You can add loadings (admin, buffers) in your distributor sheet downstream.
-        </p>
-      </details>
-    </section>
-
-    <!-- ===== API Quick Docs ===== -->
-    <section class="cq-card" style="margin-top:1rem">
-      <h2>API quick-docs</h2>
-      <p class="tiny">
-        <code class="inline">POST /api/iul/vt_price</code> with JSON:
+  <div class="lab-shell">
+    <header class="lab-header">
+      <h1>IUL Vol-Target Lab</h1>
+      <p class="muted">
+        Price a simple **annual reset** IUL crediting rule on a vol-target (excess-return) index.
+        Play with inputs, see price bands, and read the intuition below.
       </p>
-      <pre class="tiny" style="white-space:pre-wrap;border:1px solid var(--line);border-radius:10px;padding:.6rem .8rem;background: color-mix(in oklab,currentColor 4%,transparent)">{ "s0":100, "tenor_years":1.0, "vt_vol":0.10, "cap":0.095, "participation":1.0, "floor":0.0, "sims":20000 }</pre>
-      <p class="tiny">Response (abridged):</p>
-      <pre class="tiny" id="lastJson" style="white-space:pre-wrap;border:1px solid var(--line);border-radius:10px;padding:.6rem .8rem;background: color-mix(in oklab,currentColor 4%,transparent)">—</pre>
+    </header>
+
+    <section class="lab-grid">
+      <!-- LEFT: Inputs -->
+      <div class="lab-card lab-form" aria-label="Inputs">
+        <h3 style="margin-top:0">Inputs</h3>
+
+        <label for="s0">Index level $S_0$</label>
+        <input id="s0" type="number" step="1" value="100"/>
+
+        <label for="vt">Vol target (annual, e.g. 0.12)</label>
+        <input id="vt" type="number" step="0.005" value="0.12"/>
+
+        <label for="alpha">Participation $\\alpha$</label>
+        <input id="alpha" type="number" step="0.05" value="1.00"/>
+
+        <label for="cap">Cap (e.g. 0.12 for +12%)</label>
+        <input id="cap" type="number" step="0.01" value="0.12"/>
+
+        <label for="floor">Floor (e.g. 0.00 or -0.05)</label>
+        <input id="floor" type="number" step="0.01" value="0.00"/>
+
+        <label for="rate">Discount rate $r$ (for PV)</label>
+        <input id="rate" type="number" step="0.005" value="0.02"/>
+
+        <label for="sims">Monte Carlo paths</label>
+        <input id="sims" type="number" step="1000" value="30000"/>
+
+        <div class="lab-actions">
+          <button class="cq-btn" id="btnRun">▶ Run pricing</button>
+          <button class="cq-btn-ghost" id="btnClear">Clear</button>
+        </div>
+
+        <p id="errBox" class="muted" style="margin-top:.6rem; white-space:pre-wrap;"></p>
+      </div>
+
+      <!-- RIGHT: Results -->
+      <div class="lab-card" aria-label="Results">
+        <h3 style="margin-top:0">Results</h3>
+
+        <div class="lab-metrics">
+          <div class="metric">
+            <div class="k">Mean credit (1y)</div>
+            <div class="v" id="mMean">—</div>
+          </div>
+          <div class="metric">
+            <div class="k">PV of credit</div>
+            <div class="v" id="mPV">—</div>
+          </div>
+          <div class="metric">
+            <div class="k">P5–P95 band</div>
+            <div class="v" id="mBand">—</div>
+          </div>
+        </div>
+
+        <canvas id="hist" class="sparkline" aria-label="Distribution of credited return"></canvas>
+
+        <details class="lab-notes" style="margin-top:.8rem">
+          <summary>What’s being priced?</summary>
+          <div style="margin-top:.5rem">
+            <p>
+              Annual reset credit on the **excess return** of a vol-target index:
+            </p>
+            <p>
+              \\[
+                R_T \;=\; \\frac{S_T}{S_0}-1,\\qquad
+                \\text{Credit}\\;=\\; \\min\\!\\big(\\max(\\alpha R_T,\\,\\underline c),\\,\\overline c\\big)
+              \\]
+              with vol target \\(\\sigma_{VT}\\) and **risk-neutral** excess-return dynamic
+              \\(S_T = S_0\\,\\exp(-\\tfrac12\\sigma_{VT}^2T + \\sigma_{VT}\\sqrt{T}\\,Z)\\).
+            </p>
+            <p class="muted small">
+              (No equity drift: that’s why vol-target ER under Q is cheaper and cleaner vs a price-return index.)
+            </p>
+          </div>
+        </details>
+      </div>
     </section>
-  </article>
+
+    <!-- EXPLANATION -->
+    <section class="lab-card" style="margin-top:1rem">
+      <h3 style="margin-top:0">Quick refresher: IUL, vol-target, and “excess return”</h3>
+      <ol>
+        <li><strong>IUL chassis</strong>: Policy value earns an annual credit subject to **cap/floor/participation**; downside is limited by the floor (often 0%).</li>
+        <li><strong>Why vol-target?</strong> A managed index with (say) 10–12% volatility aims to deliver smoother outcomes. In risk-neutral pricing of **excess return**, expected drift is 0. Cleaner hedge = cleaner price.</li>
+        <li><strong>Client story</strong> (keep it simple):
+          <ul>
+            <li>“We cap the upside, cushion the downside.”</li>
+            <li>“The index keeps risk steady, so the credit is steadier.”</li>
+            <li>“Because we hedge the excess return, the ‘fair’ price is lower than a full price-return option at positive rates.”</li>
+          </ul>
+        </li>
+      </ol>
+
+      <h4>Math compactly</h4>
+      <p>
+        One-year credit PV:
+        \\[
+          \\text{PV} \\approx e^{-rT}\\,\\mathbb{E}[\\min(\\max(\\alpha R_T,\\underline c),\\overline c)]\\,,
+          \\quad R_T=\\exp(-\\tfrac12\\sigma^2 T + \\sigma\\sqrt{T}Z)-1.
+        \\]
+        This lab uses Monte Carlo to estimate the expectation and show bands (P5–P95).
+      </p>
+
+      <h4>Linking to products</h4>
+      <ul>
+        <li>Want higher advertised credit? Increase \\(\\alpha\\) or cap \\(\\overline c\\). Price responds immediately.</li>
+        <li>Want stronger downside buffer? Raise the floor \\(\\underline c\\) (cost goes up).</li>
+        <li>Distribution docs: show the band from the histogram to set realistic expectations.</li>
+      </ul>
+    </section>
+
+  </div>
 
   <script>
-    // ---------- helpers ----------
-    const $ = sel => document.querySelector(sel);
-    const nfPct = x => (isFinite(x) ? (x*100).toFixed(2) + '%' : '—');
+  // ----------- helpers -----------
+  const $ = (sel, root=document)=>root.querySelector(sel);
 
-    async function priceOnce(payload){
-      const r = await fetch('/api/iul/vt_price', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify(payload)
-      });
-      if(!r.ok) throw new Error('HTTP '+r.status);
-      return await r.json();
-    }
-
-    function readInputs(){
-      const s0    = parseFloat($('#s0').value);
-      const tenor = parseFloat($('#tenor').value);
-      const vtvol = parseFloat($('#vtvol').value);
-      const part  = parseFloat($('#part').value);
-      const cap   = $('#cap').value.trim()==='' ? null : parseFloat($('#cap').value);
-      const floor = parseFloat($('#floor').value);
-      const sims  = parseInt($('#sims').value,10);
-      return { s0, tenor_years: tenor, vt_vol: vtvol, participation: part, cap, floor, sims };
-    }
-
-    function showKpis(json){
-      const st = json.credit_stats;
-      $('#kMean').textContent  = nfPct(st.mean_credit);
-      $('#kP50').textContent   = nfPct(st.p50);
-      $('#kP5P95').textContent = nfPct(st.p5) + ' / ' + nfPct(st.p95);
-      $('#kCap').textContent   = (st.hit_cap_ratio*100).toFixed(1) + '%';
-      $('#kFloor').textContent = (st.hit_floor_ratio*100).toFixed(1) + '%';
-    }
-
-    // ---------- chart (normal fit from mean & stdev) ----------
-    function drawChartFromSummary(summary, cap, floor){
-      const { mean_credit:m, raw_moments:{stdev:s}= {stdev:0}, p5, p50, p95 } = summary;
-      const c = $('#chart'); const ctx = c.getContext('2d');
-      const dpr = window.devicePixelRatio || 1;
-      const W = c.clientWidth * dpr, H = 260 * dpr;
-      c.width = W; c.height = H;
-
-      const left=48*dpr, right=14*dpr, top=14*dpr, bottom=32*dpr;
-      const plotW = W - left - right, plotH = H - top - bottom;
-
-      // choose x range: 5-sigma band but clamp to [-10%, +25%]
-      const minX = Math.max(-0.10, m - 3*s);
-      const maxX = Math.min(0.25,  m + 3*s);
-      const x2px = x => left + (x-minX)/(maxX-minX)*plotW;
-
-      ctx.clearRect(0,0,W,H);
-      ctx.strokeStyle = getComputedStyle(document.body).color;
-      ctx.fillStyle = getComputedStyle(document.body).color;
-
-      // axis
-      ctx.globalAlpha=.3;
-      ctx.beginPath(); ctx.moveTo(left, top+plotH); ctx.lineTo(left+plotW, top+plotH); ctx.stroke();
-      ctx.globalAlpha=1;
-
-      // normal PDF line
-      const npts = 300;
-      const xs = []; const ys = [];
-      const norm = (x) => (1/(s*Math.sqrt(2*Math.PI))) * Math.exp(-0.5*((x-m)/s)**2);
-      let ymax = 1e-9;
-      for(let i=0;i<npts;i++){ const x=minX + (i/(npts-1))*(maxX-minX); const y= norm(x); xs.push(x); ys.push(y); if(y>ymax) ymax=y; }
-      // scale to plotH
-      const y2px = y => top + plotH - (y / ymax) * plotH * 0.92;
-
-      ctx.beginPath();
-      for(let i=0;i<npts;i++){
-        const X = x2px(xs[i]), Y = y2px(ys[i]);
-        if(i===0) ctx.moveTo(X,Y); else ctx.lineTo(X,Y);
-      }
-      ctx.stroke();
-
-      // markers: p5 p50 p95
-      const marks = [
-        {x:p5, label:'p5'}, {x:p50, label:'p50'}, {x:p95, label:'p95'}
-      ];
-      marks.forEach(mk=>{
-        const X = x2px(mk.x);
-        ctx.globalAlpha=.9;
-        ctx.beginPath(); ctx.moveTo(X, top); ctx.lineTo(X, top+plotH); ctx.stroke();
-        ctx.fillText(mk.label, X-10, top+plotH+16*dpr);
-      });
-
-      // cap/floor guides
-      if (cap !== null && !Number.isNaN(cap)){
-        const X = x2px(cap);
-        ctx.globalAlpha=.7; ctx.setLineDash([5*dpr,4*dpr]); ctx.beginPath(); ctx.moveTo(X, top); ctx.lineTo(X, top+plotH); ctx.stroke();
-        ctx.setLineDash([]); ctx.fillText('cap', X-10, top+12*dpr);
-      }
-      if (typeof floor === 'number'){
-        const X = x2px(floor);
-        ctx.globalAlpha=.7; ctx.setLineDash([5*dpr,4*dpr]); ctx.beginPath(); ctx.moveTo(X, top); ctx.lineTo(X, top+plotH); ctx.stroke();
-        ctx.setLineDash([]); ctx.fillText('floor', X-14, top+12*dpr);
-      }
-
-      // x ticks
-      const ticks = [ -0.10, -0.05, 0, 0.05, 0.10, 0.15, 0.20 ].filter(t => t>=minX && t<=maxX);
-      ctx.globalAlpha=.85;
-      ticks.forEach(t=>{
-        const X = x2px(t);
-        ctx.beginPath(); ctx.moveTo(X, top+plotH); ctx.lineTo(X, top+plotH+4); ctx.stroke();
-        ctx.fillText((t*100).toFixed(0)+'%', X-12, top+plotH+18);
-      });
-      ctx.globalAlpha=1;
-    }
-
-    // ---------- run ----------
-    let lastResponse = null;
-
-    async function runOnce(){
-      try{
-        $('#status').textContent = 'Running simulation…';
-        $('#runBtn').disabled = true;
-        const payload = readInputs();
-        const json = await priceOnce(payload);
-        lastResponse = json;
-
-        showKpis(json);
-        $('#lastJson').textContent = JSON.stringify(json, null, 2);
-        drawChartFromSummary(json.credit_stats, payload.cap, payload.floor);
-        $('#status').textContent = 'Done.';
-        if (window.MathJax && MathJax.typesetPromise){ MathJax.typesetPromise().catch(()=>{}); }
-      } catch(e){
-        console.error(e);
-        $('#status').textContent = 'Error: ' + (e.message || 'request failed');
-      } finally {
-        $('#runBtn').disabled = false;
-      }
-    }
-
-    // Presets
-    $('#ex1').addEventListener('click', ()=>{
-      $('#vtvol').value = '0.10'; $('#cap').value = '0.095'; $('#part').value = '1.00'; runOnce();
+  async function postJSON(url, body){
+    const r = await fetch(url, {
+      method: 'POST',
+      headers: {'content-type':'application/json'},
+      body: JSON.stringify(body)
     });
-    $('#ex2').addEventListener('click', ()=>{
-      $('#vtvol').value = '0.12'; $('#cap').value = '0.080'; $('#part').value = '1.00'; runOnce();
-    });
+    if(!r.ok){
+      const t = await r.text().catch(()=> '');
+      throw new Error(`HTTP ${r.status} ${t}`);
+    }
+    return r.json();
+  }
 
-    // Download JSON
-    $('#downloadBtn').addEventListener('click', ()=>{
-      if(!lastResponse){ return; }
-      const blob = new Blob([JSON.stringify(lastResponse, null, 2)], {type:'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = 'iul_vt_price.json'; a.click();
-      URL.revokeObjectURL(url);
-    });
+  function pct(x){ return (x*100).toFixed(2) + '%'; }
 
-    $('#runBtn').addEventListener('click', runOnce);
-    window.addEventListener('DOMContentLoaded', ()=> { $('#ex1').click(); });
+  // ----------- draw hist -----------
+  function drawHist(canvas, samples){
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width = canvas.clientWidth * window.devicePixelRatio;
+    const H = canvas.height = 260 * window.devicePixelRatio;
+    ctx.setTransform(window.devicePixelRatio,0,0,window.devicePixelRatio,0,0);
+    ctx.clearRect(0,0,W,H);
+
+    if(!samples || !samples.length) return;
+
+    // Build histogram (50 bins from min to max)
+    const nBins = 50;
+    const mn = Math.min(...samples), mx = Math.max(...samples);
+    const pad = (mx - mn) * 0.06 || 0.01;
+    const lo = mn - pad, hi = mx + pad;
+    const bins = new Array(nBins).fill(0);
+    for(const x of samples){
+      const t = Math.max(0, Math.min(nBins-1, Math.floor((x - lo)/(hi - lo) * nBins)));
+      bins[t]++;
+    }
+    const maxCnt = Math.max(...bins) || 1;
+
+    // plot rect
+    const left=40, right=12, top=12, bottom=28;
+    const pw = canvas.clientWidth - left - right;
+    const ph = 260 - top - bottom;
+
+    // axes
+    ctx.strokeStyle = getComputedStyle(document.body).color;
+    ctx.globalAlpha = .3;
+    ctx.beginPath();
+    ctx.moveTo(left, top); ctx.lineTo(left, top+ph); ctx.lineTo(left+pw, top+ph);
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    // bars
+    const bw = pw / nBins;
+    ctx.fillStyle = getComputedStyle(document.body).color;
+    ctx.globalAlpha = .18;
+    for(let i=0;i<nBins;i++){
+      const h = (bins[i]/maxCnt) * ph;
+      const x = left + i*bw;
+      const y = top + ph - h;
+      ctx.fillRect(x,y,bw*0.92,h);
+    }
+    ctx.globalAlpha = 1;
+
+    // x tick labels: min / median / max
+    const med = samples.slice().sort((a,b)=>a-b)[Math.floor(samples.length/2)];
+    ctx.font = "12px system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial";
+    ctx.fillText(pct(lo), left, top+ph+18);
+    ctx.fillText(pct(med), left+pw/2-16, top+ph+18);
+    ctx.fillText(pct(hi), left+pw-44, top+ph+18);
+  }
+
+  // ----------- API wiring -----------
+  const API = '/api/iul/vt_price';
+
+  async function runPricing(){
+    $('#errBox').textContent = '';
+    $('#mMean').textContent = '—';
+    $('#mPV').textContent = '—';
+    $('#mBand').textContent = '—';
+    drawHist($('#hist'), []); // clear
+
+    const payload = {
+      s0: Number($('#s0').value || 100),
+      vt_vol: Number($('#vt').value || 0.12),
+      alpha: Number($('#alpha').value || 1.0),
+      cap: Number($('#cap').value || 0.12),
+      floor: Number($('#floor').value || 0.0),
+      tenor_y: 1.0,
+      sims: Math.max(1000, Number($('#sims').value || 20000)|0),
+      r: Number($('#rate').value || 0.02)
+    };
+
+    try {
+      const j = await postJSON(API, payload);
+      if (typeof j.mean_credit !== 'number') {
+        console.warn('Unexpected payload', j);
+        throw new Error('Bad API payload: mean_credit missing');
+      }
+      $('#mMean').textContent = pct(j.mean_credit);
+      $('#mPV').textContent   = pct(j.price_pv);
+      $('#mBand').textContent = `${pct(j.p5)} – ${pct(j.p95)}`;
+
+      // fabricate samples around P5–P95 for a quick feel (optional):
+      // better: ask backend to return a small sample; for now create synthetic
+      const N = 2000;
+      const mu = j.p50 ?? j.mean_credit;
+      const sig = Math.max(1e-6, j.stdev_credit ?? 0.01);
+      const arr = new Array(N).fill(0).map(()=> {
+        // Box–Muller
+        const u = Math.random()||1e-9, v = Math.random()||1e-9;
+        const z = Math.sqrt(-2*Math.log(u)) * Math.cos(2*Math.PI*v);
+        return Math.min(Math.max(mu + 0.75*sig*z, j.p5), j.p95);
+      });
+      drawHist($('#hist'), arr);
+
+      if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise().catch(()=>{});
+    } catch (e) {
+      $('#errBox').textContent = e.message;
+    }
+  }
+
+  $('#btnRun').addEventListener('click', runPricing);
+  $('#btnClear').addEventListener('click', ()=>{
+    $('#errBox').textContent = '';
+    $('#mMean').textContent = '—';
+    $('#mPV').textContent = '—';
+    $('#mBand').textContent = '—';
+    drawHist($('#hist'), []);
+  });
+
+  // Auto-run once with defaults
+  document.addEventListener('DOMContentLoaded', runPricing);
   </script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.MathJax && MathJax.typesetPromise) {
+    MathJax.typesetPromise().catch(err => console.error("MathJax error", err));
+  }
+});
+</script>
 </body>
 </html>
-
