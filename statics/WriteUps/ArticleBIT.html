@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CoffeeQuant — 2026 Playbook: Gold, Bitcoin, and Where Structure Beats Spot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="A structurer’s 2026 field guide: gold vs Bitcoin, why structure beats spot, product menu, risks, and talking points for HNIs." />
+
+  <!-- Site theme -->
+  <link rel="stylesheet" href="../css/cq.css">
+
+  <!-- MathJax (render formulas cleanly) -->
+  <script>
+    if(!window.MathJax){
+      window.MathJax = {
+        tex: { inlineMath: [['$','$'], ['\\(','\\)']], displayMath: [['\\[','\\]'], ['$$','$$']], processEscapes:true, tags:'ams' },
+        options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+      };
+    }
+  </script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <style>
+    /* page-local sugar, keeps look aligned with cq.css */
+    .cq-article { max-width: 1080px; }
+    .lead { font-size: 1.05rem; }
+    .grid2 { display:grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .grid3 { display:grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+    .card { background: color-mix(in oklab, currentColor 6%, transparent); border:1px solid var(--line); border-radius:12px; padding: .9rem; }
+    .table { width:100%; border-collapse: collapse; font-size:.95rem; }
+    .table th, .table td { padding:.6rem .7rem; border-bottom:1px solid var(--line); text-align:left; }
+    .table thead th { font-weight:700; }
+    .pill { display:inline-block; border:1px solid color-mix(in oklab,currentColor 30%,transparent); border-radius:999px; padding:.15rem .55rem; font-size:.78rem; margin-right:.35rem; opacity:.92; }
+    .small { font-size:.92rem; }
+    .callout { border-left:3px solid var(--accent); padding-left:.75rem; }
+    @media (max-width: 960px){ .grid2,.grid3{ grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<article class="cq-article" id="cq-article">
+  <header class="cq-hero cq-hero-slim">
+    <h1>2026 Playbook: Gold, Bitcoin — and Why Structure Beats Spot</h1>
+    <p class="cq-muted">From a structured-products director’s desk: what HNIs will actually buy, how to pitch it, and where the real P&amp;L comes from.</p>
+    <div class="cq-tags" style="margin-top:.25rem">
+      <span class="pill">Gold</span><span class="pill">Bitcoin</span><span class="pill">Quanto/FX</span><span class="pill">Autocalls</span><span class="pill">Range Accrual</span>
+    </div>
+  </header>
+
+  <p class="lead">
+    HNIs can hold spot gold and BTC themselves. Our job in 2026 is to <em>engineer better risk-adjusted carry and path control</em> than spot — inside wrappers they can deploy at size,
+    roll automatically, and explain in a minute. Below is the product set, the market frame, and the talking points that convert.
+  </p>
+
+  <h2>1) Market frame for 2026 (what matters for structure)</h2>
+  <div class="grid3">
+    <div class="card">
+      <strong>Gold bid persists</strong><br>
+      Central-bank buying + “policy fragility” keep strategic demand alive. HNIs want <em>carry</em> without losing gold’s defensive convexity.
+    </div>
+    <div class="card">
+      <strong>Bitcoin is optionality, not cash</strong><br>
+      BTC’s portability story is real; tail risk is too. It mints coupon via realized vol but can break narrative on liquidity, venues, or regulation.
+    </div>
+    <div class="card">
+      <strong>USD issues</strong><br>
+      High deficits and geopolitics keep the “alternative reserve” meme alive. Clients won’t dump USD; they will <em>barbell</em> with hard-asset exposure.
+    </div>
+  </div>
+
+  <h2>2) Why structure vs “just hold gold/BTC”</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3 style="margin-top:0">Client benefit (plain speak)</h3>
+      <ul>
+        <li><strong>Income over safe assets:</strong> turn gold’s vol into coupons while keeping drawdown guardrails.</li>
+        <li><strong>Path control:</strong> KO ladders, memory accruals, and floors beat buy-and-pray P&amp;L paths.</li>
+        <li><strong>Funding &amp; tax wrappers:</strong> hold notes/ETP wrappers where custody is simple and booking is standard.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Desk edge (how we win)</h3>
+      <ul>
+        <li><strong>Harvest correlation/quanto:</strong> price in FX and cross-asset basis the client can’t synthesize in spot.</li>
+        <li><strong>Capacity &amp; roll:</strong> auto-roll wrappers build recurring flow; liquidity managed at term boundaries.</li>
+        <li><strong>Risk budgeting:</strong> shape gamma/vega where it’s hedgeable; avoid “vega inversion” zones near barriers into expiry.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>3) Product menu (2026 deployable)</h2>
+
+  <h3>3.1 Gold Range-Accrual (USD quanto)</h3>
+  <p class="callout small">
+    <strong>Pitch:</strong> “Get paid while gold behaves.” Coupon accrues if XAU stays within a transparent corridor; add soft floor for optics.
+  </p>
+  <table class="table">
+    <thead><tr><th>Block</th><th>Spec</th><th>Why HNIs buy</th><th>Desk flags</th></tr></thead>
+    <tbody>
+      <tr><td>Underlying</td><td>XAUUSD (London fix) with USD quanto</td><td>Pure gold story, USD P&amp;L</td><td>Quanto load (ρ<sub>XAU,FX</sub>σ<sub>XAU</sub>σ<sub>FX</sub>)</td></tr>
+      <tr><td>Accrual</td><td>Pay c if XAU ∈ [L,U] daily</td><td>Steady carry, easy chart</td><td>Gap risk on fix days</td></tr>
+      <tr><td>Protection</td><td>Soft floor −f per day outside band</td><td>Optics of prudence</td><td>Calibration vs headline c</td></tr>
+    </tbody>
+  </table>
+
+  <h3>3.2 Gold Autocall (safety-biased)</h3>
+  <p class="callout small">
+    <strong>Pitch:</strong> “Short-tenor, recall quickly if gold behaves.” Monthly KO 95→100% step-up, memory coupon, <em>no KI</em>.
+  </p>
+  <table class="table">
+    <thead><tr><th>Tenor</th><th>KO</th><th>Coupon</th><th>Why HNIs buy</th><th>Desk flags</th></tr></thead>
+    <tbody>
+      <tr><td>6–12M</td><td>95→100% step</td><td>Memory, fixed c</td><td>Fast recycle, simple story</td><td>Lower c than KI notes; seasonal vol</td></tr>
+    </tbody>
+  </table>
+
+  <h3>3.3 BTC–Gold Basket Memory Note</h3>
+  <p class="callout small">
+    <strong>Pitch:</strong> “Gold stabilizes, BTC pays.” Equal-weighted basket; accrual or fixed coupon with memory; USD settle.
+  </p>
+  <table class="table">
+    <thead><tr><th>Why</th><th>When to use</th><th>Key risk</th></tr></thead>
+    <tbody>
+      <tr><td>Monetize BTC vol; diversify path</td><td>Dovish soft-landing, risk appetite</td><td>BTC venue/liquidity events; basis</td></tr>
+    </tbody>
+  </table>
+
+  <h3>3.4 Gold Laddered Income (step-up coupon)</h3>
+  <p class="callout small">
+    <strong>Pitch:</strong> “Pay me more if you don’t recall me.” Clean, no-math explanation; great for RMs.
+  </p>
+
+  <h2>4) “Why not just buy gold (or BTC)?” — talking points</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3 style="margin-top:0">Gold vs structured gold</h3>
+      <ul>
+        <li><strong>Income:</strong> spot gold has no carry; range-accrual/autocall converts behavior into coupon.</li>
+        <li><strong>Path:</strong> with KO, you monetize “normal” regimes fast; spot needs a sustained trend.</li>
+        <li><strong>Risk framing:</strong> notes let you pre-define loss ladders/floors; spot is full delta all the time.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">BTC vs structured BTC</h3>
+      <ul>
+        <li><strong>Harness vol, don’t fear it:</strong> baskets/memory make BTC’s vol pay income.</li>
+        <li><strong>Venue risk isolation:</strong> USD settle, vetted components (ETF/futures) vs exchange custody DIY.</li>
+        <li><strong>Behavioral edge:</strong> structures reduce FOMO/panic churn that hurts BTC spot investors.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>5) The risks (say them out loud)</h2>
+  <div class="grid3">
+    <div class="card">
+      <strong>Bitcoin pathologies</strong>
+      <ul class="small">
+        <li>Exchange/venue incidents, sudden funding squeezes</li>
+        <li>Policy whiplash; listing/ETF flow reversal</li>
+        <li>Weekend gaps; dislocations vs fair</li>
+      </ul>
+    </div>
+    <div class="card">
+      <strong>Gold specifics</strong>
+      <ul class="small">
+        <li>Fix/holiday gaps; jewelry/CB flow seasonality</li>
+        <li>Real rates shocks; USD squeezes</li>
+        <li>Band breach clustering in range products</li>
+      </ul>
+    </div>
+    <div class="card">
+      <strong>USD backdrop</strong>
+      <ul class="small">
+        <li>Deficits/issuance keep term premia choppy</li>
+        <li>Geopolitics pushes “alt-reserve” narratives</li>
+        <li>Quanto cost &ne; free — explain it</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>6) Two napkin formulas you’ll actually use with clients</h2>
+  <p><strong>6.1 Quanto adjustment (USD P&amp;L on gold):</strong></p>
+  <p>
+    \[
+      \text{Quanto adj} \approx -\,\rho_{\text{XAU,FX}}\;\sigma_{\text{XAU}}\;\sigma_{\text{FX}}\;T \times S_0.
+    \]
+    Language: “The fee you pay to keep everything in USD without touching FX.” Sign follows USD–gold–FX geometry.
+  </p>
+  <p><strong>6.2 Range-accrual fair coupon (toy intuition):</strong></p>
+  <p>
+    If daily inside-band probability is \(p\), then a first-cut coupon is \(c \approx p \times \text{(implied vol budget)}\).
+    Wider bands ↑\(p\) → lower headline \(c\) but higher realized accrual. Use backtests to set \(p\) the client trusts.
+  </p>
+
+  <h2>7) When to pitch what (2026 cheat sheet)</h2>
+  <table class="table">
+    <thead><tr><th>Macro tape</th><th>Pitch</th><th>Why it lands</th></tr></thead>
+    <tbody>
+      <tr><td>Soft-landing, steady USD</td><td>Gold Autocall (no KI) + auto-roll</td><td>Quick recycling; clean income; minimal foot-guns</td></tr>
+      <tr><td>Risk-off, USD up</td><td>Gold Range-Accrual (wider band)</td><td>Pay to wait; visual band story calms clients</td></tr>
+      <tr><td>Risk appetite returns</td><td>BTC–Gold basket with memory</td><td>BTC vol prints coupon; gold caps drawdown optics</td></tr>
+    </tbody>
+  </table>
+
+  <footer class="cq-muted small" style="margin-top:1rem">
+    Director’s rule: if an RM can’t tell the story with one chart and three bullets, it won’t scale. Build the chart, hand them the bullets.
+  </footer>
+</article>
+
+<script>
+  // Ensure MathJax typesets if loaded after DOM
+  document.addEventListener('DOMContentLoaded', ()=>{
+    if (window.MathJax && MathJax.typesetPromise){
+      MathJax.typesetPromise([document.getElementById('cq-article')]).catch(()=>{});
+    }
+  });
+</script>
+
+</body>
+</html>
+

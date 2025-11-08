@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CQ Lab — Gold vs “Digital Gold”: Correlation, Quanto Drift, and Barbell Hedges</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- CoffeeQuant theme -->
+  <link rel="stylesheet" href="../css/cq.css" />
+
+  <!-- MathJax (global, same config used on index.html) -->
+  <script>
+    window.MathJax = { tex:{ inlineMath:[['$','$'],['\\(','\\)']], displayMath:[['\\[','\\]'],['$$','$$']], processEscapes:true } };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Chart.js (lightweight, good defaults) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    .cq-article { max-width: 1200px; margin: 0 auto; padding: 1.25rem 1.25rem 2.5rem; }
+    h1 { letter-spacing: -0.015em; margin:.25rem 0 .75rem; }
+    h2 { margin: 1.25rem 0 .5rem; }
+    .muted { opacity:.78; }
+    .small { font-size:.92rem; }
+    .row { display:flex; gap:1rem; flex-wrap:wrap; align-items:flex-start; }
+    .col { flex:1 1 320px; min-width:280px; }
+    .card { background: color-mix(in oklab, currentColor 8%, transparent); border:1px solid color-mix(in oklab,currentColor 24%, transparent); border-radius:12px; padding:1rem; }
+    .tight { padding:.75rem .9rem; }
+    .grid2 { display:grid; grid-template-columns: repeat(2, minmax(260px, 1fr)); gap:1rem; }
+    .grid3 { display:grid; grid-template-columns: repeat(3, minmax(220px, 1fr)); gap:.75rem; }
+    .table { width:100%; border-collapse:collapse; font-size:.95rem; }
+    .table th, .table td { border-bottom:1px dashed color-mix(in oklab,currentColor 24%, transparent); padding:.4rem .5rem; text-align:left; }
+    .pill { display:inline-block; border:1px solid color-mix(in oklab,currentColor 30%,transparent); border-radius:999px; padding:.15rem .6rem; font-size:.8rem; opacity:.9; }
+    .btn { background: var(--accent, #2563eb); color:#fff; border:0; border-radius:8px; padding:.55rem .9rem; cursor:pointer; font-size:.95rem; }
+    .btn:hover { filter:brightness(0.95); }
+    .btn-ghost { background: transparent; border:1px solid color-mix(in oklab,currentColor 30%,transparent); color:inherit; }
+    .ctrl label { display:block; font-weight:600; margin:.25rem 0 .15rem; }
+    .ctrl input { width:100%; padding:.45rem .55rem; border:1px solid color-mix(in oklab,currentColor 30%, transparent); border-radius:8px; background: transparent; color:inherit; }
+    .legend { display:flex; gap:.5rem; flex-wrap:wrap; align-items:center; }
+    .legend span { display:inline-flex; align-items:center; gap:.3rem; }
+    .legend i { width:10px; height:10px; display:inline-block; border-radius:2px; }
+    canvas { width:100%; height:320px; border:1px solid color-mix(in oklab,currentColor 24%, transparent); border-radius:12px; background: transparent; }
+    .notice { background: color-mix(in oklab, currentColor 6%, transparent); border:1px dashed color-mix(in oklab,currentColor 28%, transparent); padding:.65rem .8rem; border-radius:10px; }
+    .nowrap { white-space:nowrap; }
+    @media (max-width: 900px) { .grid2 { grid-template-columns: 1fr; } .grid3 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <article class="cq-article" id="root">
+    <header class="row" style="justify-content:space-between; align-items:flex-end">
+      <div class="col" style="flex:1 1 520px">
+        <h1>Gold vs “Digital Gold” — correlation, quanto, and a simple barbell</h1>
+        <p class="muted">Insurance assets aren’t identical. Gold is physical and sovereign-agnostic; Bitcoin is digital and adoption-driven. This lab lets you <em>show</em> the differences with clean numbers—then structure around them.</p>
+      </div>
+      <div class="col" style="max-width:360px">
+        <div class="card tight">
+          <div class="grid2">
+            <div><span class="pill">Gold • Macro</span></div>
+            <div><span class="pill">BTC • Digital</span></div>
+          </div>
+          <p class="small muted" style="margin:.5rem 0 0">Tip: paste your own series below (CSV, two columns: <code>date,price</code>) to replace demo data.</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- 1) Quanto forward simulator -->
+    <section>
+      <h2>1) Quanto forward uplift (USD investor on XAU)</h2>
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <p class="muted small">Under USD measure, lognormal gold (XAU) with FX converts to USD quanto forward:</p>
+            <p>
+              \[
+                F_{\text{quanto}}(0,T)=
+                S_0\exp\!\big((r_{\text{USD}}-q-\rho\,\sigma_{\text{XAU}}\sigma_{\text{FX}})T\big)
+              \]
+            </p>
+            <div class="grid3 ctrl" style="margin-top:.5rem">
+              <div><label>Spot XAUUSD, $S_0$</label><input id="q_s0" type="number" step="0.01" value="4000"></div>
+              <div><label>Tenor, $T$ (yrs)</label><input id="q_T" type="number" step="0.1" value="1.0"></div>
+              <div><label>r<sub>USD</sub> (annual)</label><input id="q_r" type="number" step="0.001" value="0.03"></div>
+              <div><label>Convenience yield, $q$</label><input id="q_q" type="number" step="0.001" value="0.00"></div>
+              <div><label>σ<sub>XAU</sub></label><input id="q_sx" type="number" step="0.001" value="0.16"></div>
+              <div><label>σ<sub>FX</sub></label><input id="q_sfx" type="number" step="0.001" value="0.09"></div>
+              <div><label>ρ (XAU vs USD FX)</label><input id="q_rho" type="number" step="0.01" value="-0.20"></div>
+            </div>
+            <div class="row" style="margin-top:.6rem">
+              <button class="btn" onclick="calcQuanto()">Compute quanto forward</button>
+              <button class="btn btn-ghost" onclick="resetQuanto()">Reset</button>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card tight">
+            <h3 style="margin:.2rem 0 .4rem">Results</h3>
+            <table class="table">
+              <tbody>
+                <tr><td>Plain forward (no quanto term)</td><td class="nowrap" id="plainF">—</td></tr>
+                <tr><td>Quanto forward</td><td class="nowrap" id="quantoF">—</td></tr>
+                <tr><td>Quanto uplift (annualized drift adj)</td><td class="nowrap" id="uplift">—</td></tr>
+              </tbody>
+            </table>
+            <p class="small muted" style="margin:.5rem 0 0">If ρ &lt; 0 (gold up, USD up tends to be opposite), the <strong>quanto forward rises</strong> vs the plain forward by $-\rho\,\sigma_{\text{XAU}}\sigma_{\text{FX}}$ each year. That’s supportive for USD-quanto calls on gold.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2) Barbell allocator -->
+    <section>
+      <h2>2) Barbell — Gold (insurance) + BTC (convex tail)</h2>
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="grid3 ctrl">
+              <div><label>Gold weight</label><input id="bb_wG" type="number" step="0.05" value="0.8"></div>
+              <div><label>BTC weight</label><input id="bb_wB" type="number" step="0.05" value="0.2"></div>
+              <div><label>Rebalance (months)</label><input id="bb_rb" type="number" step="1" value="1"></div>
+            </div>
+            <div class="row" style="margin-top:.6rem">
+              <button class="btn" onclick="runBarbell()">Simulate barbell</button>
+              <button class="btn btn-ghost" onclick="loadDemo()">Load demo data</button>
+            </div>
+            <p class="small muted" style="margin:.5rem 0 0">Use demo monthly series or paste your own below. Rebalance keeps the convex leg from running away in calm regimes.</p>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card tight">
+            <h3 style="margin:.2rem 0 .4rem">Quick stats</h3>
+            <table class="table">
+              <tbody>
+                <tr><td>Gold (ann. μ / σ)</td><td id="st_g">—</td></tr>
+                <tr><td>BTC  (ann. μ / σ)</td><td id="st_b">—</td></tr>
+                <tr><td>Barbell (ann. μ / σ)</td><td id="st_bar">—</td></tr>
+                <tr><td>Rolling 95% drawdown (barbell)</td><td id="st_dd">—</td></tr>
+              </tbody>
+            </table>
+            <p class="small muted">These are simple arithmetic estimates from the loaded series; use your own book data for proper risk.</p>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top:.75rem">
+        <div class="col">
+          <div class="card">
+            <h3 style="margin:.2rem 0 .6rem">Cumulative growth</h3>
+            <canvas id="barbellChart"></canvas>
+            <div class="legend small muted" style="margin-top:.5rem">
+              <span><i style="background:#4e79a7"></i>Gold</span>
+              <span><i style="background:#f28e2b"></i>BTC</span>
+              <span><i style="background:#59a14f"></i>Barbell</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3) Correlation / Tail beta -->
+    <section>
+      <h2>3) Rolling correlation and left-tail beta (vs SPX)</h2>
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <p class="muted small">Paste CSV for each series (two columns: <code>date,price</code>). We’ll compute monthly log returns, 6-month rolling corr, and tail beta vs SPX for the lowest 20% SPX months.</p>
+            <div class="grid2">
+              <div>
+                <label><strong>Gold CSV</strong></label>
+                <textarea id="csv_gold" style="width:100%; height:120px"></textarea>
+              </div>
+              <div>
+                <label><strong>BTC CSV</strong></label>
+                <textarea id="csv_btc" style="width:100%; height:120px"></textarea>
+              </div>
+              <div>
+                <label><strong>SPX CSV</strong></label>
+                <textarea id="csv_spx" style="width:100%; height:120px"></textarea>
+              </div>
+              <div>
+                <div class="row" style="gap:.5rem; margin-top:1.25rem">
+                  <button class="btn" onclick="parseAndCompute()">Compute</button>
+                  <button class="btn btn-ghost" onclick="loadDemo()">Demo data</button>
+                </div>
+                <p class="small muted" style="margin-top:.4rem">Dates must align reasonably; we’ll inner-join on month.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card">
+            <h3 style="margin:.2rem 0 .6rem">Rolling 6-month correlation</h3>
+            <canvas id="corrChart"></canvas>
+            <div class="legend small muted" style="margin-top:.5rem">
+              <span><i style="background:#4e79a7"></i>Gold vs SPX</span>
+              <span><i style="background:#f28e2b"></i>BTC vs SPX</span>
+            </div>
+          </div>
+          <div class="card" style="margin-top:.75rem">
+            <h3 style="margin:.2rem 0 .6rem">Left-tail beta (20% worst SPX months)</h3>
+            <table class="table">
+              <tbody>
+                <tr><td>Gold tail beta vs SPX</td><td id="tb_g">—</td></tr>
+                <tr><td>BTC tail beta vs SPX</td><td id="tb_b">—</td></tr>
+              </tbody>
+            </table>
+            <p class="small muted">Tail beta = OLS slope of asset returns on SPX returns restricted to bottom 20% SPX months. Lower (or negative) is better as insurance.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4) Notes and takeaway -->
+    <section>
+      <h2>Takeaways for clients</h2>
+      <div class="card">
+        <ul>
+          <li><strong>Insurance ≠ identical behavior:</strong> Gold’s left-tail co-move with SPX is typically lower than BTC’s; BTC brings convex upside in “risk-on” windows.</li>
+          <li><strong>Quanto matters for USD buyers of gold:</strong> With negative ρ (gold vs USD), quanto forward is higher than plain forward by \( -\rho\sigma_{\text{XAU}}\sigma_{\text{FX}} \), supportive for USD-quanto calls.</li>
+          <li><strong>Barbell clarity:</strong> Keep the majority in the physical-style insurance leg (gold), then overlay a disciplined BTC call allocation (rebalance).</li>
+        </ul>
+        <p class="muted small notice">This page is an educational lab. Use dealer curves, house vol surfaces, and production data for decisions. Not investment advice.</p>
+      </div>
+    </section>
+  </article>
+
+  <script>
+    // ----------------- Utilities -----------------
+    function toMonths(dateStr){
+      const d = new Date(dateStr);
+      if (isNaN(d)) return null;
+      return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+    }
+    function parseCSV(txt){
+      // expects two columns: date,price
+      const out = [];
+      (txt||'').trim().split(/\r?\n/).forEach((line,i)=>{
+        const parts = line.split(/[,;\s]+/);
+        if (parts.length < 2) return;
+        if (i===0 && isNaN(+parts[1])) return; // header row
+        const m = toMonths(parts[0]); if(!m) return;
+        const v = +parts[1]; if(!isFinite(v) || v <= 0) return;
+        out.push([m, v]);
+      });
+      // aggregate by month (last point)
+      const map = new Map();
+      out.forEach(([m,v])=> map.set(m, v));
+      const arr = Array.from(map.entries()).sort((a,b)=> a[0]<b[0] ? -1 : 1);
+      return arr; // [ [YYYY-MM, price], ... ]
+    }
+    function alignMonthly(a, b){
+      const ma = new Map(a), mb = new Map(b);
+      const months = Array.from(new Set([...ma.keys(), ...mb.keys()])).sort();
+      const out = [];
+      months.forEach(m=>{
+        if (ma.has(m) && mb.has(m)) out.push([m, ma.get(m), mb.get(m)]);
+      });
+      return out; // [ [month, aPrice, bPrice], ... ]
+    }
+    function toReturns(arr){ // monthly log returns
+      const out = [];
+      for (let i=1;i<arr.length;i++){
+        const m = arr[i][0];
+        const r = Math.log(arr[i][1]/arr[i-1][1]);
+        out.push([m, r]);
+      }
+      return out; // [ [month, r], ... ]
+    }
+    function rollingCorr(pairs, win=6){
+      const out = [];
+      for (let i=win-1;i<pairs.length;i++){
+        const seg = pairs.slice(i-win+1, i+1);
+        const xs = seg.map(p=>p[1]), ys = seg.map(p=>p[2]);
+        const mx = xs.reduce((s,x)=>s+x,0)/xs.length;
+        const my = ys.reduce((s,y)=>s+y,0)/ys.length;
+        let num=0, vx=0, vy=0;
+        for (let k=0;k<xs.length;k++){
+          const dx=xs[k]-mx, dy=ys[k]-my;
+          num += dx*dy; vx += dx*dx; vy += dy*dy;
+        }
+        const c = (vx>0 && vy>0) ? (num/Math.sqrt(vx*vy)) : NaN;
+        out.push([pairs[i][0], c]);
+      }
+      return out;
+    }
+    function tailBeta(pairs, q=0.2){
+      // pairs: [ [month, r_asset, r_spx], ... ]
+      const spx = pairs.map(p=>p[2]).slice().sort((a,b)=>a-b);
+      if (!spx.length) return NaN;
+      const cut = spx[Math.floor(q*spx.length)];
+      const tail = pairs.filter(p=>p[2] <= cut);
+      if (tail.length < 6) return NaN;
+      const xs = tail.map(p=>p[2]), ys = tail.map(p=>p[1]);
+      const mx = xs.reduce((s,x)=>s+x,0)/xs.length;
+      const my = ys.reduce((s,y)=>s+y,0)/ys.length;
+      let num=0, den=0;
+      for (let i=0;i<xs.length;i++){ const dx=xs[i]-mx; num+=dx*(ys[i]-my); den+=dx*dx; }
+      return den>0 ? num/den : NaN;
+    }
+    function annStats(retsMonthly){ // return [annMean, annVol]
+      const m = retsMonthly;
+      if (!m.length) return [NaN, NaN];
+      const mean = m.reduce((s,x)=>s+x,0)/m.length;
+      const varM = m.reduce((s,x)=>s+(x-mean)*(x-mean),0)/Math.max(1,m.length-1);
+      const annMu = mean*12;
+      const annSig = Math.sqrt(varM*12);
+      return [annMu, annSig];
+    }
+    function drawdown(series){ // array of cumulative values
+      let peak = -Infinity, maxDD = 0;
+      for (const v of series){
+        if (v>peak) peak=v;
+        maxDD = Math.min(maxDD, v/peak - 1);
+      }
+      return maxDD; // negative number
+    }
+
+    // ----------------- Demo Data (synthetic, monthly) -----------------
+    // Short synthetic sequences—replace by paste for production.
+    function demoSeries(){
+      // months (24 months)
+      const months = [];
+      const base = new Date('2024-01-01');
+      for (let i=0;i<30;i++){
+        const d = new Date(base.getFullYear(), base.getMonth()+i, 1);
+        months.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'));
+      }
+      // Build rough paths
+      let gold = 2000, btc=45000, spx=4500;
+      const outG=[], outB=[], outS=[];
+      for (let i=0;i<months.length;i++){
+        const rg = 0.005 + 0.06*(Math.random()-0.5);  // ~0.5%/m with some noise
+        const rb = 0.02 + 0.25*(Math.random()-0.5);   // more volatile BTC
+        const rs = 0.006 + 0.05*(Math.random()-0.5);
+        gold *= Math.exp(rg);
+        btc  *= Math.exp(rb);
+        spx  *= Math.exp(rs);
+        outG.push([months[i], gold]);
+        outB.push([months[i], btc]);
+        outS.push([months[i], spx]);
+      }
+      return {gold:outG, btc:outB, spx:outS};
+    }
+
+    // ----------------- Quanto Forward -----------------
+    function calcQuanto(){
+      const S0   = +document.getElementById('q_s0').value;
+      const T    = +document.getElementById('q_T').value;
+      const r    = +document.getElementById('q_r').value;
+      const q    = +document.getElementById('q_q').value;
+      const sX   = +document.getElementById('q_sx').value;
+      const sFX  = +document.getElementById('q_sfx').value;
+      const rho  = +document.getElementById('q_rho').value;
+
+      const plain = S0*Math.exp((r - q)*T);
+      const uplift = (-rho*sX*sFX); // annual drift bump
+      const quanto = S0*Math.exp((r - q - rho*sX*sFX)*T);
+
+      document.getElementById('plainF').textContent = plain.toFixed(2);
+      document.getElementById('quantoF').textContent = quanto.toFixed(2);
+      document.getElementById('uplift').textContent = (uplift*100).toFixed(2) + ' bps/yr';
+    }
+    function resetQuanto(){
+      document.getElementById('q_s0').value = 4000;
+      document.getElementById('q_T').value  = 1.0;
+      document.getElementById('q_r').value  = 0.03;
+      document.getElementById('q_q').value  = 0.00;
+      document.getElementById('q_sx').value = 0.16;
+      document.getElementById('q_sfx').value= 0.09;
+      document.getElementById('q_rho').value= -0.20;
+      calcQuanto();
+    }
+
+    // ----------------- Charts -----------------
+    let corrChart, barbellChart;
+
+    function ensureChart(ctx, cfg){
+      if (ctx._chart) { ctx._chart.destroy(); }
+      ctx._chart = new Chart(ctx, cfg);
+      return ctx._chart;
+    }
+
+    // ----------------- Paste / Parse / Compute -----------------
+    function loadDemo(){
+      const d = demoSeries();
+      const toCSV = arr => "date,price\n" + arr.map(a=>a[0]+","+a[1].toFixed(2)).join("\n");
+      document.getElementById('csv_gold').value = toCSV(d.gold);
+      document.getElementById('csv_btc').value  = toCSV(d.btc);
+      document.getElementById('csv_spx').value  = toCSV(d.spx);
+      parseAndCompute();
+    }
+
+    function parseAndCompute(){
+      const g = parseCSV(document.getElementById('csv_gold').value);
+      const b = parseCSV(document.getElementById('csv_btc').value);
+      const s = parseCSV(document.getElementById('csv_spx').value);
+      if (!g?.length || !b?.length || !s?.length){
+        alert('Please paste CSV for Gold, BTC, and SPX (two columns: date,price). Or click Demo data.');
+        return;
+      }
+      // Align to months and convert to returns
+      const gR = toReturns(g);
+      const bR = toReturns(b);
+      const sR = toReturns(s);
+
+      // join returns on month
+      const map = (arr)=> new Map(arr.map(x=>[x[0], x[1]]));
+      const mg = map(gR), mb=map(bR), ms=map(sR);
+      const months = Array.from(new Set([...mg.keys()])).filter(m=>mb.has(m) && ms.has(m)).sort();
+
+      const gpairs = months.map(m=>[m, mg.get(m), ms.get(m)]); // gold vs spx
+      const bpairs = months.map(m=>[m, mb.get(m), ms.get(m)]); // btc vs spx
+
+      // rolling corr 6m
+      const rcg = rollingCorr(gpairs, 6); // [ [m, corr], ... ]
+      const rcb = rollingCorr(bpairs, 6);
+
+      // tail betas
+      const tbG = tailBeta(gpairs, 0.2);
+      const tbB = tailBeta(bpairs, 0.2);
+      document.getElementById('tb_g').textContent = isFinite(tbG) ? tbG.toFixed(2) : 'n/a';
+      document.getElementById('tb_b').textContent = isFinite(tbB) ? tbB.toFixed(2) : 'n/a';
+
+      // draw correlation chart
+      const ctx = document.getElementById('corrChart').getContext('2d');
+      ensureChart(ctx, {
+        type:'line',
+        data:{
+          labels: rcg.map(x=>x[0]),
+          datasets:[
+            { label:'Gold vs SPX', data: rcg.map(x=>x[1]), borderWidth:2, pointRadius:0, tension:.2 },
+            { label:'BTC vs SPX',  data: rcb.map(x=>x[1]), borderWidth:2, pointRadius:0, tension:.2 }
+          ]
+        },
+        options:{
+          responsive:true,
+          interaction:{ mode:'index', intersect:false },
+          scales:{
+            y:{ suggestedMin:-1, suggestedMax:1, grid:{ drawBorder:false } },
+            x:{ grid:{ display:false } }
+          },
+          plugins:{ legend:{ display:false } }
+        }
+      });
+
+      // store globals for barbell
+      window._CQ_G = months.map(m=>mg.get(m)); // monthly gold returns
+      window._CQ_B = months.map(m=>mb.get(m)); // monthly btc returns
+      window._CQ_labels = months;
+
+      // update single-asset stats now
+      const [gMu,gSig] = annStats(window._CQ_G);
+      const [bMu,bSig] = annStats(window._CQ_B);
+      document.getElementById('st_g').textContent = isFinite(gMu) ? (gMu*100).toFixed(1)+'% / '+(gSig*100).toFixed(1)+'%' : '—';
+      document.getElementById('st_b').textContent = isFinite(bMu) ? (bMu*100).toFixed(1)+'% / '+(bSig*100).toFixed(1)+'%' : '—';
+    }
+
+    // ----------------- Barbell -----------------
+    function runBarbell(){
+      const wG = +document.getElementById('bb_wG').value;
+      const wB = +document.getElementById('bb_wB').value;
+      const rb = Math.max(1, Math.floor(+document.getElementById('bb_rb').value));
+
+      const G = window._CQ_G, B = window._CQ_B, L = window._CQ_labels;
+      if (!G || !B || !L){ alert('Load demo data or paste CSV above first.'); return; }
+      if (Math.abs(wG + wB - 1) > 1e-6){
+        alert('Weights must sum to 1.'); return;
+      }
+
+      // monthly portfolio returns with periodic rebalance
+      let w1 = wG, w2 = wB;
+      const pR = [];
+      let cumG=1, cumB=1, cumP=1;
+      const curveG=[1], curveB=[1], curveP=[1];
+
+      for (let i=0;i<G.length;i++){
+        const rG = G[i], rB = B[i];
+        const rp = w1*rG + w2*rB;
+        pR.push(rp);
+        cumG *= Math.exp(rG);
+        cumB *= Math.exp(rB);
+        cumP *= Math.exp(rp);
+        curveG.push(cumG);
+        curveB.push(cumB);
+        curveP.push(cumP);
+        if ((i+1)%rb===0){ w1 = wG; w2 = wB; } // rebalance to target
+        else {
+          // drift weights passively
+          const growth1 = (1+w1)*Math.exp(rG) - 1; // quick proxy (not exact)
+          const growth2 = (1+w2)*Math.exp(rB) - 1;
+          const tot = growth1 + growth2;
+          if (tot>0){ w1 = growth1/tot; w2 = growth2/tot; }
+        }
+      }
+
+      // stats
+      const [pMu, pSig] = annStats(pR);
+      const maxDD = drawdown(curveP);
+      document.getElementById('st_bar').textContent = isFinite(pMu) ? (pMu*100).toFixed(1)+'% / '+(pSig*100).toFixed(1)+'%' : '—';
+      document.getElementById('st_dd').textContent  = isFinite(maxDD) ? (maxDD*100).toFixed(1)+'%' : '—';
+
+      // chart
+      const ctx = document.getElementById('barbellChart').getContext('2d');
+      ensureChart(ctx, {
+        type:'line',
+        data:{
+          labels:['Start', ...L],
+          datasets:[
+            { label:'Gold', data:curveG, borderWidth:2, pointRadius:0, tension:.2 },
+            { label:'BTC',  data:curveB, borderWidth:2, pointRadius:0, tension:.2 },
+            { label:'Barbell', data:curveP, borderWidth:2, pointRadius:0, tension:.2 }
+          ]
+        },
+        options:{
+          responsive:true,
+          interaction:{ mode:'index', intersect:false },
+          scales:{
+            y:{ grid:{ drawBorder:false } },
+            x:{ grid:{ display:false } }
+          },
+          plugins:{ legend:{ display:false } }
+        }
+      });
+    }
+
+    // init
+    calcQuanto();
+    // Optional: preload demo so the page feels alive
+    loadDemo();
+  </script>
+</body>
+</html>
+

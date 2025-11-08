@@ -1,5 +1,14 @@
 {
   "items": [
+
+{
+  "title": "Gold vs “Digital Gold”",
+  "deck": "Correlation, quanto forward drift, and a simple gold–BTC barbell you can play with.",
+  "link": "statics/WriteUps/BTCvsGold.html",
+  "thumb": "statics/img/thumbs/gold.jpeg",
+  "tags": ["Gold", "BTC", "Quanto", "Correlation"]
+},
+
    {
       "title": "Random Walk Lab",
       "deck": "Simulate price paths with drift and vol. See possible futures.",
