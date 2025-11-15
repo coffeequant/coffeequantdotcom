@@ -1,5 +1,15 @@
 {
   "items": [
+
+    {
+      "title": "Gold, AI, and the Reinvention of Yield — 2026 Outlook",
+      "deck": "What PB/HNI will actually buy, how wrappers evolve, and where QIS fits.",
+      "link": "statics/WriteUps/Gold_AI_Yield_2026.html",
+      "thumb": "statics/img/thumbs/gold-ai-2026.png",
+      "tags": ["Metals","AI","Wrappers","QIS"],
+      "date": "2025-11-08"
+    },
+
     {
       "title": "Risk-Neutral Probability",
       "deck": "Turning messy market odds into fair pricing odds.",

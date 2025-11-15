@@ -1,4 +1,7 @@
 runtime: python312
-service: default
 entrypoint: uvicorn main:app --host 0.0.0.0 --port $PORT
+automatic_scaling:
+  min_instances: 1
+  max_instances: 3
+  target_cpu_utilization: 0.65
 
