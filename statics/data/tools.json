@@ -5,7 +5,8 @@
   "deck": "Price annual crediting on a vol-target excess-return index. Caps, floors, participation, distribution.",
   "thumb": "statics/img/thumbs/iul.jpeg",
   "tags": ["IUL","VolTarget","Pricing"],
-  "link": "statics/Tools/IULLab.html"
+  "link": "statics/Tools/IULLab.html",
+  "premium": true
 },
 
     {
@@ -13,14 +14,16 @@
       "deck": "Terminal-style calculator: Black–Scholes, Greeks, IV, Kelly…",
       "link": "statics/Tools/PricingCLI.html",
       "thumb": "statics/img/thumbs/cli.webp",
-      "tags": ["Options","Fast"]
+      "tags": ["Options","Fast"],
+      "premium":true
     },
     {
       "title": "Cross Gamma Lab",
       "deck": "Worst-of put stress map. Watch correlation turn into pain.",
       "thumb": "statics/img/thumbs/crossgamma.webp",
       "link": "statics/Tools/CrossGammaLab.html",
-      "tags": ["Correlation","Risk"]
+      "tags": ["Correlation","Risk"],
+      "premium": true
     },
 
 
@@ -29,14 +32,16 @@
       "deck": "How far do I move the barrier so I don't bleed my fee in hedge panic.",
       "link": "statics/Tools/BarrierShiftTool.html",
       "thumb": "statics/img/thumbs/betsizing.webp",
-      "tags": ["Exotics","Hedging"]
+      "tags": ["Exotics","Hedging"],
+      "premium": true
     },
      {
       "title": "Structurer CLI",
       "deck": "Black–Scholes, IV, Kelly, quick PnL shocks — in a browser terminal.",
       "link": "statics/Tools/CMDNew.html",
       "thumb": "statics/img/thumbs/quant...webp",
-      "tags": ["Options", "Greeks", "PnL"]
+      "tags": ["Options", "Greeks", "PnL"],
+      "premium": true
     }
  ]
 }

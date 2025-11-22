@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Your Plan · CoffeeQuant</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../css/cq.css" />
+  <script>
+    window.CQ_GOOGLE_CLIENT_ID = "58596950813-89s7vbdb1lnhom1t93mc979lgp5143eo.apps.googleusercontent.com";
+  </script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="../js/auth.js" defer></script>
+  <script src="../js/premium.js" defer></script>
+</head>
+<body class="cq-body">
+  <div class="cq-shell">
+    <nav class="cq-nav" role="navigation" aria-label="Main">
+      <a class="cq-logo" href="/" aria-label="CoffeeQuant Home">☕ CoffeeQuant</a>
+      <div class="cq-navlinks">
+        <a href="/">Home</a>
+        <a href="/statics/Tools/premium.html">Premium</a>
+      </div>
+      <div id="cqAuthBox" class="cq-authbox">
+        <div id="cqAuthLabel" class="cq-auth-label cq-muted">Not signed in</div>
+        <button id="cqSignInBtn" class="cq-btn-ghost-small">Sign in</button>
+        <button id="cqSignOutBtn" class="cq-btn-ghost-small" style="display:none;">Sign out</button>
+        <div id="gSignInBtn" style="display:none;"></div>
+      </div>
+    </nav>
+  </div>
+
+  <main class="cq-main cq-main-single">
+    <section class="cq-section cq-section-narrow">
+      <div class="cq-strip" data-strip="premium"></div>
+      <div class="cq-section-head">
+        <h1>Your plan</h1>
+      </div>
+      <article class="cq-article">
+        <div id="cqBillingBox" class="cq-callout">
+          <p class="cq-muted">Loading your subscription…</p>
+        </div>
+        <p class="cq-smallhint">
+          For billing questions, reach out to <a href="mailto:hello@coffeequant.example">hello@coffeequant.example</a>.
+        </p>
+      </article>
+    </section>
+  </main>
+
+  <footer class="cq-footer">
+    <div class="cq-shell">
+      <div>☕ CoffeeQuant · Fast. Minimal. Curious. No ads.</div>
+    </div>
+  </footer>
+
+  <script>
+    (async function(){
+      const box = document.getElementById('cqBillingBox');
+      if (!box || !window.CQAuth) return;
+      const user = window.CQAuth.getUser();
+      if (!user) {
+        box.innerHTML = `
+          <h2>Not signed in</h2>
+          <p class="cq-muted">Sign in with Google first to see your plan status.</p>
+        `;
+        return;
+      }
+
+      try {
+        const token = window.CQAuth.getToken();
+        const res = await fetch('/api/user/subscription/status', {
+          headers: {
+            'accept': 'application/json',
+            ...(token ? { 'authorization': 'Bearer ' + token } : {})
+          }
+        });
+        if (!res.ok) {
+          throw new Error('HTTP ' + res.status);
+        }
+        const data = await res.json();
+        if (data.premium) {
+          box.classList.add('cq-callout-success');
+          const until = data.premium_until
+            ? new Date(data.premium_until).toLocaleDateString()
+            : 'Unknown';
+          box.innerHTML = `
+            <h2>Premium 🔒✅</h2>
+            <p>You currently have an active CoffeeQuant Premium subscription.</p>
+            <p class="cq-muted">Valid until <strong>${until}</strong>.</p>
+          `;
+        } else {
+          box.classList.add('cq-callout-warn');
+          box.innerHTML = `
+            <h2>Free tier</h2>
+            <p class="cq-muted">You’re on the free plan. Premium tools and articles are locked.</p>
+            <p><a href="/statics/Tools/premium.html" class="cq-btn cq-btn-primary">Upgrade to Premium</a></p>
+          `;
+        }
+      } catch (err) {
+        box.classList.add('cq-callout-warn');
+        box.innerHTML = `
+          <h2>Couldn’t load subscription</h2>
+          <p class="cq-muted">Something went wrong while loading your plan.</p>
+          <pre class="cq-pre">${String(err)}</pre>
+        `;
+      }
+    })();
+  </script>
+</body>
+</html>
+
+
+

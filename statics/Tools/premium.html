@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CoffeeQuant Premium — Unlock Labs & Tools</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../css/cq.css" />
+  <script>
+    window.CQ_GOOGLE_CLIENT_ID = "58596950813-89s7vbdb1lnhom1t93mc979lgp5143eo.apps.googleusercontent.com";
+  </script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="../js/auth.js" defer></script>
+  <script src="../js/premium.js" defer></script>
+</head>
+<body class="cq-body">
+
+  <div class="cq-shell">
+    <nav class="cq-nav" role="navigation" aria-label="Main">
+      <a class="cq-logo" href="/" aria-label="CoffeeQuant Home">☕ CoffeeQuant</a>
+
+      <div class="cq-navlinks">
+        <a href="/">Home</a>
+        <a href="/#labs">Labs</a>
+        <a href="/#tools">Tools</a>
+        <a href="/#notes">Notes</a>
+      </div>
+
+      <div id="cqAuthBox" class="cq-authbox">
+        <div id="cqAuthLabel" class="cq-auth-label cq-muted">Not signed in</div>
+        <button id="cqSignInBtn" class="cq-btn-ghost-small">Sign in</button>
+        <button id="cqSignOutBtn" class="cq-btn-ghost-small" style="display:none;">Sign out</button>
+        <div id="gSignInBtn" style="display:none;"></div>
+      </div>
+    </nav>
+  </div>
+
+  <main class="cq-main cq-main-single">
+    <section class="cq-section cq-section-wide">
+      <div class="cq-strip" data-strip="premium"></div>
+      <div class="cq-section-head">
+        <h1>CoffeeQuant Premium</h1>
+        <span class="cq-pill cq-pill-premium">Premium</span>
+      </div>
+
+      <article class="cq-article">
+        <div class="cq-premium-grid">
+          <div class="cq-premium-card">
+            <h2>Why upgrade?</h2>
+            <ul class="cq-list-bullets">
+              <li>Full access to **IUL Lab**, vol-target and wrapper tools</li>
+              <li>Premium “desk-style” writeups with structurer-level detail</li>
+              <li>Cross-gamma / basket risk labs as they launch</li>
+              <li>Priority feature input: shape what gets built next</li>
+            </ul>
+
+            <div class="cq-premium-plan">
+              <div class="cq-premium-price">
+                <span class="cq-premium-amount">US$99</span>
+                <span class="cq-premium-period">per year</span>
+              </div>
+              <p class="cq-muted">Single subscription unlocks all current and future premium tools for 12 months.</p>
+            </div>
+
+            <div id="cqPremiumCtaBox" class="cq-premium-cta">
+              <div id="cqPremiumStatus" class="cq-muted">Checking your subscription…</div>
+              <button id="cqUpgradeBtn" class="cq-btn cq-btn-primary" disabled>
+                Upgrade with card / Apple Pay
+              </button>
+              <p class="cq-smallhint">You’ll be redirected to a secure Stripe checkout page.</p>
+            </div>
+          </div>
+
+          <aside class="cq-premium-aside">
+            <h3>What you’ll unlock</h3>
+            <div class="cq-premium-feature">
+              <h4>IUL Vol-Target Lab</h4>
+              <p class="cq-muted">ETF-style IUL crediting sim, excess-return vs price-return intuition, JSON exports for product teams.</p>
+            </div>
+            <div class="cq-premium-feature">
+              <h4>Desk-Grade Articles</h4>
+              <p class="cq-muted">Gold / BTC / wrappers, QIS in 2026, cross-gamma failure modes — written from a structurer’s desk, not marketing.</p>
+            </div>
+            <div class="cq-premium-feature">
+              <h4>Next Wave Tools</h4>
+              <p class="cq-muted">Planned: cross-gamma visualizer, quanto wrappers playground, basket stress engines.</p>
+            </div>
+            <div class="cq-premium-note cq-muted cq-smallhint">
+              Premium is aimed at RMs, structurers, and serious investors. No spam, no gated fluff.
+            </div>
+          </aside>
+        </div>
+
+        <hr class="cq-hr" />
+
+        <h2>How it works</h2>
+        <ol class="cq-list-steps">
+          <li>Sign in with your Google account (top right).</li>
+          <li>Click **Upgrade** and complete payment via Stripe Checkout.</li>
+          <li>Once confirmed, your account is marked **Premium** for 12 months.</li>
+          <li>Premium tools and articles automatically unlock when you’re signed in.</li>
+        </ol>
+      </article>
+    </section>
+  </main>
+
+  <footer class="cq-footer">
+    <div class="cq-shell">
+      <div>☕ CoffeeQuant · Fast. Minimal. Curious. No ads.</div>
+      <div style="margin-top:.4rem">
+        <a href="/rss.xml">RSS</a> ·
+        <a href="mailto:hello@coffeequant.example">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
+

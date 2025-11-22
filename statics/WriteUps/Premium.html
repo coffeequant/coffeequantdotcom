@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CoffeeQuant Premium — Labs, Tools & QIS Wrappers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- MathJax (optional, in case you drop formulas here) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$','$$']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Main theme -->
+  <link rel="stylesheet" href="/statics/css/cq.css" />
+</head>
+
+<body>
+  <!-- Top shell + nav (same as index) -->
+  <div class="cq-shell">
+    <nav class="cq-nav" role="navigation" aria-label="Main">
+      <a class="cq-logo" href="/" aria-label="CoffeeQuant Home">☕ CoffeeQuant</a>
+
+      <div class="cq-navlinks">
+        <a href="/#daily">Daily</a>
+        <a href="/#labs">Labs</a>
+        <a href="/#tools">Tools</a>
+        <a href="/#notes">Notes</a>
+        <a href="/#curios">Curios</a>
+        <a href="/statics/WriteUps/" class="cq-hide">Archive</a>
+      </div>
+
+      <!-- Auth box (same IDs as index.html so auth.js can reuse) -->
+      <div id="cqAuthBox" class="cq-authbox">
+        <div id="cqAuthLabel" class="cq-auth-label cq-muted">Not signed in</div>
+        <button id="cqSignInBtn" class="cq-btn-ghost-small">Sign in</button>
+        <button id="cqSignOutBtn" class="cq-btn-ghost-small" style="display:none;">Sign out</button>
+        <div id="gSignInBtn" style="display:none;"></div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- SINGLE COLUMN MAIN (no left dock, no maingrid) -->
+  <main class="cq-main cq-main-single" role="main">
+    <section class="cq-section cq-section-wide" aria-labelledby="premiumTitle">
+      <div class="cq-strip" data-strip="premium"></div>
+
+      <div class="cq-section-head">
+        <h1 id="premiumTitle">CoffeeQuant Premium</h1>
+        <span class="cq-pill cq-pill-premium">Member</span>
+      </div>
+
+      <!-- Guard message (in case someone opens without being allowed by JS gate) -->
+      <div id="cqPremiumGate" class="cq-card cq-premium-gate cq-hide">
+        <p class="cq-muted">
+          This page is for CoffeeQuant Premium members.
+          Please sign in with Google and make sure your subscription is active.
+        </p>
+      </div>
+
+      <!-- MAIN PREMIUM CARD -->
+      <article class="cq-card cq-premium-card">
+        <div class="cq-premium-grid">
+          <!-- LEFT: value / pitch -->
+          <div class="cq-premium-left">
+            <h2>Labs, engines, and wrappers built for real desks</h2>
+            <p class="cq-lead">
+              CoffeeQuant Premium is where the “toy” examples turn into
+              production-grade templates: pricing engines, QIS bricks,
+              IUL&nbsp;illustrators and structuring helpers you can actually
+              use in client conversations.
+            </p>
+
+            <ul class="cq-points">
+              <li><strong>Structuring labs</strong> — vol-target IUL, gold &amp; BTC wrappers, cross-gamma visualizers.</li>
+              <li><strong>Downloadable JSON</strong> for term-sheets, payoff specs and basket definitions.</li>
+              <li><strong>Daily desk notes</strong> on wrappers, autocalls, and QIS ideas built from current macro.</li>
+            </ul>
+
+            <div class="cq-premium-cta">
+              <a href="/#tools" class="cq-btn">Back to tools</a>
+              <a href="/" class="cq-btn-ghost">Home</a>
+            </div>
+          </div>
+
+          <!-- RIGHT: simple plan box -->
+          <aside class="cq-premium-right">
+            <div class="cq-plan-card">
+              <div class="cq-plan-label">Pilot phase</div>
+              <div class="cq-plan-price">
+                <span class="cq-plan-num">$X</span>
+                <span class="cq-plan-unit">/year</span>
+              </div>
+              <ul class="cq-plan-list">
+                <li>Unlock Premium-tagged labs &amp; tools</li>
+                <li>JSON / CSV exports for pricing inputs</li>
+                <li>Occasional deep-dive write-ups</li>
+              </ul>
+              <p class="cq-plan-note cq-muted">
+                Payments &amp; live pricing APIs are being rolled out in stages.
+                For now access is limited to invited users.
+              </p>
+            </div>
+          </aside>
+        </div>
+      </article>
+
+      <!-- FEATURE GRID -->
+      <section class="cq-section cq-premium-section">
+        <div class="cq-section-head cq-section-head-sub">
+          <h2>What you actually get as a structurer</h2>
+        </div>
+
+        <div class="cq-grid cq-premium-features">
+          <div class="cq-tile cq-premium-feature">
+            <h3>1. IUL &amp; vol-target lab</h3>
+            <p class="cq-muted">
+              Fast back-of-envelope pricing on index-linked crediting with cap / participation /
+              floor, plus P&amp;L-style views in excess-return space. Designed to talk both actuaries
+              and RMs through the same graph.
+            </p>
+          </div>
+
+          <div class="cq-tile cq-premium-feature">
+            <h3>2. Cross-gamma playground</h3>
+            <p class="cq-muted">
+              Visualize worst-of, quanto and PRDC-style exposures with simple sliders on
+              correlation, tenor, and basis. Use it to explain “why this hedge is expensive”
+              without opening a single PDF.
+            </p>
+          </div>
+
+          <div class="cq-tile cq-premium-feature">
+            <h3>3. Wrapper templates</h3>
+            <p class="cq-muted">
+              JSON blocks for PB notes, fund wrappers and IUL strategies:
+              underlyings, barriers, coupons and risk-budget annotations —
+              so you can paste them into your internal engines or slide decks.
+            </p>
+          </div>
+
+          <div class="cq-tile cq-premium-feature">
+            <h3>4. Desk-level commentary</h3>
+            <p class="cq-muted">
+              Occasional long-form notes on where QIS, wrappers and
+              autocalls are actually going — from someone who still runs
+              a book.
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="cq-footer">
+    <div class="cq-shell">
+      <div>☕ CoffeeQuant · Fast. Minimal. Curious. No ads.</div>
+      <div style="margin-top:.4rem">
+        <a href="/rss.xml">RSS</a> ·
+        <a href="mailto:hello@coffeequant.example">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Auth & MathJax re-typeset -->
+  <script src="/statics/js/auth.js"></script>
+  <script>
+    if (window.MathJax && MathJax.typesetPromise) {
+      MathJax.typesetPromise().catch(()=>{});
+    }
+  </script>
+</body>
+</html>
+

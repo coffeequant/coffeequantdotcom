@@ -5,3 +5,11 @@ automatic_scaling:
   max_instances: 3
   target_cpu_utilization: 0.65
 
+
+handlers:
+  - url: /statics/js/(.*)
+    static_files: statics/js/\1
+    upload: statics/js/(.*)
+    http_headers:
+      Cross-Origin-Opener-Policy: unsafe-none
+

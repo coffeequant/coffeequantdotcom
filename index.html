@@ -20,8 +20,20 @@
   <script id="MathJax-script" async
     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
 
-  <!-- Theme / layout / dojo-flavored nav -->
+  <!-- Theme / layout -->
   <link rel="stylesheet" href="statics/css/cq.css" />
+
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <!-- Expose your Google client id for auth.js -->
+  <script>
+    // TODO: put your real Web client ID here (the one that allows localhost & coffee.coffeequant.com)
+    window.CQ_GOOGLE_CLIENT_ID = "58596950813-89s7vbdb1lnhom1t93mc979lgp5143eo.apps.googleusercontent.com";
+  </script>
+
+  <!-- Auth logic (Google login + premium gating) -->
+  <script src="statics/js/auth.js" defer></script>
 </head>
 
 <body>
@@ -30,13 +42,24 @@
   <div class="cq-shell">
     <nav class="cq-nav" role="navigation" aria-label="Main">
       <a class="cq-logo" href="/" aria-label="CoffeeQuant Home">☕ CoffeeQuant</a>
+
       <div class="cq-navlinks">
         <a href="#daily">Daily</a>
-        <a href="statics/WriteUps/DailyMacro.html">Macro</a> <!-- NEW -->
         <a href="#labs">Labs</a>
         <a href="#tools">Tools</a>
         <a href="#notes">Notes</a>
         <a href="#curios">Curios</a>
+	<a href="statics/WriteUps/Premium.html">Premium</a>
+        <a href="statics/WriteUps/" class="cq-hide">Archive</a>
+      </div>
+
+      <!-- Auth area (single instance) -->
+      <div id="cqAuthBox" class="cq-authbox">
+        <div id="cqAuthLabel" class="cq-auth-label cq-muted">Not signed in</div>
+        <button id="cqSignInBtn" class="cq-btn-ghost-small">Sign in</button>
+        <button id="cqSignOutBtn" class="cq-btn-ghost-small" style="display:none;">Sign out</button>
+        <!-- Google-rendered button lives here (we keep it small / subtle) -->
+        <div id="gSignInBtn" class="cq-google-btn-container"></div>
       </div>
     </nav>
 
@@ -58,8 +81,8 @@
       <div class="cq-hero__content">
         <h1 id="heroTitle">Daily sparks. Playable math. Real desk intuition.</h1>
         <p class="cq-muted cq-hero-tagline">
-          Fast, no-bull takes on risk, optionality, and weird market edges.
-          Built for people who actually trade risk, not just talk about it.
+          Fast, no-bull takes on risk, optionality, and weird market edges —
+          built for desks, structurers, and people who actually trade risk.
         </p>
         <div class="cq-cta">
           <a class="cq-btn" href="#labs">Explore Labs</a>
@@ -76,7 +99,6 @@
     <aside class="cq-dock" aria-label="Section navigation">
       <h4>Navigate</h4>
       <a href="#daily">📰 Daily</a>
-      <a href="statics/WriteUps/DailyMacro.html">📉 Daily Macro Tape</a> <!-- NEW -->
       <a href="#labs">🧪 Labs</a>
       <a href="#tools">⌨️ Tools</a>
       <a href="#notes">📝 Notes</a>
@@ -102,21 +124,6 @@
         <article id="dailyCard" class="cq-card cq-card-block cq-daily" aria-live="polite">
           <div class="cq-skeleton">Loading today’s spark…</div>
         </article>
-
-        <!-- NEW: little inline pointer to macro tape -->
-        <div class="cq-card cq-card-block" style="margin-top:.75rem;">
-          <div class="cq-card-body" style="padding:.5rem .75rem;">
-            <div class="cq-card-title" style="font-size:.9rem; font-weight:600;">
-              Market tape in plain English
-            </div>
-            <div class="cq-card-deck cq-muted" style="font-size:.8rem; line-height:1.4;">
-              Rates are screaming slowdown, equities are still partying.
-              See the latest:
-              <a href="statics/WriteUps/DailyMacro.html">Daily Macro Tape →</a>
-            </div>
-          </div>
-        </div>
-        <!-- /NEW -->
       </section>
 
       <!-- ====== LABS ====== -->
@@ -160,25 +167,6 @@
           <div class="cq-skeleton">Loading notes…</div>
         </div>
       </section>
-	
-      <section id="videos" class="cq-section">
-  <div class="cq-strip" data-strip="videos"></div>
-  <div class="cq-section-head">
-    <h2 id="sec-videos">Video Insights</h2>
-    <span class="cq-pill">Watch & Learn</span>
-  </div>
-  <div class="cq-grid">
-    <a class="cq-tile" href="statics/WriteUps/Videos.html">
-	<div class="cq-imgwrap">
-	  <img src="statics/img/thumbs/videos.webp" alt="CoffeeQuant Videos" class="cq-imgthumb" />
-	</div>
-
-      <h3>Video Library</h3>
-      <p class="cq-muted">Visual explainers for traders and quants.</p>
-      <div class="cq-tags"><span>Videos</span><span>Intuition</span></div>
-    </a>
-  </div>
-</section>
 
       <!-- ====== CURIOS ====== -->
       <section id="curios" class="cq-section" aria-labelledby="sec-curios">
@@ -241,6 +229,19 @@
     } catch(e){ return ''; }
   }
 
+  // ---------- HERO BACKGROUND ----------
+  async function renderHeroBg(){
+    const slot = $('#heroBg'); if(!slot) return;
+    const data = await loadJSON('statics/data/hero.json');
+    if(!data || !data.images || !data.images.length) return;
+    const idx = (new Date()).getDay() % data.images.length;
+    const it = data.images[idx];
+    if(it && it.src){
+      slot.style.backgroundImage = `url("${it.src}")`;
+      slot.setAttribute('aria-label', it.alt || 'hero background');
+    }
+  }
+
   // ---------- DAILY ----------
   async function renderDaily(){
     const data = await loadJSON('statics/data/daily.json');
@@ -252,7 +253,6 @@
       return;
     }
 
-    // pick today's item if exists, else rotate by weekday
     const today = new Date().toISOString().slice(0,10);
     const exactIdx = data.items.findIndex(i => i.date === today);
     const pick = exactIdx >= 0 ? exactIdx : (new Date().getDay() % data.items.length);
@@ -272,7 +272,6 @@
       </div>
     `;
 
-    // typeset math inside daily card if present
     if (window.MathJax && MathJax.typesetPromise) {
       MathJax.typesetPromise([host]).catch(console.error);
     }
@@ -281,7 +280,8 @@
   // ---------- generic grid renderer (labs / tools / notes) ----------
   function renderGrid(listEl, items){
     listEl.innerHTML = items.map(it => `
-      <a class="cq-tile" href="${it.link}">
+      <a class="cq-tile ${it.premium ? 'cq-tile--premium' : ''}" href="${it.link}">
+        ${ it.premium ? '<div class="cq-tile-badge cq-pill cq-pill-premium">Premium</div>' : '' }
         <div class="cq-imgwrap">
           ${ it.thumb
              ? `<img src="${it.thumb}" alt="" class="cq-imgthumb" />`
@@ -324,7 +324,6 @@
       host.innerHTML = '<div class="cq-skeleton">No notes yet.</div>';
       return;
     }
-    // slice(0,6) so it doesn't get huge
     renderGrid(host, data.items.slice(0,6));
   }
 
@@ -336,29 +335,17 @@
       return;
     }
     host.innerHTML = data.items.map(it => `
-      <div class="cq-list-item">
+      <div class="cq-list-item ${it.premium ? 'cq-list-item--premium' : ''}">
         <div class="cq-list-main">
           <div class="cq-list-title">
             ${it.link ? `<a href="${it.link}">${it.title}</a>` : it.title}
+            ${ it.premium ? '<span class="cq-pill cq-pill-premium cq-pill-premium-inline">Premium</span>' : '' }
           </div>
           <div class="cq-list-desc cq-muted">${it.deck || ''}</div>
         </div>
         <div class="cq-list-meta cq-muted">${fmtDate(it.date) || ''}</div>
       </div>
     `).join('');
-  }
-
-  // ---------- HERO BACKGROUND ----------
-  async function renderHeroBg(){
-    const slot = $('#heroBg'); if(!slot) return;
-    const data = await loadJSON('statics/data/hero.json');
-    if(!data || !data.images || !data.images.length) return;
-    const idx = (new Date()).getDay() % data.images.length;
-    const it = data.images[idx];
-    if(it && it.src){
-      slot.style.backgroundImage = `url("${it.src}")`;
-      slot.setAttribute('aria-label', it.alt || 'hero background');
-    }
   }
 
   // ---------- INIT ----------
@@ -370,7 +357,7 @@
     await renderNotes();
     await renderCurios();
 
-    // generate fallback covers *before* typeset
+    // generate fallback covers
     document.querySelectorAll('.cq-imggen[data-cover]').forEach(div=>{
       if (window.CQCover) {
         CQCover.inject(div, div.getAttribute('data-cover'));

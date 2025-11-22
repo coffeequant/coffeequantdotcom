@@ -361,6 +361,138 @@ html::before {
   position:relative;
 }
 
+
+/* Base main layout (existing) */
+/* .cq-main { ... } */
+/* .cq-maingrid { display:grid; ... } */
+
+/* Single-column pages (premium, standalone tools, etc.) */
+.cq-main-single {
+  max-width: 900px;
+  margin: 2rem auto 3rem;
+  padding: 0 1.25rem;
+  display: block;           /* important: override any grid */
+}
+/* Premium strip color */
+.cq-strip[data-strip="premium"] {
+  background: linear-gradient(135deg, rgba(255, 215, 0, .4), rgba(244, 248, 255, .4));
+}
+
+/* Premium pill */
+.cq-pill-premium {
+  background: linear-gradient(135deg, #facc15, #eab308);
+  color: #422006;
+}
+
+/* Premium card layout */
+.cq-premium-card {
+  margin-top: 1rem;
+}
+
+.cq-premium-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2.1fr) minmax(260px, 1.2fr);
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.cq-premium-left h2 {
+  font-size: 1.4rem;
+  margin-bottom: .5rem;
+}
+
+.cq-lead {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.cq-points {
+  margin: 0 0 1.25rem 1.2rem;
+  padding: 0;
+  font-size: .95rem;
+}
+.cq-points li {
+  margin-bottom: .4rem;
+}
+
+/* CTA row */
+.cq-premium-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  margin-top: .75rem;
+}
+
+/* Right-hand plan box */
+.cq-premium-right {
+  min-width: 260px;
+}
+
+.cq-plan-card {
+  border-radius: 1rem;
+  padding: 1.25rem 1.4rem;
+  background: radial-gradient(circle at top left,
+              rgba(250, 204, 21, 0.18),
+              rgba(15, 23, 42, 1));
+  color: #fefce8;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.45);
+}
+
+.cq-plan-label {
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+  opacity: .9;
+  margin-bottom: .6rem;
+}
+
+.cq-plan-price {
+  display: flex;
+  align-items: baseline;
+  gap: .3rem;
+  margin-bottom: .6rem;
+}
+.cq-plan-num {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+.cq-plan-unit {
+  font-size: .9rem;
+  opacity: .8;
+}
+
+.cq-plan-list {
+  margin: 0 0 .75rem 1.1rem;
+  padding: 0;
+  font-size: .9rem;
+}
+.cq-plan-list li {
+  margin-bottom: .35rem;
+}
+
+.cq-plan-note {
+  font-size: .8rem;
+}
+
+/* Gate message (hidden by default, JS can show) */
+.cq-premium-gate {
+  margin-top: .75rem;
+}
+
+/* Smaller screens: stack left/right blocks */
+@media (max-width: 800px) {
+  .cq-premium-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .cq-premium-right {
+    order: -1;
+  }
+}
+
+
+
+
 /* Left dock (sticky nav) */
 .cq-dock {
   position:sticky;
@@ -856,3 +988,157 @@ button:focus-visible,
   border-radius: 6px;
 }
 
+.cq-nav-account {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-left: auto;
+  font-size: .9rem;
+}
+
+.cq-btn-ghost-small {
+  border: 1px solid rgba(255,255,255,.4);
+  background: transparent;
+  color: inherit;
+  padding: .25rem .6rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.cq-user-badge {
+  padding: .2rem .6rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+}
+
+
+/* --- User Auth Indicator --- */
+/* ---- Auth widget ---- */
+/* Auth box in nav */
+.cq-authbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.cq-auth-label {
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cq-auth-btn {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.8rem;
+}
+
+/* Premium tiles */
+.cq-tile--premium {
+  position: relative;
+}
+
+.cq-tile--premium::before {
+  content: "Premium";
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  padding: 0.15rem 0.45rem;
+  font-size: 0.7rem;
+  border-radius: 999px;
+  background: rgba(180, 83, 9, 0.92);
+  color: #fff;
+}
+
+.cq-tile-locked {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.cq-tile-locked:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+
+
+/* ==== Auth box in top nav ==== */
+
+.cq-authbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.cq-auth-label {
+  white-space: nowrap;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cq-btn-ghost-small {
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: transparent;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  cursor: pointer;
+  color: inherit;
+}
+
+.cq-btn-ghost-small:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+.cq-google-btn-container {
+  display: inline-block;
+}
+
+/* When signed in, you can optionally fade the generic Sign in text
+   (we already hide it via JS, this is just a fallback) */
+body.cq-has-session #cqSignInBtn {
+  display: none;
+}
+
+/* ==== Premium badges ==== */
+
+.cq-tile {
+  position: relative;
+}
+
+.cq-tile-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 0.65rem;
+  padding: 0.15rem 0.4rem;
+  z-index: 2;
+}
+
+.cq-pill-premium {
+  background: linear-gradient(135deg,#f5c542,#f08a00);
+  color: #261300;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.cq-pill-premium-inline {
+  margin-left: 0.4rem;
+  vertical-align: middle;
+}
+
+/* Optional subtle border or glow for premium tiles */
+.cq-tile--premium {
+  border: 1px solid rgba(245,197,66,0.5);
+  box-shadow: 0 0 0 1px rgba(245,197,66,0.15);
+}
+
+.cq-list-item--premium .cq-list-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}

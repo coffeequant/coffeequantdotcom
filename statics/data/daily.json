@@ -1,8 +1,17 @@
 {
   "items": [
+    {
+      "date": "2025-11-22",
+      "title": "AI - Why it Matters?",
+      "deck": "Why Traditional Market Skeptics Misread AI",
+      "link": "statics/WriteUps/AI.html",
+      "thumb": "statics/images/ai.jpeg",
+      "tags": ["Macro", "Digital Gold", "Structured Ideas"],
+      "html": "<p><strong>2008-style intuition doesnt transfer to GPU economics. Housing bubbles,            bond convexity, and bank balance sheets live in one universe. AI lives in another: governed by physics scaling laws, and brutal engineering</p>"
+    },
 
     {
-      "date": "2025-11-08",
+      "date": "2025-11-22",
       "title": "All That Glitters Isn’t (Only) Gold",
       "deck": "Gold rebounds near $4,000 as traders reassess Fed cuts — Bitcoin mirrors the same fear trade in digital form. What happens when both hedge the same risk?",
       "link": "statics/WriteUps/ArticleBIT.html",
@@ -10,8 +19,9 @@
       "tags": ["Macro", "Digital Gold", "Structured Ideas"],
       "html": "<p><strong>Gold vs Bitcoin:</strong> Two 'insurance assets' in one macro moment. Gold steadies after a $3,800–$4,050 consolidation, while BTC toys with $100k — both priced on faith in fiat fragility. Our charts track correlation flips, left-tail betas, and structurable hedges combining metals and crypto.</p>"
     },
+
  {
-   "date": "2025-11-01",
+   "date": "2025-11-11",
    "title": "Rates say slowdown. Equities say party.",
   "deck": "10y UST < 4%. Tech still euphoric. One of them is lying.",
   "link": "statics/WriteUps/DailyMacro.html",
