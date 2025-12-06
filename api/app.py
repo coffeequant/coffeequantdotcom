@@ -1,315 +1,317 @@
-"""
-CoffeeQuant backend API
-
-- Serves the static SPA (index.html + /statics/*)
-- Google Sign-In callback stub (returns a demo session token)
-- IUL / vol-target Monte Carlo endpoint
-- Stripe scaffolding for future subscriptions
-"""
-
 import os
-import datetime as dt
+import json
+import base64
+import secrets
+import math
+import random
 from pathlib import Path
 from typing import Optional, Dict, Any
 
-import stripe
-from fastapi import FastAPI, Request, Header, HTTPException, Depends
+from fastapi import FastAPI, Request, Response, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, Field
+from fastapi.responses import (
+    FileResponse, HTMLResponse, JSONResponse, PlainTextResponse
+)
+from pydantic import BaseModel
 
-from .auth import router as auth_router  # your existing auth router (for future use)
+# -----------------------------------------------------------------------------
+#   OPTIONAL STRIPE
+# -----------------------------------------------------------------------------
+try:
+    import stripe as stripe_lib
+except ImportError:
+    stripe_lib = None
 
-# ----------------- Stripe config (scaffolding) -----------------
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
+STRIPE_PRICE_ID_YEARLY = os.getenv("STRIPE_PRICE_ID_YEARLY", "")
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
+FRONTEND_BASE_URL = os.getenv("FRONTEND_BASE_URL", "http://localhost:8000")
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
 
-stripe.api_key = os.environ.get("STRIPE_SECRET_KEY", "")
+if stripe_lib and STRIPE_SECRET_KEY:
+    stripe_lib.api_key = STRIPE_SECRET_KEY
 
-# Yearly subscription price (Stripe Price ID)
-STRIPE_PRICE_ID = os.environ.get("STRIPE_PRICE_ID", "")
+# -----------------------------------------------------------------------------
+#   FASTAPI APP
+# -----------------------------------------------------------------------------
+app = FastAPI()
 
-# Webhook secret for Stripe (used by /api/billing/webhook)
-STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
-
-# VERY simple in-memory subscription store (dev only).
-# Replace with Firestore / DB in production.
-_SUBS_DB: Dict[str, Dict[str, Any]] = {}
-
-# ----------------- FastAPI app + CORS -----------------
-
-app = FastAPI(title="CoffeeQuant API", docs_url=None, redoc_url=None)
+BASE_DIR = Path(__file__).resolve().parent.parent
+STATIC_DIR = BASE_DIR / "statics"
+INDEX_FILE = BASE_DIR / "index.html"
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],   # you can tighten this to your domains later
+    allow_origins=[
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+        "https://coffee.coffeequant.com",
+        "http://coffee.coffeequant.com",
+        "https://coffeequant.appspot.com",
+    ],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ----------------- Auth / user helpers -----------------
+app.mount("/statics", StaticFiles(directory=str(STATIC_DIR)), name="statics")
 
+# -----------------------------------------------------------------------------
+#   SIMPLE SESSION STORE
+# -----------------------------------------------------------------------------
+SESSIONS: Dict[str, Dict[str, Any]] = {}
+PREMIUM_OVERRIDE = {"animesh.saxena@gmail.com"}
 
-class CQUser(BaseModel):
-    sub: str
-    email: str
-    name: Optional[str] = None
-    picture: Optional[str] = None
+def _decode_jwt_noverify(token: str) -> Optional[dict]:
+    """Decode payload of Google JWT WITHOUT verifying (signature verified client-side)."""
+    try:
+        parts = token.split(".")
+        if len(parts) != 3:
+            return None
+        payload_b64 = parts[1]
+        padding = "=" * (-len(payload_b64) % 4)
+        data = base64.urlsafe_b64decode(payload_b64 + padding)
+        return json.loads(data.decode("utf-8"))
+    except Exception:
+        return None
 
-
-def get_user_from_token(authorization: Optional[str] = Header(default=None)) -> CQUser:
-    """
-    SUPER simple placeholder. In production you should verify the token (e.g. JWT).
-    For now we reuse the demo session token.
-    """
-    if not authorization:
-        raise HTTPException(status_code=401, detail="Missing Authorization header")
-
-    parts = authorization.split()
-    if len(parts) != 2 or parts[0].lower() != "bearer":
-        raise HTTPException(status_code=401, detail="Invalid Authorization header")
-
-    token = parts[1]
-
-    # Demo path: any client that has 'demo-session-token' is treated as a valid user.
-    if token == "demo-session-token":
-        return CQUser(
-            sub="demo-user-123",
-            email="demo@coffeequant.com",
-            name="CoffeeQuant Demo",
-            picture="https://www.gravatar.com/avatar?d=identicon",
-        )
-
-    # For now deny everything else.
-    raise HTTPException(status_code=401, detail="Unknown token")
-
-
-# ----------------- Google Identity callback stub -----------------
-
-
-class GoogleCallbackPayload(BaseModel):
-    # Matches the "credential" field from Google Identity Services
-    credential: str
-
-
-@app.post("/api/auth/google/callback")
-async def google_auth_callback(payload: GoogleCallbackPayload, request: Request):
-    """
-    Minimal stub: accepts a Google ID token from the browser,
-    pretends to validate it, and returns a session token + user payload.
-
-    Later you can plug in:
-      google.oauth2.id_token.verify_oauth2_token(...)
-    """
-    id_token_str = payload.credential  # noqa: F841  # not used yet
-
-    fake_user = {
-        "sub": "demo-user-123",
-        "email": "demo@coffeequant.com",
-        "name": "CoffeeQuant Demo",
-        "picture": "https://www.gravatar.com/avatar?d=identicon",
+def _new_session(user: dict) -> str:
+    token = secrets.token_hex(32)
+    SESSIONS[token] = {
+        "user": user,
+        "is_premium": user.get("is_premium", False)
     }
+    return token
 
-    return {
-        "ok": True,
-        "user": fake_user,
-        "token": "demo-session-token",
-    }
+def _get_session(request: Request) -> Optional[Dict[str, Any]]:
+    tok = request.cookies.get("cq_session")
+    if not tok:
+        tok = request.headers.get("X-CQ-Session")
+    if not tok:
+        return None
+    return SESSIONS.get(tok)
 
-
-# ----------------- Static / index routing -----------------
-
-ROOT = Path(__file__).resolve().parents[1]   # project root
-STATICS_DIR = ROOT / "statics"
-INDEX_HTML = ROOT / "index.html"
-FAVICON = ROOT / "favicon.ico"
-
-# Serve /statics/* from the statics folder
-app.mount("/statics", StaticFiles(directory=str(STATICS_DIR)), name="statics")
-
-# Include any extra auth routes you already have
-app.include_router(auth_router)
-
-
-@app.get("/_ah/health", include_in_schema=False)
-def gae_health():
-    """Health check for App Engine."""
-    return PlainTextResponse("ok")
-
-
-@app.get("/healthz", include_in_schema=False)
-def healthz():
-    """Simple health endpoint for curl / monitors."""
-    return {"ok": True}
-
-
-@app.get("/favicon.ico", include_in_schema=False)
-def favicon():
-    if FAVICON.exists():
-        return FileResponse(str(FAVICON))
-    return PlainTextResponse("", status_code=204)
-
-
-@app.get("/", include_in_schema=False)
-def index():
-    if INDEX_HTML.exists():
-        return FileResponse(str(INDEX_HTML))
+# -----------------------------------------------------------------------------
+#   ROOT
+# -----------------------------------------------------------------------------
+@app.get("/", response_class=HTMLResponse)
+async def root():
+    if INDEX_FILE.exists():
+        return FileResponse(str(INDEX_FILE))
     return PlainTextResponse("index.html not found", status_code=404)
 
+@app.get("/healthz")
+async def healthz():
+    return {"ok": True}
 
-# ----------------- IUL vol-target endpoint -----------------
+# -----------------------------------------------------------------------------
+#   GOOGLE SIGN-IN CALLBACK
+# -----------------------------------------------------------------------------
+class GoogleCredential(BaseModel):
+    credential: str
 
+from google.oauth2 import id_token
+from google.auth.transport import requests as grequests
 
-class VTReq(BaseModel):
-    s0: float = Field(100.0, description="Start level (unused for pure ER, kept for future)")
-    vt_vol: float = Field(0.10, description="Annual vol target (e.g., 0.10)")
-    years: float = Field(1.0, description="Maturity in years")
-    n_paths: int = Field(20000, description="Monte Carlo paths")
-    cap: float = Field(0.10, description="Cap per period")
-    floor: float = Field(0.00, description="Floor per period")
-    alpha: float = Field(1.0, description="Participation")
-    seed: Optional[int] = Field(None, description="Random seed")
+@app.post("/api/auth/google/callback")
+async def google_callback(request: Request):
+    data = await request.json()
+    credential = data.get("credential")
 
-
-class VTRsp(BaseModel):
-    ok: bool
-    mean_credit: float
-    stdev_credit: float
-    details: Dict[str, Any]
-
-
-def _price_iul_vt(req: VTReq) -> VTRsp:
-    """Monte Carlo on excess-return vol-target index with cap/floor."""
-    import numpy as np
-
-    rng = np.random.default_rng(req.seed)
-    T = req.years
-    sig = req.vt_vol
-
-    # Risk-neutral excess return: drift = -0.5 * sigma^2
-    z = rng.standard_normal(req.n_paths)
-    rt = np.exp(-0.5 * sig * sig * T + sig * (T ** 0.5) * z) - 1.0  # excess return
-    credit = np.clip(req.alpha * rt, req.floor, req.cap)
-
-    return VTRsp(
-        ok=True,
-        mean_credit=float(np.mean(credit)),
-        stdev_credit=float(np.std(credit, ddof=1)),
-        details={
-            "paths": req.n_paths,
-            "years": T,
-            "vt_vol": sig,
-            "cap": req.cap,
-            "floor": req.floor,
-            "alpha": req.alpha,
-        },
-    )
-
-
-@app.post("/api/iul/vt_price", response_model=VTRsp)
-def vt_price(req: VTReq):
-    """Public API used by IULLab.html."""
-    try:
-        return _price_iul_vt(req)
-    except Exception as e:  # pragma: no cover
-        return JSONResponse({"ok": False, "error": str(e)}, status_code=400)
-
-
-# ----------------- Stripe subscription scaffolding -----------------
-
-class CheckoutReq(BaseModel):
-    success_url: Optional[str] = None
-    cancel_url: Optional[str] = None
-    price_id: Optional[str] = None
-
-
-@app.post("/api/billing/checkout")
-def create_checkout_session(
-    req: CheckoutReq,
-    user: CQUser = Depends(get_user_from_token),
-):
-    """
-    Creates a Stripe Checkout session for yearly subscription.
-
-    Front-end will redirect the browser to the 'url' returned here.
-    """
-    if not stripe.api_key or not (STRIPE_PRICE_ID or req.price_id):
-        raise HTTPException(
-            status_code=500,
-            detail="Stripe not configured on server",
-        )
-
-    price_id = req.price_id or STRIPE_PRICE_ID
+    if not credential:
+        raise HTTPException(status_code=400, detail="Missing credential")
 
     try:
-        session = stripe.checkout.Session.create(
-            mode="subscription",
-            customer_email=user.email,
-            line_items=[{"price": price_id, "quantity": 1}],
-            success_url=req.success_url
-            or "https://coffee.coffeequant.com/?billing=success",
-            cancel_url=req.cancel_url
-            or "https://coffee.coffeequant.com/?billing=cancel",
+        payload = id_token.verify_oauth2_token(
+            credential,
+            grequests.Request(),
+            GOOGLE_CLIENT_ID
         )
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=401, detail=f"Google token invalid: {e}")
 
-    # Optional: optimistic mark in memory
-    _SUBS_DB[user.email] = {
-        "status": "pending",
-        "updated_at": dt.datetime.utcnow().isoformat(),
+    email = payload.get("email", "").lower()
+    name = payload.get("name", "")
+    picture = payload.get("picture", "")
+    sub = payload.get("sub", "")
+
+    # premium override
+    is_premium = email in PREMIUM_OVERRIDE
+
+    # Create session token
+    token = secrets.token_hex(32)
+    SESSIONS[token] = {
+        "user": {
+            "email": email,
+            "name": name,
+            "picture": picture,
+            "sub": sub,
+            "is_premium": is_premium,
+        },
+        "is_premium": is_premium
     }
 
-    return {"id": session.id, "url": session.url}
+    response = JSONResponse({
+        "ok": True,
+        "user": SESSIONS[token]["user"],
+        "token": token,
+    })
+    response.set_cookie("cq_session", token, httponly=False)
+    return response
 
+# -----------------------------------------------------------------------------
+#   LOGOUT
+# -----------------------------------------------------------------------------
+@app.post("/api/auth/logout")
+async def logout(request: Request, response: Response):
+    tok = request.cookies.get("cq_session")
+    if tok and tok in SESSIONS:
+        del SESSIONS[tok]
+    response.delete_cookie("cq_session")
+    return {"ok": True}
 
-@app.get("/api/me/subscription")
-def me_subscription(user: CQUser = Depends(get_user_from_token)):
-    """
-    Returns a very simple subscription status for the logged-in user.
+# -----------------------------------------------------------------------------
+#   USER SELF LOOKUP
+# -----------------------------------------------------------------------------
+@app.get("/api/user/me")
+async def user_me(request: Request):
+    sess = _get_session(request)
+    if not sess:
+        return {"ok": False, "user": None, "is_premium": False}
+    return {
+        "ok": True,
+        "user": sess["user"],
+        "is_premium": sess.get("is_premium", False),
+    }
 
-    For now uses an in-memory store keyed by email. Replace with DB later.
-    """
-    sub = _SUBS_DB.get(user.email)
-    if not sub:
-        return {"active": False, "status": "none"}
-    return {"active": sub.get("status") == "active", **sub}
+# -----------------------------------------------------------------------------
+#   STRIPE CHECKOUT
+# -----------------------------------------------------------------------------
+class CheckoutReq(BaseModel):
+    originPath: Optional[str] = None
 
+@app.post("/api/stripe/create-checkout")
+async def create_checkout(req: CheckoutReq, request: Request):
+    if not (stripe_lib and STRIPE_SECRET_KEY and STRIPE_PRICE_ID_YEARLY):
+        raise HTTPException(status_code=500, detail="Stripe not configured")
 
-@app.post("/api/billing/webhook")
-async def stripe_webhook(request: Request):
-    """
-    Stripe webhook endpoint.
+    sess = _get_session(request)
+    if not sess:
+        raise HTTPException(status_code=401, detail="Please sign in")
 
-    In production, register this URL in the Stripe dashboard and set
-    STRIPE_WEBHOOK_SECRET in App Engine env vars.
-    """
-    if not STRIPE_WEBHOOK_SECRET:
-        # If not configured, you probably don't want this endpoint live
-        raise HTTPException(status_code=400, detail="Webhook secret not configured")
+    email = sess["user"].get("email")
+    origin = req.originPath or "/"
 
-    payload = await request.body()
-    sig_header = request.headers.get("stripe-signature", "")
+    success_url = (
+        f"{FRONTEND_BASE_URL}/statics/Tools/PremiumSuccess.html"
+        f"?session_id={{CHECKOUT_SESSION_ID}}&origin={origin}"
+    )
+    cancel_url = f"{FRONTEND_BASE_URL}/statics/Tools/PremiumCancel.html"
 
     try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, STRIPE_WEBHOOK_SECRET
+        ck = stripe_lib.checkout.Session.create(
+            mode="subscription",
+            line_items=[{"price": STRIPE_PRICE_ID_YEARLY, "quantity": 1}],
+            customer_email=email,
+            success_url=success_url,
+            cancel_url=cancel_url,
         )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Stripe error: {e}")
+
+    return {"ok": True, "checkout_url": ck.url}
+
+# -----------------------------------------------------------------------------
+#   STRIPE WEBHOOK
+# -----------------------------------------------------------------------------
+@app.post("/api/stripe/webhook")
+async def stripe_webhook(request: Request):
+    if not (stripe_lib and STRIPE_WEBHOOK_SECRET):
+        raise HTTPException(status_code=500, detail="Webhook not configured")
+
+    payload = await request.body()
+    sig = request.headers.get("stripe-signature")
+
+    try:
+        event = stripe_lib.Webhook.construct_event(payload, sig, STRIPE_WEBHOOK_SECRET)
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Webhook error: {e}")
 
-    etype = event.get("type")
-    data = event.get("data", {}).get("object", {})
+    if event["type"] == "checkout.session.completed":
+        sess_obj = event["data"]["object"]
+        email = sess_obj.get("customer_email")
 
-    # Typical flow: on checkout.session.completed, activate subscription
-    if etype == "checkout.session.completed":
-        email = data.get("customer_email")
         if email:
-            _SUBS_DB[email] = {
-                "status": "active",
-                "updated_at": dt.datetime.utcnow().isoformat(),
-                "source": "stripe",
-            }
+            for _, s in SESSIONS.items():
+                if s["user"].get("email") == email:
+                    s["is_premium"] = True
 
-    # You can add more event handling here (invoice.payment_failed, etc.)
-    return {"received": True}
+    return {"ok": True}
 
+# -----------------------------------------------------------------------------
+#   PREMIUM CHECK
+# -----------------------------------------------------------------------------
+def _require_premium(request: Request):
+    sess = _get_session(request)
+    if not sess:
+        raise HTTPException(status_code=401, detail="Sign in required")
+
+    email = sess["user"].get("email")
+    if email in PREMIUM_OVERRIDE:
+        return
+
+    if not sess.get("is_premium"):
+        raise HTTPException(status_code=402, detail="Premium subscription required")
+
+# -----------------------------------------------------------------------------
+#   VOL-TARGET IUL ENGINE (PREMIUM)
+# -----------------------------------------------------------------------------
+class VTReq(BaseModel):
+    s0: float = 100.0
+    vt_vol: float = 0.10
+    cap: float = 0.12
+    floor: float = -0.05
+    participation: float = 1.0
+    years: int = 1
+    n_paths: int = 20000
+    seed: Optional[int] = None
+
+@app.post("/api/iul/vt_price")
+async def vt_price(req: VTReq, request: Request):
+    _require_premium(request)
+
+    rng = random.Random(req.seed)
+    credits = []
+    s0 = req.s0
+    sigma = req.vt_vol
+    cap = req.cap
+    floor = req.floor
+    alpha = req.participation
+    T = float(req.years)
+
+    for _ in range(req.n_paths):
+        z = rng.gauss(0.0, 1.0)
+        sT = s0 * math.exp(-0.5 * sigma * sigma * T + sigma * math.sqrt(T) * z)
+        rT = sT / s0 - 1.0
+        credit = max(alpha * rT, floor)
+        credit = min(credit, cap)
+        credits.append(credit)
+
+    n = len(credits)
+    mean = sum(credits) / n
+    var = sum((c - mean) ** 2 for c in credits) / n
+    sd = math.sqrt(var)
+
+    p_floor = sum(1 for c in credits if c <= floor + 1e-12) / n
+    p_cap = sum(1 for c in credits if c >= cap - 1e-12) / n
+
+    return {
+        "ok": True,
+        "mean_credit": mean,
+        "stdev_credit": sd,
+        "p_floor": p_floor,
+        "p_cap": p_cap,
+        "sample": credits[:1000],
+        "n_paths": n,
+    }

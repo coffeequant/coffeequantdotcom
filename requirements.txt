@@ -4,4 +4,7 @@ numpy
 google-auth
 google-auth-oauthlib
 google-auth-httplib2
+pydantic[email]
+stripe==10.0.0
+email-validator
 

@@ -1,7 +1,29 @@
 {
   "items": [
     {
-      "date": "2025-11-22",
+      "date": "2025-12-06",
+      "title": "Finacing - How it works?",
+      "deck": "Financing Strategies for Chinese Corporates",
+      "link": "statics/WriteUps/China_Corporate_Financing.html",
+      "thumb": "statics/images/wd.png",
+      "tags": ["Put", "Financing", "Corporates"],
+      "html": "<p><strong>Credit is tight. Capital is expensive. But structured derivatives can replicate financing economically — if Sales teams understand the logic</p>"
+    },
+
+    {
+      "date": "2025-12-05",
+      "title": "Put Replication - When Everyone Replicates the Put",
+      "deck": "Why Put Replication causes Issues",
+      "link": "statics/WriteUps/PutReplication.html",
+      "thumb": "statics/images/wd.png",
+      "tags": ["Put", "QIS", "Insurance"],
+      "html": "<p><strong>Equilibrium, instability, and why large-scale put replication changes the drift and volatility you think you’re hedging.</p>"
+    },
+
+
+
+    {
+      "date": "2025-11-29",
       "title": "AI - Why it Matters?",
       "deck": "Why Traditional Market Skeptics Misread AI",
       "link": "statics/WriteUps/AI.html",
@@ -21,7 +43,7 @@
     },
 
  {
-   "date": "2025-11-11",
+   "date": "2025-11-22",
    "title": "Rates say slowdown. Equities say party.",
   "deck": "10y UST < 4%. Tech still euphoric. One of them is lying.",
   "link": "statics/WriteUps/DailyMacro.html",

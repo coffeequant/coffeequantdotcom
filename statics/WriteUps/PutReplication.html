@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CoffeeQuant – When Everyone Replicates the Put</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../css/cq.css" />
+  <style>
+    /* Light extra styling for the simulator */
+    .cq-sim {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: radial-gradient(circle at top left, rgba(255,255,255,0.06), transparent 50%);
+    }
+    .cq-sim-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      align-items: center;
+    }
+    .cq-sim-controls label {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      min-width: 180px;
+    }
+    .cq-sim-controls input[type="range"] {
+      width: 180px;
+    }
+    .cq-sim-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      margin: 0.75rem 0 0.5rem;
+      font-size: 0.8rem;
+      opacity: 0.9;
+    }
+    .cq-sim-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      margin-right: 0.4rem;
+    }
+    .cq-sim-dot-alpha { background: #4caf50; }
+    .cq-sim-dot-delta { background: #ff9800; }
+    .cq-sim-dot-total { background: #e91e63; }
+    .cq-sim-summary {
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+    .cq-sim-summary strong {
+      font-weight: 600;
+    }
+    .cq-chip-stable, .cq-chip-unstable {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      margin-left: 0.4rem;
+    }
+    .cq-chip-stable {
+      background: rgba(76, 175, 80, 0.15);
+      color: #8bc34a;
+      border: 1px solid rgba(76, 175, 80, 0.5);
+    }
+    .cq-chip-unstable {
+      background: rgba(244, 67, 54, 0.1);
+      color: #ff8a80;
+      border: 1px solid rgba(244, 67, 54, 0.7);
+    }
+    canvas#simChart {
+      width: 100%;
+      max-width: 640px;
+      height: 260px;
+      border-radius: 10px;
+      background: radial-gradient(circle at top, rgba(255,255,255,0.03), transparent 55%);
+      display: block;
+    }
+  </style>
+</head>
+<body class="cq-body cq-body-article">
+  <!-- Optional hero background -->
+  <div id="heroBg" class="cq-hero-bg"></div>
+
+  <main class="cq-main">
+    <header class="cq-article-hero">
+      <p class="cq-kicker">Daily Note · Market Microstructure &amp; QIS</p>
+      <h1>When Everyone Replicates the Put</h1>
+      <p class="cq-hero-subtitle">
+        Equilibrium, instability, and why large-scale put replication changes the drift and volatility you think you’re hedging.
+      </p>
+      <div class="cq-hero-meta">
+        <span>By CoffeeQuant</span>
+        <span>·</span>
+        <span>For structurers, QIS quants, and insurance engineers</span>
+      </div>
+    </header>
+
+    <article class="cq-article">
+      <section class="cq-section">
+        <h2>1. The basic idea: options don’t live in a vacuum</h2>
+        <p>
+          In textbooks, the underlying price <strong>S(t)</strong> is exogenous and “lognormal”.
+          You write a put, you delta-hedge it, and the option magically drops out of a
+          clean Black–Scholes world.
+        </p>
+        <p>
+          In reality, <strong>your hedging flow changes the demand for the underlying itself</strong>.
+          And when everyone runs the same replication strategy – QIS, portfolio insurance,
+          vol-target indices, structured notes – the usual lognormal story breaks.
+        </p>
+        <p>
+          A simple way to see that:
+          start from an <em>equilibrium price</em> defined by supply and demand, then
+          inject a systematic hedging flow and see what happens to stability.
+        </p>
+      </section>
+
+      <section class="cq-section">
+        <h2>2. Excess demand and equilibrium</h2>
+        <p>
+          Let’s define an <strong>excess demand</strong> function
+          <code>α(S, t, x)</code>:
+        </p>
+        <ul>
+          <li><code>S</code> = stock price</li>
+          <li><code>t</code> = time</li>
+          <li><code>x</code> = random influences / noise (news, flows, etc.)</li>
+        </ul>
+        <p>
+          At equilibrium, <strong>excess demand is zero</strong>:
+        </p>
+        <pre><code>α(S_eq(t), t, x) = 0</code></pre>
+        <p>
+          Intuitively:
+        </p>
+        <ul>
+          <li>When price goes up, demand should fall (unless you’re in a bubble).</li>
+          <li>When price goes down, demand should rise (unless the company is dying).</li>
+        </ul>
+        <p>
+          So a natural assumption is:
+        </p>
+        <pre><code>∂α / ∂S &lt; 0  (downward-sloping demand)</code></pre>
+        <p>
+          That gives you a <strong>stable equilibrium</strong>: if price drifts above equilibrium,
+          excess demand turns negative, sellers dominate, and price is pushed back down.
+        </p>
+      </section>
+
+      <section class="cq-section">
+        <h2>3. Add a trading strategy: delta as extra demand</h2>
+        <p>
+          Now add a systematic trading strategy – e.g. put replication, portfolio insurance,
+          vol-target, or a QIS index that trades the underlying.
+        </p>
+        <p>
+          Let’s call its net demand <code>Δ(S, t)</code>.
+          Then total excess demand is:
+        </p>
+        <pre><code>α(S, t, x) + Δ(S, t) = 0   (equilibrium with strategies)</code></pre>
+        <p>
+          At equilibrium, we have:
+        </p>
+        <pre><code>α + Δ = 0</code></pre>
+        <p>
+          and if price moves a little, the first-order condition is:
+        </p>
+        <pre><code>dα + dΔ ≈ 0  ⇒  (∂α/∂S + ∂Δ/∂S) · dS ≈ 0</code></pre>
+        <p>
+          So the <strong>effective slope</strong> of demand becomes:
+        </p>
+        <pre><code>∂(α + Δ) / ∂S = ∂α/∂S + ∂Δ/∂S</code></pre>
+        <p>
+          If this slope is negative, the equilibrium remains stable.
+          If the slope turns positive, the equilibrium becomes <strong>unstable</strong>.
+        </p>
+        <p>
+          That’s the whole story in one line: <strong>when the hedging strategy’s slope
+          is strong enough, it can flip the sign of the total demand curve.</strong>
+        </p>
+      </section>
+
+      <section class="cq-section">
+        <h2>4. A toy functional form for demand</h2>
+        <p>
+          Take a very simple linear form for “fundamental” excess demand:
+        </p>
+        <pre><code>α(S) = (1 / β) · (S* − S)</code></pre>
+        <ul>
+          <li><code>S*</code> = “fair” or target price implied by fundamentals</li>
+          <li><code>β &gt; 0</code> = how elastic demand is vs price</li>
+        </ul>
+        <p>Then:</p>
+        <pre><code>∂α / ∂S = −1 / β  &lt; 0  (stable slope)</code></pre>
+        <p>
+          Now add a strategy demand <code>Δ(S)</code>.
+          You can think of <code>Δ</code> as “how many units the hedgers want to buy or sell”
+          as a function of <code>S</code>.
+        </p>
+        <p>
+          For a <strong>delta-hedging strategy of a short put</strong> (dealer is short the put),
+          the dealer is typically:
+        </p>
+        <ul>
+          <li>short underlying when the put is out of the money,</li>
+          <li>less short as it moves deeper ITM (because gamma hedging makes them buy into sell-offs).</li>
+        </ul>
+        <p>
+          Seen from the market’s perspective, this flow adds an extra term <code>Δ(S)</code>.
+          When put replication is done at large scale by <em>many players</em>, the effective
+          <code>∂Δ/∂S</code> matters.
+        </p>
+        <p>
+          The new total slope is:
+        </p>
+        <pre><code>∂(α + Δ) / ∂S = −1/β + ∂Δ/∂S</code></pre>
+        <p>
+          If:
+        </p>
+        <pre><code>∂Δ/∂S  &gt;  1/β</code></pre>
+        <p>
+          then <code>∂(α + Δ)/∂S &gt; 0</code>: the equilibrium becomes <strong>locally unstable</strong>.
+        </p>
+        <p>
+          Small price moves now get <em>amplified</em> by hedging flows instead of damped
+          by natural demand.
+        </p>
+      </section>
+
+      <section class="cq-section">
+        <h2>5. Long gamma, short stability</h2>
+        <p>
+          In the clean Black–Scholes world, a long gamma position is a dream:
+          buy low, sell high, and harvest convexity. The underlying follows:
+        </p>
+        <pre><code>dS / S = μ dt + σ dW</code></pre>
+        <p>
+          with lognormal dynamics and exogenous volatility <code>σ</code>.
+        </p>
+        <p>
+          But when <strong>everyone</strong> is implementing a similar long-gamma profile
+          via put replication or portfolio insurance, the underlying is no longer exogenous.
+          Your hedging flows feed back into the drift and volatility of <code>S</code>.
+        </p>
+        <p>A simple way to write this is:</p>
+        <pre><code>dS / S = μ_eff(S, t) dt + σ_eff(S, t) dW</code></pre>
+        <p>where:</p>
+        <ul>
+          <li><code>μ_eff</code> = μ + (impact from aggregate hedging flow / S)</li>
+          <li><code>σ_eff</code> = σ + (liquidity / impact component)</li>
+        </ul>
+        <p>
+          Once dynamic hedging becomes system-wide, the “lognormal with constant σ”
+          you calibrate to is just a <strong>snapshot</strong> of this feedback loop,
+          not a structural truth.
+        </p>
+      </section>
+
+      <section class="cq-section">
+        <h2>6. Simulator: see equilibrium flip from stable to unstable</h2>
+        <p>
+          Below is a toy simulator. It’s deliberately simple:
+        </p>
+        <ul>
+          <li><strong>Green</strong>: fundamental excess demand α(S) – downward sloping.</li>
+          <li><strong>Orange</strong>: demand from put-replication / QIS hedgers Δ(S).</li>
+          <li><strong>Pink</strong>: total excess demand α(S) + Δ(S).</li>
+        </ul>
+        <p>
+          As you increase the <em>number of strategies</em> or <em>hedging intensity</em>, the
+          total slope can flip from negative (stable) to positive (unstable).
+        </p>
+
+        <div class="cq-sim">
+          <div class="cq-sim-controls">
+            <label>
+              Number of strategies (N)
+              <input id="simStrategies" type="range" min="0" max="10" step="1" value="3" />
+              <span id="simStrategiesVal">3</span>
+            </label>
+            <label>
+              Hedging intensity (κ)
+              <input id="simIntensity" type="range" min="0" max="2" step="0.1" value="0.5" />
+              <span id="simIntensityVal">0.5</span>
+            </label>
+          </div>
+
+          <canvas id="simChart" width="640" height="260"></canvas>
+
+          <div class="cq-sim-legend">
+            <span><span class="cq-sim-dot cq-sim-dot-alpha"></span> α(S): fundamental demand</span>
+            <span><span class="cq-sim-dot cq-sim-dot-delta"></span> Δ(S): strategy demand</span>
+            <span><span class="cq-sim-dot cq-sim-dot-total"></span> α(S)+Δ(S): total</span>
+          </div>
+
+          <div id="simSummary" class="cq-sim-summary">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+
+        <p>
+          Interpretation:
+        </p>
+        <ul>
+          <li>
+            When the <strong>pink line</strong> slopes downward near S*,
+            the market pulls back to equilibrium after a shock.
+          </li>
+          <li>
+            When it slopes upward, small shocks can get amplified:
+            more selling begets more selling.
+          </li>
+        </ul>
+      </section>
+
+      <section class="cq-section">
+        <h2>7. Link to QIS and insurance: put replication inside wrappers</h2>
+        <p>
+          In the insurance world, especially in Asia, a lot of the real gamma sits inside:
+        </p>
+        <ul>
+          <li>capital-protected or guaranteed products,</li>
+          <li>IUL / variable UL products with embedded guarantees,</li>
+          <li>QIS-based underlying funds (vol-target, risk-control, trend-following),</li>
+          <li>CPPI-style or constant-proportion rebalancing strategies.</li>
+        </ul>
+        <p>
+          The story is usually told in terms of elegant indices and wrappers. But at the core:
+          <strong>you are manufacturing a put</strong>, often via dynamic replication on a basket
+          or a vol-target index.
+        </p>
+        <p>
+          From the perspective of the underlying market, these are just systematic
+          <strong>buy/sell rules</strong> – i.e. a big Δ(S, t).
+        </p>
+        <p>Examples:</p>
+        <ul>
+          <li>
+            A capital-protected wrapper on a vol-target index: the bank or insurer
+            often replicates a long-dated put through shorter-dated hedges on the index.
+          </li>
+          <li>
+            A “defensive” QIS index that mechanically sells risky assets when volatility spikes:
+            this is a kind of portfolio insurance flow.
+          </li>
+          <li>
+            Structured notes with bespoke capital protection whose underlying is itself a QIS:
+            put-on-put replication layered on top of systematic rebalancing.
+          </li>
+        </ul>
+        <p>
+          When these products scale, your Δ(S, t) is no longer small. It becomes
+          a noticeable component of market microstructure, especially in thin hours or on
+          single-asset underlyings.
+        </p>
+      </section>
+
+      <section class="cq-section">
+        <h2>8. What happens when everyone uses the same QIS?</h2>
+        <p>
+          The concentration problem is straightforward:
+        </p>
+        <ul>
+          <li>Same underlyings (US indices, gold, a popular vol-target index).</li>
+          <li>Same leverage rules (target 5% or 10% vol).</li>
+          <li>Same rebalance triggers (e.g. 3pm fixes, or end-of-day snapshots).</li>
+        </ul>
+        <p>
+          This effectively synchronizes Δ(S, t) across multiple books and issuers.
+        </p>
+        <p>
+          When volatility rises:
+        </p>
+        <ul>
+          <li>Vol-target QIS reduces exposure (selling underlying or futures).</li>
+          <li>Put replication increases short exposure into down-moves (delta hedging).</li>
+          <li>CPPI or risk-control overlays sell risky assets to protect floor values.</li>
+        </ul>
+        <p>
+          On the way down, these systematic sellers can dominate the natural buyers implied
+          by α(S). In our earlier notation:
+        </p>
+        <pre><code>∂(α + Δ) / ∂S  &gt;  0  ⇒  local instability</code></pre>
+        <p>
+          You see this as:
+        </p>
+        <ul>
+          <li>air pockets in liquidity,</li>
+          <li>gaps through levels where strikes or triggers cluster,</li>
+          <li>vol spikes that look sharper than “fundamentals” justify.</li>
+        </ul>
+      </section>
+
+      <section class="cq-section cq-section-highlight">
+        <h2>9. Closing thought</h2>
+        <p>
+          Put replication is elegant on a whiteboard. In production size – inside QIS,
+          insurance wrappers, and structured notes – it becomes a <strong>macro flow</strong>.
+        </p>
+        <p>
+          The key shift in mindset is simple:
+        </p>
+        <p class="cq-quote">
+          You’re not pricing an option <em>on</em> a lognormal process.<br />
+          You’re designing a strategy that helps <em>create</em> the process.
+        </p>
+        <p>
+          Once you see that, equilibrium diagrams and excess-demand slopes become more than
+          academic toys. They’re a sanity check on whether your next “defensive” idea
+          is actually stabilising the market – or quietly leaning on an unstable equilibrium.
+        </p>
+      </section>
+
+      <footer class="cq-article-footer">
+        <a href="/" class="cq-back-link">← Back to CoffeeQuant Daily</a>
+      </footer>
+    </article>
+  </main>
+
+  <!-- Simple simulator JS (no external libraries) -->
+  <script>
+    (function () {
+      const S_MIN = 80;
+      const S_MAX = 120;
+      const S_STAR = 100;   // equilibrium price
+      const BETA = 10;      // demand elasticity: α(S) = (S* - S)/β
+
+      const strategiesSlider = document.getElementById("simStrategies");
+      const intensitySlider = document.getElementById("simIntensity");
+      const strategiesVal = document.getElementById("simStrategiesVal");
+      const intensityVal = document.getElementById("simIntensityVal");
+      const canvas = document.getElementById("simChart");
+      const summary = document.getElementById("simSummary");
+
+      if (!canvas || !strategiesSlider || !intensitySlider) {
+        return; // fail quietly if elements are missing
+      }
+
+      const ctx = canvas.getContext("2d");
+
+      function computeCurves(N, kappa) {
+        // α(S) = (S* - S)/β  (downward sloping)
+        // Δ(S) = N * kappa * (S - S*)  (upward sloping when kappa>0)
+        // total = α + Δ
+        const nPoints = 80;
+        const points = [];
+        let minY = Infinity;
+        let maxY = -Infinity;
+
+        for (let i = 0; i < nPoints; i++) {
+          const u = i / (nPoints - 1);
+          const S = S_MIN + (S_MAX - S_MIN) * u;
+
+          const alpha = (S_STAR - S) / BETA;
+          const delta = N * kappa * (S - S_STAR) / BETA; // scale by β just to keep numbers reasonable
+          const total = alpha + delta;
+
+          points.push({ S, alpha, delta, total });
+
+          if (alpha < minY) minY = alpha;
+          if (delta < minY) minY = delta;
+          if (total < minY) minY = total;
+
+          if (alpha > maxY) maxY = alpha;
+          if (delta > maxY) maxY = delta;
+          if (total > maxY) maxY = total;
+        }
+
+        // ensure some padding
+        const pad = 0.1 * (maxY - minY || 1);
+        minY -= pad;
+        maxY += pad;
+
+        return { points, minY, maxY };
+      }
+
+      function mapToCanvas(S, y, minY, maxY) {
+        const w = canvas.width;
+        const h = canvas.height;
+        const x = ((S - S_MIN) / (S_MAX - S_MIN)) * (w - 40) + 30; // margin
+        const yNorm = (y - minY) / (maxY - minY || 1);
+        const cy = h - 25 - yNorm * (h - 50); // margin top/bottom
+        return { x, y: cy };
+      }
+
+      function drawAxes(minY, maxY) {
+        const w = canvas.width;
+        const h = canvas.height;
+
+        ctx.clearRect(0, 0, w, h);
+
+        ctx.save();
+        ctx.strokeStyle = "rgba(255,255,255,0.15)";
+        ctx.lineWidth = 1;
+
+        // Horizontal midline (approx y=0)
+        const zeroYNorm = (0 - minY) / (maxY - minY || 1);
+        const zeroY = h - 25 - zeroYNorm * (h - 50);
+        ctx.beginPath();
+        ctx.moveTo(20, zeroY);
+        ctx.lineTo(w - 10, zeroY);
+        ctx.stroke();
+
+        // Vertical line at S*
+        const xStar = ((S_STAR - S_MIN) / (S_MAX - S_MIN)) * (w - 40) + 30;
+        ctx.beginPath();
+        ctx.moveTo(xStar, 10);
+        ctx.lineTo(xStar, h - 20);
+        ctx.stroke();
+
+        ctx.restore();
+
+        // Labels
+        ctx.save();
+        ctx.fillStyle = "rgba(255,255,255,0.65)";
+        ctx.font = "11px system-ui, -apple-system, BlinkMacSystemFont, sans-serif";
+        ctx.fillText("Price S", w / 2 - 20, h - 7);
+        ctx.fillText("Excess demand α, Δ, α+Δ", 10, 20);
+        ctx.fillText("S*", xStar - 6, h - 7);
+        ctx.restore();
+      }
+
+      function drawCurve(points, key, color, minY, maxY) {
+        ctx.save();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let i = 0; i < points.length; i++) {
+          const p = points[i];
+          const { x, y } = mapToCanvas(p.S, p[key], minY, maxY);
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function update() {
+        const N = parseInt(strategiesSlider.value, 10) || 0;
+        const kappa = parseFloat(intensitySlider.value) || 0;
+
+        strategiesVal.textContent = String(N);
+        intensityVal.textContent = String(kappa);
+
+        const { points, minY, maxY } = computeCurves(N, kappa);
+
+        drawAxes(minY, maxY);
+        drawCurve(points, "alpha", "#4caf50", minY, maxY);  // green
+        drawCurve(points, "delta", "#ff9800", minY, maxY);  // orange
+        drawCurve(points, "total", "#e91e63", minY, maxY);  // pink
+
+        // Approximate slope near S* using central difference on total
+        let slope = 0;
+        for (let i = 1; i < points.length - 1; i++) {
+          if (points[i].S <= S_STAR && points[i + 1].S >= S_STAR) {
+            const p1 = points[i - 1];
+            const p2 = points[i + 1];
+            const dS = p2.S - p1.S || 1;
+            slope = (p2.total - p1.total) / dS;
+            break;
+          }
+        }
+
+        const isStable = slope < 0;
+        const chip = isStable
+          ? '<span class="cq-chip-stable">stable</span>'
+          : '<span class="cq-chip-unstable">unstable</span>';
+
+        summary.innerHTML =
+          'Total slope near S* ≈ <strong>' +
+          slope.toFixed(3) +
+          '</strong> ' +
+          chip +
+          '<br />' +
+          'Fundamental slope is always negative (α). As you increase the number of strategies N or hedging intensity κ, ' +
+          'the strategy slope Δ can overpower fundamentals and flip the total curve. ' +
+          'Once the slope turns positive, small shocks tend to get amplified instead of mean-reverted.';
+      }
+
+      strategiesSlider.addEventListener("input", update);
+      intensitySlider.addEventListener("input", update);
+
+      update();
+    })();
+  </script>
+
+  <!-- Optional: reuse common site JS if you have it -->
+  <script src="../js/common.js"></script>
+</body>
+</html>

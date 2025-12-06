@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CoffeeQuant | Chinese Corporates, Collars and Deferred Premium</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="../css/cq.css" />
+  <style>
+    /* Page-local tweaks, works with cq.css */
+
+    .cq-article-hero {
+      position: relative;
+      padding: 3rem 1.5rem 2rem;
+      background: radial-gradient(circle at top, #1f2937, #020617);
+      color: #f9fafb;
+      border-bottom: 1px solid rgba(148,163,184,0.3);
+    }
+
+    .cq-article-hero-inner {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .cq-article-kicker {
+      font-size: 0.85rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #93c5fd;
+      margin-bottom: 0.5rem;
+    }
+
+    .cq-article-title {
+      font-size: clamp(1.8rem, 2.6vw, 2.4rem);
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .cq-article-subtitle {
+      font-size: 0.95rem;
+      color: #e5e7eb;
+      max-width: 40rem;
+    }
+
+    .cq-article-meta {
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    .cq-article-meta span {
+      margin-right: 1rem;
+    }
+
+    .cq-article-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.8rem;
+      margin-bottom: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .cq-article-back a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(148,163,184,0.5);
+    }
+
+    .cq-article-layout {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.75rem 1.25rem 3rem;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 1.4fr);
+      gap: 2.25rem;
+    }
+
+    @media (max-width: 900px) {
+      .cq-article-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .cq-article-main {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #e5e7eb;
+    }
+
+    .cq-article-main h2 {
+      margin-top: 1.75rem;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #f9fafb;
+    }
+
+    .cq-article-main h3 {
+      margin-top: 1.2rem;
+      margin-bottom: 0.4rem;
+      font-size: 0.98rem;
+      font-weight: 600;
+      color: #e5e7eb;
+    }
+
+    .cq-article-main p {
+      margin: 0.4rem 0 0.4rem;
+    }
+
+    .cq-article-main ul {
+      margin: 0.4rem 0 0.4rem 1.4rem;
+      padding: 0;
+    }
+
+    .cq-article-main li {
+      margin: 0.2rem 0;
+    }
+
+    .cq-article-tagline {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      margin-top: 0.4rem;
+    }
+
+    .cq-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      border: 1px solid rgba(148,163,184,0.7);
+      color: #e5e7eb;
+      background: rgba(15,23,42,0.7);
+    }
+
+    .cq-pill--hot {
+      border-color: rgba(248,250,252,0.8);
+      background: linear-gradient(135deg, rgba(248,250,252,0.2), rgba(56,189,248,0.2));
+    }
+
+    .cq-aside {
+      font-size: 0.86rem;
+      color: #cbd5f5;
+    }
+
+    .cq-aside-card {
+      border-radius: 0.75rem;
+      border: 1px solid rgba(148,163,184,0.35);
+      background: radial-gradient(circle at top left, rgba(30,64,175,0.4), rgba(15,23,42,0.95));
+      padding: 1rem 1rem 1.1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .cq-aside-card h3 {
+      margin-top: 0;
+      font-size: 0.9rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .cq-aside-card p {
+      margin: 0.3rem 0;
+    }
+
+    .cq-aside-taglist {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      margin-top: 0.35rem;
+    }
+
+    .cq-badge {
+      font-size: 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.7);
+      padding: 0.05rem 0.45rem;
+    }
+
+    .cq-badge--premium {
+      border-color: #fbbf24;
+      color: #facc15;
+    }
+
+    .cq-sim-card {
+      margin-top: 1.5rem;
+      border-radius: 0.9rem;
+      border: 1px solid rgba(148,163,184,0.35);
+      background: radial-gradient(circle at top, rgba(56,189,248,0.16), rgba(15,23,42,0.95));
+      padding: 1rem 1.1rem 1.1rem;
+    }
+
+    .cq-sim-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.5rem;
+      margin-bottom: 0.55rem;
+    }
+
+    .cq-sim-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .cq-sim-caption {
+      font-size: 0.75rem;
+      color: #cbd5f5;
+    }
+
+    .cq-sim-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.5rem 0.75rem;
+      margin-bottom: 0.6rem;
+      font-size: 0.8rem;
+    }
+
+    .cq-sim-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .cq-sim-label {
+      font-size: 0.75rem;
+      color: #e5e7eb;
+    }
+
+    .cq-sim-input {
+      border-radius: 0.5rem;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.8);
+      color: #f9fafb;
+      padding: 0.2rem 0.35rem;
+      font-size: 0.8rem;
+    }
+
+    .cq-sim-input:focus {
+      outline: none;
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 1px rgba(56,189,248,0.6);
+    }
+
+    .cq-sim-mainrow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      margin-top: 0.4rem;
+    }
+
+    .cq-sim-btn {
+      border-radius: 999px;
+      border: 1px solid rgba(56,189,248,0.9);
+      background: radial-gradient(circle at top, rgba(56,189,248,0.25), rgba(15,23,42,0.98));
+      color: #e0f2fe;
+      padding: 0.25rem 0.8rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .cq-sim-btn:hover {
+      transform: translateY(-0.5px);
+      box-shadow: 0 4px 14px rgba(56,189,248,0.35);
+    }
+
+    .cq-sim-metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 0.75rem;
+      font-size: 0.78rem;
+    }
+
+    .cq-sim-metric-label {
+      color: #cbd5f5;
+    }
+
+    .cq-sim-metric-value {
+      font-variant-numeric: tabular-nums;
+      color: #f9fafb;
+    }
+
+    .cq-sim-chart {
+      margin-top: 0.5rem;
+      border-radius: 0.6rem;
+      border: 1px dashed rgba(148,163,184,0.4);
+      padding: 0.5rem;
+      font-size: 0.78rem;
+      color: #cbd5f5;
+      background: rgba(15,23,42,0.7);
+    }
+
+    .cq-sim-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 0.15rem;
+    }
+
+    .cq-sim-bar-label {
+      flex: 0 0 5rem;
+    }
+
+    .cq-sim-bar-track {
+      flex: 1;
+      position: relative;
+      height: 0.5rem;
+      border-radius: 999px;
+      background: rgba(30,64,175,0.7);
+      overflow: hidden;
+    }
+
+    .cq-sim-bar-fill {
+      position: absolute;
+      inset: 0;
+      width: 50%;
+      background: linear-gradient(90deg, #38bdf8, #a855f7);
+    }
+
+    .cq-sim-bar-text {
+      flex: 0 0 3.5rem;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cq-note {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-top: 0.4rem;
+    }
+
+    .cq-eq-box {
+      border-radius: 0.75rem;
+      border: 1px solid rgba(148,163,184,0.3);
+      background: rgba(15,23,42,0.9);
+      padding: 0.6rem 0.75rem;
+      font-size: 0.8rem;
+      margin: 0.5rem 0;
+    }
+
+    code.cq-inline {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.78rem;
+      background: rgba(15,23,42,0.9);
+      padding: 0.05rem 0.25rem;
+      border-radius: 0.3rem;
+      border: 1px solid rgba(148,163,184,0.4);
+    }
+  </style>
+</head>
+<body class="cq-body">
+  <header class="cq-article-hero">
+    <div class="cq-article-hero-inner">
+      <div class="cq-article-back">
+        <span>←</span><a href="../../index.html">Back to CoffeeQuant</a>
+      </div>
+      <div class="cq-article-kicker">STRUCTURED FINANCING · CHINA CORPORATES</div>
+      <h1 class="cq-article-title">From Loans to Collars: How Chinese Corporates Can Finance With SPX &amp; NDX</h1>
+      <p class="cq-article-subtitle">
+        Credit is tight, USD liquidity is political, and boards still want buybacks and capex.
+        Zero-upfront SPX / NDX collars with deferred premium offer an alternative “funding rail”
+        that looks like equity risk but feels like loan financing.
+      </p>
+      <div class="cq-article-meta">
+        <span>CoffeeQuant Daily</span>
+        <span>Audience: PB &amp; Structured Sales</span>
+      </div>
+      <div class="cq-article-tagline">
+        How to sell financing, not just payoff, when a Chinese corporate suggests a “view” on SPX / NDX.
+      </div>
+    </div>
+  </header>
+
+  <main class="cq-article-layout">
+    <article class="cq-article-main">
+      <p>
+        When a Chinese corporate treasury says, “We’re thinking of doing a collar on SPX or NDX,”
+        it rarely starts as a pure macro view. It’s usually about <strong>funding</strong>:
+        RMB cash flow is visible, offshore USD is scarce, and the bank’s credit appetite
+        isn’t infinite. The question is:
+      </p>
+      <p>
+        <em>“How do I raise cheap, off-balance sheet USD funding without calling it a loan?”</em>
+      </p>
+      <p>
+        That’s where <strong>zero-cost collars with deferred premium</strong> come in. Structurally,
+        they look like a long-dated SPX / NDX option structure. Economically, they behave like
+        a loan with equity-linked repay profile plus embedded equity upside.
+      </p>
+
+      <h2>1. Why financing matters now: tighter credit, political dollars</h2>
+
+      <p>For large Chinese corporates, the constraints are familiar:</p>
+      <ul>
+        <li><strong>Onshore:</strong> RMB liquidity is available, but restricted in where it can go.</li>
+        <li><strong>Offshore USD:</strong> more political, more scrutinized, and ultimately finite.</li>
+        <li><strong>Traditional loans:</strong> chew up credit lines and CSA limits, especially under LCR &amp; NSFR pressure.</li>
+      </ul>
+      <p>
+        Treasurers still have to fund:
+      </p>
+      <ul>
+        <li>Capex (overseas acquisitions, plant, logistics, tech),</li>
+        <li>Share buybacks and investor “signals”,</li>
+        <li>Working-capital smoothing around volatile export flows.</li>
+      </ul>
+      <p>
+        So you get the classic question to PB / IB sales:
+        <em>“Can we use structured products on SPX / NDX to synthetically finance?”</em>
+      </p>
+
+      <h2>2. Basic financing intuition: from simple loan to equity-linked collar</h2>
+
+      <h3>2.1 Plain loan – the baseline</h3>
+      <p>
+        Start with a vanilla bullet loan: the corporate borrows <strong>Notional</strong> now,
+        pays back <strong>Notional × (1 + r<sub>loan</sub> × T)</strong> at maturity.
+      </p>
+      <div class="cq-eq-box">
+        <strong>Loan cash flows (USD notional = 100):</strong><br />
+        Today: +100<br />
+        At maturity: &minus;100 × (1 + r<sub>loan</sub> × T)
+      </div>
+
+      <p>
+        Under CSA, the bank must fund this with capital and HQLA. The effective economic cost
+        to the corporate is the loan rate plus any fees.
+      </p>
+
+      <h3>2.2 Zero-cost collar as “synthetic financing”</h3>
+
+      <p>
+        Now imagine the corporate does a <strong>zero-cost collar</strong> on SPX / NDX:
+      </p>
+      <ul>
+        <li><strong>Sell a put</strong> (downside risk) at strike K<sub>put</sub> &lt; S<sub>0</sub></li>
+        <li><strong>Buy a call</strong> (upside participation) at strike K<sub>call</sub> &gt; S<sub>0</sub></li>
+        <li>Choose strikes so that <strong>Put premium ≈ Call premium</strong> → net premium ≈ 0 at inception.</li>
+      </ul>
+
+      <p>In payoff terms at maturity (ignoring discounting):</p>
+      <div class="cq-eq-box">
+        Collar payoff (from corporate’s perspective):<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;=&; Long Call(K<sub>call</sub>) &minus; Short Put(K<sub>put</sub>)
+      </div>
+
+      <p>
+        The bank can structure this so that the <strong>put notional</strong> effectively acts as
+        a funded exposure: if SPX / NDX finishes below K<sub>put</sub>, the corporate pays the
+        shortfall, economically similar to repaying a loan.
+      </p>
+
+      <p>
+        In practice, the structurer chooses strikes and notionals so that:
+      </p>
+      <ul>
+        <li>The <strong>expected option P&amp;L</strong> compensates the bank for funding costs, and</li>
+        <li>The <strong>cash outlay for the corporate at maturity</strong> looks like a loan repayment schedule.</li>
+      </ul>
+
+      <h2>3. Why “sell put, buy call” is about skew and deferred premium</h2>
+
+      <h3>3.1 Skew = financing spread hidden in vol</h3>
+
+      <p>
+        In SPX / NDX, the <strong>downside put vol &gt; upside call vol</strong> (classic equity skew).
+        That means:
+      </p>
+      <ul>
+        <li>The corporate selling a put <strong>monetizes rich downside vol</strong>,</li>
+        <li>The corporate buying an upside call pays <strong>cheaper vol</strong> on the call wing.</li>
+      </ul>
+
+      <p>
+        Net effect: the <strong>option package</strong> (sell put, buy call) embeds a financing benefit,
+        because the bank can think of:
+      </p>
+      <div class="cq-eq-box">
+        Effective financing spread ≈ <strong>(Put prem &minus; Call prem)</strong> / Notional / T
+      </div>
+
+      <p>
+        You’re not telling the client “we beat the loan market by 75bp”. You’re saying
+        <em>“we shift part of your funding cost into a disciplined equity risk budget on SPX / NDX.”</em>
+      </p>
+
+      <h3>3.2 Deferred premium: why 0-upfront matters</h3>
+
+      <p>
+        If you pay or receive option premium <strong>upfront</strong>, your CSA and balance sheet
+        see it immediately. But if you can structure
+        <strong>deferred premium at maturity</strong> (or amortised), you get:
+      </p>
+      <ul>
+        <li><strong>0 premium today</strong> → no immediate cash usage, matches financing intuition.</li>
+        <li><strong>Premium “paid” via payoff</strong> at maturity → economically equivalent to paying interest.</li>
+        <li><strong>Accounting / regulatory</strong> treatment can be more favourable vs a plain loan, subject to rules.</li>
+      </ul>
+
+      <p>
+        That’s the heart of the pitch to Chinese corporates:
+        <em>“we keep day-1 cash neutral, but you finance via structured equity risk instead of headline loan.”</em>
+      </p>
+
+      <h2>4. A simple skew &amp; financing calculator</h2>
+
+      <p>
+        Below is a <strong>toy simulator</strong> that lets you play with:
+      </p>
+      <ul>
+        <li>Spot level on SPX / NDX,</li>
+        <li>Put &amp; call strikes,</li>
+        <li>Downside vs upside vol,</li>
+        <li>Loan rate you’re “competing” with.</li>
+      </ul>
+      <p>
+        It uses a simple Black–Scholes approximation to derive:
+      </p>
+      <ul>
+        <li>Put premium (short),</li>
+        <li>Call premium (long),</li>
+        <li>Net premium (call &minus; put),</li>
+        <li>Implied annual financing vs a plain loan.</li>
+      </ul>
+
+      <div class="cq-sim-card" id="financing-sim">
+        <div class="cq-sim-header">
+          <div>
+            <div class="cq-sim-title">Collar Skew &amp; Financing Simulator</div>
+            <div class="cq-sim-caption">
+              Adjust strikes and skew to see how “sell put, buy call” mimics cheap funding.
+            </div>
+          </div>
+          <span class="cq-pill cq-pill--hot">Live Sandbox</span>
+        </div>
+
+        <div class="cq-sim-grid">
+          <div class="cq-sim-field">
+            <label class="cq-sim-label" for="sim-spot">Spot S₀ (index level)</label>
+            <input id="sim-spot" class="cq-sim-input" type="number" value="5000" step="10" />
+          </div>
+          <div class="cq-sim-field">
+            <label class="cq-sim-label" for="sim-tenor">Tenor T (years)</label>
+            <input id="sim-tenor" class="cq-sim-input" type="number" value="3" step="0.25" />
+          </div>
+          <div class="cq-sim-field">
+            <label class="cq-sim-label" for="sim-kput">Put strike Kₚ</label>
+            <input id="sim-kput" class="cq-sim-input" type="number" value="4500" step="10" />
+          </div>
+          <div class="cq-sim-field">
+            <label class="cq-sim-label" for="sim-kcall">Call strike K𝚌</label>
+            <input id="sim-kcall" class="cq-sim-input" type="number" value="5500" step="10" />
+          </div>
+          <div class="cq-sim-field">
+            <label class="cq-sim-label" for="sim-vol-put">Downside vol σₚ</label>
+            <input id="sim-vol-put" class="cq-sim-input" type="number" value="0.30" step="0.01" />
+          </div>
+          <div class="cq-sim-field">
+            <label class="cq-sim-label" for="sim-vol-call">Upside vol σ𝚌</label>
+            <input id="sim-vol-call" class="cq-sim-input" type="number" value="0.22" step="0.01" />
+          </div>
+          <div class="cq-sim-field">
+            <label class="cq-sim-label" for="sim-r-loan">Loan rate r<sub>loan</sub> (p.a.)</label>
+            <input id="sim-r-loan" class="cq-sim-input" type="number" value="0.06" step="0.005" />
+          </div>
+          <div class="cq-sim-field">
+            <label class="cq-sim-label" for="sim-notional">Notional (USD m)</label>
+            <input id="sim-notional" class="cq-sim-input" type="number" value="100" step="10" />
+          </div>
+        </div>
+
+        <div class="cq-sim-mainrow">
+          <button id="sim-run" class="cq-sim-btn">Recalculate financing</button>
+          <div class="cq-sim-metrics">
+            <div><span class="cq-sim-metric-label">Put premium:</span>
+              <span id="sim-put-prem" class="cq-sim-metric-value">–</span>
+            </div>
+            <div><span class="cq-sim-metric-label">Call premium:</span>
+              <span id="sim-call-prem" class="cq-sim-metric-value">–</span>
+            </div>
+            <div><span class="cq-sim-metric-label">Net option cashflow (call − put):</span>
+              <span id="sim-net-prem" class="cq-sim-metric-value">–</span>
+            </div>
+            <div><span class="cq-sim-metric-label">Implied financing spread vs loan:</span>
+              <span id="sim-spread" class="cq-sim-metric-value">–</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cq-sim-chart">
+          <div><strong>Visual: collar vs loan</strong></div>
+          <div class="cq-sim-bar-row">
+            <div class="cq-sim-bar-label">Loan cost</div>
+            <div class="cq-sim-bar-track">
+              <div id="bar-loan" class="cq-sim-bar-fill"></div>
+            </div>
+            <div id="bar-loan-text" class="cq-sim-bar-text">–</div>
+          </div>
+          <div class="cq-sim-bar-row">
+            <div class="cq-sim-bar-label">Collar implied</div>
+            <div class="cq-sim-bar-track">
+              <div id="bar-collar" class="cq-sim-bar-fill"></div>
+            </div>
+            <div id="bar-collar-text" class="cq-sim-bar-text">–</div>
+          </div>
+          <div class="cq-note">
+            Bars compare total “interest cost” on a 100m notional, assuming loan vs collar-implied cost.
+            Downside skew (σₚ &gt; σ𝚌) typically pushes collar cost <em>below</em> loan cost — that’s your sales story.
+          </div>
+        </div>
+      </div>
+
+      <p class="cq-note">
+        This simulator deliberately ignores dividends, funding curves, and CSA details.
+        In real deals you’ll match funding, CSA, hedge cost, and credit limits;
+        but the intuition for sales is the same: <em>skew = hidden carry.</em>
+      </p>
+
+      <h2>5. Where delta-hedging pressure matters (Option A intuition)</h2>
+
+      <p>
+        When enough corporates sell the same SPX / NDX put strikes, the dealer community
+        becomes <strong>short gamma</strong> at those levels. As spot sells off towards K<sub>put</sub>:
+      </p>
+      <ul>
+        <li>Dealers’ <strong>delta hedges</strong> push more selling into the market,</li>
+        <li>Liquidity thins just where “everyone” has protection,</li>
+        <li>Skew steepens further → future financing trades become more expensive.</li>
+      </ul>
+      <p>
+        In the language we used earlier:
+      </p>
+      <div class="cq-eq-box">
+        Market equilibrium: &alpha;(S) + Δ<sub>hedge</sub>(S) ≈ 0<br />
+        If too many corporates run the same short-put structure,<br />
+        Δ<sub>hedge</sub> becomes large and state-dependent → instability around Kₚ.
+      </div>
+      <p>
+        For a sales desk, this is a risk, but also a talking point:
+        <em>“Don’t warehouse all your financing at the same strikes the street is short.”</em>
+      </p>
+
+      <h2>6. How to pitch this to a Chinese corporate treasury</h2>
+
+      <h3>6.1 Start from their problem, not your payoff</h3>
+      <ul>
+        <li>“You want offshore USD, but don’t want to show a big loan on day 1.”</li>
+        <li>“You already believe SPX / NDX won’t collapse 50% in three years.”</li>
+        <li>“You’re willing to budget some equity-like risk to get cheaper funding.”</li>
+      </ul>
+
+      <h3>6.2 Frame the collar as a funding rail</h3>
+      <ul>
+        <li>Put notional ≈ synthetic loan notional.</li>
+        <li>Put strike ≈ “worst-case” equity-linked repayment level.</li>
+        <li>Call strike ≈ board-friendly upside story (“we shared in the AI / tech upside”).</li>
+      </ul>
+
+      <h3>6.3 Use numbers, not adjectives</h3>
+      <p>
+        Take the simulator numbers into a simple RM story:
+      </p>
+      <ul>
+        <li>Loan cost on 100m at 6% over 3y ≈ 18m interest.</li>
+        <li>Collar’s net option economics equivalent to 3.8–4.2% p.a. → 11–13m in funding “cost”.</li>
+        <li>Difference = “equity risk budget” you monetise via skew.</li>
+      </ul>
+
+      <h2>7. For structurers: where QIS and insurance play in</h2>
+
+      <p>
+        For insurers and longer-dated Chinese balance sheets, you can wrap this logic into:
+      </p>
+      <ul>
+        <li><strong>QIS indices</strong> (SPX / NDX vol-targeted, skew-aware),</li>
+        <li><strong>IUL-style wrappers</strong> with annual caps / floors linked to collars,</li>
+        <li><strong>Hybrid financing notes</strong> with deferred coupons tied to collar performance.</li>
+      </ul>
+      <p>
+        The math is still Black–Scholes at the core, but the story is different:
+        you’re no longer selling “yield enhancement”, you’re selling
+        <strong>balance-sheet-friendly financing</strong>.
+      </p>
+
+      <p>
+        In 2026, Chinese corporates that <em>only</em> think in terms of loans and bonds
+        will feel boxed in. Those that are comfortable with <strong>structured financing
+        on global indices</strong> will have an extra rail to fund capex, M&amp;A, or buybacks
+        without shouting “we borrowed more” to the street.
+      </p>
+    </article>
+
+    <aside class="cq-aside">
+      <div class="cq-aside-card">
+        <h3>Deal cheat sheet</h3>
+        <p><strong>Client:</strong> CN exporter, USD revenues, tight CSA headroom.</p>
+        <p><strong>Objective:</strong> 3y 100m USD funding for capex.</p>
+        <ul>
+          <li>Reference: SPX or NDX</li>
+          <li>Sell 3y put at 90% strike</li>
+          <li>Buy 3y call at 110–115% strike</li>
+          <li>Calibrate notionals → zero-cost, deferred premium</li>
+        </ul>
+        <div class="cq-aside-taglist">
+          <span class="cq-badge">SPX</span>
+          <span class="cq-badge">NDX</span>
+          <span class="cq-badge cq-badge--premium">Skew</span>
+          <span class="cq-badge">Deferred premium</span>
+        </div>
+      </div>
+
+      <div class="cq-aside-card">
+        <h3>Talking points for RMs</h3>
+        <ul>
+          <li>“We finance you via equity skew, not just loans.”</li>
+          <li>“Zero upfront. All cash moves at maturity.”</li>
+          <li>“You choose how much downside you’re willing to fund with equity risk.”</li>
+          <li>“You participate in upside if AI / tech keeps rerating.”</li>
+        </ul>
+      </div>
+
+      <div class="cq-aside-card">
+        <h3>Risk angle (internal)</h3>
+        <p>
+          Concentration risk if many CN corporates sell the same put strikes.
+          Watch dealer gamma and Street positioning around those levels.
+        </p>
+        <p>
+          Use dispersion across indices / tenors to avoid everyone sitting on the same
+          short-put cliff.
+        </p>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    // --- Simple Black–Scholes collar + financing simulator ---
+
+    function normCdf(x) {
+      // Abramowitz-Stegun approximation, good enough for UI
+      var a1 = 0.254829592,
+          a2 = -0.284496736,
+          a3 = 1.421413741,
+          a4 = -1.453152027,
+          a5 = 1.061405429,
+          p  = 0.3275911;
+
+      var sign = 1;
+      if (x < 0) sign = -1;
+      x = Math.abs(x) / Math.sqrt(2.0);
+
+      var t = 1.0 / (1.0 + p*x);
+      var y = 1.0 - (((((a5*t + a4)*t) + a3)*t + a2)*t + a1)*t*Math.exp(-x*x);
+
+      return 0.5*(1.0 + sign*y);
+    }
+
+    function bsCall(S, K, T, sigma, r) {
+      if (T <= 0 || sigma <= 0 || S <= 0 || K <= 0) return 0;
+      var sqrtT = Math.sqrt(T);
+      var d1 = (Math.log(S/K) + (r + 0.5*sigma*sigma)*T) / (sigma*sqrtT);
+      var d2 = d1 - sigma*sqrtT;
+      return S * normCdf(d1) - K * Math.exp(-r*T) * normCdf(d2);
+    }
+
+    function bsPut(S, K, T, sigma, r) {
+      if (T <= 0 || sigma <= 0 || S <= 0 || K <= 0) return 0;
+      var sqrtT = Math.sqrt(T);
+      var d1 = (Math.log(S/K) + (r + 0.5*sigma*sigma)*T) / (sigma*sqrtT);
+      var d2 = d1 - sigma*sqrtT;
+      return K * Math.exp(-r*T) * normCdf(-d2) - S * normCdf(-d1);
+    }
+
+    function fmt(x, digits) {
+      if (!isFinite(x)) return "–";
+      return x.toFixed(digits);
+    }
+
+    function runSim() {
+      var S0   = parseFloat(document.getElementById("sim-spot").value) || 0;
+      var T    = parseFloat(document.getElementById("sim-tenor").value) || 0;
+      var Kp   = parseFloat(document.getElementById("sim-kput").value) || 0;
+      var Kc   = parseFloat(document.getElementById("sim-kcall").value) || 0;
+      var sigP = parseFloat(document.getElementById("sim-vol-put").value) || 0;
+      var sigC = parseFloat(document.getElementById("sim-vol-call").value) || 0;
+      var rLoan= parseFloat(document.getElementById("sim-r-loan").value) || 0;
+      var notM = parseFloat(document.getElementById("sim-notional").value) || 0;
+
+      var r = 0.02; // simple flat risk-free
+
+      // Prices per 1 notional
+      var pPut = bsPut(S0, Kp, T, sigP, r);
+      var pCal = bsCall(S0, Kc, T, sigC, r);
+
+      var netPrem = pCal - pPut; // call - put (corporate buys call, sells put)
+      var notional = notM * 1_000_000.0;
+
+      // Interpret netPrem as "interest cost" distributed over T
+      // If netPrem is negative (receive upfront), treat as cheaper-than-zero funding.
+      var totalLoanInterest = notional * rLoan * T;
+      var impliedRate = totalLoanInterest === 0
+        ? 0
+        : (netPrem / notional / T); // per annum
+
+      var spread = impliedRate - rLoan; // collar-implicit vs loan
+
+      // Update text metrics
+      document.getElementById("sim-put-prem").textContent =
+        fmt(pPut, 2) + " (per 1 not.)";
+      document.getElementById("sim-call-prem").textContent =
+        fmt(pCal, 2) + " (per 1 not.)";
+      document.getElementById("sim-net-prem").textContent =
+        fmt(netPrem, 2) + " (per 1 not.)";
+
+      var spreadBps = spread * 10_000;
+      var spreadText = (spread >= 0 ? "+" : "") + fmt(spreadBps, 1) + " bp p.a.";
+      document.getElementById("sim-spread").textContent = spreadText;
+
+      // Bars: compare total interest cost on 100% loan vs collar-implied cost
+      var loanTotal = totalLoanInterest;
+      var collarTotal = impliedRate * notional * T;
+
+      // Avoid degenerate
+      var maxCost = Math.max(Math.abs(loanTotal), Math.abs(collarTotal), 1);
+      var loanPct   = Math.min(100, Math.max(0, Math.abs(loanTotal / maxCost) * 100));
+      var collarPct = Math.min(100, Math.max(0, Math.abs(collarTotal / maxCost) * 100));
+
+      document.getElementById("bar-loan").style.width   = loanPct + "%";
+      document.getElementById("bar-collar").style.width = collarPct + "%";
+
+      document.getElementById("bar-loan-text").textContent =
+        fmt(loanTotal / 1_000_000, 2) + "m";
+      document.getElementById("bar-collar-text").textContent =
+        fmt(collarTotal / 1_000_000, 2) + "m";
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      var btn = document.getElementById("sim-run");
+      if (btn) {
+        btn.addEventListener("click", function (e) {
+          e.preventDefault();
+          runSim();
+        });
+      }
+      // initial run
+      runSim();
+    });
+  </script>
+</body>
+</html>

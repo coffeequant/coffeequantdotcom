@@ -2,44 +2,41 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>CoffeeQuant Premium — Labs, Tools & QIS Wrappers</title>
+  <title>CoffeeQuant Premium — Structured Yield in Plain English</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- MathJax (optional, in case you drop formulas here) -->
-  <script>
-    window.MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['\\[', '\\]'], ['$$','$$']],
-        processEscapes: true,
-        tags: 'ams'
-      },
-      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
-    };
-  </script>
-  <script id="MathJax-script" async
-    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
-
-  <!-- Main theme -->
+  <!-- Shared CQ styles -->
   <link rel="stylesheet" href="/statics/css/cq.css" />
-</head>
 
-<body>
-  <!-- Top shell + nav (same as index) -->
+  <!-- Google Identity -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    // Same client ID you use on index.html
+    window.CQ_GOOGLE_CLIENT_ID = "58596950813-89s7vbdb1lnhom1t93mc979lgp5143eo.apps.googleusercontent.com";
+  </script>
+
+  <!-- Auth + Premium logic -->
+  <script src="/statics/js/auth.js" defer></script>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="/statics/js/premium.js" defer></script>
+</head>
+<body class="cq-body">
+
+  <!-- Top nav -->
   <div class="cq-shell">
     <nav class="cq-nav" role="navigation" aria-label="Main">
       <a class="cq-logo" href="/" aria-label="CoffeeQuant Home">☕ CoffeeQuant</a>
 
       <div class="cq-navlinks">
+        <a href="/">Home</a>
         <a href="/#daily">Daily</a>
         <a href="/#labs">Labs</a>
         <a href="/#tools">Tools</a>
         <a href="/#notes">Notes</a>
         <a href="/#curios">Curios</a>
-        <a href="/statics/WriteUps/" class="cq-hide">Archive</a>
       </div>
 
-      <!-- Auth box (same IDs as index.html so auth.js can reuse) -->
+      <!-- Auth box (same structure as index) -->
       <div id="cqAuthBox" class="cq-authbox">
         <div id="cqAuthLabel" class="cq-auth-label cq-muted">Not signed in</div>
         <button id="cqSignInBtn" class="cq-btn-ghost-small">Sign in</button>
@@ -49,137 +46,101 @@
     </nav>
   </div>
 
-  <!-- SINGLE COLUMN MAIN (no left dock, no maingrid) -->
-  <main class="cq-main cq-main-single" role="main">
-    <section class="cq-section cq-section-wide" aria-labelledby="premiumTitle">
-      <div class="cq-strip" data-strip="premium"></div>
-
-      <div class="cq-section-head">
-        <h1 id="premiumTitle">CoffeeQuant Premium</h1>
-        <span class="cq-pill cq-pill-premium">Member</span>
-      </div>
-
-      <!-- Guard message (in case someone opens without being allowed by JS gate) -->
-      <div id="cqPremiumGate" class="cq-card cq-premium-gate cq-hide">
+  <!-- Main content -->
+  <main class="cq-main cq-shell cq-article">
+    <article class="cq-article-body">
+      <header class="cq-article-header">
+        <p class="cq-pill cq-pill-premium">Premium</p>
+        <h1>Unlock CoffeeQuant Premium</h1>
         <p class="cq-muted">
-          This page is for CoffeeQuant Premium members.
-          Please sign in with Google and make sure your subscription is active.
+          HKD 100 / year · for structurers, traders and PMs who want desk-grade intuition without the noise.
         </p>
-      </div>
+      </header>
 
-      <!-- MAIN PREMIUM CARD -->
-      <article class="cq-card cq-premium-card">
-        <div class="cq-premium-grid">
-          <!-- LEFT: value / pitch -->
-          <div class="cq-premium-left">
-            <h2>Labs, engines, and wrappers built for real desks</h2>
-            <p class="cq-lead">
-              CoffeeQuant Premium is where the “toy” examples turn into
-              production-grade templates: pricing engines, QIS bricks,
-              IUL&nbsp;illustrators and structuring helpers you can actually
-              use in client conversations.
-            </p>
+      <section class="cq-premium-hero">
+        <div class="cq-premium-banner">
+          <h2>What you get</h2>
+          <ul>
+            <li>🔒 Full access to <strong>premium Labs</strong> (IUL vol-target lab, pricing CLI, cross-gamma tools).</li>
+            <li>📈 Deep-dive write-ups with <strong>numbers and intuition</strong>, not marketing slides.</li>
+            <li>🧮 Downloadable JSON / parameters for your own models.</li>
+            <li>🎯 Focus on <strong>Asia PB / insurance</strong> structuring, not generic macro talk.</li>
+          </ul>
+        </div>
 
-            <ul class="cq-points">
-              <li><strong>Structuring labs</strong> — vol-target IUL, gold &amp; BTC wrappers, cross-gamma visualizers.</li>
-              <li><strong>Downloadable JSON</strong> for term-sheets, payoff specs and basket definitions.</li>
-              <li><strong>Daily desk notes</strong> on wrappers, autocalls, and QIS ideas built from current macro.</li>
+        <div class="cq-premium-card">
+          <div class="cq-premium-price">
+            <span class="cq-premium-amt">HKD 100</span>
+            <span class="cq-premium-period">per year</span>
+          </div>
+          <p class="cq-muted">
+            Single flat fee. No tiers, no upsell. If it stops being useful, you stop renewing.
+          </p>
+
+          <button
+            id="cqSubscribeBtn"
+            class="cq-btn cq-btn-primary"
+            data-stripe-price="price_1SWJKRRzxxClYou2DPfdr0lu"
+          >
+            Subscribe with Stripe
+          </button>
+
+          <p id="cqPremiumMsg" class="cq-muted" style="margin-top:.5rem;"></p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Why there’s a paywall at all</h2>
+        <p>
+          CoffeeQuant started as a free side-project — daily sparks, simple visuals, and “desk-truth” explanations.
+          Traffic has grown, and the tools are getting heavier: Monte Carlo, vol-target IUL engines, server-side pricing.
+        </p>
+        <p>
+          To keep this sustainable (and ad-free), some pieces now sit behind a light HKD 100 / year paywall:
+          enough to cover infra, not enough to need a sales deck.
+        </p>
+      </section>
+
+      <section>
+        <h2>What’s premium vs free?</h2>
+        <div class="cq-grid cq-premium-grid">
+          <div class="cq-card">
+            <h3>Free</h3>
+            <ul>
+              <li>Daily macro / structuring notes.</li>
+              <li>Simple static explainers.</li>
+              <li>Occasional public tools &amp; demos.</li>
             </ul>
-
-            <div class="cq-premium-cta">
-              <a href="/#tools" class="cq-btn">Back to tools</a>
-              <a href="/" class="cq-btn-ghost">Home</a>
-            </div>
           </div>
-
-          <!-- RIGHT: simple plan box -->
-          <aside class="cq-premium-right">
-            <div class="cq-plan-card">
-              <div class="cq-plan-label">Pilot phase</div>
-              <div class="cq-plan-price">
-                <span class="cq-plan-num">$X</span>
-                <span class="cq-plan-unit">/year</span>
-              </div>
-              <ul class="cq-plan-list">
-                <li>Unlock Premium-tagged labs &amp; tools</li>
-                <li>JSON / CSV exports for pricing inputs</li>
-                <li>Occasional deep-dive write-ups</li>
-              </ul>
-              <p class="cq-plan-note cq-muted">
-                Payments &amp; live pricing APIs are being rolled out in stages.
-                For now access is limited to invited users.
-              </p>
-            </div>
-          </aside>
-        </div>
-      </article>
-
-      <!-- FEATURE GRID -->
-      <section class="cq-section cq-premium-section">
-        <div class="cq-section-head cq-section-head-sub">
-          <h2>What you actually get as a structurer</h2>
-        </div>
-
-        <div class="cq-grid cq-premium-features">
-          <div class="cq-tile cq-premium-feature">
-            <h3>1. IUL &amp; vol-target lab</h3>
-            <p class="cq-muted">
-              Fast back-of-envelope pricing on index-linked crediting with cap / participation /
-              floor, plus P&amp;L-style views in excess-return space. Designed to talk both actuaries
-              and RMs through the same graph.
-            </p>
-          </div>
-
-          <div class="cq-tile cq-premium-feature">
-            <h3>2. Cross-gamma playground</h3>
-            <p class="cq-muted">
-              Visualize worst-of, quanto and PRDC-style exposures with simple sliders on
-              correlation, tenor, and basis. Use it to explain “why this hedge is expensive”
-              without opening a single PDF.
-            </p>
-          </div>
-
-          <div class="cq-tile cq-premium-feature">
-            <h3>3. Wrapper templates</h3>
-            <p class="cq-muted">
-              JSON blocks for PB notes, fund wrappers and IUL strategies:
-              underlyings, barriers, coupons and risk-budget annotations —
-              so you can paste them into your internal engines or slide decks.
-            </p>
-          </div>
-
-          <div class="cq-tile cq-premium-feature">
-            <h3>4. Desk-level commentary</h3>
-            <p class="cq-muted">
-              Occasional long-form notes on where QIS, wrappers and
-              autocalls are actually going — from someone who still runs
-              a book.
-            </p>
+          <div class="cq-card cq-card-premium">
+            <h3>Premium</h3>
+            <ul>
+              <li>IUL Vol-Target Lab.</li>
+              <li>Pricing CLI &amp; scenario tools.</li>
+              <li>Specialist articles on wrappers, QIS, and Asia PB flows.</li>
+              <li>Access to new tools as they ship.</li>
+            </ul>
           </div>
         </div>
       </section>
 
-    </section>
+      <section>
+        <h2>How it works</h2>
+        <ol>
+          <li>Sign in with Google (top right). You’ll see “Signed in as …” when it works.</li>
+          <li>Click <strong>“Subscribe with Stripe”</strong>.</li>
+          <li>Complete payment (HKD 100 / year) on Stripe’s secure checkout page.</li>
+          <li>
+            Stripe sends a confirmation to CoffeeQuant; your account is flagged as premium and
+            Labs / Tools tagged <span class="cq-pill cq-pill-premium-inline">Premium</span> unlock.
+          </li>
+        </ol>
+        <p class="cq-muted">
+          You can cancel renewal any time from your Stripe customer portal (link coming soon).
+        </p>
+      </section>
+    </article>
   </main>
 
-  <!-- Footer -->
-  <footer class="cq-footer">
-    <div class="cq-shell">
-      <div>☕ CoffeeQuant · Fast. Minimal. Curious. No ads.</div>
-      <div style="margin-top:.4rem">
-        <a href="/rss.xml">RSS</a> ·
-        <a href="mailto:hello@coffeequant.example">Contact</a>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Auth & MathJax re-typeset -->
-  <script src="/statics/js/auth.js"></script>
-  <script>
-    if (window.MathJax && MathJax.typesetPromise) {
-      MathJax.typesetPromise().catch(()=>{});
-    }
-  </script>
 </body>
 </html>
-
