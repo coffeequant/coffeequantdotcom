@@ -1,74 +1,90 @@
 {
   "items": [
     {
+      "date": "2026-02-13",
+      "title": "CQ DAILY:",
+      "href": "/statics/WriteUps/cq-daily.html",
+      "tag": "Daily",
+      "premium": false
+    },
+    {
       "date": "2026-02-09",
       "title": "Bond Repacks - How it works?",
       "deck": "Bond Repacks",
       "link": "statics/WriteUps/BondRepack.html",
       "thumb": "statics/images/wd.png",
-      "tags": ["Bond", "Repack", "Institutional"],
+      "tags": [
+        "Bond",
+        "Repack",
+        "Institutional"
+      ],
       "html": "<p><strong>Bond Repacks: Repo, Default, and the Hidden Call Option Traders Actually Price</p>"
     },
-
     {
       "date": "2025-12-05",
       "title": "Put Replication - When Everyone Replicates the Put",
       "deck": "Why Put Replication causes Issues",
       "link": "statics/WriteUps/PutReplication.html",
       "thumb": "statics/images/wd.png",
-      "tags": ["Put", "QIS", "Insurance"],
-      "html": "<p><strong>Equilibrium, instability, and why large-scale put replication changes the drift and volatility you think you’re hedging.</p>"
+      "tags": [
+        "Put",
+        "QIS",
+        "Insurance"
+      ],
+      "html": "<p><strong>Equilibrium, instability, and why large-scale put replication changes the drift and volatility you think you?re hedging.</p>"
     },
-
-
-
     {
       "date": "2025-11-29",
       "title": "AI - Why it Matters?",
       "deck": "Why Traditional Market Skeptics Misread AI",
       "link": "statics/WriteUps/AI.html",
       "thumb": "statics/images/ai.jpeg",
-      "tags": ["Macro", "Digital Gold", "Structured Ideas"],
+      "tags": [
+        "Macro",
+        "Digital Gold",
+        "Structured Ideas"
+      ],
       "html": "<p><strong>2008-style intuition doesnt transfer to GPU economics. Housing bubbles,            bond convexity, and bank balance sheets live in one universe. AI lives in another: governed by physics scaling laws, and brutal engineering</p>"
     },
-
     {
       "date": "2025-11-22",
-      "title": "All That Glitters Isn’t (Only) Gold",
-      "deck": "Gold rebounds near $4,000 as traders reassess Fed cuts — Bitcoin mirrors the same fear trade in digital form. What happens when both hedge the same risk?",
+      "title": "All That Glitters Isn?t (Only) Gold",
+      "deck": "Gold rebounds near $4,000 as traders reassess Fed cuts ? Bitcoin mirrors the same fear trade in digital form. What happens when both hedge the same risk?",
       "link": "statics/WriteUps/ArticleBIT.html",
       "thumb": "statics/img/thumbs/gold.jpeg",
-      "tags": ["Macro", "Digital Gold", "Structured Ideas"],
-      "html": "<p><strong>Gold vs Bitcoin:</strong> Two 'insurance assets' in one macro moment. Gold steadies after a $3,800–$4,050 consolidation, while BTC toys with $100k — both priced on faith in fiat fragility. Our charts track correlation flips, left-tail betas, and structurable hedges combining metals and crypto.</p>"
+      "tags": [
+        "Macro",
+        "Digital Gold",
+        "Structured Ideas"
+      ],
+      "html": "<p><strong>Gold vs Bitcoin:</strong> Two 'insurance assets' in one macro moment. Gold steadies after a $3,800?$4,050 consolidation, while BTC toys with $100k ? both priced on faith in fiat fragility. Our charts track correlation flips, left-tail betas, and structurable hedges combining metals and crypto.</p>"
     },
-
- {
-   "date": "2025-11-22",
-   "title": "Rates say slowdown. Equities say party.",
-  "deck": "10y UST < 4%. Tech still euphoric. One of them is lying.",
-  "link": "statics/WriteUps/DailyMacro.html",
-  "thumb": "statics/img/hero/hero-01.webp",
-  "html": "<p>Bond market is quietly screaming \"growth is fading\". Stocks are still in 'soft landing forever' mode. This is the tension.</p>"
+    {
+      "date": "2025-11-22",
+      "title": "Rates say slowdown. Equities say party.",
+      "deck": "10y UST < 4%. Tech still euphoric. One of them is lying.",
+      "link": "statics/WriteUps/DailyMacro.html",
+      "thumb": "statics/img/hero/hero-01.webp",
+      "html": "<p>Bond market is quietly screaming \"growth is fading\". Stocks are still in 'soft landing forever' mode. This is the tension.</p>"
     },
     {
       "date": "2025-10-24",
-      "title": "A 6×6 thought: why sum=7 feels special",
+      "title": "A 6?6 thought: why sum=7 feels special",
       "deck": "On two dice, the middle sum gets the most paths. Try highlighting the diagonal.",
-      "html": "<p>Count pairs, not magic. The six ways to make 7 line up as a diagonal in the 6×6 grid.</p>",
+      "html": "<p>Count pairs, not magic. The six ways to make 7 line up as a diagonal in the 6?6 grid.</p>",
       "link": "statics/WriteUps/DicePuzzle.html",
       "thumb": "statics/img/thumbs/quant..webp"
-
     },
     {
-      "date": "2025-10-23",	    
-      "title": "Kelly’s whisper",
-      "deck": "If your edge is p, the sweet spot is roughly f = 2p − 1. Too big kills you.",
+      "date": "2025-10-23",
+      "title": "Kelly?s whisper",
+      "deck": "If your edge is p, the sweet spot is roughly f = 2p ? 1. Too big kills you.",
       "html": "<p>Play first in the lab, then open the derivation. $g(f)=p\\ln(1+f)+(1-p)\\ln(1-f)$ peaks at $2p-1$.</p>",
       "link": "statics/WriteUps/BetSizing.html",
-      "thumb":"statics/img/thumbs/lehman.webp"
+      "thumb": "statics/img/thumbs/lehman.webp"
     },
     {
-      "date": "2025-10-24",	    
+      "date": "2025-10-24",
       "title": "Gamma flips near zero",
       "deck": "Binary curve notes: OTM stabilizes, ITM amplifies. Watch the $K=0$ line.",
       "html": "<p>Replacement flows (receive 30y / pay 10y) lean on the spread when stress rises.</p>",
@@ -76,4 +92,3 @@
     }
   ]
 }
-
