@@ -14,17 +14,13 @@ env_variables:
   GOOGLE_CLIENT_ID: "58596950813-89s7vbdb1lnhom1t93mc979lgp5143eo.apps.googleusercontent.com"
 
 handlers:
-  # Static files: HTML, CSS, JS, images, JSON, etc.
+  # Serve all your static assets from /statics/...
   - url: /(.*\.(html|css|js|json|png|jpg|jpeg|gif|webp|svg|ico|txt|pdf|woff2?))$
     static_files: \1
     upload: (.*\.(html|css|js|json|png|jpg|jpeg|gif|webp|svg|ico|txt|pdf|woff2?))$
     secure: always
-    http_headers:
-      # Optional: add caching headers if you like
-      # Cache-Control: "public, max-age=3600"
-      Cross-Origin-Opener-Policy: "unsafe-none"
 
-  # Everything else (/, /api/...) handled by FastAPI via uvicorn
+  # Everything else → FastAPI app via uvicorn
   - url: /.*
     script: auto
     secure: always

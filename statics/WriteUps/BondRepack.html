@@ -1,0 +1,895 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CoffeeQuant Daily: Bond Repacks, Repo, and the Hidden Option</title>
+
+  <!-- If you have your site CSS, keep it -->
+  <link rel="stylesheet" href="/statics/css/cq.css" />
+
+  <!-- Chart.js for the mini simulator -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- MathJax for readable formulas -->
+  <script>
+    window.MathJax = { tex: { inlineMath: [['\\(','\\)'],['$','$']] } };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <style>
+    /* Self-contained styling that still plays nicely with cq.css */
+    :root{
+      --bg:#0b0e14; --panel:#0f1420; --panel2:#0c1120;
+      --text:#e8ecff; --muted:#aab3d6; --line:#1c2440;
+      --gold:#f2c14e; --cyan:#7de3ff; --pink:#ff77aa; --ok:#7dffb2;
+      --shadow: 0 14px 40px rgba(0,0,0,.35);
+      --r: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    }
+    body{ background: var(--bg); color: var(--text); font-family: var(--sans); }
+    .cq-article-wrap{ max-width: 1060px; margin: 0 auto; padding: 24px 18px 70px; }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding: 12px 14px; border:1px solid var(--line); border-radius: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+      box-shadow: var(--shadow);
+      position: sticky; top: 10px; z-index: 5;
+      backdrop-filter: blur(8px);
+    }
+    .brand a{ color: var(--text); text-decoration:none; font-weight:800; letter-spacing:.2px; }
+    .brand span{ color: var(--gold); }
+    .nav a{ color: var(--muted); text-decoration:none; margin-left: 12px; font-weight:600; }
+    .nav a:hover{ color: var(--text); }
+    .hero{
+      margin-top: 16px;
+      border-radius: var(--r);
+      border:1px solid var(--line);
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      background:
+        radial-gradient(900px 260px at 20% 0%, rgba(242,193,78,.20), transparent 60%),
+        radial-gradient(700px 220px at 80% 10%, rgba(125,227,255,.16), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+    }
+    .hero-inner{ padding: 22px 22px 18px; }
+    .kicker{ color: var(--muted); text-transform: uppercase; letter-spacing: .14em; font-size: 12px; font-weight: 800; }
+    h1{ margin: 8px 0 10px; font-size: 34px; line-height: 1.12; letter-spacing: -0.02em; }
+    .sub{ color: var(--muted); font-size: 15px; line-height: 1.6; max-width: 900px; }
+    .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top: 14px; }
+    .chip{
+      font-family: var(--mono);
+      font-size: 12px; color: var(--text);
+      padding: 7px 10px; border-radius: 999px;
+      border:1px solid var(--line);
+      background: rgba(15,20,32,.55);
+    }
+
+    .grid{ display:grid; gap: 14px; margin-top: 14px; }
+    @media (min-width: 960px){ .grid{ grid-template-columns: 1.15fr .85fr; } }
+
+    .card{
+      border:1px solid var(--line);
+      border-radius: var(--r);
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding: 14px 16px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      background: rgba(12,17,32,.35);
+    }
+    .card .hd h2{ margin:0; font-size: 15px; letter-spacing: -0.01em; }
+    .card .bd{ padding: 14px 16px 16px; color: var(--text); }
+    p{ margin: 10px 0; line-height: 1.68; color: rgba(232,236,255,.92); }
+    ul{ margin: 10px 0 10px 22px; color: rgba(232,236,255,.92); line-height: 1.65; }
+    li{ margin: 6px 0; }
+    .muted{ color: var(--muted); }
+    .callout{
+      border:1px dashed rgba(242,193,78,.45);
+      background: rgba(242,193,78,.08);
+      border-radius: 14px;
+      padding: 12px 12px;
+      margin: 12px 0;
+    }
+    .callout b{ color: var(--gold); }
+    .math{
+      font-family: var(--mono);
+      font-size: 13px;
+      color: rgba(232,236,255,.88);
+      background: rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.06);
+      padding: 10px 10px;
+      border-radius: 12px;
+      overflow:auto;
+    }
+    .two{ display:grid; gap: 12px; }
+    @media (min-width: 860px){ .two{ grid-template-columns: 1fr 1fr; } }
+
+    .sim{
+      display:grid; gap: 12px;
+    }
+    .sl{
+      border:1px solid rgba(255,255,255,.07);
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(0,0,0,.12);
+    }
+    .sl label{ display:flex; justify-content:space-between; gap:10px; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+    input[type="range"]{ width: 100%; }
+    .kv{
+      display:grid; gap: 8px;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 12px;
+    }
+    .k{
+      border:1px solid rgba(255,255,255,.07);
+      border-radius: 14px; padding: 10px;
+      background: rgba(0,0,0,.12);
+    }
+    .k .t{ color: var(--muted); font-size: 12px; }
+    .k .v{ font-size: 16px; font-weight: 800; margin-top: 6px; }
+    .btnrow{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 10px; }
+    .btn{
+      cursor:pointer; user-select:none;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(125,227,255,.10);
+      color: var(--text);
+      font-weight: 800;
+      letter-spacing: .01em;
+    }
+    .btn.secondary{ background: rgba(255,255,255,.04); color: var(--muted); }
+    canvas{ background: rgba(0,0,0,.10); border:1px solid rgba(255,255,255,.06); border-radius: 14px; }
+
+    .foot{ margin-top: 18px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px; padding: 8px 10px;
+      border-radius: 999px; border:1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.12);
+      font-family: var(--mono);
+      font-size: 12px;
+      color: rgba(232,236,255,.86);
+    }
+    .dot{ width:8px; height:8px; border-radius:99px; background: var(--ok); box-shadow: 0 0 20px rgba(125,255,178,.22); }
+    .divider{ height:1px; background: rgba(255,255,255,.06); margin: 12px 0; }
+    .miniimg{
+      width:100%; border-radius: 14px; border:1px solid rgba(255,255,255,.06);
+      background:
+        radial-gradient(600px 180px at 20% 20%, rgba(255,119,170,.14), transparent 65%),
+        radial-gradient(600px 180px at 80% 10%, rgba(242,193,78,.18), transparent 65%),
+        radial-gradient(600px 240px at 60% 90%, rgba(125,227,255,.12), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      padding: 16px;
+    }
+    .miniimg h3{ margin:0 0 6px; font-size: 14px; }
+    .miniimg .small{ color: var(--muted); font-size: 12px; line-height: 1.6; }
+
+    /* SVG diagram */
+    .diag{ width:100%; height:auto; display:block; }
+    .svgbox{ border-radius: 14px; border:1px solid rgba(255,255,255,.06); background: rgba(0,0,0,.12); padding: 10px; }
+  </style>
+</head>
+
+<body>
+  <div class="cq-article-wrap">
+
+    <div class="topbar">
+      <div class="brand">
+        <a href="/"><span>☕</span> CoffeeQuant</a>
+      </div>
+      <div class="nav">
+        <a href="/">Home</a>
+        <a href="#structure">Structure</a>
+        <a href="#option">Optionality</a>
+	<a href="#max0">Hidden Option</a>
+        <a href="#repo">Repo</a>
+        <a href="#sim">Simulator</a>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="kicker">CoffeeQuant Daily • Bond Engineering</div>
+        <h1>Bond Repacks: Repo, Default, and the Hidden Call Option Traders Actually Price</h1>
+        <div class="sub">
+          Q4 was one of those quarters where the market tape was noisy, the inbox was louder, and “simple” structures somehow
+          still had three term-sheets and five lawyers. So let’s reboot with something that looks complicated
+          but is surprisingly clean once you view it through a trader lens: <b>the repack’s optionality</b>.
+        </div>
+        <div class="chips">
+          <div class="chip">SPV note</div>
+          <div class="chip">repo funding</div>
+          <div class="chip">default hazard</div>
+          <div class="chip">call / termination</div>
+          <div class="chip">insurance wrappers</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <section class="card" id="structure">
+        <div class="hd">
+          <h2>1) What is a bond repack in one sentence?</h2>
+          <span class="pill"><span class="dot"></span> trader view</span>
+        </div>
+        <div class="bd">
+          <p>
+            A bond repack is a <b>funded note issued by an SPV</b> that holds (or references) an underlying bond and
+            transforms its cashflows into something that fits the buyer’s mandate, coupon profile, currency, or wrapper.
+          </p>
+          <p class="callout">
+            The “secret sauce” is not the SPV. It’s the <b>embedded option(s)</b> and how they behave under
+            <b>default timing</b>, <b>repo margining</b>, and <b>funding stress</b>.
+          </p>
+
+          <div class="svgbox">
+            <svg class="diag" viewBox="0 0 980 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bond repack schematic">
+              <defs>
+                <linearGradient id="g1" x1="0" x2="1">
+                  <stop offset="0" stop-color="rgba(242,193,78,.22)"/>
+                  <stop offset="1" stop-color="rgba(125,227,255,.16)"/>
+                </linearGradient>
+              </defs>
+
+              <rect x="10" y="10" width="960" height="340" rx="18" fill="rgba(0,0,0,.10)" stroke="rgba(255,255,255,.08)"/>
+              <rect x="40" y="60" width="230" height="110" rx="16" fill="rgba(15,20,32,.9)" stroke="rgba(255,255,255,.10)"/>
+              <text x="155" y="95" text-anchor="middle" fill="white" font-size="16" font-weight="700">Investor</text>
+              <text x="155" y="123" text-anchor="middle" fill="rgba(232,236,255,.78)" font-size="12">Buys SPV note</text>
+              <text x="155" y="146" text-anchor="middle" fill="rgba(232,236,255,.78)" font-size="12">Receives coupon/redemption</text>
+
+              <rect x="375" y="40" width="240" height="140" rx="16" fill="url(#g1)" stroke="rgba(255,255,255,.12)"/>
+              <text x="495" y="78" text-anchor="middle" fill="white" font-size="16" font-weight="800">SPV / Repack</text>
+              <text x="495" y="105" text-anchor="middle" fill="rgba(232,236,255,.86)" font-size="12">Issues funded note</text>
+              <text x="495" y="128" text-anchor="middle" fill="rgba(232,236,255,.86)" font-size="12">Holds/refs bond + hedges</text>
+              <text x="495" y="151" text-anchor="middle" fill="rgba(232,236,255,.86)" font-size="12">May embed call/termination</text>
+
+              <rect x="700" y="60" width="240" height="110" rx="16" fill="rgba(15,20,32,.9)" stroke="rgba(255,255,255,.10)"/>
+              <text x="820" y="95" text-anchor="middle" fill="white" font-size="16" font-weight="700">Underlying Bond</text>
+              <text x="820" y="123" text-anchor="middle" fill="rgba(232,236,255,.78)" font-size="12">Coupons + principal</text>
+              <text x="820" y="146" text-anchor="middle" fill="rgba(232,236,255,.78)" font-size="12">Default / recovery risk</text>
+
+              <rect x="375" y="220" width="240" height="110" rx="16" fill="rgba(15,20,32,.9)" stroke="rgba(255,255,255,.10)"/>
+              <text x="495" y="255" text-anchor="middle" fill="white" font-size="16" font-weight="700">Repo / Funding Desk</text>
+              <text x="495" y="282" text-anchor="middle" fill="rgba(232,236,255,.78)" font-size="12">Funds bond position</text>
+              <text x="495" y="305" text-anchor="middle" fill="rgba(232,236,255,.78)" font-size="12">Haircut + margin calls</text>
+
+              <!-- arrows -->
+              <path d="M270 115 L375 110" stroke="rgba(125,227,255,.65)" stroke-width="3" fill="none"/>
+              <polygon points="370,104 375,110 370,116" fill="rgba(125,227,255,.85)"/>
+              <text x="322" y="96" text-anchor="middle" fill="rgba(125,227,255,.95)" font-size="12" font-family="monospace">Note proceeds</text>
+
+              <path d="M615 110 L700 115" stroke="rgba(242,193,78,.65)" stroke-width="3" fill="none"/>
+              <polygon points="695,109 700,115 695,121" fill="rgba(242,193,78,.85)"/>
+              <text x="657" y="96" text-anchor="middle" fill="rgba(242,193,78,.95)" font-size="12" font-family="monospace">Bond purchase</text>
+
+              <path d="M700 145 L615 145" stroke="rgba(242,193,78,.45)" stroke-width="3" fill="none"/>
+              <polygon points="620,139 615,145 620,151" fill="rgba(242,193,78,.70)"/>
+              <text x="657" y="170" text-anchor="middle" fill="rgba(242,193,78,.90)" font-size="12" font-family="monospace">Coupons / recovery</text>
+
+              <path d="M495 180 L495 220" stroke="rgba(255,255,255,.22)" stroke-width="3" fill="none"/>
+              <polygon points="489,215 495,220 501,215" fill="rgba(255,255,255,.40)"/>
+              <text x="495" y="205" text-anchor="middle" fill="rgba(232,236,255,.70)" font-size="12" font-family="monospace">Funding</text>
+
+              <path d="M375 255 L270 170" stroke="rgba(255,119,170,.35)" stroke-width="3" fill="none"/>
+              <polygon points="274,173 270,170 272,175" fill="rgba(255,119,170,.60)"/>
+              <text x="325" y="225" text-anchor="middle" fill="rgba(255,119,170,.85)" font-size="12" font-family="monospace">stress channel</text>
+
+            </svg>
+          </div>
+
+          <p class="muted">
+            The diagram is intentionally “desk-real”: the repack is not a fairy tale SPV. It is a position that has
+            funding constraints, optionality, and default timing.
+          </p>
+        </div>
+      </section>
+
+      <aside class="card">
+        <div class="hd">
+          <h2>Quick glossary (so sales can stay dangerous)</h2>
+        </div>
+        <div class="bd">
+          <ul>
+            <li><b>Repack note</b>: the issued liability. Investor holds this.</li>
+            <li><b>Underlying</b>: bond (cash), TRS on bond, or basket/portfolio in the SPV.</li>
+            <li><b>Repo</b>: financing for the bond holding. Think haircut + margin mechanics.</li>
+            <li><b>Termination / call</b>: right to unwind or redeem early, sometimes conditional.</li>
+            <li><b>Default timing</b>: not just “defaults or not” but <i>when</i>.</li>
+            <li><b>Recovery</b>: what you get after default, and how quickly.</li>
+          </ul>
+
+          <div class="miniimg">
+            <h3>Why traders care</h3>
+            <div class="small">
+              If the structure has a call, the trader prices a <b>default-sensitive option</b>.
+              If the structure is repo-funded, the trader also prices the <b>funding tail</b>.
+              In a repack, those two tails often hold hands.
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <section class="card" id="option" style="margin-top:14px;">
+      <div class="hd"><h2>2) The “complex part”: what is the option in a repack?</h2></div>
+      <div class="bd">
+        <p>
+          A lot of repacks contain an explicit or implicit right to end the trade early:
+          issuer call, investor put, termination on trigger, clean-up call, or “optional redemption”.
+          In trader language: <b>you’ve embedded an option on a credit instrument under funding constraints</b>.
+        </p>
+
+        <div class="two">
+          <div>
+            <p><b>Two common ways the option shows up</b></p>
+            <ul>
+              <li><b>Issuer call / clean-up call:</b> issuer can redeem when outstanding is small or at certain dates.</li>
+              <li><b>Termination on event:</b> downgrade / collateral trigger / repo discontinuity / NAV breach.</li>
+            </ul>
+
+            <p class="callout">
+              If the bond can default <b>before</b> the remaining cashflows are received, the option is not “rates optionality”.
+              It is <b>default-timing optionality</b>.
+            </p>
+          </div>
+
+          <div>
+            <p><b>The trader’s mental model (deliberately simplified)</b></p>
+            <div class="math">
+              Under risk-neutral pricing, expected PV is “survival-weighted” cashflows:
+
+              \[
+              PV \approx \int_0^T D(t)\, \lambda(t)\,S(t)\,R\,dt + \int_0^T D(t)\,S(t)\,c\,dt + D(T)S(T)\,1
+              \]
+
+              where \(S(t)=e^{-\int_0^t \lambda(u)\,du}\) is survival, \(\lambda(t)\) hazard,
+              \(R\) recovery, \(c\) coupon, \(D(t)\) discount.
+            </div>
+            <p class="muted">
+              “Option value” comes from comparing continuation value vs call/redemption value at decision dates.
+              Default timing makes the continuation value highly nonlinear.
+            </p>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <p>
+          Here’s the intuition you can use with clients:
+        </p>
+        <ul>
+          <li>
+            The bond’s value already embeds default risk (hazard + recovery).
+          </li>
+          <li>
+            A call/termination adds a second layer: “<b>when do I get to stop playing</b>?”
+          </li>
+          <li>
+            If stress arrives, default probability rises, repo haircuts widen, and suddenly the “right to stop” can be worth a lot.
+          </li>
+        </ul>
+      </div>
+    </section>
+<section class="card" id="max0" style="margin-top:14px;">
+  <div class="hd"><h2>2.5) The hidden option: why limited liability turns the repack into <span style="color:var(--gold)">max(0, A − B)</span></h2></div>
+  <div class="bd">
+    <p>
+      Here’s the cleanest way to explain the “option” inside many repacks, especially to a sales audience.
+      Forget stochastic calculus for a minute. Think in <b>cash-in</b> and <b>cash-out</b>.
+    </p>
+
+    <div class="two">
+      <div>
+        <p><b>Define two piles of cash:</b></p>
+        <ul>
+          <li><b>A</b> = cash you <b>RECEIVE</b> from the bond (coupons + principal + recovery)</li>
+          <li><b>B</b> = cash you <b>MUST PAY</b> (funding / repo carry + close-out + losses)</li>
+        </ul>
+
+        <p class="callout">
+          In normal times, both A and B “feel smooth”: coupons accrue steadily → A grows,
+          funding accrues steadily → B grows. So far, no drama.
+        </p>
+
+        <div class="math">
+          The repack’s limited-liability payoff often behaves like:
+
+          \[
+          \text{Equity / residual payoff} \;\approx\; \max(0,\;A - B)
+          \]
+
+          If \(A\) is less than \(B\), the vehicle can’t pay “negative equity”.
+          It just goes to zero.
+        </div>
+
+        <p class="muted">
+          That floor at zero is the option. It’s not a marketing feature. It’s the legal + structural physics of the SPV.
+        </p>
+      </div>
+
+      <div class="svgbox">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px;">
+          <div class="pill"><span class="dot"></span> scenario widget</div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn secondary" id="scEarly">Early default (Year 2)</button>
+            <button class="btn secondary" id="scLate">Late default (Year 9)</button>
+          </div>
+        </div>
+
+        <div style="display:grid; gap:10px;">
+          <div class="k">
+            <div class="t">A = cash RECEIVED</div>
+            <div style="margin-top:8px; background:rgba(0,0,0,.12); border:1px solid rgba(255,255,255,.06); border-radius:12px; overflow:hidden;">
+              <div id="barA" style="height:14px; width:55%; background: linear-gradient(90deg, rgba(242,193,78,.85), rgba(242,193,78,.35));"></div>
+            </div>
+            <div class="muted" style="margin-top:6px; font-family:var(--mono); font-size:12px;" id="txtA">███ (coupons + some principal/recovery)</div>
+          </div>
+
+          <div class="k">
+            <div class="t">B = cash MUST PAY</div>
+            <div style="margin-top:8px; background:rgba(0,0,0,.12); border:1px solid rgba(255,255,255,.06); border-radius:12px; overflow:hidden;">
+              <div id="barB" style="height:14px; width:80%; background: linear-gradient(90deg, rgba(125,227,255,.85), rgba(125,227,255,.30));"></div>
+            </div>
+            <div class="muted" style="margin-top:6px; font-family:var(--mono); font-size:12px;" id="txtB">████████████ (funding + close-out + loss)</div>
+          </div>
+
+          <div class="k">
+            <div class="t">Payoff = max(0, A − B)</div>
+            <div class="v" id="txtPayoff" style="margin-top:8px;">0.000 (floor hit)</div>
+            <div class="muted" style="margin-top:6px;">
+              👉 The bank does <b>not</b> pay extra when things go wrong. The structure just runs out of equity.
+              That “no negative” is the option.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <h3 style="margin:0 0 6px; font-size:15px;">Step 2: Early default (this is where convexity comes from)</h3>
+    <p>
+      Assume default happens in <b>Year 2</b>, recovery is <b>40</b>.
+    </p>
+    <ul>
+      <li><b>A collapses early</b>: only 2 coupons received, principal mostly gone, recovery comes in at 40 not 100.</li>
+      <li><b>B does not collapse</b>: funding already paid for 2 years, plus unwind/close-out friction, plus the loss is “locked in”.</li>
+    </ul>
+
+    <div class="two">
+      <div class="math">
+        Visual (not to scale):
+
+        A: ███
+        B: ████████████
+
+        So \(A - B < 0\), but payoff is floored:
+        \[
+        \max(0, A - B) = 0
+        \]
+      </div>
+      <div class="callout">
+        <b>Sales line:</b> “The repack’s equity can’t go negative. That floor is exactly why the option has value.”
+      </div>
+    </div>
+
+    <h3 style="margin:14px 0 6px; font-size:15px;">Step 3: Late default (the important contrast)</h3>
+    <p>
+      Now move default to <b>Year 9</b>.
+      You’ve already harvested most of the carry.
+    </p>
+    <ul>
+      <li><b>A is large</b>: most coupons already received.</li>
+      <li><b>B is large too</b>: funding paid over time, but the <i>loss</i> hits late when carry has already been banked.</li>
+      <li>So \(A - B\) may still be positive, or only mildly negative, and the floor is less “in the money”.</li>
+    </ul>
+
+    <p class="callout">
+      <b>Key intuition:</b> The option is about <b>timing</b>.
+      Early default is “bad convexity” for the residual, and “good convexity” for limited liability.
+      Late default feels less explosive because carry had time to accumulate.
+    </p>
+
+    <p class="muted">
+      If you want one sentence: <b>repack equity is short “default timing”</b>, and limited liability is the embedded protection that makes the payoff kinked.
+    </p>
+  </div>
+</section>
+
+<script>
+  (function(){
+    const barA = document.getElementById("barA");
+    const barB = document.getElementById("barB");
+    const txtA = document.getElementById("txtA");
+    const txtB = document.getElementById("txtB");
+    const txtPayoff = document.getElementById("txtPayoff");
+    const scEarly = document.getElementById("scEarly");
+    const scLate = document.getElementById("scLate");
+
+    function setScenario(kind){
+      // These are illustrative numbers to match the story.
+      // A = received cash; B = paid cash. payoff = max(0, A-B).
+      let A, B, labelA, labelB;
+
+      if(kind === "early"){
+        A = 0.35;  // small: 2 coupons + partial recovery
+        B = 0.80;  // larger: funding + unwind + loss locked
+        labelA = "███ (2 coupons + recovery)";
+        labelB = "████████████ (funding + close-out + loss)";
+      } else {
+        A = 0.92;  // big: most coupons earned
+        B = 0.88;  // big too, but loss hits late
+        labelA = "███████████ (carry harvested + recovery)";
+        labelB = "██████████ (funding + late loss)";
+      }
+
+      const payoff = Math.max(0, A - B);
+
+      barA.style.width = Math.round(A*100) + "%";
+      barB.style.width = Math.round(B*100) + "%";
+      txtA.textContent = labelA + "  (" + Math.round(A*100) + "%)";
+      txtB.textContent = labelB + "  (" + Math.round(B*100) + "%)";
+      txtPayoff.textContent = payoff.toFixed(3) + (payoff === 0 ? " (floor hit)" : " (residual survives)");
+
+      // button states
+      scEarly.classList.toggle("btn", true);
+      scLate.classList.toggle("btn", true);
+      scEarly.classList.toggle("secondary", kind !== "early");
+      scLate.classList.toggle("secondary", kind !== "late");
+    }
+
+    if(scEarly && scLate){
+      scEarly.addEventListener("click", ()=>setScenario("early"));
+      scLate.addEventListener("click", ()=>setScenario("late"));
+      setScenario("early");
+    }
+  })();
+</script>
+
+
+
+    <section class="card" id="repo" style="margin-top:14px;">
+      <div class="hd"><h2>3) Repo is not housekeeping: it’s part of the payoff</h2></div>
+      <div class="bd">
+        <p>
+          If the SPV holds a bond and finances it via repo, you’ve introduced a real-world constraint:
+          <b>funding cost and funding discontinuity</b>.
+          The note might look like “bond cashflows transformed”, but the desk sees:
+          <b>bond + funding basis + option(s) + triggers</b>.
+        </p>
+
+        <div class="two">
+          <div>
+            <p><b>What can go wrong (and why the option matters)?</b></p>
+            <ul>
+              <li><b>Haircut / margin:</b> bond price drops → margin call → forced unwind risk.</li>
+              <li><b>Repo rate spikes:</b> carry flips sign right when you don’t want it to.</li>
+              <li><b>Repo term mismatch:</b> short-term repo funding a longer asset = rollover risk.</li>
+              <li><b>Wrong-way risk:</b> credit stress → bond down → haircut up → funding tighter.</li>
+            </ul>
+          </div>
+          <div>
+            <p><b>Desk simplification</b></p>
+            <div class="math">
+              Think “bond carry” under repo:
+
+              \[
+              \text{Carry} \approx (y - r_{\text{repo}})\cdot \text{funded notional} - \text{haircut drag}
+              \]
+
+              The repack option is often a <i>liquidity valve</i>:
+              when carry turns ugly or haircuts bite, the call/termination reshapes the loss distribution.
+            </div>
+          </div>
+        </div>
+
+        <p class="callout">
+          A repack is a “bond story” until funding starts driving outcomes. Then it becomes a <b>repo + optionality</b> story.
+          In 2026, that’s not a tail scenario. It’s table stakes.
+        </p>
+      </div>
+    </section>
+
+    <section class="card" id="sim" style="margin-top:14px;">
+      <div class="hd"><h2>4) Mini simulator: why “more optionality” can destabilize equilibrium</h2></div>
+      <div class="bd">
+        <p>
+          This is a <b>toy model</b> (not a pricing library). Its job is to make one point visually:
+          when you add an early-exit rule (call/termination) and then layer funding stress,
+          the PV becomes a <b>kinked function of hazard and repo</b>.
+        </p>
+
+        <div class="sim">
+          <div class="two">
+            <div class="sl">
+              <label><span>Hazard (annual, flat) \(\lambda\)</span><span id="hzv" class="pill">2.0%</span></label>
+              <input id="haz" type="range" min="0" max="150" value="20" />
+              <label><span>Recovery \(R\)</span><span id="rcv" class="pill">40%</span></label>
+              <input id="rec" type="range" min="0" max="100" value="40" />
+              <label><span>Repo rate \(r_{repo}\)</span><span id="rpv" class="pill">4.0%</span></label>
+              <input id="repo" type="range" min="0" max="120" value="40" />
+              <label><span>Coupon (annual) \(c\)</span><span id="cpv" class="pill">6.0%</span></label>
+              <input id="coup" type="range" min="0" max="200" value="60" />
+              <label><span>Call at year 1? (redeem @ par)</span><span id="clv" class="pill">ON</span></label>
+              <input id="call" type="range" min="0" max="1" value="1" />
+              <div class="btnrow">
+                <button class="btn" id="runBtn">Run</button>
+                <button class="btn secondary" id="resetBtn">Reset</button>
+              </div>
+
+              <div class="kv">
+                <div class="k">
+                  <div class="t">PV (no call)</div>
+                  <div class="v" id="pvNo">—</div>
+                </div>
+                <div class="k">
+                  <div class="t">PV (with call)</div>
+                  <div class="v" id="pvYes">—</div>
+                </div>
+                <div class="k">
+                  <div class="t">“Option value”</div>
+                  <div class="v" id="optV">—</div>
+                </div>
+                <div class="k">
+                  <div class="t">Funding drag (rough)</div>
+                  <div class="v" id="fdg">—</div>
+                </div>
+              </div>
+
+              <p class="muted" style="margin-top:10px;">
+                Simplification: discount rate = repo rate; call means “redeem at par at t=1 if continuation PV &lt; par”.
+                This mimics the desk instinct: if continuation looks bad, exercise the valve.
+              </p>
+            </div>
+
+            <div>
+              <canvas id="chartPV" height="220"></canvas>
+              <div style="height:10px;"></div>
+              <canvas id="chartSens" height="220"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <p>
+          If you want to tie this to <b>insurance QIS / wrapper reality</b>:
+          repacks often sit inside wrappers where <b>cashflow shape</b>, <b>drawdown control</b>,
+          and <b>reporting simplicity</b> matter. The repack becomes an “asset packaging layer”:
+          take messy underlying credit/funding dynamics and output something that an insurer can hold and operationalize.
+        </p>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:14px;">
+      <div class="hd"><h2>5) How I’d explain pricing to a client (without lying)</h2></div>
+      <div class="bd">
+        <p>
+          A clean client explanation is:
+        </p>
+        <ul>
+          <li>The repack note is funded, but the underlying is a credit asset: default timing matters.</li>
+          <li>The “option” is the right to stop or reshape cashflows under stress.</li>
+          <li>Repo is the oxygen line. When oxygen gets expensive, optionality becomes valuable.</li>
+          <li>Traders price the option by comparing continuation value vs redemption value under survival-weighted cashflows and funding.</li>
+        </ul>
+
+        <div class="callout">
+          <b>Practical takeaway:</b> In a repack, “option value” often shows up as spread:
+          tighter spread if the desk is short the option; wider if the desk is long stress optionality.
+          The client sees a coupon. The desk sees a distribution.
+        </div>
+
+        <p class="foot">
+          Disclaimer: The simulator is intuition-only and ignores many realities (term structure of hazard, convexity,
+          accrued recovery conventions, deliverability, repo haircuts, margin period of risk, etc.).
+          But the <b>shape</b> of the story is the real message.
+        </p>
+      </div>
+    </section>
+
+  </div>
+
+<script>
+  // -------- Helper formatting
+  const pct = (x, d=1) => (100*x).toFixed(d) + "%";
+  const bp  = (x) => (10000*x).toFixed(0) + " bp";
+  const usd = (x) => (x>=0 ? "" : "−") + "$" + Math.abs(x).toFixed(3);
+
+  // -------- Toy PV model (survival-weighted cashflows)
+  // Notation:
+  // - Flat hazard lambda
+  // - Annual coupon c on par
+  // - Recovery R at default
+  // - Discount at repo rate (so funding stress is "in the discount")
+  // - Call at t=1: redeem at par if continuation PV < 1
+  function pvBond({lambda, R, r, c, T=5, dt=1/12}) {
+    let pv = 0;
+    let surv = 1.0;
+    for (let t=dt; t<=T+1e-12; t+=dt) {
+      const disc = Math.exp(-r*t);
+      const dDefault = surv * (1 - Math.exp(-lambda*dt));
+      const dSurvNext = surv * Math.exp(-lambda*dt);
+
+      // default recovery paid at default time
+      pv += disc * dDefault * R;
+
+      // coupon paid if survive to payment time (approx continuous accrual)
+      pv += disc * dSurvNext * c * dt;
+
+      surv = dSurvNext;
+    }
+    // principal at maturity if survive
+    pv += Math.exp(-r*T) * surv * 1.0;
+    return pv;
+  }
+
+  function pvWithCall(params) {
+    // Call at t=1:
+    // - compare continuation PV from year 1 onward (as-of t=1) versus par
+    // - if continuation < 1, redeem at 1 (exercise call)
+    const {lambda, R, r, c, T=5} = params;
+    const pv0_no_call = pvBond({lambda,R,r,c,T});
+
+    // value at t=1 conditional on survival to 1:
+    // continuation PV (from t=1) with remaining maturity T-1:
+    const cont_asof1 = pvBond({lambda,R,r,c,T:(T-1)}) / Math.exp(-r*1); // bring to t=1 by dividing discount
+    const redeem_asof1 = 1.0;
+
+    const exercise = (cont_asof1 < redeem_asof1);
+    // PV of call feature (simplified): PV = PV up to 1y + PV of chosen value at 1y conditional on survival
+    // We'll compute PV directly:
+    const pv_up_to1 = pvBond({lambda,R,r,c,T:1});
+    // survival to 1:
+    const S1 = Math.exp(-lambda*1);
+    const chosen = exercise ? redeem_asof1 : cont_asof1;
+    const pv_chosen = Math.exp(-r*1) * S1 * chosen;
+    // But pv_up_to1 already includes principal at 1 if T=1. We need "cashflows up to 1 excluding principal".
+    // Quick hack: compute pv_up_to1_no_principal by subtracting survival*discount*principal.
+    const pv_principal1 = Math.exp(-r*1) * S1 * 1.0;
+    const pv_coupon_recovery_up_to1 = pv_up_to1 - pv_principal1;
+
+    return {
+      pv_call: pv_coupon_recovery_up_to1 + pv_chosen,
+      pv_no_call: pv0_no_call,
+      exercise
+    };
+  }
+
+  // Funding drag rough proxy: (repo - coupon) * funded years (very toy)
+  function fundingDrag({r, c, haircut=0.10, T=5}) {
+    // treat haircut as "unfunded" capital drag; ignore actual cost of capital and haircut dynamics.
+    const funded = (1 - haircut);
+    return (r - c) * funded * T;
+  }
+
+  // -------- UI
+  const el = (id)=>document.getElementById(id);
+  const haz = el("haz"), rec = el("rec"), repo = el("repo"), coup = el("coup"), call = el("call");
+  const hzv = el("hzv"), rcv = el("rcv"), rpv = el("rpv"), cpv = el("cpv"), clv = el("clv");
+
+  function readParams() {
+    const lambda = (haz.value/1000);  // 0..0.150
+    const R = (rec.value/100);        // 0..1
+    const r = (repo.value/1000);      // 0..0.120
+    const c = (coup.value/1000);      // 0..0.200
+    const callOn = (call.value === "1");
+    return {lambda,R,r,c,callOn};
+  }
+
+  function updateLabels() {
+    const p = readParams();
+    hzv.textContent = pct(p.lambda,1);
+    rcv.textContent = pct(p.R,0);
+    rpv.textContent = pct(p.r,1);
+    cpv.textContent = pct(p.c,1);
+    clv.textContent = p.callOn ? "ON" : "OFF";
+  }
+
+  // Charts
+  let chartPV=null, chartSens=null;
+
+  function buildCharts() {
+    const ctx1 = el("chartPV");
+    const ctx2 = el("chartSens");
+    chartPV = new Chart(ctx1, {
+      type: "line",
+      data: { labels: [], datasets: [
+        { label: "PV (no call)", data: [], tension: 0.25 },
+        { label: "PV (with call)", data: [], tension: 0.25 }
+      ]},
+      options: {
+        responsive: true,
+        plugins:{ legend:{ labels:{ color:"#e8ecff" } } },
+        scales:{
+          x:{ ticks:{ color:"#aab3d6" }, grid:{ color:"rgba(255,255,255,.06)" } },
+          y:{ ticks:{ color:"#aab3d6" }, grid:{ color:"rgba(255,255,255,.06)" } }
+        }
+      }
+    });
+
+    chartSens = new Chart(ctx2, {
+      type: "bar",
+      data: { labels: ["Base", "+hazard", "+repo", "+both"], datasets: [
+        { label: "PV with call", data: [] }
+      ]},
+      options: {
+        responsive: true,
+        plugins:{ legend:{ labels:{ color:"#e8ecff" } } },
+        scales:{
+          x:{ ticks:{ color:"#aab3d6" }, grid:{ color:"rgba(255,255,255,.06)" } },
+          y:{ ticks:{ color:"#aab3d6" }, grid:{ color:"rgba(255,255,255,.06)" } }
+        }
+      }
+    });
+  }
+
+  function run() {
+    updateLabels();
+    const {lambda,R,r,c,callOn} = readParams();
+    const base = pvWithCall({lambda,R,r,c,T:5});
+    const pvNo = base.pv_no_call;
+    const pvYes = callOn ? base.pv_call : pvNo;
+
+    const opt = pvYes - pvNo; // note: with this call rule, often positive (protection-like)
+    const fd = fundingDrag({r,c,haircut:0.10,T:5});
+
+    el("pvNo").textContent = pvNo.toFixed(3);
+    el("pvYes").textContent = pvYes.toFixed(3) + (callOn ? (base.exercise ? " (call exercised)" : " (continue)") : "");
+    el("optV").textContent = (callOn ? opt.toFixed(3) : "0.000");
+    el("fdg").textContent = (fd>=0?"+":"") + fd.toFixed(3);
+
+    // PV curves vs hazard
+    const labels=[], noCall=[], withCall=[];
+    const steps = 26;
+    for (let i=0;i<steps;i++){
+      const lam = i*(0.12/(steps-1)); // 0..12%
+      const res = pvWithCall({lambda:lam,R,r,c,T:5});
+      labels.push((100*lam).toFixed(1)+"%");
+      noCall.push(res.pv_no_call);
+      withCall.push(callOn ? res.pv_call : res.pv_no_call);
+    }
+
+    chartPV.data.labels = labels;
+    chartPV.data.datasets[0].data = noCall;
+    chartPV.data.datasets[1].data = withCall;
+    chartPV.update();
+
+    // Sensitivity bars
+    const bumpH = Math.min(lambda + 0.02, 0.15);
+    const bumpR = Math.min(r + 0.02, 0.12);
+
+    const b0 = pvWithCall({lambda,R,r,c,T:5}).pv_call;
+    const bH = pvWithCall({lambda:bumpH,R,r,c,T:5}).pv_call;
+    const bR = pvWithCall({lambda,R,r:bumpR,c,T:5}).pv_call;
+    const bB = pvWithCall({lambda:bumpH,R,r:bumpR,c,T:5}).pv_call;
+
+    chartSens.data.datasets[0].data = callOn ? [b0,bH,bR,bB] : [pvNo,pvNo,pvNo,pvNo];
+    chartSens.update();
+  }
+
+  function reset() {
+    haz.value=20; rec.value=40; repo.value=40; coup.value=60; call.value=1;
+    run();
+  }
+
+  // init
+  buildCharts();
+  updateLabels();
+  run();
+
+  ["input","change"].forEach(evt=>{
+    [haz,rec,repo,coup,call].forEach(x=>x.addEventListener(evt, run));
+  });
+  el("runBtn").addEventListener("click", run);
+  el("resetBtn").addEventListener("click", reset);
+</script>
+</body>
+</html>
+

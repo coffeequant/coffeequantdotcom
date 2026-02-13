@@ -1,13 +1,13 @@
 {
   "items": [
     {
-      "date": "2025-12-06",
-      "title": "Finacing - How it works?",
-      "deck": "Financing Strategies for Chinese Corporates",
-      "link": "statics/WriteUps/China_Corporate_Financing.html",
+      "date": "2026-02-09",
+      "title": "Bond Repacks - How it works?",
+      "deck": "Bond Repacks",
+      "link": "statics/WriteUps/BondRepack.html",
       "thumb": "statics/images/wd.png",
-      "tags": ["Put", "Financing", "Corporates"],
-      "html": "<p><strong>Credit is tight. Capital is expensive. But structured derivatives can replicate financing economically — if Sales teams understand the logic</p>"
+      "tags": ["Bond", "Repack", "Institutional"],
+      "html": "<p><strong>Bond Repacks: Repo, Default, and the Hidden Call Option Traders Actually Price</p>"
     },
 
     {

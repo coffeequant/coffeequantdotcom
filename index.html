@@ -2,376 +2,515 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>CoffeeQuant — Daily sparks, playground labs, and desk truth</title>
+  <title>CoffeeQuant — espresso shots of structured intuition</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- MathJax (global, once) -->
-  <script>
-    window.MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['\\[', '\\]'], ['$$','$$']],
-        processEscapes: true,
-        tags: 'ams'
-      },
-      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
-    };
-  </script>
-  <script id="MathJax-script" async
-    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
-
-  <!-- Theme / layout -->
-  <link rel="stylesheet" href="statics/css/cq.css" />
+  <!-- Main site CSS -->
+  <link rel="stylesheet" href="statics/css/cq.css?v=20260213" />
 
   <!-- Google Identity Services -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-  <!-- Expose your Google client id for auth.js -->
+  <!-- Expose your Google client id for auth.js (matches app.yaml GOOGLE_CLIENT_ID) -->
   <script>
-    // Must match GOOGLE_CLIENT_ID in app.yaml
     window.CQ_GOOGLE_CLIENT_ID = "58596950813-89s7vbdb1lnhom1t93mc979lgp5143eo.apps.googleusercontent.com";
   </script>
+
+  <!-- Small page-only polish (kept minimal so cq.css remains the boss) -->
+  <style>
+    :root {
+      --cq-cream: rgba(255,255,255,.82);
+      --cq-ink: rgba(255,255,255,.92);
+      --cq-dim: rgba(255,255,255,.68);
+      --cq-line: rgba(255,255,255,.10);
+      --cq-card: rgba(20,20,20,.55);
+      --cq-card2: rgba(20,20,20,.35);
+      --cq-accent: #ffcf7a;
+      --cq-accent2: #9ee7ff;
+    }
+
+    body { background: radial-gradient(1200px 600px at 20% 0%, rgba(255,207,122,.18), transparent 55%),
+                      radial-gradient(900px 500px at 85% 15%, rgba(158,231,255,.12), transparent 55%),
+                      linear-gradient(180deg, #0c0c0f 0%, #111116 60%, #0c0c0f 100%); }
+
+    .cq-wrap { max-width: 1200px; margin: 0 auto; padding: 16px 16px 64px; }
+    .cq-topbar {
+      display:flex; align-items:center; justify-content:space-between;
+      gap: 12px; padding: 10px 0 18px; border-bottom: 1px solid var(--cq-line);
+      position: sticky; top: 0; backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(12,12,15,.78), rgba(12,12,15,.35));
+      z-index: 20;
+    }
+
+    .cq-brand { display:flex; align-items:center; gap: 10px; }
+    .cq-mark {
+      width: 34px; height: 34px; border-radius: 10px;
+      background: linear-gradient(135deg, rgba(255,207,122,.28), rgba(158,231,255,.18));
+      border: 1px solid rgba(255,255,255,.14);
+      display:flex; align-items:center; justify-content:center;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      font-size: 18px;
+    }
+    .cq-titleblock { line-height: 1.05; }
+    .cq-titleblock .t1 { color: var(--cq-ink); font-weight: 800; letter-spacing: .2px; }
+    .cq-titleblock .t2 { color: var(--cq-dim); font-size: 12px; margin-top: 4px; }
+
+    .cq-nav {
+      display:flex; align-items:center; gap: 10px; flex-wrap: wrap; justify-content:flex-end;
+    }
+    .cq-nav a {
+      color: var(--cq-dim); text-decoration:none; font-size: 13px;
+      padding: 8px 10px; border-radius: 999px; border: 1px solid transparent;
+    }
+    .cq-nav a:hover { color: var(--cq-ink); border-color: rgba(255,255,255,.12); background: rgba(255,255,255,.04); }
+
+    .cq-hero {
+      margin-top: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      overflow: hidden;
+      background:
+        radial-gradient(900px 380px at 12% 20%, rgba(255,207,122,.24), transparent 55%),
+        radial-gradient(700px 360px at 88% 10%, rgba(158,231,255,.18), transparent 50%),
+        linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      box-shadow: 0 30px 80px rgba(0,0,0,.35);
+      position: relative;
+    }
+    .cq-hero::after {
+      content:"";
+      position:absolute; inset:-40px;
+      background-image: url("statics/img/bg/cq-bg-dark.svg");
+      opacity:.18;
+      transform: rotate(-2deg);
+      pointer-events:none;
+    }
+
+    .cq-hero-inner { position: relative; z-index: 2; padding: 26px 22px; display:grid; grid-template-columns: 1.2fr .8fr; gap: 18px; }
+    .cq-hero h1 { margin:0; font-size: 30px; color: var(--cq-ink); letter-spacing: .2px; }
+    .cq-hero p { margin: 10px 0 0; color: var(--cq-dim); max-width: 64ch; }
+    .cq-hero .cq-cta { margin-top: 14px; display:flex; gap: 10px; flex-wrap: wrap; }
+    .cq-btn {
+      display:inline-flex; align-items:center; gap: 8px;
+      padding: 10px 12px; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color: var(--cq-ink); text-decoration:none; font-size: 13px; font-weight: 650;
+    }
+    .cq-btn:hover { background: rgba(255,255,255,.10); }
+
+    .cq-btn-hot {
+      border-color: rgba(255,207,122,.35);
+      background: linear-gradient(135deg, rgba(255,207,122,.20), rgba(255,255,255,.06));
+    }
+
+    .cq-hero-right {
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      padding: 14px;
+    }
+    .cq-microgrid { display:grid; gap: 10px; }
+    .cq-micro {
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      padding: 10px 10px;
+    }
+    .cq-micro .k { color: var(--cq-dim); font-size: 12px; }
+    .cq-micro .v { color: var(--cq-ink); font-weight: 750; margin-top: 3px; }
+
+    .cq-grid {
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .cq-section {
+      border: 1px solid rgba(255,255,255,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .cq-section-head {
+      display:flex; align-items:baseline; justify-content:space-between; gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      padding-bottom: 10px; margin-bottom: 12px;
+    }
+    .cq-section-head h2 { margin:0; color: var(--cq-ink); font-size: 16px; }
+    .cq-muted { color: var(--cq-dim); font-size: 12px; }
+
+    .cq-cards {
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 12px;
+    }
+    @media (max-width: 980px) {
+      .cq-hero-inner { grid-template-columns: 1fr; }
+      .cq-cards { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+    @media (max-width: 620px) {
+      .cq-cards { grid-template-columns: 1fr; }
+    }
+
+    .cq-card {
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      overflow:hidden;
+      min-height: 120px;
+      display:flex; flex-direction:column;
+    }
+    .cq-thumb {
+      height: 110px;
+      background: linear-gradient(135deg, rgba(255,207,122,.18), rgba(158,231,255,.10));
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      position: relative;
+    }
+    .cq-thumb img { width:100%; height:100%; object-fit:cover; display:block; opacity:.92; }
+    .cq-thumb .cq-badge {
+      position:absolute; top:10px; left:10px;
+      padding: 6px 9px; border-radius: 999px;
+      font-size: 11px; font-weight: 800;
+      color: rgba(0,0,0,.88);
+      background: rgba(255,207,122,.92);
+      border: 1px solid rgba(0,0,0,.10);
+    }
+    .cq-thumb .cq-badge.locked { background: rgba(255,255,255,.90); }
+    .cq-body { padding: 12px; }
+    .cq-body h3 { margin:0; font-size: 14px; color: var(--cq-ink); }
+    .cq-body h3 a { color: inherit; text-decoration:none; }
+    .cq-body h3 a:hover { text-decoration: underline; }
+    .cq-body p { margin: 8px 0 0; color: var(--cq-dim); font-size: 12px; }
+    .cq-meta { margin-top: 10px; display:flex; justify-content:space-between; gap: 10px; color: var(--cq-dim); font-size: 11px; }
+
+    .cq-archive-row { display:flex; gap: 10px; flex-wrap: wrap; align-items:center; justify-content:space-between; }
+    .cq-search { display:flex; gap: 8px; align-items:center; }
+    .cq-search input {
+      width: min(360px, 70vw);
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color: var(--cq-ink);
+      outline: none;
+    }
+    .cq-search input::placeholder { color: rgba(255,255,255,.45); }
+
+    /* Auth box: keeps your existing IDs/classes so auth.js keeps working */
+    .cq-authbox { display:flex; align-items:center; gap: 10px; }
+    .cq-auth-label { color: var(--cq-dim); font-size: 12px; }
+    .cq-btn-ghost-small {
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      color: var(--cq-ink);
+      cursor:pointer;
+      font-size: 12px;
+    }
+    .cq-btn-ghost-small:hover { background: rgba(255,255,255,.08); }
+    .cq-google-btn-container { display:flex; align-items:center; }
+  </style>
 </head>
 
 <body>
+  <div class="cq-wrap">
 
-  <!-- ====== NAV WRAPPER ====== -->
-  <div class="cq-shell">
-    <nav class="cq-nav" role="navigation" aria-label="Main">
-      <a class="cq-logo" href="/" aria-label="CoffeeQuant Home">☕ CoffeeQuant</a>
+    <!-- TOP BAR -->
+    <header class="cq-topbar">
+      <div class="cq-brand">
+        <div class="cq-mark">☕</div>
+        <div class="cq-titleblock">
+          <div class="t1">CoffeeQuant</div>
+          <div class="t2">daily sparks · labs · tools · notes</div>
+        </div>
+      </div>
 
-      <div class="cq-navlinks">
+      <nav class="cq-nav" aria-label="Main">
         <a href="#daily">Daily</a>
         <a href="#labs">Labs</a>
         <a href="#tools">Tools</a>
         <a href="#notes">Notes</a>
         <a href="#curios">Curios</a>
+        <a href="#archive">Archive</a>
         <a href="statics/WriteUps/Premium.html">Premium</a>
-        <a href="statics/WriteUps/" class="cq-hide">Archive</a>
-      </div>
 
-      <!-- Auth area (single instance) -->
-      <div id="cqAuthBox" class="cq-authbox">
-        <div id="cqAuthLabel" class="cq-auth-label cq-muted">Not signed in</div>
-        <button id="cqSignInBtn" class="cq-btn-ghost-small">Sign in</button>
-        <button id="cqSignOutBtn" class="cq-btn-ghost-small" style="display:none;">Sign out</button>
-        <!-- Google-rendered button lives here (small / subtle) -->
-        <div id="gSignInBtn" class="cq-google-btn-container"></div>
-      </div>
-    </nav>
-
-    <!-- ====== HERO SECTION ====== -->
-    <section class="cq-hero" aria-labelledby="heroTitle">
-      <!-- background image gets injected from hero.json -->
-      <div class="cq-hero__bg" id="heroBg"></div>
-      <div class="cq-hero__overlay"></div>
-
-      <!-- subtle animated steam -->
-      <div class="cq-steam" aria-hidden="true">
-        <svg viewBox="0 0 1200 400" preserveAspectRatio="none">
-          <path d="M200,340 C260,280 280,240 300,200" />
-          <path d="M420,340 C460,300 500,250 520,210" />
-          <path d="M740,340 C780,300 820,250 840,210" />
-        </svg>
-      </div>
-
-      <div class="cq-hero__content">
-        <h1 id="heroTitle">Daily sparks. Playable math. Real desk intuition.</h1>
-        <p class="cq-muted cq-hero-tagline">
-          Fast, no-bull takes on risk, optionality, and weird market edges.
-          Built for people who actually trade risk, not just talk about it.
-        </p>
-        <div class="cq-cta">
-          <a class="cq-btn" href="#labs">Explore Labs</a>
-          <a class="cq-btn-ghost" href="#daily">Today’s Spark</a>
+        <!-- Auth area (single instance) -->
+        <span style="width:10px;"></span>
+        <div id="cqAuthBox" class="cq-authbox">
+          <div id="cqAuthLabel" class="cq-auth-label">Not signed in</div>
+          <button id="cqSignInBtn" class="cq-btn-ghost-small">Sign in</button>
+          <button id="cqSignOutBtn" class="cq-btn-ghost-small" style="display:none;">Sign out</button>
+          <div id="gSignInBtn" class="cq-google-btn-container"></div>
         </div>
+      </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="cq-hero" aria-label="Hero">
+      <div class="cq-hero-inner">
+        <div>
+          <h1>Structured intuition, brewed daily.</h1>
+          <p>
+            Short, practical write-ups from the desk: repacks, skew, funding, convexity,
+            QIS wrappers, and the occasional “why is this even priced like that?” moment.
+          </p>
+          <div class="cq-cta">
+            <a class="cq-btn cq-btn-hot" href="#daily">📰 Today’s Spark</a>
+            <a class="cq-btn" href="#labs">🧪 Open a Lab</a>
+            <a class="cq-btn" href="statics/WriteUps/Premium.html">✨ Go Premium</a>
+          </div>
+        </div>
+
+        <div class="cq-hero-right">
+          <div class="cq-microgrid">
+            <div class="cq-micro">
+              <div class="k">Now brewing</div>
+              <div class="v" id="nowBrewing">Loading…</div>
+            </div>
+            <div class="cq-micro">
+              <div class="k">Premium status</div>
+              <div class="v" id="premiumStatus">Checking…</div>
+            </div>
+            <div class="cq-micro">
+              <div class="k">Quick jump</div>
+              <div class="v" style="font-weight:600;">
+                <a href="#archive" style="color:var(--cq-accent); text-decoration:none;">Latest archive drops →</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
-  </div>
 
-  <!-- ====== MAIN GRID LAYOUT ====== -->
-  <main class="cq-main cq-maingrid" role="main">
+    <!-- CONTENT -->
+    <div class="cq-grid">
 
-    <!-- LEFT DOCK / NAV PANEL -->
-    <aside class="cq-dock" aria-label="Section navigation">
-      <h4>Navigate</h4>
-      <a href="#daily">📰 Daily</a>
-      <a href="#labs">🧪 Labs</a>
-      <a href="#tools">⌨️ Tools</a>
-      <a href="#notes">📝 Notes</a>
-      <a href="#curios">🔗 Curios</a>
-
-      <h4 style="margin-top:1rem">Shortcuts</h4>
-      <a href="#" id="openKbar">⌘K · Command palette</a>
-      <a href="statics/Tools/PricingCLI.html">▶ Pricing CLI</a>
-    </aside>
-
-    <!-- RIGHT CONTENT COLUMN -->
-    <div class="cq-content-col">
-
-      <!-- ====== DAILY ====== -->
-      <section id="daily" class="cq-section" aria-labelledby="sec-daily">
-        <div class="cq-strip" data-strip="daily"></div>
+      <!-- DAILY -->
+      <section id="daily" class="cq-section">
         <div class="cq-section-head">
-          <h2 id="sec-daily">CoffeeQuant Daily</h2>
-          <span class="cq-pill">60-second spark</span>
+          <h2>Daily</h2>
+          <div class="cq-muted">one punchy idea, one clean takeaway</div>
         </div>
-
-        <article id="dailyCard" class="cq-card cq-card-block cq-daily" aria-live="polite">
-          <div class="cq-skeleton">Loading today’s spark…</div>
-        </article>
-      </section>
-
-      <!-- ====== LABS ====== -->
-      <section id="labs" class="cq-section" aria-labelledby="sec-labs">
-        <div class="cq-strip" data-strip="labs"></div>
-        <div class="cq-section-head">
-          <h2 id="sec-labs">Playground Labs</h2>
-          <span class="cq-pill">Interactive</span>
-        </div>
-
-        <div id="labsList" class="cq-grid cq-card-block">
-          <div class="cq-skeleton">Loading labs…</div>
+        <div id="dailySlot" class="cq-cards">
+          <div class="cq-muted">Loading daily…</div>
         </div>
       </section>
 
-      <!-- ====== TOOLS ====== -->
-      <section id="tools" class="cq-section" aria-labelledby="sec-tools">
-        <div class="cq-strip" data-strip="tools"></div>
+      <!-- LABS -->
+      <section id="labs" class="cq-section">
         <div class="cq-section-head">
-          <h2 id="sec-tools">Tools</h2>
-          <span class="cq-pill">Try in browser</span>
+          <h2>Labs</h2>
+          <div class="cq-muted">interactive, visual, playable</div>
         </div>
-
-        <div id="toolsList" class="cq-grid cq-card-block">
-          <div class="cq-skeleton">Loading tools…</div>
+        <div id="labsSlot" class="cq-cards">
+          <div class="cq-muted">Loading labs…</div>
         </div>
       </section>
 
-      <!-- ====== NOTES ====== -->
-      <section id="notes" class="cq-section" aria-labelledby="sec-notes">
-        <div class="cq-strip" data-strip="notes"></div>
+      <!-- TOOLS -->
+      <section id="tools" class="cq-section">
         <div class="cq-section-head">
-          <h2 id="sec-notes">Notes from the Desk</h2>
-          <span class="cq-pill">Readable depth</span>
+          <h2>Tools</h2>
+          <div class="cq-muted">small utilities that save desk time</div>
         </div>
-
-        <div id="notesList" class="cq-grid cq-card-block cq-notes-tight">
-          <div class="cq-skeleton">Loading notes…</div>
+        <div id="toolsSlot" class="cq-cards">
+          <div class="cq-muted">Loading tools…</div>
         </div>
       </section>
 
-      <!-- ====== CURIOS ====== -->
-      <section id="curios" class="cq-section" aria-labelledby="sec-curios">
-        <div class="cq-strip" data-strip="curios"></div>
+      <!-- NOTES -->
+      <section id="notes" class="cq-section">
         <div class="cq-section-head">
-          <h2 id="sec-curios">Quant Curiosities</h2>
-          <span class="cq-pill">Links & ideas</span>
+          <h2>Notes</h2>
+          <div class="cq-muted">longer reads, trader-grade framing</div>
         </div>
+        <div id="notesSlot" class="cq-cards">
+          <div class="cq-muted">Loading notes…</div>
+        </div>
+      </section>
 
-        <div id="curiosList" class="cq-list cq-list--compact cq-card-block">
-          <div class="cq-skeleton">Loading curiosities…</div>
+      <!-- CURIOS -->
+      <section id="curios" class="cq-section">
+        <div class="cq-section-head">
+          <h2>Curios</h2>
+          <div class="cq-muted">links, weird edges, useful rabbit holes</div>
+        </div>
+        <div id="curiosSlot" class="cq-cards">
+          <div class="cq-muted">Loading curios…</div>
+        </div>
+      </section>
+
+      <!-- ARCHIVE (RECENT ONLY) -->
+      <section id="archive" class="cq-section">
+        <div class="cq-section-head">
+          <h2>Archive (Recent)</h2>
+          <div class="cq-archive-row">
+            <div class="cq-muted">Showing the latest few only. Full directory stays hidden.</div>
+            <div class="cq-search">
+              <input id="archiveQuery" type="search" placeholder="Search by title (local filter)" />
+              <a class="cq-btn" href="statics/WriteUps/">Open full archive</a>
+            </div>
+          </div>
+        </div>
+        <div id="archiveSlot" class="cq-cards">
+          <div class="cq-muted">Loading archive…</div>
         </div>
       </section>
 
     </div>
-  </main>
+  </div>
 
-  <!-- Cover generator (for auto thumbs) -->
-  <script src="statics/js/cq-covers.js"></script>
-
-  <!-- Auth / premium helpers -->
+  <!-- Existing JS -->
   <script src="statics/js/auth.js"></script>
   <script src="statics/js/premium.js"></script>
 
-  <!-- PAGE BOOTSTRAP / RENDER LOGIC -->
+  <!-- PAGE LOGIC -->
   <script>
-    // ---------- helpers ----------
-    const $ = (sel, root = document) => root.querySelector(sel);
+    const $ = (sel, root=document) => root.querySelector(sel);
 
     async function loadJSON(path) {
-      try {
-        const r = await fetch(path, { cache: 'no-store' });
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        return await r.json();
-      } catch (e) {
-        return null;
-      }
+      const r = await fetch(path, { cache: "no-store" });
+      if (!r.ok) throw new Error(path + " HTTP " + r.status);
+      return await r.json();
+    }
+
+    function parseDateISO(s) {
+      // Expect YYYY-MM-DD, treat as UTC midnight
+      const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s || ""));
+      if (!m) return null;
+      return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));
     }
 
     function fmtDate(iso) {
       try {
-        return new Date(iso).toLocaleDateString(undefined, {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric'
-        });
-      } catch (e) {
-        return '';
-      }
+        const d = parseDateISO(iso) || new Date(iso);
+        return d.toLocaleDateString(undefined, { year:"numeric", month:"short", day:"2-digit" });
+      } catch { return ""; }
     }
 
-    function isPremiumUser() {
-      // Use auth.js global state
+    function premiumFlag() {
       return !!(window.CQ_AUTH_STATE && window.CQ_AUTH_STATE.isPremium);
     }
 
-    // ---------- DAILY ----------
-    async function renderDaily() {
-      const data = await loadJSON('statics/data/daily.json');
-      const host = $('#dailyCard');
-      if (!host) return;
+    function cardHTML(it, kind) {
+      const isPremium = premiumFlag();
+      const locked = !!it.premium && !isPremium;
+      const href = locked ? "statics/WriteUps/Premium.html" : (it.link || "#");
 
-      if (!data || !data.items || !data.items.length) {
-        host.innerHTML = '<div class="cq-skeleton">No daily item yet.</div>';
-        return;
-      }
+      const badge = it.premium
+        ? `<div class="cq-badge ${locked ? "locked" : ""}">${locked ? "Premium 🔒" : "Premium ✓"}</div>`
+        : `<div class="cq-badge" style="background:rgba(255,255,255,.90);">${kind}</div>`;
 
-      const today = new Date().toISOString().slice(0, 10);
-      const exactIdx = data.items.findIndex(i => i.date === today);
-      const pick = exactIdx >= 0 ? exactIdx : (new Date().getDay() % data.items.length);
-      const it = data.items[pick];
+      const thumb = it.thumb
+        ? `<img src="${it.thumb}" alt="">`
+        : "";
 
-      host.innerHTML = `
-        <div class="cq-card-thumb">
-          ${it.thumb ? `<img src="${it.thumb}" alt="">` : ''}
-        </div>
-        <div class="cq-card-body">
-          <h3 class="cq-card-title">
-            ${it.link ? `<a href="${it.link}">${it.title}</a>` : it.title}
-          </h3>
-          <p class="cq-card-deck cq-muted">${it.deck || ''}</p>
-          ${it.html ? `<div>${it.html}</div>` : ''}
-          <div class="cq-card-meta cq-muted">${fmtDate(it.date) || ''}</div>
-        </div>
-      `;
-
-      if (window.MathJax && MathJax.typesetPromise) {
-        MathJax.typesetPromise([host]).catch(console.error);
-      }
-    }
-
-    // ---------- generic grid renderer (labs / tools / notes) ----------
-    function renderGrid(listEl, items) {
-      const premiumFlag = isPremiumUser();
-
-      listEl.innerHTML = items.map(it => {
-        const locked = it.premium && !premiumFlag;
-        const href = locked ? "statics/WriteUps/Premium.html" : it.link;
-        const premiumBadge = it.premium
-          ? `<span class="cq-pill cq-pill-premium">${locked ? 'Premium 🔒' : 'Premium ✓'}</span>`
-          : '';
-
-        return `
-          <article class="cq-card cq-card-sm">
-            <div class="cq-card-thumb cq-imggen" data-cover="${(it.title || '').replace(/"/g,'&quot;')}">
-              ${it.thumb ? `<img src="${it.thumb}" alt="">` : ''}
-            </div>
-            <div class="cq-card-body">
-              <h3 class="cq-card-title">
-                ${href ? `<a href="${href}">${it.title}</a>` : it.title}
-              </h3>
-              <p class="cq-card-deck cq-muted">${it.deck || ''}</p>
-              <div class="cq-card-meta">
-                <span class="cq-muted">${fmtDate(it.date) || ''}</span>
-                ${premiumBadge}
-              </div>
-            </div>
-          </article>
-        `;
-      }).join('');
-    }
-
-    async function renderLabs() {
-      const data = await loadJSON('statics/data/labs.json');
-      const host = $('#labsList'); if (!host) return;
-      if (!data || !data.items || !data.items.length) {
-        host.innerHTML = '<div class="cq-skeleton">No labs yet.</div>';
-        return;
-      }
-      renderGrid(host, data.items);
-    }
-
-    async function renderTools() {
-      const data = await loadJSON('statics/data/tools.json');
-      const host = $('#toolsList'); if (!host) return;
-      if (!data || !data.items || !data.items.length) {
-        host.innerHTML = '<div class="cq-skeleton">No tools yet.</div>';
-        return;
-      }
-      renderGrid(host, data.items);
-    }
-
-    async function renderNotes() {
-      const data = await loadJSON('statics/data/notes.json');
-      const host = $('#notesList'); if (!host) return;
-      if (!data || !data.items || !data.items.length) {
-        host.innerHTML = '<div class="cq-skeleton">No notes yet.</div>';
-        return;
-      }
-      renderGrid(host, data.items.slice(0, 6));
-    }
-
-    async function renderCurios() {
-      const data = await loadJSON('statics/data/curios.json');
-      const host = $('#curiosList'); if (!host) return;
-      if (!data || !data.items || !data.items.length) {
-        host.innerHTML = '<div class="cq-skeleton">No curios yet.</div>';
-        return;
-      }
-      host.innerHTML = data.items.map(it => `
-        <div class="cq-list-item">
-          <div class="cq-list-main">
-            <div class="cq-list-title">
-              ${it.link ? `<a href="${it.link}">${it.title}</a>` : it.title}
-            </div>
-            <div class="cq-list-desc cq-muted">${it.deck || ''}</div>
+      return `
+        <article class="cq-card">
+          <div class="cq-thumb">
+            ${thumb}
+            ${badge}
           </div>
-          <div class="cq-list-meta cq-muted">${fmtDate(it.date) || ''}</div>
-        </div>
-      `).join('');
+          <div class="cq-body">
+            <h3>${href ? `<a href="${href}">${it.title || "Untitled"}</a>` : (it.title || "Untitled")}</h3>
+            <p>${it.deck || ""}</p>
+            <div class="cq-meta">
+              <span>${fmtDate(it.date) || ""}</span>
+              <span>${locked ? "unlock via Premium" : ""}</span>
+            </div>
+          </div>
+        </article>
+      `;
     }
 
-    // ---------- HERO BACKGROUND ----------
-    async function renderHeroBg() {
-      const slot = $('#heroBg'); if (!slot) return;
-      const data = await loadJSON('statics/data/hero.json');
-      if (!data || !data.images || !data.images.length) return;
-      const idx = (new Date()).getDay() % data.images.length;
-      const it = data.images[idx];
-      if (it && it.src) {
-        slot.style.backgroundImage = `url("${it.src}")`;
-        slot.setAttribute('aria-label', it.alt || 'hero background');
+    function renderCards(slot, items, kind, limit=6) {
+      const xs = (items || []).slice(0, limit);
+      if (!xs.length) {
+        slot.innerHTML = `<div class="cq-muted">No items yet.</div>`;
+        return;
       }
+      slot.innerHTML = xs.map(it => cardHTML(it, kind)).join("");
     }
 
-    // ---------- INIT ----------
-    (async function initPage() {
-      await renderHeroBg();
-      await renderDaily();
-      await renderLabs();
-      await renderTools();
-      await renderNotes();
-      await renderCurios();
+    // Most recent item (<= today) else newest
+    function pickMostRecent(items) {
+      const xs = (items || []).slice();
+      xs.sort((a,b) => (parseDateISO(b.date)?.getTime()||-Infinity) - (parseDateISO(a.date)?.getTime()||-Infinity));
+      const todayUTC = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate())).getTime();
+      return xs.find(x => (parseDateISO(x.date)?.getTime() ?? Infinity) <= todayUTC) || xs[0] || null;
+    }
 
-      // generate fallback covers
-      document.querySelectorAll('.cq-imggen[data-cover]').forEach(div => {
-        if (window.CQCover) {
-          CQCover.inject(div, div.getAttribute('data-cover'));
-        } else {
-          const txt = div.getAttribute('data-cover') || '';
-          const parts = txt.trim().split(/\s+/);
-          const initials =
-            (parts[0]?.[0] || '').toUpperCase() + (parts[1]?.[0] || '');
-          div.textContent = initials || 'CQ';
+    async function boot() {
+      // status panels
+      $("#premiumStatus").textContent = premiumFlag() ? "Premium ✓" : "Free";
+
+      // daily
+      const daily = await loadJSON("statics/data/daily.json").catch(() => null);
+      const dailyItem = pickMostRecent(daily?.items);
+      if (dailyItem) {
+        $("#nowBrewing").textContent = dailyItem.title || "Daily";
+        renderCards($("#dailySlot"), [dailyItem], "Daily", 1);
+      } else {
+        $("#nowBrewing").textContent = "—";
+        $("#dailySlot").innerHTML = `<div class="cq-muted">No daily item found.</div>`;
+      }
+
+      // labs/tools/notes/curios
+      const labs = await loadJSON("statics/data/labs.json").catch(() => null);
+      const tools = await loadJSON("statics/data/tools.json").catch(() => null);
+      const notes = await loadJSON("statics/data/notes.json").catch(() => null);
+      const curios = await loadJSON("statics/data/curios.json").catch(() => null);
+
+      renderCards($("#labsSlot"), labs?.items, "Lab", 6);
+      renderCards($("#toolsSlot"), tools?.items, "Tool", 6);
+      renderCards($("#notesSlot"), notes?.items, "Note", 6);
+
+      // Curios as cards (small)
+      renderCards($("#curiosSlot"), curios?.items, "Curio", 6);
+
+      // Archive (Recent): merge a few from daily/notes/labs/tools, show latest 9
+      const merged = [];
+      (daily?.items || []).forEach(x => merged.push({ ...x, _kind: "Daily" }));
+      (notes?.items || []).forEach(x => merged.push({ ...x, _kind: "Note" }));
+      (labs?.items || []).forEach(x => merged.push({ ...x, _kind: "Lab" }));
+      (tools?.items || []).forEach(x => merged.push({ ...x, _kind: "Tool" }));
+
+      merged.sort((a,b) => (parseDateISO(b.date)?.getTime()||-Infinity) - (parseDateISO(a.date)?.getTime()||-Infinity));
+
+      const archiveSlot = $("#archiveSlot");
+      const q = $("#archiveQuery");
+
+      function drawArchive(filterText="") {
+        const t = (filterText || "").trim().toLowerCase();
+        const filtered = !t ? merged : merged.filter(it => String(it.title||"").toLowerCase().includes(t));
+        const top = filtered.slice(0, 9);
+        if (!top.length) {
+          archiveSlot.innerHTML = `<div class="cq-muted">No matches.</div>`;
+          return;
         }
-      });
-
-      if (window.MathJax && MathJax.typesetPromise) {
-        MathJax.typesetPromise().catch(() => { });
+        archiveSlot.innerHTML = top.map(it => cardHTML(it, it._kind || "Post")).join("");
       }
-    })();
-  </script>
 
+      drawArchive("");
+
+      q.addEventListener("input", () => drawArchive(q.value));
+
+      // If auth state updates after login, refresh premium labels + locked links
+      window.addEventListener("cq-auth-changed", () => {
+        $("#premiumStatus").textContent = premiumFlag() ? "Premium ✓" : "Free";
+        // re-render sections so premium locks update
+        renderCards($("#labsSlot"), labs?.items, "Lab", 6);
+        renderCards($("#toolsSlot"), tools?.items, "Tool", 6);
+        renderCards($("#notesSlot"), notes?.items, "Note", 6);
+        renderCards($("#curiosSlot"), curios?.items, "Curio", 6);
+        drawArchive($("#archiveQuery").value);
+      });
+    }
+
+    boot();
+  </script>
 </body>
 </html>

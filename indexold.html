@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CoffeeQuant — Daily sparks, playground labs, and desk truth</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- MathJax (global, once) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['\\[', '\\]'], ['$$','$$']],
+        processEscapes: true,
+        tags: 'ams'
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Theme / layout -->
+  <link rel="stylesheet" href="statics/css/cq_v2.css?v=2" />
+
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <!-- Expose your Google client id for auth.js -->
+  <script>
+    // Must match GOOGLE_CLIENT_ID in app.yaml
+    window.CQ_GOOGLE_CLIENT_ID = "58596950813-89s7vbdb1lnhom1t93mc979lgp5143eo.apps.googleusercontent.com";
+  </script>
+</head>
+
+<body>
+
+  <!-- ====== NAV WRAPPER ====== -->
+  <div class="cq-shell">
+    <nav class="cq-nav" role="navigation" aria-label="Main">
+      <a class="cq-logo" href="/" aria-label="CoffeeQuant Home">☕ CoffeeQuant</a>
+
+      <div class="cq-navlinks">
+        <a href="#daily">Daily</a>
+        <a href="#labs">Labs</a>
+        <a href="#tools">Tools</a>
+        <a href="#notes">Notes</a>
+        <a href="#curios">Curios</a>
+        <a href="statics/WriteUps/Premium.html">Premium</a>
+        <a href="statics/WriteUps/" class="cq-hide">Archive</a>
+      </div>
+
+      <!-- Auth area (single instance) -->
+      <div id="cqAuthBox" class="cq-authbox">
+        <div id="cqAuthLabel" class="cq-auth-label cq-muted">Not signed in</div>
+        <button id="cqSignInBtn" class="cq-btn-ghost-small">Sign in</button>
+        <button id="cqSignOutBtn" class="cq-btn-ghost-small" style="display:none;">Sign out</button>
+        <!-- Google-rendered button lives here (small / subtle) -->
+        <div id="gSignInBtn" class="cq-google-btn-container"></div>
+      </div>
+    </nav>
+
+    <!-- ====== HERO SECTION ====== -->
+    <section class="cq-hero" aria-labelledby="heroTitle">
+      <!-- background image gets injected from hero.json -->
+      <div class="cq-hero__bg" id="heroBg"></div>
+      <div class="cq-hero__overlay"></div>
+
+      <!-- subtle animated steam -->
+      <div class="cq-steam" aria-hidden="true">
+        <svg viewBox="0 0 1200 400" preserveAspectRatio="none">
+          <path d="M200,340 C260,280 280,240 300,200" />
+          <path d="M420,340 C460,300 500,250 520,210" />
+          <path d="M740,340 C780,300 820,250 840,210" />
+        </svg>
+      </div>
+
+      <div class="cq-hero__content">
+        <h1 id="heroTitle">Daily sparks. Playable math. Real desk intuition.</h1>
+        <p class="cq-muted cq-hero-tagline">
+          Fast, no-bull takes on risk, optionality, and weird market edges.
+          Built for people who actually trade risk, not just talk about it.
+        </p>
+        <div class="cq-cta">
+          <a class="cq-btn" href="#labs">Explore Labs</a>
+          <a class="cq-btn-ghost" href="#daily">Today’s Spark</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ====== MAIN GRID LAYOUT ====== -->
+  <main class="cq-main cq-maingrid" role="main">
+
+    <!-- LEFT DOCK / NAV PANEL -->
+    <aside class="cq-dock" aria-label="Section navigation">
+      <h4>Navigate</h4>
+      <a href="#daily">📰 Daily</a>
+      <a href="#labs">🧪 Labs</a>
+      <a href="#tools">⌨️ Tools</a>
+      <a href="#notes">📝 Notes</a>
+      <a href="#curios">🔗 Curios</a>
+
+      <h4 style="margin-top:1rem">Shortcuts</h4>
+      <a href="#" id="openKbar">⌘K · Command palette</a>
+      <a href="statics/Tools/PricingCLI.html">▶ Pricing CLI</a>
+    </aside>
+
+    <!-- RIGHT CONTENT COLUMN -->
+    <div class="cq-content-col">
+
+      <!-- ====== DAILY ====== -->
+      <section id="daily" class="cq-section" aria-labelledby="sec-daily">
+        <div class="cq-strip" data-strip="daily"></div>
+        <div class="cq-section-head">
+          <h2 id="sec-daily">CoffeeQuant Daily</h2>
+          <span class="cq-pill">60-second spark</span>
+        </div>
+
+        <article id="dailyCard" class="cq-card cq-card-block cq-daily" aria-live="polite">
+          <div class="cq-skeleton">Loading today’s spark…</div>
+        </article>
+      </section>
+
+      <!-- ====== LABS ====== -->
+      <section id="labs" class="cq-section" aria-labelledby="sec-labs">
+        <div class="cq-strip" data-strip="labs"></div>
+        <div class="cq-section-head">
+          <h2 id="sec-labs">Playground Labs</h2>
+          <span class="cq-pill">Interactive</span>
+        </div>
+
+        <div id="labsList" class="cq-grid cq-card-block">
+          <div class="cq-skeleton">Loading labs…</div>
+        </div>
+      </section>
+
+      <!-- ====== TOOLS ====== -->
+      <section id="tools" class="cq-section" aria-labelledby="sec-tools">
+        <div class="cq-strip" data-strip="tools"></div>
+        <div class="cq-section-head">
+          <h2 id="sec-tools">Tools</h2>
+          <span class="cq-pill">Try in browser</span>
+        </div>
+
+        <div id="toolsList" class="cq-grid cq-card-block">
+          <div class="cq-skeleton">Loading tools…</div>
+        </div>
+      </section>
+
+      <!-- ====== NOTES ====== -->
+      <section id="notes" class="cq-section" aria-labelledby="sec-notes">
+        <div class="cq-strip" data-strip="notes"></div>
+        <div class="cq-section-head">
+          <h2 id="sec-notes">Notes from the Desk</h2>
+          <span class="cq-pill">Readable depth</span>
+        </div>
+
+        <div id="notesList" class="cq-grid cq-card-block cq-notes-tight">
+          <div class="cq-skeleton">Loading notes…</div>
+        </div>
+      </section>
+
+      <!-- ====== CURIOS ====== -->
+      <section id="curios" class="cq-section" aria-labelledby="sec-curios">
+        <div class="cq-strip" data-strip="curios"></div>
+        <div class="cq-section-head">
+          <h2 id="sec-curios">Quant Curiosities</h2>
+          <span class="cq-pill">Links & ideas</span>
+        </div>
+
+        <div id="curiosList" class="cq-list cq-list--compact cq-card-block">
+          <div class="cq-skeleton">Loading curiosities…</div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Cover generator (for auto thumbs) -->
+  <script src="statics/js/cq-covers.js"></script>
+
+  <!-- Auth / premium helpers -->
+  <script src="statics/js/auth.js"></script>
+  <script src="statics/js/premium.js"></script>
+
+  <!-- PAGE BOOTSTRAP / RENDER LOGIC -->
+  <script>
+    // ---------- helpers ----------
+    const $ = (sel, root = document) => root.querySelector(sel);
+
+    async function loadJSON(path) {
+      try {
+        const r = await fetch(path, { cache: 'no-store' });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return await r.json();
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function fmtDate(iso) {
+      try {
+        return new Date(iso).toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function isPremiumUser() {
+      // Use auth.js global state
+      return !!(window.CQ_AUTH_STATE && window.CQ_AUTH_STATE.isPremium);
+    }
+
+    // ---------- DAILY ----------
+    async function renderDaily() {
+      const data = await loadJSON('statics/data/daily.json');
+      const host = $('#dailyCard');
+      if (!host) return;
+
+      if (!data || !data.items || !data.items.length) {
+        host.innerHTML = '<div class="cq-skeleton">No daily item yet.</div>';
+        return;
+      }
+
+	    // pick the most recent item by date (prefer <= today; fallback = newest)
+const items = (data.items || []).slice();
+
+const parseISO = (s) => {
+  // Expect YYYY-MM-DD; treat as UTC midnight to avoid timezone surprises
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s || ''));
+  if (!m) return null;
+  return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));
+};
+
+items.sort((a, b) => {
+  const da = parseISO(a.date)?.getTime() ?? -Infinity;
+  const db = parseISO(b.date)?.getTime() ?? -Infinity;
+  return db - da; // newest first
+});
+
+const todayUTC = new Date(Date.UTC(
+  new Date().getUTCFullYear(),
+  new Date().getUTCMonth(),
+  new Date().getUTCDate()
+)).getTime();
+
+let it = items.find(x => (parseISO(x.date)?.getTime() ?? Infinity) <= todayUTC);
+if (!it) it = items[0]; // fallback: newest even if "future-dated"
+
+
+
+
+      host.innerHTML = `
+        <div class="cq-card-thumb">
+          ${it.thumb ? `<img src="${it.thumb}" alt="">` : ''}
+        </div>
+        <div class="cq-card-body">
+          <h3 class="cq-card-title">
+            ${it.link ? `<a href="${it.link}">${it.title}</a>` : it.title}
+          </h3>
+          <p class="cq-card-deck cq-muted">${it.deck || ''}</p>
+          ${it.html ? `<div>${it.html}</div>` : ''}
+          <div class="cq-card-meta cq-muted">${fmtDate(it.date) || ''}</div>
+        </div>
+      `;
+
+      if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise([host]).catch(console.error);
+      }
+    }
+
+    // ---------- generic grid renderer (labs / tools / notes) ----------
+    function renderGrid(listEl, items) {
+      const premiumFlag = isPremiumUser();
+
+      listEl.innerHTML = items.map(it => {
+        const locked = it.premium && !premiumFlag;
+        const href = locked ? "statics/WriteUps/Premium.html" : it.link;
+        const premiumBadge = it.premium
+          ? `<span class="cq-pill cq-pill-premium">${locked ? 'Premium 🔒' : 'Premium ✓'}</span>`
+          : '';
+
+        return `
+          <article class="cq-card cq-card-sm">
+            <div class="cq-card-thumb cq-imggen" data-cover="${(it.title || '').replace(/"/g,'&quot;')}">
+              ${it.thumb ? `<img src="${it.thumb}" alt="">` : ''}
+            </div>
+            <div class="cq-card-body">
+              <h3 class="cq-card-title">
+                ${href ? `<a href="${href}">${it.title}</a>` : it.title}
+              </h3>
+              <p class="cq-card-deck cq-muted">${it.deck || ''}</p>
+              <div class="cq-card-meta">
+                <span class="cq-muted">${fmtDate(it.date) || ''}</span>
+                ${premiumBadge}
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    async function renderLabs() {
+      const data = await loadJSON('statics/data/labs.json');
+      const host = $('#labsList'); if (!host) return;
+      if (!data || !data.items || !data.items.length) {
+        host.innerHTML = '<div class="cq-skeleton">No labs yet.</div>';
+        return;
+      }
+      renderGrid(host, data.items);
+    }
+
+    async function renderTools() {
+      const data = await loadJSON('statics/data/tools.json');
+      const host = $('#toolsList'); if (!host) return;
+      if (!data || !data.items || !data.items.length) {
+        host.innerHTML = '<div class="cq-skeleton">No tools yet.</div>';
+        return;
+      }
+      renderGrid(host, data.items);
+    }
+
+    async function renderNotes() {
+      const data = await loadJSON('statics/data/notes.json');
+      const host = $('#notesList'); if (!host) return;
+      if (!data || !data.items || !data.items.length) {
+        host.innerHTML = '<div class="cq-skeleton">No notes yet.</div>';
+        return;
+      }
+      renderGrid(host, data.items.slice(0, 6));
+    }
+
+    async function renderCurios() {
+      const data = await loadJSON('statics/data/curios.json');
+      const host = $('#curiosList'); if (!host) return;
+      if (!data || !data.items || !data.items.length) {
+        host.innerHTML = '<div class="cq-skeleton">No curios yet.</div>';
+        return;
+      }
+      host.innerHTML = data.items.map(it => `
+        <div class="cq-list-item">
+          <div class="cq-list-main">
+            <div class="cq-list-title">
+              ${it.link ? `<a href="${it.link}">${it.title}</a>` : it.title}
+            </div>
+            <div class="cq-list-desc cq-muted">${it.deck || ''}</div>
+          </div>
+          <div class="cq-list-meta cq-muted">${fmtDate(it.date) || ''}</div>
+        </div>
+      `).join('');
+    }
+
+    // ---------- HERO BACKGROUND ----------
+    async function renderHeroBg() {
+      const slot = $('#heroBg'); if (!slot) return;
+      const data = await loadJSON('statics/data/hero.json');
+      if (!data || !data.images || !data.images.length) return;
+      const idx = (new Date()).getDay() % data.images.length;
+      const it = data.images[idx];
+      if (it && it.src) {
+        slot.style.backgroundImage = `url("${it.src}")`;
+        slot.setAttribute('aria-label', it.alt || 'hero background');
+      }
+    }
+
+    // ---------- INIT ----------
+    (async function initPage() {
+      await renderHeroBg();
+      await renderDaily();
+      await renderLabs();
+      await renderTools();
+      await renderNotes();
+      await renderCurios();
+
+      // generate fallback covers
+      document.querySelectorAll('.cq-imggen[data-cover]').forEach(div => {
+        if (window.CQCover) {
+          CQCover.inject(div, div.getAttribute('data-cover'));
+        } else {
+          const txt = div.getAttribute('data-cover') || '';
+          const parts = txt.trim().split(/\s+/);
+          const initials =
+            (parts[0]?.[0] || '').toUpperCase() + (parts[1]?.[0] || '');
+          div.textContent = initials || 'CQ';
+        }
+      });
+
+      if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise().catch(() => { });
+      }
+    })();
+  </script>
+
+</body>
+</html>
