@@ -2,6 +2,15 @@
   "items": [
     {
       "date": "2026-02-13",
+      "title": "Repack Optionality: Why Max(0, A?B) is the Whole Trade",
+      "href": "/statics/WriteUps/bond-repacks-max0-ab.html",
+      "tag": "Daily",
+      "premium": false,
+      "hero": "statics/img/headers/fx-collage.webp",
+      "excerpt": "INTRO Q4 was busy... (your intro) Section 1: The trade in one sentence ... Section 2: Where the option appears A = cash you RECEIVE B = cash you MUST PAY Payoff = max(0, A?B) ....."
+    },
+    {
+      "date": "2026-02-13",
       "title": "CQ DAILY: Bond Repack Optionality (Max(0,A-B))",
       "href": "/statics/WriteUps/cq-daily-bond-repack-optionality-max-0-a-b.html",
       "tag": "Daily",
