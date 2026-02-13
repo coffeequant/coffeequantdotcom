@@ -2,6 +2,13 @@
   "items": [
     {
       "date": "2026-02-13",
+      "title": "CQ DAILY: Bond Repack Optionality (Max(0,A-B))",
+      "href": "/statics/WriteUps/cq-daily-bond-repack-optionality-max-0-a-b.html",
+      "tag": "Daily",
+      "premium": false
+    },
+    {
+      "date": "2026-02-13",
       "title": "CQ DAILY:",
       "href": "/statics/WriteUps/cq-daily.html",
       "tag": "Daily",
