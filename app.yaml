@@ -12,7 +12,6 @@ env_variables:
   STRIPE_SECRET_KEY: "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"
   STRIPE_PRICE_ID_YEARLY: "price_1SWJKRRzxxClYou2DPfdr0lu"
   STRIPE_WEBHOOK_SECRET: "whsec_bLJUL3vJ5WxpS9YkiH5e9TvzkdrT6P0D"
-  FRONTEND_BASE_URL: "https://coffee.coffeequant.com"
 
 
 handlers:
