@@ -1,6 +1,16 @@
 {
   "items": [
-   {
+    {
+      "date": "2026-02-14",
+      "title": "Repack Optionality: Max(0, A-B) is the Whole Trade (Test Post)",
+      "href": "statics/WriteUps/repack-option-max0-ab-test.html",
+      "link": "statics/WriteUps/repack-option-max0-ab-test.html",
+      "tag": "Daily",
+      "premium": false,
+      "hero": "statics/img/headers/fx-collage.webp",
+      "excerpt": "INTRO This is a test post sent via email ? Apps Script ? GitHub ? daily.json. If you can click the title on the homepage and it opens the write-up, the pipeline is working. The ..."
+    },
+    {
       "date": "2026-02-09",
       "title": "Bond Repacks - How it works?",
       "deck": "Bond Repacks",
