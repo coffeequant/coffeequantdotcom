@@ -7,20 +7,24 @@ automatic_scaling:
   target_cpu_utilization: 0.65
 
 env_variables:
+  FRONTEND_BASE_URL: "https://coffee.coffeequant.com"
+  GOOGLE_CLIENT_ID: "58596950813-89s7vbdb1lnhom1t93mc979lgp5143eo.apps.googleusercontent.com"
   STRIPE_SECRET_KEY: "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"
   STRIPE_PRICE_ID_YEARLY: "price_1SWJKRRzxxClYou2DPfdr0lu"
   STRIPE_WEBHOOK_SECRET: "whsec_bLJUL3vJ5WxpS9YkiH5e9TvzkdrT6P0D"
   FRONTEND_BASE_URL: "https://coffee.coffeequant.com"
-  GOOGLE_CLIENT_ID: "58596950813-89s7vbdb1lnhom1t93mc979lgp5143eo.apps.googleusercontent.com"
+
 
 handlers:
-  # Serve all your static assets from /statics/...
-  - url: /(.*\.(html|css|js|json|png|jpg|jpeg|gif|webp|svg|ico|txt|pdf|woff2?))$
-    static_files: \1
-    upload: (.*\.(html|css|js|json|png|jpg|jpeg|gif|webp|svg|ico|txt|pdf|woff2?))$
+  - url: /statics
+    static_dir: statics
     secure: always
 
-  # Everything else → FastAPI app via uvicorn
+  - url: /favicon.ico
+    static_files: favicon.ico
+    upload: favicon.ico
+    secure: always
+
   - url: /.*
     script: auto
     secure: always

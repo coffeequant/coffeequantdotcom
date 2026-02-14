@@ -1,20 +1,63 @@
-name: Deploy to App Engine
+name: Deploy CoffeeQuant to App Engine
 
 on:
   push:
     branches: ["master"]
+  workflow_dispatch: {}
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - id: auth
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Optional: quick debug so you can see what's being deployed
+      - name: Debug tree
+        run: |
+          pwd
+          ls -la
+          ls -la api || true
+          ls -la statics || true
+          ls -la main.py || true
+          cat requirements.txt || true
+
+      # Auth to Google Cloud using a service account JSON stored as GitHub Secret: GCP_SA_KEY
+      - name: Auth to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          credentials_json: "${{ secrets.GCP_SA_KEY }}"
 
-      - uses: google-github-actions/setup-gcloud@v2
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: coffeequant
 
-      - run: gcloud app deploy app.yaml --quiet
+      # (Recommended) ensure App Engine API is enabled (won't error if already enabled)
+      - name: Enable required APIs (best effort)
+        run: |
+          gcloud services enable appengine.googleapis.com --quiet || true
+
+      # Build a deterministic version id so smoke test + promote target the SAME deploy
+      - name: Deploy (no promote)
+        run: |
+          VERSION="gha-${GITHUB_RUN_NUMBER}-${GITHUB_SHA::7}"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Deploying version: $VERSION"
+          gcloud app deploy app.yaml --quiet --no-promote --version "$VERSION"
+
+      - name: Smoke test new version
+        run: |
+          echo "VERSION is: $VERSION"
+          URL="https://${VERSION}-dot-coffeequant.appspot.com/healthz"
+          echo "Testing $URL"
+          curl -fsS "$URL"
+
+      - name: Promote traffic
+        run: |
+          echo "Promoting version: $VERSION"
+          gcloud app services set-traffic default --splits ${VERSION}=1 --quiet
