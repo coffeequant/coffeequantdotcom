@@ -3,7 +3,7 @@ entrypoint: uvicorn main:app --host 0.0.0.0 --port $PORT
 
 automatic_scaling:
   min_instances: 1
-  max_instances: 3
+  max_instances: 1
   target_cpu_utilization: 0.65
 
 env_variables:
