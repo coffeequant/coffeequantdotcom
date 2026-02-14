@@ -17,6 +17,17 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Show git + verify healthz exists
+        run: |
+          echo "Branch:"
+          git branch --show-current
+          echo "Commit:"
+          git rev-parse HEAD
+          echo "Searching for /healthz route..."
+          grep -R "healthz" -n main.py api/app.py api || true
+          echo "Listing main entrypoint files:"
+          ls -la main.py api/app.py || true
+
       - name: Debug tree (repo root)
         run: |
           echo "PWD=$(pwd)"
