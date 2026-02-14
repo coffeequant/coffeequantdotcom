@@ -1,4 +1,4 @@
-# .gcloudignore (SAFE DEFAULT)
+# Keep it simple. Ignore only obvious junk.
 .gcloudignore
 .git
 .git/**
@@ -9,21 +9,17 @@ __pycache__/**
 *.pyc
 *.pyo
 *.pyd
+.DS_Store
 .env
 .env.*
 .vscode
 .idea
-.DS_Store
 
-# IMPORTANT: explicitly KEEP these
+# Make sure app + code + assets are included
 !app.yaml
 !main.py
 !requirements.txt
+!api/**
+!statics/**
 !index.html
 !favicon.ico
-
-# KEEP app code + static dirs (directory + contents)
-!api/
-!api/**
-!statics/
-!statics/**

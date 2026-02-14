@@ -12,22 +12,7 @@ jobs:
       contents: read
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Debug branch + verify routes exist
-        run: |
-          echo "Branch: $(git branch --show-current)"
-          echo "Commit: $(git rev-parse HEAD)"
-          echo "Tree:"
-          ls -la
-          echo ""
-          echo "Verify entrypoint files:"
-          ls -la main.py || true
-          ls -la api/app.py || true
-          echo ""
-          echo "Search for healthz route:"
-          grep -R "healthz" -n main.py api/app.py api || true
+      - uses: actions/checkout@v4
 
       - name: Auth to Google Cloud
         uses: google-github-actions/auth@v2
@@ -39,33 +24,28 @@ jobs:
         with:
           project_id: coffeequant
 
+      - name: Show ignore + files-to-upload
+        run: |
+          echo "=== .gcloudignore ==="
+          (test -f .gcloudignore && cat .gcloudignore) || echo "NO .gcloudignore"
+          echo ""
+          echo "=== files gcloud will upload (first 200) ==="
+          gcloud meta list-files-for-upload --directory . | head -n 200
+
       - name: Deploy (no promote)
         run: |
           VERSION="gha-${GITHUB_RUN_NUMBER}-${GITHUB_SHA::7}"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "Deploying version: $VERSION"
           gcloud app deploy app.yaml --quiet --no-promote --version "$VERSION"
 
-      - name: Smoke test new version (show response)
+      - name: Smoke test new version
         run: |
-          echo "VERSION is: $VERSION"
           BASE="https://${VERSION}-dot-coffeequant.appspot.com"
-
-          echo ""
-          echo "GET $BASE/healthz"
-          curl -i "$BASE/healthz" | head -n 60 || true
-
-          echo ""
-          echo "GET $BASE/"
-          curl -i "$BASE/" | head -n 60 || true
-
+          echo "Testing $BASE/healthz"
+          curl -i "$BASE/healthz" | head -n 60
           code=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/healthz")
-          echo "healthz status: $code"
           test "$code" = "200"
 
       - name: Promote traffic
         run: |
-          echo "Promoting version: $VERSION"
           gcloud app services set-traffic default --splits ${VERSION}=1 --quiet
-
-
