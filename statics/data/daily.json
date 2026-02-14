@@ -2,6 +2,16 @@
   "items": [
     {
       "date": "2026-02-14",
+      "title": "Japan?s Fiscal Pivot, Yen Vol & Why Repack Optionality Matters Again",
+      "href": "statics/WriteUps/japan-fiscal-yen-repacks.html",
+      "link": "statics/WriteUps/japan-fiscal-yen-repacks.html",
+      "tag": "Daily",
+      "premium": false,
+      "hero": "statics/img/headers/fx-collage.webp",
+      "excerpt": "INTRO Japan is back in macro headlines. Sanae Takaichi?s election victory signals fiscal expansion, state-led investment, and a stronger security posture. Bloomberg Economics ex..."
+    },
+    {
+      "date": "2026-02-14",
       "title": "Repack Optionality: Max(0, A-B) is the Whole Trade (Test Post)",
       "href": "statics/WriteUps/repack-option-max0-ab-test.html",
       "link": "statics/WriteUps/repack-option-max0-ab-test.html",
