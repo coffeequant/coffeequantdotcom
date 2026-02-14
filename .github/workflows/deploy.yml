@@ -12,7 +12,10 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Auth to Google Cloud
         uses: google-github-actions/auth@v2
@@ -36,6 +39,7 @@ jobs:
         run: |
           VERSION="gha-${GITHUB_RUN_NUMBER}-${GITHUB_SHA::7}"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Deploying version: $VERSION"
           gcloud app deploy app.yaml --quiet --no-promote --version "$VERSION"
 
       - name: Smoke test new version (wait + retry)
@@ -43,7 +47,7 @@ jobs:
           BASE="https://${VERSION}-dot-coffeequant.appspot.com"
           echo "Testing version URL: $BASE"
 
-        # 1) Wait until App Engine reports SERVING (can lag a bit)
+          # Wait until App Engine reports SERVING (can lag)
           for i in {1..30}; do
             STATUS=$(gcloud app versions describe "${VERSION}" --service=default --format="value(servingStatus)" 2>/dev/null || echo "")
             echo "servingStatus: ${STATUS:-<none>} (try $i/30)"
@@ -53,11 +57,21 @@ jobs:
             sleep 5
           done
 
-          # 2) Retry the actual endpoint (cold start + route propagation)
+          # Retry healthz (cold start + route propagation)
           for i in {1..30}; do
             echo "curl try $i/30 -> $BASE/healthz"
-            if curl -fsS "$BASE/healthz" ; then
-              echo "✅ healthz OK"
+            if curl -fsS "$BASE/healthz" >/dev/null ; then
+              echo "✅ /healthz OK"
+              break
+            fi
+            sleep 4
+          done
+
+          # Also verify home page is up
+          for i in {1..30}; do
+            echo "curl try $i/30 -> $BASE/"
+            if curl -fsS "$BASE/" >/dev/null ; then
+              echo "✅ / OK"
               exit 0
             fi
             sleep 4
@@ -66,8 +80,10 @@ jobs:
           echo "❌ Smoke test failed after retries"
           echo "Last check (headers):"
           curl -I "$BASE/healthz" || true
+          curl -I "$BASE/" || true
           exit 1
 
       - name: Promote traffic
         run: |
+          echo "Promoting version: $VERSION"
           gcloud app services set-traffic default --splits ${VERSION}=1 --quiet
