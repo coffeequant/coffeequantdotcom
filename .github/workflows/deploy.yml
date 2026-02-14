@@ -44,30 +44,29 @@ jobs:
           echo "Testing version URL: $BASE"
 
         # 1) Wait until App Engine reports SERVING (can lag a bit)
-        for i in {1..30}; do
-          STATUS=$(gcloud app versions describe "${VERSION}" --service=default --format="value(servingStatus)" 2>/dev/null || echo "")
-          echo "servingStatus: ${STATUS:-<none>} (try $i/30)"
-          if [ "$STATUS" = "SERVING" ]; then
-            break
-          fi
-          sleep 5
-        done
+          for i in {1..30}; do
+            STATUS=$(gcloud app versions describe "${VERSION}" --service=default --format="value(servingStatus)" 2>/dev/null || echo "")
+            echo "servingStatus: ${STATUS:-<none>} (try $i/30)"
+            if [ "$STATUS" = "SERVING" ]; then
+              break
+            fi
+            sleep 5
+          done
 
-        # 2) Retry the actual endpoint (cold start + route propagation)
-        for i in {1..30}; do
-          echo "curl try $i/30 -> $BASE/healthz"
-          if curl -fsS "$BASE/healthz" ; then
-            echo "✅ healthz OK"
-            exit 0
-          fi
-          sleep 4
-        done
+          # 2) Retry the actual endpoint (cold start + route propagation)
+          for i in {1..30}; do
+            echo "curl try $i/30 -> $BASE/healthz"
+            if curl -fsS "$BASE/healthz" ; then
+              echo "✅ healthz OK"
+              exit 0
+            fi
+            sleep 4
+          done
 
-        echo "❌ Smoke test failed after retries"
-        echo "Last check (headers):"
-        curl -I "$BASE/healthz" || true
-        exit 1
-
+          echo "❌ Smoke test failed after retries"
+          echo "Last check (headers):"
+          curl -I "$BASE/healthz" || true
+          exit 1
 
       - name: Promote traffic
         run: |
