@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Repack Optionality: Max(0, A-B) is the Whole Trade (Test Post) | CoffeeQuant</title>
+  <link rel="stylesheet" href="/statics/css/cq.css?v=20260213" />
+</head>
+<body class="cq-body">
+  <div class="cq-shell">
+    <nav class="cq-nav" aria-label="Main">
+      <a class="cq-logo" href="/" aria-label="CoffeeQuant Home">? CoffeeQuant</a>
+      <div class="cq-navlinks">
+        <a href="/#daily">Daily</a>
+        <a href="/#labs">Labs</a>
+        <a href="/#tools">Tools</a>
+        <a href="/#notes">Notes</a>
+        <a href="/#curios">Curios</a>
+      </div>
+    </nav>
+    <main class="cq-main">
+      <article class="cq-article cq-article-centered">
+        <header class="cq-hero">
+          <div class="cq-hero-imgwrap">
+            <img class="cq-hero-img" src="/statics/img/headers/fx-collage.webp" alt="CoffeeQuant header" />
+          </div>
+          <div class="cq-hero-text">
+            <div class="cq-kicker">Daily ? 2026-02-14</div>
+            <h1>Repack Optionality: Max(0, A-B) is the Whole Trade (Test Post)</h1>
+
+          </div>
+        </header>
+        <section class="cq-article-body">
+<p>INTRO<br>This is a test post sent via email ? Apps Script ? GitHub ?<br>daily.json. If you can click the title on the homepage and it opens<br>the write-up, the pipeline is working.</p>
+
+<h2>The trade in 20 seconds</h2>
+A repack is: buy a bond, fund it in repo, and pass cashflows into a note.
+The ?mystery? is not the coupons. It?s the limited liability floor.
+
+<h2>The option in one line</h2>
+Define:
+<ul>
+<li><strong>A</strong> = cash you RECEIVE from the bond (coupons + principal if no default)</li>
+<li><strong>B</strong> = cash you MUST PAY (repo funding + close-out + losses)</li>
+</ul>
+
+<p>Payoff to the note SPV is:<br><code>max(0, A - B)</code></p>
+
+<p>That max(0,?) is the embedded option traders price.</p>
+
+<h2>Toy timeline (why convexity exists)</h2>
+Case 1: No default
+<ul>
+<li>A grows steadily (coupon carry)</li>
+<li>B grows steadily (funding)</li>
+<li>A - B stays positive</li>
+</ul>
+
+<p>Case 2: Default in Year 2<br><ul><br><li>A collapses early (only 2 coupons + recovery)</li><br><li>B does NOT collapse (funding already paid, unwind costs)</li><br><li>A - B becomes negative</li><br><li>But payoff floors at 0</li><br></ul></p>
+
+<p>So the downside is truncated, and that truncation is the option.</p>
+
+<h2>Quick check (what you should see)</h2>
+1) Homepage shows this new title at the top of Daily
+2) Clicking it opens:
+   statics/WriteUps/repack-option-max0-ab-test.html
+3) The page is centered (not stuck to the left), with your CQ nav and CSS.
+
+<p>CQ_PUBLISH</p>
+        </section>
+        <footer class="cq-footer">
+          <a class="cq-back" href="/">? Back to home</a>
+        </footer>
+      </article>
+    </main>
+  </div>
+</body>
+</html>
