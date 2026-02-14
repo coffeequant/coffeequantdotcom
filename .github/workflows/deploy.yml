@@ -82,8 +82,35 @@ jobs:
           curl -I "$BASE/healthz" || true
           curl -I "$BASE/" || true
           exit 1
+name: Deploy CoffeeQuant to App Engine
 
-      - name: Promote traffic
+on:
+  push:
+    branches: ["master"]
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: "${{ secrets.GCP_SA_KEY }}"
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: coffeequant
+
+      - name: Deploy to App Engine (same as local)
         run: |
-          echo "Promoting version: $VERSION"
-          gcloud app services set-traffic default --splits ${VERSION}=1 --quiet
+          echo "Deploying using app.yaml"
+          gcloud app deploy app.yaml --quiet
