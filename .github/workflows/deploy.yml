@@ -2,93 +2,6 @@ name: Deploy CoffeeQuant to App Engine
 
 on:
   push:
-    branches: ["master"]
-  workflow_dispatch: {}
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-
-      - name: Show git + verify healthz exists
-        run: |
-          echo "Branch:"
-          git branch --show-current
-          echo "Commit:"
-          git rev-parse HEAD
-          echo "Searching for /healthz route..."
-          grep -R "healthz" -n main.py api/app.py api || true
-          echo "Listing main entrypoint files:"
-          ls -la main.py api/app.py || true
-
-      - name: Debug tree (repo root)
-        run: |
-          echo "PWD=$(pwd)"
-          ls -la
-          echo "--- api ---"
-          ls -la api || true
-          echo "--- statics ---"
-          ls -la statics || true
-          echo "--- main.py ---"
-          ls -la main.py || true
-          echo "--- requirements.txt ---"
-          cat requirements.txt || true
-          echo "--- app.yaml ---"
-          cat app.yaml || true
-          echo "--- .gcloudignore ---"
-          cat .gcloudignore || true
-
-      - name: Auth to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: "${{ secrets.GCP_SA_KEY }}"
-
-      - name: Setup gcloud
-        uses: google-github-actions/setup-gcloud@v2
-        with:
-          project_id: coffeequant
-
-      - name: Enable required APIs (best effort)
-        run: |
-          gcloud services enable appengine.googleapis.com --quiet || true
-
-      # 🔍 THIS shows what gcloud will actually upload (most important debug)
-      - name: List files to upload (gcloud packaging)
-        run: |
-          echo "PWD=$(pwd)"
-          echo "Top of list-files-for-upload:"
-          gcloud meta list-files-for-upload | head -n 200
-          echo "Count:"
-          gcloud meta list-files-for-upload | wc -l
-
-      - name: Deploy (no promote)
-        working-directory: ${{ github.workspace }}
-        run: |
-          VERSION="gha-${GITHUB_RUN_NUMBER}-${GITHUB_SHA::7}"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "Deploying version: $VERSION"
-          gcloud app deploy app.yaml --quiet --no-promote --version "$VERSION"
-
-      - name: Smoke test new version (healthz + homepage)
-        run: |
-          echo "VERSION is: $VERSION"
-          HEALTH="https://${VERSION}-dot-coffeequant.appspot.com/healthz"
-          HOME="https://${VERSION}-dot-coffeequant.appspot.com/"
-          echo "Testing $HEALTH"
-          curl -fsS "$HEALTH"
-          echo "Testing $HOME"
-          curl -fsS "$HOME" | head -n 20
-name: Deploy CoffeeQuant to App Engine
-
-on:
-  push:
     branches: ["main", "master"]
   workflow_dispatch: {}
 
@@ -137,14 +50,15 @@ jobs:
         run: |
           echo "VERSION is: $VERSION"
           BASE="https://${VERSION}-dot-coffeequant.appspot.com"
+
           echo ""
           echo "GET $BASE/healthz"
           curl -i "$BASE/healthz" | head -n 60 || true
+
           echo ""
           echo "GET $BASE/"
           curl -i "$BASE/" | head -n 60 || true
 
-          # Fail the job if healthz is not 200
           code=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/healthz")
           echo "healthz status: $code"
           test "$code" = "200"
@@ -153,3 +67,5 @@ jobs:
         run: |
           echo "Promoting version: $VERSION"
           gcloud app services set-traffic default --splits ${VERSION}=1 --quiet
+
+
