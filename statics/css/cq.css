@@ -397,3 +397,11 @@ a:focus-visible, button:focus-visible{
   padding:0 1.1rem;
   display:block;
 }
+
+.cq-img{width:100%;height:auto;display:block;border-radius:14px;margin:18px 0;}
+.cq-map,.cq-callout{border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.03);border-radius:14px;padding:14px 16px;margin:20px 0;}
+.cq-ribbon{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 22px;}
+.cq-pill{display:inline-flex;gap:8px;align-items:center;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,0.06);font-weight:650;font-size:13px;}
+.cq-pill-k{opacity:.75;font-weight:800;}
+.cq-table{width:100%;border-collapse:collapse;margin:18px 0;}
+.cq-table th,.cq-table td{padding:10px 10px;border-bottom:1px solid rgba(255,255,255,0.10);vertical-align:top;}
