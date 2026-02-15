@@ -2,6 +2,16 @@
   "items": [
     {
       "date": "2026-02-16",
+      "title": "AI Doom Loop Meets QIS",
+      "href": "statics/WriteUps/ai-doom-loop-meets-qis.html",
+      "link": "statics/WriteUps/ai-doom-loop-meets-qis.html",
+      "tag": "CQX",
+      "premium": false,
+      "hero": "statics/images/mathematics.png",
+      "excerpt": ":::ribbon Nasdaq: -YTD MSFT: -20% from peak AI capex 2026E: $600bn+ QIS risk: regime shift ::: :::map Transmission chain Capex shock → duration repricing → mega-cap unwind AI to..."
+    },
+    {
+      "date": "2026-02-16",
       "title": "The AI Doom Loop & Why Quants Must Still Read the Code",
       "href": "statics/WriteUps/the-ai-doom-loop-and-why-quants-must-still-read-the-code.html",
       "link": "statics/WriteUps/the-ai-doom-loop-and-why-quants-must-still-read-the-code.html",
