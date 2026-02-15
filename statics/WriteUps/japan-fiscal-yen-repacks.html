@@ -3,23 +3,41 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>...</title>
+  <title>Japan’s Fiscal Pivot, Yen Vol &amp; Why Repack Optionality Matters Again | CoffeeQuant</title>
+
+  <!-- you wanted this -->
   <link rel="stylesheet" href="../css/cq.css?v=20260213" />
 
-  <!-- Article-page override: force centered single column -->
+  <!-- Article-page override: keep site nav, but make article full-width -->
   <style>
-    .cq-shell { display: block !important; }
-    .cq-main  { max-width: 980px; margin: 0 auto; padding: 28px 18px; }
-    .cq-article { width: 100%; }
+    /* Do NOT break the site wrapper/grid; just ensure the content area is wide */
+    .cq-main{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 18px;
+      width: 100%;
+    }
+
+    /* If cq.css caps centered articles, uncap it */
+    .cq-article{
+      max-width: 980px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .cq-article.cq-article-centered{
+      max-width: 980px; /* neutralize if this class exists */
+    }
+
     .cq-hero { margin-bottom: 18px; }
     .cq-hero-imgwrap { border-radius: 16px; overflow: hidden; }
     .cq-hero-img { width: 100%; height: auto; display: block; }
   </style>
 </head>
+
 <body class="cq-body">
   <div class="cq-shell">
     <nav class="cq-nav" aria-label="Main">
-      <a class="cq-logo" href="/" aria-label="CoffeeQuant Home">? CoffeeQuant</a>
+      <a class="cq-logo" href="/" aria-label="CoffeeQuant Home">☕ CoffeeQuant</a>
       <div class="cq-navlinks">
         <a href="/#daily">Daily</a>
         <a href="/#labs">Labs</a>
@@ -28,19 +46,22 @@
         <a href="/#curios">Curios</a>
       </div>
     </nav>
+
     <main class="cq-main">
-      <article class="cq-article cq-article-centered">
+      <!-- removed cq-article-centered -->
+      <article class="cq-article">
         <header class="cq-hero">
           <div class="cq-hero-imgwrap">
             <img class="cq-hero-img" src="/statics/img/headers/fx-collage.webp" alt="CoffeeQuant header" />
           </div>
           <div class="cq-hero-text">
-            <div class="cq-kicker">Daily ? 2026-02-14</div>
-            <h1>Japan?s Fiscal Pivot, Yen Vol &amp; Why Repack Optionality Matters Again</h1>
-
+            <div class="cq-kicker">Daily • 2026-02-14</div>
+            <h1>Japan’s Fiscal Pivot, Yen Vol &amp; Why Repack Optionality Matters Again</h1>
           </div>
         </header>
+
         <section class="cq-article-body">
+          <!-- keep the rest of your body exactly as-is -->
 <p>INTRO</p>
 
 <p>Japan is back in macro headlines.</p>
