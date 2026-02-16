@@ -3,6 +3,7 @@
     {
       "date": "2026-02-14",
       "title": "JGB yields rising ? Korea can?t ?cut? in peace",
+      "thumb":"statics/img/thumbs/money.jpg",
       "deck": "Japan fiscal expansion risk = higher JGB long-end + weaker yen. Korea imports both: KRW pressure + long-end yields drift up. Policy implication: BoK?s ?do nothing? becomes the d...",
       "link": "https://www.bloomberg.com/",
       "premium": false
@@ -10,12 +11,8 @@
     {
       "title": "Kelly criterion and sizing intuition",
       "url": "https://en.wikipedia.org/wiki/Kelly_criterion",
+      "thumb":"statics/img/thumbs/lehman.webp",
       "desc": "How fractional betting maximizes geometric growth."
-    },
-    {
-      "title": "Black?Scholes visualizer",
-      "url": "https://coffeequant.github.io/tools/cli",
-      "desc": "Try in-browser pricing CLI."
     }
   ]
 }
