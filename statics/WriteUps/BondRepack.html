@@ -1,6 +1,22 @@
 <!doctype html>
 <html lang="en">
 <head>
+<link rel="canonical" href="https://coffee.coffeequant.com/statics/WriteUps/BondRepack.html">
+
+<meta property="og:site_name" content="CoffeeQuant">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bond Repacks: Repo, Default, and the Hidden Call Option Traders Actually Price">
+<meta property="og:description" content="A trader-first walkthrough of repacks: where the real optionality lives (default timing + repo stress), why limited liability creates max(0, A−B), and how desks actually think about the payoff.">
+<meta property="og:url" content="https://coffee.coffeequant.com/statics/WriteUps/BondRepack.html">
+<meta property="og:image" content="https://coffee.coffeequant.com/statics/images/tools2.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Bond Repacks: Repo, Default, and the Hidden Call Option">
+<meta name="twitter:description" content="Default timing + repo stress is where repacks become option products. A clean desk mental model + visuals.">
+<meta name="twitter:image" content="https://coffee.coffeequant.com/statics/images/tools2.jpg">
+
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>CoffeeQuant Daily: Bond Repacks, Repo, and the Hidden Option</title>
@@ -193,6 +209,22 @@
     </div>
 
     <section class="hero">
+<div class="cq-share">
+  <div class="share-title">Share this article</div>
+  <div class="share-buttons">
+    <a id="shareLinkedIn" target="_blank" rel="noopener" class="share-btn linkedin">
+      Share on LinkedIn
+    </a>
+    <a id="shareTwitter" target="_blank" rel="noopener" class="share-btn twitter">
+      Share on X
+    </a>
+    <a id="shareEmail" class="share-btn email">
+      Share via Email
+    </a>
+  </div>
+</div>
+
+
       <div class="hero-inner">
         <div class="kicker">CoffeeQuant Daily • Bond Engineering</div>
         <h1>Bond Repacks: Repo, Default, and the Hidden Call Option Traders Actually Price</h1>
@@ -889,6 +921,29 @@
   });
   el("runBtn").addEventListener("click", run);
   el("resetBtn").addEventListener("click", reset);
+</script>
+
+<script>
+(function () {
+  // Prefer canonical URL if present
+  var canonicalEl = document.querySelector('link[rel="canonical"]');
+  var canonical = canonicalEl ? canonicalEl.href : window.location.href;
+
+  var url = encodeURIComponent(canonical);
+  var title = encodeURIComponent(document.title);
+
+  var linkedInUrl = "https://www.linkedin.com/sharing/share-offsite/?url=" + url;
+  var twitterUrl  = "https://twitter.com/intent/tweet?url=" + url + "&text=" + title;
+  var emailUrl    = "mailto:?subject=" + title + "&body=Thought you'd find this interesting:%0A%0A" + url;
+
+  var li = document.getElementById("shareLinkedIn");
+  var tw = document.getElementById("shareTwitter");
+  var em = document.getElementById("shareEmail");
+
+  if (li) li.href = linkedInUrl;
+  if (tw) tw.href = twitterUrl;
+  if (em) em.href = emailUrl;
+})();
 </script>
 </body>
 </html>

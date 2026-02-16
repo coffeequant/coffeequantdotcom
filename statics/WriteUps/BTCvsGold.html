@@ -3,6 +3,41 @@
 <head>
   <meta charset="utf-8" />
   <title>CQ Lab — Gold vs “Digital Gold”: Correlation, Quanto Drift, and Barbell Hedges</title>
+<link rel="canonical" href="https://coffee.coffeequant.com/statics/WriteUps/BTCvsGold.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="CoffeeQuant" />
+<meta property="og:title" content="CQ Lab — Gold vs “Digital Gold”: Correlation, Quanto Drift, and Barbell Hedges" />
+<meta property="og:description" content="Gold vs BTC as insurance assets: correlation, quanto drift, tail beta, and a simple barbell you can structure." />
+<meta property="og:url" content="https://coffee.coffeequant.com/statics/WriteUps/BTCvsGold.html" />
+<meta property="og:image" content="https://coffee.coffeequant.com/statics/images/share-default.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="CQ Lab — Gold vs “Digital Gold”" />
+<meta name="twitter:description" content="Correlation, quanto drift, tail beta, and a clean barbell." />
+<meta name="twitter:image" content="https://coffee.coffeequant.com/statics/images/share-default.jpg" />
+
+<div class="cq-share" style="margin:.75rem 0 1rem; display:flex; gap:.5rem; flex-wrap:wrap; align-items:center;">
+  <span class="muted small" style="opacity:.75; font-weight:700;">Share:</span>
+
+  <a class="pill" target="_blank" rel="noopener"
+     href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcoffee.coffeequant.com%2Fstatics%2FWriteUps%2FBTCvsGold.html">
+    LinkedIn
+  </a>
+
+  <a class="pill" target="_blank" rel="noopener"
+     href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcoffee.coffeequant.com%2Fstatics%2FWriteUps%2FBTCvsGold.html&text=CQ%20Lab%3A%20Gold%20vs%20Digital%20Gold">
+    X
+  </a>
+
+  <button class="pill" type="button" onclick="navigator.clipboard.writeText(location.href)">
+    Copy link
+  </button>
+</div>
+
+
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- CoffeeQuant theme -->
@@ -527,6 +562,22 @@
     // Optional: preload demo so the page feels alive
     loadDemo();
   </script>
+<div class="cq-share" id="cqShare"></div>
+<script>
+  (function(){
+    var url = encodeURIComponent(location.href);
+    var title = encodeURIComponent(document.title.replace(/\s+\|\s+CoffeeQuant\s*$/,''));
+    var html = ''
+      + '<div style="margin:.75rem 0 1rem; display:flex; gap:.5rem; flex-wrap:wrap; align-items:center;">'
+      + '  <span style="opacity:.75; font-weight:700;">Share:</span>'
+      + '  <a class="pill" target="_blank" rel="noopener" href="https://www.linkedin.com/sharing/share-offsite/?url=' + url + '">LinkedIn</a>'
+      + '  <a class="pill" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?url=' + url + '&text=' + title + '">X</a>'
+      + '  <button class="pill" type="button" onclick="navigator.clipboard.writeText(location.href)">Copy link</button>'
+      + '</div>';
+    document.getElementById('cqShare').innerHTML = html;
+  })();
+</script>
+
 </body>
 </html>
 
