@@ -336,19 +336,6 @@
         <a href="#archive">Archive</a>
         <a href="statics/WriteUps/Premium.html">Premium</a>
 
-        <!-- Visitor counter -->
-
-	<div class="cq-visitors" title="Live-ish site stats">
-  <span class="cq-dot" aria-hidden="true"></span>
-  <span class="cq-visitors-label">Visitors</span>
-  <span class="cq-visitors-metrics">
-    <span>All: <b id="cq-visits">—</b></span>
-    <span class="cq-sep">•</span>
-    <span>Today: <b id="cq-today">—</b></span>
-    <span class="cq-sep">•</span>
-    <span>Online: <b id="cq-online">—</b></span>
-  </span>
-</div>
 
         <!-- Auth area (single instance) -->
         <span style="width:10px;"></span>
@@ -671,232 +658,92 @@ async function boot() {
     boot();
   </script>
 
-
-<script>
-/* CoffeeQuant: Visitor counter + CQ Pulse + Share (LinkedIn)
-   - Global counter via CountAPI (no backend)
-   - Local "Today" counter (per device)
-   - "Online" is a playful estimate (no tracking)
-*/
-(function(){
-  // ---------- Config ----------
-  var DOMAIN = "coffee.coffeequant.com";
-  var COUNTAPI_KEY = "homepage_visits";
-  var BASE = 18342; // display seed (change any time)
-
-  var SHARE_URL = "https://coffee.coffeequant.com";
-  var SHARE_TITLE = "CoffeeQuant – Macro, Rates & Volatility Insights";
-
-  // ---------- Helpers ----------
-  function $(id){ return document.getElementById(id); }
-  function fmt(n){
-    try { return Number(n).toLocaleString("en-US"); } catch(e){ return String(n); }
-  }
-  function nowStamp(){
-    var d = new Date();
-    var hh = ("0"+d.getHours()).slice(-2);
-    var mm = ("0"+d.getMinutes()).slice(-2);
-    return hh + ":" + mm;
-  }
-  function todayKey(){
-    var d = new Date();
-    var y = d.getFullYear();
-    var m = ("0"+(d.getMonth()+1)).slice(-2);
-    var da = ("0"+d.getDate()).slice(-2);
-    return "cq_visits_day_v1_" + y + "-" + m + "-" + da;
-  }
-  function getInt(key, def){
-    var v = parseInt(localStorage.getItem(key) || "", 10);
-    return isNaN(v) ? def : v;
-  }
-  function setInt(key, v){
-    localStorage.setItem(key, String(v));
-  }
-
-  // ---------- Local counters (per device) ----------
-  var KEY_SEED = "cq_visits_seed_v1";
-  var seed = getInt(KEY_SEED, 0);
-  if (!seed){
-    seed = Math.floor(1200 + Math.random()*2800); // 1.2k–4.0k
-    setInt(KEY_SEED, seed);
-  }
-
-  var dayKey = todayKey();
-  var today = getInt(dayKey, 0) + 1;
-  setInt(dayKey, today);
-
-  // ---------- Online estimate (no tracking) ----------
-  function estimateOnline(shownTotal){
-    var d = new Date();
-    var h = d.getHours();
-    var base = (h>=8 && h<=22) ? 8 : 3;
-    var swing = (h>=10 && h<=18) ? 10 : 5;
-    var jitter = Math.floor(Math.random()*4);
-    var scale = Math.min(18, Math.floor((shownTotal) / 4000));
-    return Math.max(1, base + Math.floor(Math.random()*swing) + jitter + scale);
-  }
-
-  // ---------- CountAPI (global) ----------
-  async function hitCountApi(){
-    var url = "https://api.countapi.xyz/hit/" + encodeURIComponent(DOMAIN) + "/" + encodeURIComponent(COUNTAPI_KEY);
-    var resp = await fetch(url, { cache: "no-store" });
-    if (!resp.ok) throw new Error("CountAPI " + resp.status);
-    var data = await resp.json();
-    var n = (data && typeof data.value === "number") ? data.value : 0;
-    return n;
-  }
-
-  function renderAll(shownTotal){
-    // Topbar pill
-    var pill = $("cqVisitorCount");
-    if (pill) pill.textContent = fmt(shownTotal);
-
-    // CQ Pulse
-    var elTotal = $("cqVisitCount");
-    var elToday = $("cqVisitToday");
-    var elNow   = $("cqVisitNow");
-    var elStamp = $("cqPulseStamp");
-    var elBar   = $("cqPulseBar");
-
-    if (elTotal) elTotal.textContent = fmt(shownTotal);
-    if (elToday) elToday.textContent = fmt(today);
-    if (elNow) elNow.textContent = fmt(estimateOnline(shownTotal));
-    if (elStamp) elStamp.textContent = "Updated " + nowStamp();
-
-    if (elBar){
-      // soft cap: 60 visits/day = 100%
-      var pct = Math.min(100, Math.round((today / 60) * 100));
-      elBar.style.width = pct + "%";
-    }
-  }
-
-  async function init(){
-    // Render immediately with a decent fallback so it's never blank
-    var fallbackTotal = BASE + seed + today; 
-    renderAll(fallbackTotal);
-
-    // Try global count
-    try{
-      var n = await hitCountApi();
-      var shownTotal = BASE + n;
-      renderAll(shownTotal);
-    }catch(e){
-      // keep fallback; no console spam needed
-    }
-
-    // keep "online" feeling alive without re-hitting CountAPI
-    setInterval(function(){
-      var current = $("cqVisitCount");
-      var shown = current ? parseInt(String(current.textContent).replace(/,/g,""),10) : fallbackTotal;
-      if (!shown || isNaN(shown)) shown = fallbackTotal;
-      renderAll(shown);
-    }, 25000);
-
-    // Share button: attach immediately (script is at end of body)
-    var btn = $("cq-share-btn");
-    if (btn){
-      btn.addEventListener("click", function(e){
-        e.preventDefault();
-        var u = "https://www.linkedin.com/sharing/share-offsite/?url=" + encodeURIComponent(SHARE_URL);
-        window.open(u, "_blank", "noopener,noreferrer");
-      });
-      btn.setAttribute("title", "Share " + SHARE_URL + " on LinkedIn");
-    }
-  }
-
-  init();
-})();
-</script>
-
 <script>
 (() => {
-  const BASE_URL = "https://coffee.coffeequant.com/";
-  const COUNTAPI_NS = "coffeequant";
+  const COUNTAPI_NS  = "coffeequant";
   const COUNTAPI_KEY = "coffeequant_home";
 
-  const elAll = document.getElementById("cq-visits");
-  const elToday = document.getElementById("cq-today");
+  const elAll    = document.getElementById("cq-visits");
+  const elToday  = document.getElementById("cq-today");
   const elOnline = document.getElementById("cq-online");
+  const shareBtn = document.getElementById("cq-share-btn");
 
   function fmt(n) {
-    if (n === null || n === undefined || Number.isNaN(n)) return "—";
-    return Number(n).toLocaleString("en-US");
+    return Number(n || 0).toLocaleString("en-US");
   }
 
-  // --- Total visits via CountAPI
+  // ---------- TOTAL VISITS (Global)
   async function bumpTotal() {
-    const url = `https://api.countapi.xyz/hit/${encodeURIComponent(COUNTAPI_NS)}/${encodeURIComponent(COUNTAPI_KEY)}`;
-    const r = await fetch(url, { cache: "no-store" });
+    const url = `https://api.countapi.xyz/hit/${COUNTAPI_NS}/${COUNTAPI_KEY}`;
+    const r = await fetch(url);
     if (!r.ok) throw new Error("CountAPI error");
     const j = await r.json();
     return j.value;
   }
 
-  // --- Today counter (per-browser, but looks clean)
+  // ---------- TODAY VISITS (Per Browser)
   function bumpToday() {
-    const todayKey = "cq_today_" + new Date().toISOString().slice(0, 10);
-    const v = (parseInt(localStorage.getItem(todayKey) || "0", 10) || 0) + 1;
-    localStorage.setItem(todayKey, String(v));
-    return v;
+    const key = "cq_today_" + new Date().toISOString().slice(0,10);
+    const val = (parseInt(localStorage.getItem(key) || "0", 10) || 0) + 1;
+    localStorage.setItem(key, val);
+    return val;
   }
 
-  // --- “Online now” (lightweight animated estimate)
-  function startOnlinePulse() {
-    const base = 3 + Math.floor(Math.random() * 6); // 3..8
-    let cur = base;
+  // ---------- ONLINE (Simulated rolling)
+  function startOnline() {
+    let base = 5 + Math.floor(Math.random() * 6);
 
     const tick = () => {
-      const step = (Math.random() < 0.55 ? 1 : -1) * (Math.random() < 0.75 ? 1 : 2);
-      cur = Math.max(1, Math.min(29, cur + step));
-      if (elOnline) elOnline.textContent = fmt(cur);
+      const delta = Math.random() < 0.6 ? 1 : -1;
+      base = Math.max(2, Math.min(35, base + delta));
+      if (elOnline) elOnline.textContent = fmt(base);
     };
 
     tick();
-    setInterval(tick, 4200);
+    setInterval(tick, 4000);
   }
 
-  // --- Share on LinkedIn (share only your homepage, not “full page” text)
-  function wireLinkedInShare() {
-    const btn = document.querySelector("[data-cq-share='linkedin']");
-    if (!btn) return;
+  // ---------- LINKEDIN SHARE
+  function wireShare() {
+    if (!shareBtn) return;
 
-    btn.addEventListener("click", (e) => {
-      e.preventDefault();
-      const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(BASE_URL)}`;
-      window.open(shareUrl, "_blank", "noopener,noreferrer,width=980,height=720");
+    shareBtn.addEventListener("click", () => {
+      const siteURL = "https://coffee.coffeequant.com";
+      const shareURL = "https://www.linkedin.com/sharing/share-offsite/?url=" +
+                       encodeURIComponent(siteURL);
+
+      window.open(
+        shareURL,
+        "_blank",
+        "noopener,noreferrer,width=980,height=720"
+      );
     });
   }
 
   async function boot() {
-    // placeholders
     if (elAll) elAll.textContent = "—";
     if (elToday) elToday.textContent = "—";
     if (elOnline) elOnline.textContent = "—";
 
-    // today (instant)
     try {
-      const t = bumpToday();
-      if (elToday) elToday.textContent = fmt(t);
+      const today = bumpToday();
+      if (elToday) elToday.textContent = fmt(today);
     } catch {}
 
-    // online pulse (instant)
-    startOnlinePulse();
+    startOnline();
 
-    // total (async)
     try {
       const total = await bumpTotal();
       if (elAll) elAll.textContent = fmt(total);
-    } catch (err) {
-      // If CountAPI fails, keep it graceful.
+    } catch {
       if (elAll) elAll.textContent = "—";
     }
 
-    wireLinkedInShare();
+    wireShare();
   }
 
   boot();
 })();
 </script>
-
 </body>
 </html>
