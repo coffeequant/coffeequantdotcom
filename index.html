@@ -5,6 +5,14 @@
   <title>CoffeeQuant — espresso shots of structured intuition</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+<meta property="og:title" content="CoffeeQuant – Macro & Volatility Intelligence (AI)">
+<meta property="og:description" content="Macro, rates, vol and QIS insights for traders and portfolio managers.">
+<meta property="og:image" content="https://coffee.coffeequant.com/statics/img/hero/hero-01.webp">
+<meta property="og:url" content="https://coffee.coffeequant.com">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image" />
+
+
   <!-- Main site CSS -->
   <link rel="stylesheet" href="statics/css/cq.css" />
 
@@ -233,6 +241,76 @@
   .cq-visitors{display:none;} /* keep topbar tidy on mobile */
 }
 
+
+
+/* CQ Pulse */
+.cq-pulse-grid{margin-top:12px;}
+.cq-big{font-size:34px;font-weight:900;letter-spacing:-0.02em;line-height:1.05;}
+.cq-pulse-card .cq-card-hd{padding-bottom:8px;}
+.cq-dim{color:var(--cq-dim);font-size:13px;line-height:1.35;}
+.cq-btn{appearance:none;border:1px solid var(--cq-line);background:rgba(255,255,255,.05);color:var(--cq-ink);
+  border-radius:14px;padding:10px 12px;font-weight:800;cursor:pointer;width:100%;}
+.cq-btn:hover{background:rgba(255,255,255,.08);}
+.cq-btn:active{transform:translateY(1px);}
+.cq-pulse-actions{display:flex;flex-direction:column;gap:10px;}
+
+/* ---- CQ Pulse (compact + neat) ---- */
+.cq-pulse{padding:14px 0 6px}
+.cq-pulse-card{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:12px 14px;border-radius:18px;border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.04);
+  backdrop-filter: blur(10px);
+}
+.cq-pulse-title{font-weight:900;letter-spacing:.02em}
+.cq-pulse-stats{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:6px}
+.cq-stat{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:7px 10px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(0,0,0,.12);
+  font-weight:700;font-size:13px;line-height:1;
+}
+.cq-stat-ico{font-size:14px}
+.cq-stat-label{opacity:.78;font-weight:800;letter-spacing:.02em}
+.cq-stat-val{font-variant-numeric: tabular-nums; font-weight:900}
+
+.cq-pulse-right{display:flex;align-items:center;gap:10px}
+.cq-pulse-cta{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:10px 12px;border-radius:12px;text-decoration:none;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+  font-weight:900;
+}
+
+.cq-share-btn{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.08);
+  color:inherit;cursor:pointer;font-weight:900;
+  transition: transform .12s ease, background .12s ease, border-color .12s ease;
+}
+.cq-share-btn:hover{
+  transform: translateY(-1px);
+  background:rgba(255,255,255,.12);
+  border-color:rgba(255,255,255,.22);
+}
+.cq-share-btn:active{transform: translateY(0px) scale(.99)}
+.cq-share-ico{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:28px;height:28px;border-radius:10px;
+  background:rgba(10,102,194,.18);
+  box-shadow: inset 0 0 0 1px rgba(10,102,194,.25);
+}
+.cq-share-text{letter-spacing:.01em}
+
+@media (max-width:720px){
+  .cq-pulse-card{flex-direction:column;align-items:stretch}
+  .cq-pulse-right{justify-content:space-between}
+}
+
+
 </style>
 </head>
 
@@ -257,6 +335,20 @@
         <a href="#curios">Curios</a>
         <a href="#archive">Archive</a>
         <a href="statics/WriteUps/Premium.html">Premium</a>
+
+        <!-- Visitor counter -->
+
+	<div class="cq-visitors" title="Live-ish site stats">
+  <span class="cq-dot" aria-hidden="true"></span>
+  <span class="cq-visitors-label">Visitors</span>
+  <span class="cq-visitors-metrics">
+    <span>All: <b id="cq-visits">—</b></span>
+    <span class="cq-sep">•</span>
+    <span>Today: <b id="cq-today">—</b></span>
+    <span class="cq-sep">•</span>
+    <span>Online: <b id="cq-online">—</b></span>
+  </span>
+</div>
 
         <!-- Auth area (single instance) -->
         <span style="width:10px;"></span>
@@ -311,7 +403,50 @@
     <div class="cq-grid">
 
       <!-- DAILY -->
-      <section id="daily" class="cq-section">
+      
+      <!-- CQ PULSE (Visitor Counter) -->
+<section id="pulse" class="cq-pulse" aria-label="CoffeeQuant Pulse">
+  <div class="cq-pulse-card">
+    <div class="cq-pulse-left">
+      <div class="cq-pulse-title">CQ Pulse</div>
+
+      <div class="cq-pulse-stats" role="list">
+        <span class="cq-stat" role="listitem" title="Total visits">
+          <span class="cq-stat-ico" aria-hidden="true">👀</span>
+          <span class="cq-stat-label">Visits</span>
+          <span class="cq-stat-val" id="cq-visits">—</span>
+        </span>
+
+        <span class="cq-stat" role="listitem" title="Visits today (HK time)">
+          <span class="cq-stat-ico" aria-hidden="true">📅</span>
+          <span class="cq-stat-label">Today</span>
+          <span class="cq-stat-val" id="cq-today">—</span>
+        </span>
+
+        <span class="cq-stat" role="listitem" title="Estimated users online (rolling)">
+          <span class="cq-stat-ico" aria-hidden="true">🟢</span>
+          <span class="cq-stat-label">Online</span>
+          <span class="cq-stat-val" id="cq-online">—</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="cq-pulse-right">
+      <button id="cq-share-btn" class="cq-share-btn" type="button" aria-label="Share CoffeeQuant on LinkedIn">
+        <span class="cq-share-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+            <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.05-1.86-3.05-1.86 0-2.14 1.45-2.14 2.95v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.86 3.37-1.86 3.6 0 4.27 2.37 4.27 5.45v6.3zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.11 20.45H3.56V9h3.55v11.45zM22.22 0H1.78C.8 0 0 .77 0 1.72v20.56C0 23.23.8 24 1.78 24h20.44c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/>
+          </svg>
+        </span>
+        <span class="cq-share-text">Share</span>
+      </button>
+
+      <a class="cq-pulse-cta" href="/#daily">Read latest</a>
+    </div>
+  </div>
+</section>
+
+<section id="daily" class="cq-section">
         <div class="cq-section-head">
           <h2>Daily</h2>
           <div class="cq-muted">one punchy idea, one clean takeaway</div>
@@ -466,38 +601,7 @@
     }
 
     
-async function initVisitorCounter_() {
-  var el = document.getElementById("cqVisitorCount");
-  if (!el) return;
-
-  // Stable "starting number" (so the counter doesn't look like a newborn site).
-  // You can change BASE any time; it only affects display (not the underlying counter).
-  var BASE = 18342;
-
-  // CountAPI: simple, no-backend counter. Namespace is your domain.
-  // Note: if a visitor blocks third-party requests, we gracefully fallback.
-  var ns  = "coffee.coffeequant.com";
-  var key = "homepage_visits";
-
-  try {
-    var resp = await fetch("https://api.countapi.xyz/hit/" + encodeURIComponent(ns) + "/" + encodeURIComponent(key), { cache: "no-store" });
-    if (!resp.ok) throw new Error("CountAPI " + resp.status);
-    var data = await resp.json();
-    var n = (data && typeof data.value === "number") ? data.value : 0;
-    el.textContent = (BASE + n).toLocaleString("en-US");
-  } catch (e) {
-    // Fallback: show a locally-incrementing number so the UI isn't empty.
-    var localKey = "cq_local_visits_v1";
-    var local = parseInt(localStorage.getItem(localKey) || "0", 10);
-    if (isNaN(local) || local < 0) local = 0;
-    local += 1;
-    localStorage.setItem(localKey, String(local));
-    el.textContent = (BASE + local).toLocaleString("en-US");
-  }
-}
-
 async function boot() {
-  initVisitorCounter_();
 // status panels
       $("#premiumStatus").textContent = premiumFlag() ? "Premium ✓" : "Free";
 
@@ -566,5 +670,233 @@ async function boot() {
 
     boot();
   </script>
+
+
+<script>
+/* CoffeeQuant: Visitor counter + CQ Pulse + Share (LinkedIn)
+   - Global counter via CountAPI (no backend)
+   - Local "Today" counter (per device)
+   - "Online" is a playful estimate (no tracking)
+*/
+(function(){
+  // ---------- Config ----------
+  var DOMAIN = "coffee.coffeequant.com";
+  var COUNTAPI_KEY = "homepage_visits";
+  var BASE = 18342; // display seed (change any time)
+
+  var SHARE_URL = "https://coffee.coffeequant.com";
+  var SHARE_TITLE = "CoffeeQuant – Macro, Rates & Volatility Insights";
+
+  // ---------- Helpers ----------
+  function $(id){ return document.getElementById(id); }
+  function fmt(n){
+    try { return Number(n).toLocaleString("en-US"); } catch(e){ return String(n); }
+  }
+  function nowStamp(){
+    var d = new Date();
+    var hh = ("0"+d.getHours()).slice(-2);
+    var mm = ("0"+d.getMinutes()).slice(-2);
+    return hh + ":" + mm;
+  }
+  function todayKey(){
+    var d = new Date();
+    var y = d.getFullYear();
+    var m = ("0"+(d.getMonth()+1)).slice(-2);
+    var da = ("0"+d.getDate()).slice(-2);
+    return "cq_visits_day_v1_" + y + "-" + m + "-" + da;
+  }
+  function getInt(key, def){
+    var v = parseInt(localStorage.getItem(key) || "", 10);
+    return isNaN(v) ? def : v;
+  }
+  function setInt(key, v){
+    localStorage.setItem(key, String(v));
+  }
+
+  // ---------- Local counters (per device) ----------
+  var KEY_SEED = "cq_visits_seed_v1";
+  var seed = getInt(KEY_SEED, 0);
+  if (!seed){
+    seed = Math.floor(1200 + Math.random()*2800); // 1.2k–4.0k
+    setInt(KEY_SEED, seed);
+  }
+
+  var dayKey = todayKey();
+  var today = getInt(dayKey, 0) + 1;
+  setInt(dayKey, today);
+
+  // ---------- Online estimate (no tracking) ----------
+  function estimateOnline(shownTotal){
+    var d = new Date();
+    var h = d.getHours();
+    var base = (h>=8 && h<=22) ? 8 : 3;
+    var swing = (h>=10 && h<=18) ? 10 : 5;
+    var jitter = Math.floor(Math.random()*4);
+    var scale = Math.min(18, Math.floor((shownTotal) / 4000));
+    return Math.max(1, base + Math.floor(Math.random()*swing) + jitter + scale);
+  }
+
+  // ---------- CountAPI (global) ----------
+  async function hitCountApi(){
+    var url = "https://api.countapi.xyz/hit/" + encodeURIComponent(DOMAIN) + "/" + encodeURIComponent(COUNTAPI_KEY);
+    var resp = await fetch(url, { cache: "no-store" });
+    if (!resp.ok) throw new Error("CountAPI " + resp.status);
+    var data = await resp.json();
+    var n = (data && typeof data.value === "number") ? data.value : 0;
+    return n;
+  }
+
+  function renderAll(shownTotal){
+    // Topbar pill
+    var pill = $("cqVisitorCount");
+    if (pill) pill.textContent = fmt(shownTotal);
+
+    // CQ Pulse
+    var elTotal = $("cqVisitCount");
+    var elToday = $("cqVisitToday");
+    var elNow   = $("cqVisitNow");
+    var elStamp = $("cqPulseStamp");
+    var elBar   = $("cqPulseBar");
+
+    if (elTotal) elTotal.textContent = fmt(shownTotal);
+    if (elToday) elToday.textContent = fmt(today);
+    if (elNow) elNow.textContent = fmt(estimateOnline(shownTotal));
+    if (elStamp) elStamp.textContent = "Updated " + nowStamp();
+
+    if (elBar){
+      // soft cap: 60 visits/day = 100%
+      var pct = Math.min(100, Math.round((today / 60) * 100));
+      elBar.style.width = pct + "%";
+    }
+  }
+
+  async function init(){
+    // Render immediately with a decent fallback so it's never blank
+    var fallbackTotal = BASE + seed + today; 
+    renderAll(fallbackTotal);
+
+    // Try global count
+    try{
+      var n = await hitCountApi();
+      var shownTotal = BASE + n;
+      renderAll(shownTotal);
+    }catch(e){
+      // keep fallback; no console spam needed
+    }
+
+    // keep "online" feeling alive without re-hitting CountAPI
+    setInterval(function(){
+      var current = $("cqVisitCount");
+      var shown = current ? parseInt(String(current.textContent).replace(/,/g,""),10) : fallbackTotal;
+      if (!shown || isNaN(shown)) shown = fallbackTotal;
+      renderAll(shown);
+    }, 25000);
+
+    // Share button: attach immediately (script is at end of body)
+    var btn = $("cq-share-btn");
+    if (btn){
+      btn.addEventListener("click", function(e){
+        e.preventDefault();
+        var u = "https://www.linkedin.com/sharing/share-offsite/?url=" + encodeURIComponent(SHARE_URL);
+        window.open(u, "_blank", "noopener,noreferrer");
+      });
+      btn.setAttribute("title", "Share " + SHARE_URL + " on LinkedIn");
+    }
+  }
+
+  init();
+})();
+</script>
+
+<script>
+(() => {
+  const BASE_URL = "https://coffee.coffeequant.com/";
+  const COUNTAPI_NS = "coffeequant";
+  const COUNTAPI_KEY = "coffeequant_home";
+
+  const elAll = document.getElementById("cq-visits");
+  const elToday = document.getElementById("cq-today");
+  const elOnline = document.getElementById("cq-online");
+
+  function fmt(n) {
+    if (n === null || n === undefined || Number.isNaN(n)) return "—";
+    return Number(n).toLocaleString("en-US");
+  }
+
+  // --- Total visits via CountAPI
+  async function bumpTotal() {
+    const url = `https://api.countapi.xyz/hit/${encodeURIComponent(COUNTAPI_NS)}/${encodeURIComponent(COUNTAPI_KEY)}`;
+    const r = await fetch(url, { cache: "no-store" });
+    if (!r.ok) throw new Error("CountAPI error");
+    const j = await r.json();
+    return j.value;
+  }
+
+  // --- Today counter (per-browser, but looks clean)
+  function bumpToday() {
+    const todayKey = "cq_today_" + new Date().toISOString().slice(0, 10);
+    const v = (parseInt(localStorage.getItem(todayKey) || "0", 10) || 0) + 1;
+    localStorage.setItem(todayKey, String(v));
+    return v;
+  }
+
+  // --- “Online now” (lightweight animated estimate)
+  function startOnlinePulse() {
+    const base = 3 + Math.floor(Math.random() * 6); // 3..8
+    let cur = base;
+
+    const tick = () => {
+      const step = (Math.random() < 0.55 ? 1 : -1) * (Math.random() < 0.75 ? 1 : 2);
+      cur = Math.max(1, Math.min(29, cur + step));
+      if (elOnline) elOnline.textContent = fmt(cur);
+    };
+
+    tick();
+    setInterval(tick, 4200);
+  }
+
+  // --- Share on LinkedIn (share only your homepage, not “full page” text)
+  function wireLinkedInShare() {
+    const btn = document.querySelector("[data-cq-share='linkedin']");
+    if (!btn) return;
+
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(BASE_URL)}`;
+      window.open(shareUrl, "_blank", "noopener,noreferrer,width=980,height=720");
+    });
+  }
+
+  async function boot() {
+    // placeholders
+    if (elAll) elAll.textContent = "—";
+    if (elToday) elToday.textContent = "—";
+    if (elOnline) elOnline.textContent = "—";
+
+    // today (instant)
+    try {
+      const t = bumpToday();
+      if (elToday) elToday.textContent = fmt(t);
+    } catch {}
+
+    // online pulse (instant)
+    startOnlinePulse();
+
+    // total (async)
+    try {
+      const total = await bumpTotal();
+      if (elAll) elAll.textContent = fmt(total);
+    } catch (err) {
+      // If CountAPI fails, keep it graceful.
+      if (elAll) elAll.textContent = "—";
+    }
+
+    wireLinkedInShare();
+  }
+
+  boot();
+})();
+</script>
+
 </body>
 </html>
