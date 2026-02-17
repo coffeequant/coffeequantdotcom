@@ -2,13 +2,23 @@
   "items": [
     {
       "date": "2026-02-17",
+      "title": "Gold Convexity in a Policy World — The Quiet Hedge Funds Are Building",
+      "href": "statics/WriteUps/gold-convexity-in-a-policy-world-the-quiet-hedge-funds-are-building.html",
+      "link": "statics/WriteUps/gold-convexity-in-a-policy-world-the-quiet-hedge-funds-are-building.html",
+      "tag": "Macro / Volatility",
+      "premium": false,
+      "hero": "statics/img/newarticles/images.jpeg",
+      "excerpt": "CQX Thesis Crash convexity in equities is expensive. But policy convexity in gold is not. Hedge funds may be forced to sell gold in the short term due to margin calls. But struc..."
+    },
+    {
+      "date": "2026-02-17",
       "title": "AI Isn’t Crashing the Market. Rates Are.",
       "href": "statics/WriteUps/ai-isn-t-crashing-the-market-rates-are.html",
       "link": "statics/WriteUps/ai-isn-t-crashing-the-market-rates-are.html",
       "tag": "Macro",
       "premium": false,
       "hero": "statics/images/newarticle_image1.jpg",
-      "thumb":"statics/images/newarticle_image2.png",
+      "thumb": "statics/images/newarticle_image2.png",
       "excerpt": "AI Isn’t Crashing the Market. Rates Are. Over $1.5 trillion has been wiped from Big Tech in weeks. Microsoft and Amazon are down more than 20% from peaks. Nasdaq momentum has cr..."
     },
     {
