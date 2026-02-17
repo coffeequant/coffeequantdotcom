@@ -577,6 +577,34 @@
     document.getElementById('cqShare').innerHTML = html;
   })();
 </script>
+<script>
+(function(){
+
+const API = "https://script.google.com/macros/s/AKfycbwzpejJn6sddqxBGQGp6-ZNCBOTjFH1-Z16kTB-hFD0ea7TVtv5-NV1UR8GgewEfR8s/exec";
+const slug = window.location.pathname.split("/").pop().replace(".html","");
+
+function cid(){
+  let c = localStorage.getItem("cq_id");
+  if(!c){
+    c = "cq_" + Math.random().toString(36).slice(2) + Date.now();
+    localStorage.setItem("cq_id", c);
+  }
+  return c;
+}
+
+fetch(API,{
+  method:"POST",
+  body: JSON.stringify({
+    article: slug,
+    ref: document.referrer || "direct",
+    cid: cid()
+  }),
+  headers:{ "Content-Type":"application/json" }
+});
+
+})();
+</script>
+
 
 </body>
 </html>
