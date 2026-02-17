@@ -211,29 +211,7 @@
     }
     .cq-btn-ghost-small:hover { background: rgba(255,255,255,.08); }
     .cq-google-btn-container { display:flex; align-items:center; }
-  
-/* --- CoffeeQuant: visitor counter pill --- */
-.cq-visitors{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  margin-left:12px;
-  padding:8px 10px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.14);
-  background:rgba(0,0,0,.22);
-  backdrop-filter: blur(8px);
-  font-size:12px;
-  line-height:1;
-  user-select:none;
-}
-.cq-visitors-label{opacity:.75;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:11px;}
-.cq-visitors-num{font-variant-numeric: tabular-nums; font-weight:800;}
-@media (max-width: 720px){
-  .cq-visitors{display:none;} /* keep topbar tidy on mobile */
-}
-
-</style>
+  </style>
 </head>
 
 <body>
@@ -465,40 +443,8 @@
       return xs.find(x => (parseDateISO(x.date)?.getTime() ?? Infinity) <= todayUTC) || xs[0] || null;
     }
 
-    
-async function initVisitorCounter_() {
-  var el = document.getElementById("cqVisitorCount");
-  if (!el) return;
-
-  // Stable "starting number" (so the counter doesn't look like a newborn site).
-  // You can change BASE any time; it only affects display (not the underlying counter).
-  var BASE = 18342;
-
-  // CountAPI: simple, no-backend counter. Namespace is your domain.
-  // Note: if a visitor blocks third-party requests, we gracefully fallback.
-  var ns  = "coffee.coffeequant.com";
-  var key = "homepage_visits";
-
-  try {
-    var resp = await fetch("https://api.countapi.xyz/hit/" + encodeURIComponent(ns) + "/" + encodeURIComponent(key), { cache: "no-store" });
-    if (!resp.ok) throw new Error("CountAPI " + resp.status);
-    var data = await resp.json();
-    var n = (data && typeof data.value === "number") ? data.value : 0;
-    el.textContent = (BASE + n).toLocaleString("en-US");
-  } catch (e) {
-    // Fallback: show a locally-incrementing number so the UI isn't empty.
-    var localKey = "cq_local_visits_v1";
-    var local = parseInt(localStorage.getItem(localKey) || "0", 10);
-    if (isNaN(local) || local < 0) local = 0;
-    local += 1;
-    localStorage.setItem(localKey, String(local));
-    el.textContent = (BASE + local).toLocaleString("en-US");
-  }
-}
-
-async function boot() {
-  initVisitorCounter_();
-// status panels
+    async function boot() {
+      // status panels
       $("#premiumStatus").textContent = premiumFlag() ? "Premium ✓" : "Free";
 
       // daily
