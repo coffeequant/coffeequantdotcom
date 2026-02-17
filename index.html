@@ -393,30 +393,22 @@
       
       <!-- CQ PULSE (Visitor Counter) -->
 <section id="pulse" class="cq-pulse" aria-label="CoffeeQuant Pulse">
-  <div class="cq-pulse-card">
-    <div class="cq-pulse-left">
-      <div class="cq-pulse-title">CQ Pulse</div>
+<div class="cq-pulse" id="cqPulse">
+  <div class="cq-pulse-item">
+    <span class="cq-pulse-label">👀 Visits</span>
+    <span class="cq-pulse-value" id="cqTotal">–</span>
+  </div>
 
-      <div class="cq-pulse-stats" role="list">
-        <span class="cq-stat" role="listitem" title="Total visits">
-          <span class="cq-stat-ico" aria-hidden="true">👀</span>
-          <span class="cq-stat-label">Visits</span>
-          <span class="cq-stat-val" id="cq-visits">—</span>
-        </span>
+  <div class="cq-pulse-item">
+    <span class="cq-pulse-label">📅 Today</span>
+    <span class="cq-pulse-value" id="cqToday">–</span>
+  </div>
 
-        <span class="cq-stat" role="listitem" title="Visits today (HK time)">
-          <span class="cq-stat-ico" aria-hidden="true">📅</span>
-          <span class="cq-stat-label">Today</span>
-          <span class="cq-stat-val" id="cq-today">—</span>
-        </span>
-
-        <span class="cq-stat" role="listitem" title="Estimated users online (rolling)">
-          <span class="cq-stat-ico" aria-hidden="true">🟢</span>
-          <span class="cq-stat-label">Online</span>
-          <span class="cq-stat-val" id="cq-online">—</span>
-        </span>
-      </div>
-    </div>
+  <div class="cq-pulse-item">
+    <span class="cq-pulse-label">🟢 Online</span>
+    <span class="cq-pulse-value" id="cqOnline">–</span>
+  </div>
+</div>
 
     <div class="cq-pulse-right">
       <button id="cq-share-btn" class="cq-share-btn" type="button" aria-label="Share CoffeeQuant on LinkedIn">
@@ -658,91 +650,85 @@ async function boot() {
     boot();
   </script>
 
-<script>
-(() => {
-  const COUNTAPI_NS  = "coffeequant";
-  const COUNTAPI_KEY = "coffeequant_home";
+  <script>
+(function () {
 
-  const elAll    = document.getElementById("cq-visits");
-  const elToday  = document.getElementById("cq-today");
-  const elOnline = document.getElementById("cq-online");
-  const shareBtn = document.getElementById("cq-share-btn");
+  // Your Apps Script URL
+  const COUNTER_URL = "https://script.google.com/macros/s/AKfycbwzpejJn6sddqxBGQGp6-ZNCBOTjFH1-Z16kTB-hFD0ea7TVtv5-NV1UR8GgewEfR8s/exec";
+
+  const elTotal = document.getElementById("cqTotal");
+  const elToday = document.getElementById("cqToday");
+  const elOnline = document.getElementById("cqOnline");
 
   function fmt(n) {
     return Number(n || 0).toLocaleString("en-US");
   }
 
-  // ---------- TOTAL VISITS (Global)
-  async function bumpTotal() {
-    const url = `https://api.countapi.xyz/hit/${COUNTAPI_NS}/${COUNTAPI_KEY}`;
-    const r = await fetch(url);
-    if (!r.ok) throw new Error("CountAPI error");
-    const j = await r.json();
-    return j.value;
+  function getCID() {
+    let cid = localStorage.getItem("cq_cid");
+    if (!cid) {
+      cid = "cid_" + Math.random().toString(36).slice(2) + Date.now();
+      localStorage.setItem("cq_cid", cid);
+    }
+    return cid;
   }
 
-  // ---------- TODAY VISITS (Per Browser)
-  function bumpToday() {
-    const key = "cq_today_" + new Date().toISOString().slice(0,10);
-    const val = (parseInt(localStorage.getItem(key) || "0", 10) || 0) + 1;
-    localStorage.setItem(key, val);
-    return val;
-  }
-
-  // ---------- ONLINE (Simulated rolling)
-  function startOnline() {
-    let base = 5 + Math.floor(Math.random() * 6);
-
-    const tick = () => {
-      const delta = Math.random() < 0.6 ? 1 : -1;
-      base = Math.max(2, Math.min(35, base + delta));
-      if (elOnline) elOnline.textContent = fmt(base);
-    };
-
-    tick();
-    setInterval(tick, 4000);
-  }
-
-  // ---------- LINKEDIN SHARE
-  function wireShare() {
-    if (!shareBtn) return;
-
-    shareBtn.addEventListener("click", () => {
-      const siteURL = "https://coffee.coffeequant.com";
-      const shareURL = "https://www.linkedin.com/sharing/share-offsite/?url=" +
-                       encodeURIComponent(siteURL);
-
-      window.open(
-        shareURL,
-        "_blank",
-        "noopener,noreferrer,width=980,height=720"
-      );
-    });
-  }
-
-  async function boot() {
-    if (elAll) elAll.textContent = "—";
-    if (elToday) elToday.textContent = "—";
-    if (elOnline) elOnline.textContent = "—";
-
+  async function updateTotal() {
     try {
-      const today = bumpToday();
-      if (elToday) elToday.textContent = fmt(today);
-    } catch {}
+      // Try increment (POST)
+      const res = await fetch(COUNTER_URL, {
+        method: "POST",
+        body: JSON.stringify({ cid: getCID() }),
+        headers: { "Content-Type": "application/json" }
+      });
 
-    startOnline();
-
-    try {
-      const total = await bumpTotal();
-      if (elAll) elAll.textContent = fmt(total);
-    } catch {
-      if (elAll) elAll.textContent = "—";
+      const data = await res.json();
+      if (data && data.count !== undefined) {
+        elTotal.textContent = fmt(data.count);
+        return;
+      }
+    } catch (err) {
+      console.warn("POST failed, falling back to GET");
     }
 
-    wireShare();
+    // Fallback: just read count
+    try {
+      const res = await fetch(COUNTER_URL);
+      const data = await res.json();
+      if (data && data.count !== undefined) {
+        elTotal.textContent = fmt(data.count);
+      } else {
+        elTotal.textContent = "—";
+      }
+    } catch (err) {
+      console.error("Counter GET failed", err);
+      elTotal.textContent = "—";
+    }
   }
 
-  boot();
+  function updateToday() {
+    const key = "cq_today_" + new Date().toISOString().slice(0,10);
+    let n = parseInt(localStorage.getItem(key) || "0", 10);
+    n += 1;
+    localStorage.setItem(key, n);
+    elToday.textContent = fmt(n);
+  }
+
+  function startOnline() {
+    let base = 6 + Math.floor(Math.random() * 5);
+    function tick() {
+      const drift = Math.random() < 0.5 ? 1 : -1;
+      base = Math.max(3, Math.min(20, base + drift));
+      elOnline.textContent = fmt(base);
+    }
+    tick();
+    setInterval(tick, 6000);
+  }
+
+  updateTotal();
+  updateToday();
+  startOnline();
+
 })();
 </script>
 </body>
