@@ -393,24 +393,43 @@
       
       <!-- CQ PULSE (Visitor Counter) -->
 <section id="pulse" class="cq-pulse" aria-label="CoffeeQuant Pulse">
-<div class="cq-pulse" id="cqPulse">
-  <div class="cq-pulse-item">
-    <span class="cq-pulse-label">👀 Visits</span>
-    <span class="cq-pulse-value" id="cqTotal">–</span>
+<!-- CQ Pulse Bar: Counter + Share (single line, clean) -->
+<div class="cq-pulse-strip" id="cqPulse">
+  <div class="cq-pulse-left">
+    <span class="cq-pill" title="Live widget">
+      <span class="cq-dot"></span> Live
+    </span>
+
+    <span class="cq-stat">
+      <span class="cq-stat-label">Visits</span>
+      <span class="cq-stat-val" id="cqTotal">–</span>
+    </span>
+
+    <span class="cq-stat">
+      <span class="cq-stat-label">Today</span>
+      <span class="cq-stat-val" id="cqToday">–</span>
+    </span>
+
+    <span class="cq-stat">
+      <span class="cq-stat-label">Online</span>
+      <span class="cq-stat-val" id="cqOnline">–</span>
+    </span>
   </div>
 
-  <div class="cq-pulse-item">
-    <span class="cq-pulse-label">📅 Today</span>
-    <span class="cq-pulse-value" id="cqToday">–</span>
-  </div>
+  <div class="cq-pulse-actions">
+    <a class="cq-share-btn" id="cqShareLinkedIn" href="#" aria-label="Share CoffeeQuant on LinkedIn" title="Share on LinkedIn">
+      <!-- Simple LinkedIn icon -->
+      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor" d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5ZM.22 23.5h4.56V7.98H.22V23.5ZM8.22 7.98h4.37v2.12h.06c.61-1.16 2.1-2.38 4.32-2.38 4.62 0 5.47 3.04 5.47 6.99v8.79h-4.56v-7.8c0-1.86-.03-4.25-2.59-4.25-2.59 0-2.99 2.02-2.99 4.11v7.94H8.22V7.98Z"/>
+      </svg>
+      <span>Share</span>
+    </a>
 
-  <div class="cq-pulse-item">
-    <span class="cq-pulse-label">🟢 Online</span>
-    <span class="cq-pulse-value" id="cqOnline">–</span>
+    <a class="cq-btn" href="/#daily">Read latest</a>
   </div>
 </div>
 
-    <div class="cq-pulse-right">
+	<div class="cq-pulse-right">
       <button id="cq-share-btn" class="cq-share-btn" type="button" aria-label="Share CoffeeQuant on LinkedIn">
         <span class="cq-share-ico" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
@@ -649,41 +668,138 @@ async function boot() {
 
     boot();
   </script>
-
 <script>
-(function(){
+(function () {
+  // ✅ Your Apps Script Web App endpoint
+  // (the one you pasted that shows correct JSON)
+  const COUNTER_API = "https://script.google.com/macros/s/AKfycbwzpejJn6sddqxBGQGp6-ZNCBOTjFH1-Z16kTB-hFD0ea7TVtv5-NV1UR8GgewEfR8s/exec";
 
-  const API = "https://script.google.com/macros/s/AKfycbwzpejJn6sddqxBGQGp6-ZNCBOTjFH1-Z16kTB-hFD0ea7TVtv5-NV1UR8GgewEfR8s/exec";
+  // ✅ Share URL (always share homepage, not full deep page)
+  const SHARE_URL = "https://coffee.coffeequant.com/";
 
-  async function updateCounter(){
-    try{
-      const res = await fetch(API, { method: "GET" });
-      const data = await res.json();
+  const fmt = new Intl.NumberFormat("en-US");
 
-      const totalEl = document.getElementById("cqTotal");
-      const todayEl = document.getElementById("cqToday");
-      const onlineEl = document.getElementById("cqOnline");
+  function $(id) { return document.getElementById(id); }
 
-      if(data && typeof data.total !== "undefined"){
-        totalEl.textContent = Number(data.total).toLocaleString();
+  function getOrCreateCID() {
+    try {
+      const k = "cq_cid";
+      let cid = localStorage.getItem(k);
+      if (!cid) {
+        cid = (crypto && crypto.randomUUID) ? crypto.randomUUID() : ("cid_" + Math.random().toString(16).slice(2) + Date.now());
+        localStorage.setItem(k, cid);
       }
-
-      if(data && typeof data.today !== "undefined"){
-        todayEl.textContent = Number(data.today).toLocaleString();
-      }
-
-      // Fake lightweight "online" indicator (5–15 rolling)
-      onlineEl.textContent = 5 + Math.floor(Math.random()*10);
-
-    } catch(e){
-      console.error("Counter error:", e);
+      return cid;
+    } catch (e) {
+      return "cid_fallback_" + Math.random().toString(16).slice(2);
     }
   }
 
-  updateCounter();
+  function bumpTodayCounter() {
+    // purely front-end "today" (nice UX), backend is total
+    try {
+      const todayKey = "cq_today_" + new Date().toISOString().slice(0, 10);
+      const seenKey = todayKey + "_seen";
+      let today = parseInt(localStorage.getItem(todayKey) || "0", 10);
+      const seen = sessionStorage.getItem(seenKey);
+      if (!seen) {
+        today += 1;
+        localStorage.setItem(todayKey, String(today));
+        sessionStorage.setItem(seenKey, "1");
+      }
+      return today;
+    } catch (e) {
+      return 0;
+    }
+  }
 
+  function setText(id, val) {
+    const el = $(id);
+    if (!el) return;
+    el.textContent = val;
+  }
+
+  async function postHitOnce() {
+    // POST increments (dedup happens server-side via cache + cid)
+    const cid = getOrCreateCID();
+    const resp = await fetch(COUNTER_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ cid })
+    });
+    if (!resp.ok) throw new Error("Counter POST failed: " + resp.status);
+    return resp.json();
+  }
+
+  async function getCount() {
+    const resp = await fetch(COUNTER_API, { method: "GET" });
+    if (!resp.ok) throw new Error("Counter GET failed: " + resp.status);
+    return resp.json();
+  }
+
+  async function refreshCounter() {
+    // Try POST first (so total increases when appropriate), fallback to GET.
+    let data;
+    try {
+      data = await postHitOnce();
+    } catch (e) {
+      data = await getCount();
+    }
+
+    // Your API might return {count: n} OR {total: n}. Support both.
+    const total = (typeof data.total === "number") ? data.total
+                : (typeof data.count === "number") ? data.count
+                : 0;
+
+    setText("cqTotal", fmt.format(total));
+  }
+
+  function startOnlineTicker() {
+    // This is an *estimate* (front-end only).
+    // If you want true online, you need a backend presence ping.
+    const base = 3 + Math.floor(Math.random() * 7); // 3..9
+    let cur = base;
+    setText("cqOnline", String(cur));
+
+    setInterval(() => {
+      // small wiggle so it feels alive
+      const delta = Math.floor(Math.random() * 3) - 1; // -1,0,1
+      cur = Math.max(1, cur + delta);
+      setText("cqOnline", String(cur));
+    }, 12000);
+  }
+
+  function bindShare() {
+    const btn = $("cqShareLinkedIn");
+    if (!btn) return;
+
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      // LinkedIn share endpoint
+      const u = "https://www.linkedin.com/sharing/share-offsite/?url=" + encodeURIComponent(SHARE_URL);
+      window.open(u, "cq_share_linkedin", "noopener,noreferrer,width=900,height=700");
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", async function () {
+    // Fill Today immediately (UX)
+    const today = bumpTodayCounter();
+    setText("cqToday", String(today));
+
+    bindShare();
+    startOnlineTicker();
+
+    // Fill Total from Apps Script
+    try {
+      await refreshCounter();
+    } catch (e) {
+      // show a dash, not a scary 0
+      setText("cqTotal", "–");
+      console.warn(e);
+    }
+  });
 })();
 </script>
-
 </body>
 </html>
