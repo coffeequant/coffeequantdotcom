@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="canonical" href="https://coffee.coffeequant.com/statics/WriteUps/gamma-is-not-delta-hedging.html">
+  <meta property="og:site_name" content="CoffeeQuant">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Gamma Is Not Delta Hedging">
+  <meta property="og:description" content="Gamma Is Not Delta Hedging Most fresh traders think derivatives trading is: “Check the delta. Take the opposite position. Done.” If it were that simple, we wouldn’t need traders...">
+  <meta property="og:url" content="https://coffee.coffeequant.com/statics/WriteUps/gamma-is-not-delta-hedging.html">
+  <meta property="og:image" content="https://coffee.coffeequant.com/statics/img/newarticles/images.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://coffee.coffeequant.com/statics/img/newarticles/images.png">
+  <meta name="twitter:title" content="Gamma Is Not Delta Hedging">
+  <meta name="twitter:description" content="Gamma Is Not Delta Hedging Most fresh traders think derivatives trading is: “Check the delta. Take the opposite position. Done.” If it were that simple, we wouldn’t need traders...">
+  <title>Gamma Is Not Delta Hedging | CoffeeQuant</title>
+  <link rel="stylesheet" href="../css/cq.css" />
+  <style>
+html,body{width:100%!important;max-width:none!important;margin:0!important;}
+body{overflow-x:hidden;}
+.cq-body{display:block!important;width:100%!important;max-width:none!important;}
+.cq-article-wrap{max-width:1120px;margin:0 auto;padding:24px 18px 70px;width:100%;}
+.cq-topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 14px;border-radius:14px;position:sticky;top:10px;z-index:5;backdrop-filter:blur(8px);}
+.cq-brand a{text-decoration:none;font-weight:800;letter-spacing:.2px;}
+.cq-nav a{text-decoration:none;margin-left:12px;font-weight:600;}
+.cq-hero{margin-top:16px;border-radius:18px;overflow:hidden;}
+.cq-hero-img{width:100%;height:auto;display:block;}
+.cq-kicker{opacity:.8;text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:800;}
+.cq-h1{margin:10px 0 8px;font-size:34px;line-height:1.12;letter-spacing:-0.02em;}
+.cq-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px;}
+.cq-badge{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700;}
+.cq-card{margin-top:14px;border-radius:18px;overflow:hidden;}
+.cq-card-hd{padding:14px 16px;}
+.cq-card-bd{padding:14px 16px 18px;}
+.cq-share{margin-top:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.cq-share .share-title{font-weight:800;opacity:.85;}
+.cq-share a{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;text-decoration:none;font-weight:800;}
+.cq-share a:hover{opacity:.9;}
+.cq-share .s-li,.cq-share .s-x,.cq-share .s-em{border:1px solid rgba(255,255,255,.12);}
+.cq-pill{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-weight:800;font-size:12px;
+  border:1px solid rgba(255,255,255,.14);opacity:.95;}
+.cq-callout{border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:12px 14px;margin:14px 0;}
+.cq-callout-hd{font-weight:900;margin-bottom:6px;opacity:.95;}
+.cq-callout-bd p{margin:8px 0;}
+.cq-callout-info{box-shadow: inset 0 0 0 9999px rgba(80,140,255,.06);}
+.cq-callout-warn{box-shadow: inset 0 0 0 9999px rgba(255,170,70,.06);}
+.cq-callout-tip{box-shadow: inset 0 0 0 9999px rgba(120,255,190,.05);}
+.cq-thumb{display:flex;gap:12px;align-items:flex-start;margin:16px 0;}
+.cq-thumb-right{flex-direction:row-reverse;}
+.cq-thumb-img{flex:0 0 220px;max-width:220px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.10);}
+.cq-thumb-img img{width:100%;height:auto;display:block;}
+.cq-thumb-txt{flex:1 1 auto;min-width:0;}
+.cq-figure{margin:16px 0;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.10);}
+.cq-img{width:100%;height:auto;display:block;}
+.cq-caption{padding:10px 12px;font-size:12px;opacity:.85;border-top:1px solid rgba(255,255,255,.08);}
+.cq-list-bullets{padding-left:20px;}
+.cq-list-steps{padding-left:22px;}
+.cq-back{display:inline-block;margin-top:18px;text-decoration:none;font-weight:700;}
+  </style>
+</head>
+<body class="cq-body">
+  <div class="cq-article-wrap">
+    <div class="cq-topbar">
+      <div class="cq-brand"><a href="/"><span aria-hidden="true">☕</span> CoffeeQuant</a></div>
+      <div class="cq-nav">
+        <a href="/#daily">Daily</a>
+        <a href="/#labs">Labs</a>
+        <a href="/#tools">Tools</a>
+        <a href="/#notes">Notes</a>
+        <a href="/#curios">Curios</a>
+      </div>
+    </div>
+    <div class="cq-share" role="group" aria-label="Share">
+      <div class="share-title">Share this article</div>
+      <div class="share-buttons">
+        <a id="cqShareLinkedIn" class="s-li" target="_blank" rel="noopener">LinkedIn</a>
+        <a id="cqShareX" class="s-x" target="_blank" rel="noopener">X</a>
+        <a id="cqShareEmail" class="s-em">Email</a>
+      </div>
+    </div>
+    <section class="cq-hero">
+      <img class="cq-hero-img" src="/statics/img/newarticles/images.png" alt="CoffeeQuant header" />
+    </section>
+    <section class="cq-card">
+      <div class="cq-card-hd">
+        <div class="cq-kicker">CQX • 2026-02-19</div>
+        <h1 class="cq-h1">Gamma Is Not Delta Hedging</h1>
+        <div class="cq-meta">
+
+        </div>
+      </div>
+      <div class="cq-card-bd">
+<p>Gamma Is Not Delta Hedging</p>
+
+<p>Most fresh traders think derivatives trading is:</p>
+
+<p>“Check the delta. Take the opposite position. Done.”</p>
+
+<p>If it were that simple, we wouldn’t need traders.</p>
+
+<p>A derivatives trader is not a delta hedger.</p>
+
+<p>A derivatives trader is a non-linear control system translating linear<br>models into a non-linear market.</p>
+
+<p>And nowhere is this more misunderstood than gamma.</p>
+
+<p>________________________________</p>
+
+<p>CQX FRAME</p>
+
+<p>Thesis</p>
+
+<p>Long gamma and short gamma are not just risk profiles.</p>
+
+<p>They are opposite liquidity behaviors.</p>
+
+<p>Long gamma → you trade against the move</p>
+
+<p>Short gamma → you trade with the move</p>
+
+<p>Everything else is noise.</p>
+
+<p>________________________________</p>
+
+<p>The Visual: Gamma P&amp;L Logic</p>
+
+<p>Think in shapes.</p>
+
+<p>Long Gamma P&amp;L:<br>        /<br>       /<br>  ____/<br>       \<br>        \</p>
+
+<p>Short Gamma P&amp;L:<br>        \<br>         \<br>          \____<br>         /<br>        /</p>
+
+<p>Long gamma benefits from movement.</p>
+
+<p>Short gamma suffers from acceleration.</p>
+
+<p>But the P&amp;L shape is only half the story.</p>
+
+<p>The execution logic is the other half.</p>
+
+<p>________________________________</p>
+
+<p>Long Gamma: You Are the Liquidity</p>
+
+<p>If the market falls → you need to buy.</p>
+
+<p>If the market rises → you need to sell.</p>
+
+<p>That means:</p>
+
+<p>Post bids on weakness</p>
+
+<p>Post offers on strength</p>
+
+<p>Let the market trade into you</p>
+
+<p>You are harvesting movement and spread.</p>
+
+<p>If you are long gamma and repeatedly crossing the spread aggressively?</p>
+
+<p>You are leaking your edge.</p>
+
+<p>Long gamma = convexity + spread capture.</p>
+
+<p>________________________________</p>
+
+<p>Short Gamma: You Are the Momentum</p>
+
+<p>Short gamma is the opposite.</p>
+
+<p>If market breaks higher → you must buy.</p>
+
+<p>If market breaks lower → you must sell.</p>
+
+<p>Passive quoting won’t save you.</p>
+
+<p>Because the move accelerates against you.</p>
+
+<p>Short gamma requires stop discipline.</p>
+
+<p>Not because you’re weak.</p>
+
+<p>Because gamma is acceleration.</p>
+
+<p>________________________________</p>
+
+<p>Trader Intuition Example</p>
+
+<p>Index Vol Desk (Long Gamma)</p>
+
+<p>Buys downside vol during stress.</p>
+
+<p>Sells futures as market spikes.</p>
+
+<p>Buys futures as market drops.</p>
+
+<p>Provides liquidity during intraday swings.</p>
+
+<p>The desk earns from:</p>
+
+<p>Movement</p>
+
+<p>Skew shifts</p>
+
+<p>Spread capture</p>
+
+<p>If execution is sloppy, the convexity edge disappears.</p>
+
+<p>________________________________</p>
+
+<p>Structured Products Desk (Short Gamma)</p>
+
+<p>Short puts via autocalls.</p>
+
+<p>Market gaps lower.</p>
+
+<p>Delta explodes.</p>
+
+<p>Forced to sell into weakness.</p>
+
+<p>No stop logic → runaway losses.</p>
+
+<p>Short gamma without discipline is not a strategy.</p>
+
+<p>It’s delayed regret.</p>
+
+<p>________________________________</p>
+
+<p>The Rookie Mistake</p>
+
+<p>Short gamma sitting passively on the bid or offer.</p>
+
+<p>Long gamma chasing the market aggressively.</p>
+
+<p>Both are misunderstandings of flow logic.</p>
+
+<p>Gamma is not about being delta-neutral.</p>
+
+<p>It’s about understanding:</p>
+
+<p>Who provides liquidity?</p>
+
+<p>Who consumes liquidity?</p>
+
+<p>Who benefits from acceleration?</p>
+
+<p>________________________________</p>
+
+<p>The Simple Truth</p>
+
+<p>Long gamma players place orders against the market.</p>
+
+<p>Short gamma players use stops with the market.</p>
+
+<p>Everything else is commentary.</p>
+
+<p>Simple things are often misunderstood.</p>
+        <a class="cq-back" href="/">← Back to home</a>
+      </div>
+    </section>
+  </div>
+<script>
+(function(){
+  var canonicalEl = document.querySelector('link[rel="canonical"]');
+  var canonical = canonicalEl ? canonicalEl.href : window.location.href;
+  var url = encodeURIComponent(canonical);
+  var title = encodeURIComponent(document.title);
+  var li = document.getElementById('cqShareLinkedIn');
+  var xx = document.getElementById('cqShareX');
+  var em = document.getElementById('cqShareEmail');
+  if(li) li.href = 'https://www.linkedin.com/sharing/share-offsite/?url=' + url;
+  if(xx) xx.href = 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title;
+  if(em) em.href = 'mailto:?subject=' + title + '&body=' + encodeURIComponent('Thought you\'d like this:\n\n' + canonical);
+})();
+</script>
+</body>
+</html>
