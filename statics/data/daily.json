@@ -1,6 +1,16 @@
 {
   "items": [
     {
+      "date": "2026-02-19",
+      "title": "Gamma Is Not Delta Hedging",
+      "href": "statics/WriteUps/gamma-is-not-delta-hedging.html",
+      "link": "statics/WriteUps/gamma-is-not-delta-hedging.html",
+      "tag": "CQX",
+      "premium": false,
+      "hero": "statics/img/newarticles/images.png",
+      "excerpt": "Gamma Is Not Delta Hedging Most fresh traders think derivatives trading is: “Check the delta. Take the opposite position. Done.” If it were that simple, we wouldn’t need traders..."
+    },
+    {
       "date": "2026-02-18",
       "title": "Gold Convexity in a Policy World — The Quiet Hedge Funds Are Building",
       "href": "statics/WriteUps/gold-convexity-in-a-policy-world-the-quiet-hedge-funds-are-building.html",
@@ -8,7 +18,7 @@
       "tag": "Macro / Volatility",
       "premium": false,
       "hero": "statics/img/newarticles/images.jpeg",
-      "thumb":"statics/img/newarticles/processor3.jpeg",
+      "thumb": "statics/img/newarticles/processor3.jpeg",
       "excerpt": "CQX Thesis Crash convexity in equities is expensive. But policy convexity in gold is not. Hedge funds may be forced to sell gold in the short term due to margin calls. But struc..."
     },
     {
