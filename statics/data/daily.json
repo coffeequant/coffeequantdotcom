@@ -7,6 +7,7 @@
       "link": "statics/WriteUps/gamma-is-not-delta-hedging.html",
       "tag": "CQX",
       "premium": false,
+      "thumb": "statics/img/newarticles/images.png",
       "hero": "statics/img/newarticles/images.png",
       "excerpt": "Gamma Is Not Delta Hedging Most fresh traders think derivatives trading is: “Check the delta. Take the opposite position. Done.” If it were that simple, we wouldn’t need traders..."
     },
