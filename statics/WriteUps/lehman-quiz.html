@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Are You Smarter Than a Lehman Brothers Trader? | CoffeeQuant</title>
+
+  <!-- Your site CSS -->
+  <link rel="stylesheet" href="../css/cq.css" />
+
+  <style>
+    /* Minimal CQX quiz styling (works with or without cq.css) */
+    html, body { margin:0; padding:0; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 22px 16px 64px; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .brand a { text-decoration:none; font-weight:800; letter-spacing:.2px; }
+    .nav a { text-decoration:none; margin-left:12px; font-weight:600; opacity:.9; }
+    .hero { margin-top:16px; border-radius:18px; overflow:hidden; }
+    .hero img { width:100%; height:auto; display:block; }
+
+    .h1 { margin:14px 0 8px; font-size: 34px; line-height:1.12; letter-spacing:-.02em; }
+    .kicker { opacity:.75; text-transform:uppercase; letter-spacing:.14em; font-size:12px; font-weight:800; }
+
+    .card { margin-top:14px; border-radius:18px; overflow:hidden; border: 1px solid rgba(255,255,255,.12); }
+    .card-hd { padding:14px 16px; border-bottom: 1px solid rgba(255,255,255,.10); }
+    .card-bd { padding:14px 16px 18px; }
+
+    .q { padding:14px 0; border-top: 1px solid rgba(255,255,255,.08); }
+    .q:first-child { border-top: none; }
+    .qtitle { font-weight:800; margin-bottom:8px; }
+    .qtext { opacity:.95; margin-bottom:10px; }
+    .opts { display:grid; gap:8px; }
+
+    .opt {
+      display:flex; gap:10px; align-items:flex-start;
+      padding:10px 10px; border-radius:14px;
+      border: 1px solid rgba(255,255,255,.12);
+      cursor:pointer; user-select:none;
+      transition: transform .08s ease;
+    }
+    .opt:hover { transform: translateY(-1px); }
+    .opt input { margin-top: 3px; }
+    .opt.correct { border-color: rgba(0, 200, 120, .55); box-shadow: 0 0 0 2px rgba(0, 200, 120, .12) inset; }
+    .opt.wrong   { border-color: rgba(230, 80, 80, .55); box-shadow: 0 0 0 2px rgba(230, 80, 80, .12) inset; opacity:.95; }
+    .opt.dim { opacity:.55; }
+
+    .actions { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-top:16px; }
+    .btn {
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      padding:10px 12px; border-radius:999px;
+      font-weight:800; cursor:pointer;
+      display:inline-flex; align-items:center; gap:8px;
+      text-decoration:none;
+    }
+    .btn:hover { background: rgba(255,255,255,.10); }
+    .btn.primary { background: rgba(255,255,255,.12); }
+    .btn.primary:hover { background: rgba(255,255,255,.18); }
+
+    .scoreline { font-weight:900; }
+    .badge { display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; font-weight:800; border:1px solid rgba(255,255,255,.16); }
+    .muted { opacity:.75; }
+    details { margin-top:10px; }
+    summary { cursor:pointer; font-weight:800; }
+
+    .shareRow { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+    .shareIcon {
+      width:18px; height:18px; display:inline-block;
+    }
+    .footer { margin-top:18px; }
+  </style>
+</head>
+
+<body class="cq-body">
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand"><a href="/"><span aria-hidden="true">☕</span> CoffeeQuant</a></div>
+      <div class="nav">
+        <a href="/#daily">Daily</a>
+        <a href="/#curios">Curios</a>
+        <a href="/#labs">Labs</a>
+      </div>
+    </div>
+
+    <!-- Optional hero image -->
+    <div class="hero">
+      <img src="/statics/img/newarticles/images.png" alt="CoffeeQuant quiz hero" />
+    </div>
+
+    <div class="kicker">CQX QUIZ • DERIVATIVES • 10 QUESTIONS</div>
+    <h1 class="h1">Are You Smarter Than a Lehman Brothers Trader?</h1>
+    <div class="muted">Pick one answer per question. Hit <b>Score me</b>. Then share your score (and start a small professional feud).</div>
+
+    <section class="card">
+      <div class="card-hd">
+        <div class="actions">
+          <button class="btn primary" id="scoreBtn">✅ Score me</button>
+          <button class="btn" id="resetBtn">↩ Reset</button>
+          <span class="scoreline" id="scoreLine">Score: – / –</span>
+          <span class="badge" id="badge">Badge: –</span>
+        </div>
+
+        <div class="shareRow">
+          <a class="btn" id="shareLinkedIn" href="#" target="_blank" rel="noopener">
+            <span class="shareIcon" aria-hidden="true">
+              <!-- simple LinkedIn icon -->
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.5 23.5h4V7.98h-4V23.5zM8.5 7.98h3.83v2.12h.05c.53-1 1.83-2.12 3.77-2.12 4.03 0 4.78 2.65 4.78 6.1v9.42h-4v-8.35c0-1.99-.04-4.56-2.78-4.56-2.78 0-3.2 2.17-3.2 4.41v8.5h-4V7.98z"/></svg>
+            </span>
+            Share on LinkedIn
+          </a>
+
+          <a class="btn" id="shareX" href="#" target="_blank" rel="noopener">
+            <span class="shareIcon" aria-hidden="true">
+              <!-- simple X icon -->
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-6.8 7.8L23.3 22h-6.5l-5.1-6.6L6 22H2.9l7.4-8.5L.7 2h6.6l4.6 5.9L18.9 2zm-1.1 18h1.7L6.1 3.9H4.3L17.8 20z"/></svg>
+            </span>
+            Share on X
+          </a>
+
+          <button class="btn" id="copyLink">🔗 Copy link</button>
+        </div>
+
+        <details>
+          <summary>Show explanations after scoring</summary>
+          <div class="muted">Explanations appear under each question after you hit <b>Score me</b>.</div>
+        </details>
+      </div>
+
+      <div class="card-bd" id="quiz"></div>
+
+      <div class="card-bd footer">
+        <a class="btn" href="/">← Back to home</a>
+      </div>
+    </section>
+  </div>
+
+<script>
+(function(){
+  // IMPORTANT:
+  // Set this to your canonical public URL so LinkedIn shares the right page.
+  // If left blank, it uses window.location.href.
+  const CANONICAL_URL = ""; // e.g. "https://coffee.coffeequant.com/statics/WriteUps/lehman-quiz.html"
+  const PAGE_URL = (CANONICAL_URL && CANONICAL_URL.trim()) ? CANONICAL_URL.trim() : window.location.href;
+
+  // Quiz data
+  const QUESTIONS = [
+    {
+      id: "q1",
+      title: "Q1",
+      text: "Theoretically, what is the main issue in using the Black-Scholes Equation for pricing options on stocks and on baskets composed of those stocks?",
+      options: {
+        a: "Difficulty in calculating the basket forward",
+        b: "Contradiction between the stock returns and the basket returns both being lognormal",
+        c: "Valuation of American options",
+        d: "Estimating the instantaneous basket volatility with a given correlation"
+      },
+      answer: "b",
+      explain: "If each stock is lognormal under BS, a weighted sum (basket) is generally not lognormal. That breaks the closed-form ‘same model everywhere’ assumption."
+    },
+    {
+      id: "q2",
+      title: "Q2",
+      text: "Which of these options can be valued by the regular Black-Scholes equation for European options? (Spot=100; barrier is American-style.)",
+      options: {
+        a: "1y European call K=110 with knock-in at 130",
+        b: "1y European call K=90 with knock-in at 95",
+        c: "1y European call K=110 with knock-in at 80",
+        d: "1y European call K=130 with knock-in at 110"
+      },
+      answer: "d",
+      explain: "If K=130 and KI=110, the option only comes alive after the barrier is hit, but payoff is only relevant above 130 at maturity. This is the classic ‘standard’ knock-in structure where pricing can be expressed via vanilla pieces under BS."
+    },
+    {
+      id: "q3",
+      title: "Q3",
+      text: "A trader is shipwrecked and wants to manually simulate a normally distributed variable. Which should he take?",
+      options: {
+        a: "The roulette table from the ship's casino",
+        b: "Five six-sided dice",
+        c: "A newspaper with last year's Dow closes",
+        d: "Twenty-four one-dollar bills"
+      },
+      answer: "b",
+      explain: "Sum of multiple iid discrete variables tends toward normal (CLT). Dice are a classic low-tech ‘Gaussian-ish’ generator."
+    },
+    {
+      id: "q4",
+      title: "Q4",
+      text: "What is the contradiction in using Black-Scholes to price both options on long-dated interest rates and options on long-dated bonds?",
+      options: {
+        a: "Interest rates have no volatility whereas bonds do",
+        b: "Bonds have no volatility but interest rates do",
+        c: "Hedging of interest rates with bonds is impossible",
+        d: "They both cannot be lognormally distributed"
+      },
+      answer: "d",
+      explain: "A long bond is (approximately) 1/(rate) in a simple world; if both rate and bond were lognormal simultaneously, you get an inconsistency. Real models resolve this with rate models or shifted/lognormal variants."
+    },
+    {
+      id: "q5",
+      title: "Q5",
+      text: "On any day the market can only go up in steps of $1 or down in steps of $9. Given that out of 10 steps, 9 will be up and 1 will be down. What is the price of a one-day ATM digital call paying $1 if the market finishes higher tomorrow than today?",
+      options: {
+        a: "$0",
+        b: "$0.9",
+        c: "$1",
+        d: "$4.5"
+      },
+      answer: "b",
+      explain: "Interpreted as a one-step outcome: P(up)=0.9, P(down)=0.1. Digital pays if higher → value ≈ 0.9 (ignoring rates)."
+    },
+    {
+      id: "q6",
+      title: "Q6",
+      text: "For a digital option, why isn't the delta the probability of exercise?",
+      options: {
+        a: "Because volatility skew is not defined for digital options",
+        b: "Because the pricing of forward drift changes the expected carry P&L",
+        c: "Because the probability of exercise does not depend on the magnitude of the moves, while the hedge does",
+        d: "None of the above"
+      },
+      answer: "c",
+      explain: "Probability is about crossing the strike; delta hedge P&L depends on path and magnitude. Digitals have nasty gamma spikes near strike."
+    },
+    {
+      id: "q7",
+      title: "Q7",
+      text: "In general, a volatility cap call gives the purchaser:",
+      options: {
+        a: "High leverage to the underlying during a sequence of sharp upward moves",
+        b: "Low leverage to the underlying during a sequence of sharp downward moves",
+        c: "High leverage to the underlying for large realized volatilities",
+        d: "None of the above"
+      },
+      answer: "d",
+      explain: "A vol-cap call is about limiting exposure beyond a vol/realized threshold; these statements are too generic and usually false without precise payoff definition."
+    },
+    {
+      id: "q8",
+      title: "Q8",
+      text: "Given 5 stocks and all else equal, which is cheapest?",
+      options: {
+        a: "Basket of ATM monthly Asian calls",
+        b: "Monthly Asian ATM Himalaya",
+        c: "ATM Himalaya",
+        d: "Basket of ATM American calls"
+      },
+      answer: "b",
+      explain: "A Himalaya ‘locks in’ winners along the way, reducing remaining optionality; adding monthly averaging further reduces convexity. Lower optionality → cheaper."
+    },
+    {
+      id: "q9",
+      title: "Q9",
+      text: "I run a CPPI on an equity underlying with no additional borrow facility. If the underlying rallies with high volatility (non-monotonic), I expect to make more profit than if I simply held the underlying until maturity.",
+      options: {
+        a: "TRUE",
+        b: "FALSE"
+      },
+      answer: "b",
+      explain: "Classic CPPI is path-dependent and often effectively short gamma in whippy markets: it sells after drops and buys after rises."
+    },
+    {
+      id: "q10",
+      title: "Q10",
+      text: "A European digital pays out if spot is above a barrier at maturity. Does this option contain risk-reversal risk?",
+      options: {
+        a: "Yes",
+        b: "No"
+      },
+      answer: "a",
+      explain: "Digital exposure is concentrated at strike: skew (call vs put vol) matters. It can behave like long vol below, short vol above across strikes (smile dynamics)."
+    }
+  ];
+
+  const quizEl = document.getElementById("quiz");
+  const scoreBtn = document.getElementById("scoreBtn");
+  const resetBtn = document.getElementById("resetBtn");
+  const scoreLine = document.getElementById("scoreLine");
+  const badgeEl = document.getElementById("badge");
+
+  function render(){
+    quizEl.innerHTML = QUESTIONS.map((q, idx) => {
+      const name = q.id;
+      const opts = Object.entries(q.options).map(([k, v]) => {
+        const optId = `${q.id}_${k}`;
+        return `
+          <label class="opt" data-q="${q.id}" data-opt="${k}" for="${optId}">
+            <input type="radio" name="${name}" id="${optId}" value="${k}" />
+            <div><b>${k})</b> ${v}</div>
+          </label>
+        `;
+      }).join("");
+      return `
+        <div class="q" id="${q.id}">
+          <div class="qtitle">${idx+1}. ${q.title}</div>
+          <div class="qtext">${q.text}</div>
+          <div class="opts">${opts}</div>
+          <div class="muted" id="${q.id}_explain" style="display:none;margin-top:10px;"></div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function getSelections(){
+    const out = {};
+    QUESTIONS.forEach(q => {
+      const sel = document.querySelector(`input[name="${q.id}"]:checked`);
+      out[q.id] = sel ? sel.value : null;
+    });
+    return out;
+  }
+
+  function badgeFor(score, total){
+    const pct = score / total;
+    if (pct >= 0.9) return "🏆 Desk Quant (survives committee)";
+    if (pct >= 0.7) return "🧠 Trader (dangerously employable)";
+    if (pct >= 0.5) return "📈 Structurer (knows where bodies are buried)";
+    if (pct >= 0.3) return "🧪 Intern (but curious, so salvageable)";
+    return "🧯 Risk Manager (it’s fine, it’s fine, it’s fine)";
+  }
+
+  function score(){
+    const sel = getSelections();
+    let correct = 0;
+
+    // Clear styles first
+    document.querySelectorAll(".opt").forEach(el => {
+      el.classList.remove("correct","wrong","dim");
+    });
+
+    QUESTIONS.forEach(q => {
+      const chosen = sel[q.id];
+      if (chosen && chosen === q.answer) correct++;
+
+      // Apply per-option styling
+      Object.keys(q.options).forEach(k => {
+        const optLabel = document.querySelector(`.opt[data-q="${q.id}"][data-opt="${k}"]`);
+        if (!optLabel) return;
+
+        if (k === q.answer) optLabel.classList.add("correct");
+        else optLabel.classList.add("dim");
+
+        if (chosen && k === chosen && chosen !== q.answer) {
+          optLabel.classList.add("wrong");
+          optLabel.classList.remove("dim");
+        }
+        if (chosen && k === chosen && chosen === q.answer) {
+          optLabel.classList.remove("dim");
+        }
+      });
+
+      const exp = document.getElementById(`${q.id}_explain`);
+      if (exp){
+        exp.style.display = "block";
+        exp.innerHTML = `<b>Explanation:</b> ${q.explain || "—"}`;
+      }
+    });
+
+    scoreLine.textContent = `Score: ${correct} / ${QUESTIONS.length}`;
+    badgeEl.textContent = `Badge: ${badgeFor(correct, QUESTIONS.length)}`;
+
+    // Update share links with score
+    const text = `I scored ${correct}/${QUESTIONS.length} on the CoffeeQuant “Lehman Trader” quiz. Can you beat it?`;
+    setShareLinks(text);
+  }
+
+  function reset(){
+    document.querySelectorAll("input[type=radio]").forEach(i => i.checked = false);
+    document.querySelectorAll(".opt").forEach(el => el.classList.remove("correct","wrong","dim"));
+    QUESTIONS.forEach(q => {
+      const exp = document.getElementById(`${q.id}_explain`);
+      if (exp) exp.style.display = "none";
+    });
+    scoreLine.textContent = `Score: – / –`;
+    badgeEl.textContent = `Badge: –`;
+    setShareLinks("Try this CoffeeQuant derivatives quiz:");
+  }
+
+  function setShareLinks(message){
+    const li = document.getElementById("shareLinkedIn");
+    const x  = document.getElementById("shareX");
+
+    // LinkedIn share: shares URL + optional title/summary not always honored
+    const liUrl = "https://www.linkedin.com/sharing/share-offsite/?url=" + encodeURIComponent(PAGE_URL);
+    li.href = liUrl;
+
+    // X share includes text + url
+    const xUrl = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(message) + "&url=" + encodeURIComponent(PAGE_URL);
+    x.href = xUrl;
+  }
+
+  document.getElementById("copyLink").addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(PAGE_URL);
+      const btn = document.getElementById("copyLink");
+      const old = btn.textContent;
+      btn.textContent = "✅ Copied";
+      setTimeout(() => btn.textContent = old, 900);
+    } catch(e){
+      alert("Could not copy. URL: " + PAGE_URL);
+    }
+  });
+
+  scoreBtn.addEventListener("click", score);
+  resetBtn.addEventListener("click", reset);
+
+  render();
+  reset();
+})();
+</script>
+</body>
+</html>
