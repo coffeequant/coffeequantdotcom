@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Autocall Hedging Deep Dive: Delta, Vega Convexity, Vanna, Vomma, and the Rate Link | CoffeeQuant</title>
+
+  <!-- CSS: articles live in statics/WriteUps/, css is in statics/css/ -->
+  <link rel="stylesheet" href="../css/cq.css"/>
+
+  <!-- Canonical + social (important for LinkedIn previews) -->
+  <link rel="canonical" href="https://coffee.coffeequant.com/statics/WriteUps/autocall-hedging-deep-dive.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:site_name" content="CoffeeQuant"/>
+  <meta property="og:title" content="Autocall Hedging Deep Dive: Delta, Vega Convexity, Vanna, Vomma, and the Rate Link"/>
+  <meta property="og:description" content="A desk-grade guide to how single-stock autocalls actually breathe: regime shifts in delta/gamma/vega, vanna/vomma, vega bucketing, and why rates matter."/>
+  <meta property="og:url" content="https://coffee.coffeequant.com/statics/WriteUps/autocall-hedging-deep-dive.html"/>
+
+  <!-- Optional: set an OG image if you have one -->
+  <!-- <meta property="og:image" content="https://coffee.coffeequant.com/statics/img/newarticles/images.png"/> -->
+
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Autocall Hedging Deep Dive"/>
+  <meta name="twitter:description" content="Delta/Gamma/Vega regimes, vanna/vomma, vega bucketing, and the equity-rate link."/>
+  <!-- <meta name="twitter:image" content="https://coffee.coffeequant.com/statics/img/newarticles/images.png"/> -->
+
+  <style>
+    /* Page-level override so cq.css homepage layout never squeezes the article */
+    html, body { width:100% !important; max-width:none !important; margin:0 !important; }
+    body, .cq-body { display:block !important; }
+    .cq-article-wrap { max-width: 1120px; margin: 0 auto; padding: 22px 18px 70px; width:100%; }
+    .cq-topbar {
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding: 12px 14px; border-radius: 14px; position: sticky; top: 10px; z-index: 10;
+      backdrop-filter: blur(10px);
+    }
+    .cq-brand a { text-decoration:none; font-weight: 900; letter-spacing: .2px; }
+    .cq-nav a { text-decoration:none; margin-left: 12px; font-weight: 700; opacity: .95; }
+    .cq-h1 { margin: 10px 0 8px; font-size: 34px; line-height: 1.12; letter-spacing: -0.02em; }
+    .cq-kicker { opacity:.85; text-transform: uppercase; letter-spacing: .14em; font-size: 12px; font-weight: 900; }
+    .cq-sub { opacity:.92; font-size: 16px; line-height: 1.55; margin-top: 8px; max-width: 70ch; }
+    .cq-card { margin-top: 14px; border-radius: 18px; overflow: hidden; }
+    .cq-card-hd { padding: 14px 16px; }
+    .cq-card-bd { padding: 14px 16px 18px; }
+    .cq-meta { display:flex; gap:10px; flex-wrap: wrap; align-items:center; margin-top: 10px; }
+    .cq-pill { display:inline-flex; align-items:center; gap:8px; padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 800; opacity: .95; }
+    .cq-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 900px){ .cq-grid { grid-template-columns: 1fr; } }
+
+    /* Visual blocks */
+    .viz {
+      border-radius: 16px;
+      overflow: hidden;
+      padding: 14px;
+    }
+    .viz h3 { margin: 0 0 10px; }
+    .viz small { opacity: .8; display:block; margin-top: 8px; }
+    .svg-wrap { width:100%; overflow:hidden; border-radius: 14px; }
+    svg { width:100%; height:auto; display:block; }
+
+    /* Simulator */
+    .sim { border-radius: 16px; padding: 14px; }
+    .sim-grid { display:grid; grid-template-columns: 1.1fr .9fr; gap: 14px; }
+    @media (max-width: 980px){ .sim-grid { grid-template-columns: 1fr; } }
+    .row { display:flex; gap: 10px; align-items:center; margin: 8px 0; }
+    .row label { width: 170px; opacity: .95; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: .10em; }
+    .row input[type="range"] { flex: 1; }
+    .row .val { width: 90px; text-align:right; font-variant-numeric: tabular-nums; opacity: .95; font-weight: 800; }
+    .btns { display:flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+    .btn {
+      cursor:pointer; user-select:none;
+      display:inline-flex; align-items:center; gap: 10px;
+      padding: 10px 12px; border-radius: 14px; font-weight: 900; text-decoration:none;
+    }
+    .btn:active { transform: translateY(1px); }
+
+    .kpi { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+    @media (max-width: 520px){ .kpi { grid-template-columns: 1fr; } }
+    .k { border-radius: 14px; padding: 12px; }
+    .k .t { opacity:.8; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: .12em; }
+    .k .n { margin-top: 6px; font-size: 20px; font-weight: 950; font-variant-numeric: tabular-nums; }
+
+    canvas { width:100%; height: 240px; border-radius: 14px; display:block; }
+
+    /* Share */
+    .sharebar { display:flex; align-items:center; justify-content:space-between; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+    .share-actions { display:flex; gap: 10px; flex-wrap: wrap; }
+    .share-btn {
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 10px 12px; border-radius: 14px; text-decoration:none; font-weight: 900;
+    }
+    .icon { width: 18px; height: 18px; display:inline-block; }
+    .pulse { position:relative; }
+    .pulse::after{
+      content:"";
+      position:absolute; inset:-6px;
+      border-radius: 16px;
+      opacity:.35;
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse{
+      0% { transform: scale(.98); opacity:.0; }
+      35% { transform: scale(1.02); opacity:.35; }
+      100% { transform: scale(1.06); opacity:0; }
+    }
+
+    /* Typography helpers */
+    .tight p { margin: 10px 0; }
+    .hr { height:1px; opacity:.25; margin: 14px 0; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 13px; opacity:.95; }
+  </style>
+</head>
+
+<body class="cq-body">
+  <div class="cq-article-wrap">
+    <div class="cq-topbar">
+      <div class="cq-brand"><a href="/"><span aria-hidden="true">☕</span> CoffeeQuant</a></div>
+      <div class="cq-nav">
+        <a href="/#daily">Daily</a>
+        <a href="/#labs">Labs</a>
+        <a href="/#tools">Tools</a>
+        <a href="/#notes">Notes</a>
+        <a href="/#curios">Curios</a>
+      </div>
+    </div>
+
+    <section class="cq-card">
+      <div class="cq-card-hd">
+        <div class="cq-kicker">Basics + Desk Mechanics • Autocalls • Single Stocks</div>
+        <h1 class="cq-h1">Autocall Hedging Deep Dive</h1>
+        <div class="cq-sub">
+          A single-stock autocall is not “short vol” as a lifestyle choice. It’s a <b>state machine</b>:
+          delta/gamma/vega rotate as spot moves, time passes, skew breathes, and rates shift discounting.
+        </div>
+        <div class="cq-meta">
+          <span class="cq-pill">Δ / Γ Regimes</span>
+          <span class="cq-pill">Vanna / Vomma</span>
+          <span class="cq-pill">Vega Bucketing</span>
+          <span class="cq-pill">Equity–Rate Link</span>
+        </div>
+
+        <div class="sharebar">
+          <div class="mono" id="canonicalHint">Share uses canonical URL</div>
+          <div class="share-actions">
+            <a class="share-btn pulse" id="shareLinkedIn" href="#" target="_blank" rel="noopener">
+              <span class="icon" aria-hidden="true">
+                <!-- LinkedIn icon -->
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 23.5h4V7.98h-4V23.5zM8 7.98h3.83v2.12h.05c.53-1 1.84-2.06 3.78-2.06 4.04 0 4.79 2.66 4.79 6.12v9.34h-4v-8.27c0-1.97-.04-4.5-2.74-4.5-2.75 0-3.17 2.14-3.17 4.35v8.42H8V7.98z"/></svg>
+              </span>
+              Share on LinkedIn
+            </a>
+            <a class="share-btn" id="shareX" href="#" target="_blank" rel="noopener">
+              <span class="icon" aria-hidden="true">
+                <!-- X icon -->
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-6.8 7.8L23.5 22H17l-5.1-6.6L6 22H2.9l7.3-8.4L.5 2H7l4.6 6.1L18.9 2zm-1.1 18h1.7L6.1 3.9H4.3L17.8 20z"/></svg>
+              </span>
+              Share on X
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="cq-card-bd tight">
+        <h2>1) The “Breathing” Autocall: Three Spot Regimes</h2>
+        <p>
+          Think of the autocall as a product with a <b>probability-of-life</b>. As spot rises, it wants to die early.
+          As spot falls, it wants to live longer (and becomes more put-like).
+        </p>
+
+        <div class="cq-grid">
+          <div class="viz">
+            <h3>Delta / Gamma Intuition (Regime Map)</h3>
+            <div class="svg-wrap">
+              <svg viewBox="0 0 900 420" role="img" aria-label="Autocall delta gamma regimes diagram">
+                <defs>
+                  <linearGradient id="g1" x1="0" x2="1">
+                    <stop offset="0" stop-color="currentColor" stop-opacity=".10"/>
+                    <stop offset="1" stop-color="currentColor" stop-opacity=".04"/>
+                  </linearGradient>
+                </defs>
+
+                <rect x="20" y="20" width="860" height="380" rx="16" fill="url(#g1)" stroke="currentColor" stroke-opacity=".18"/>
+
+                <!-- axis -->
+                <line x1="80" y1="320" x2="840" y2="320" stroke="currentColor" stroke-opacity=".35" />
+                <line x1="80" y1="80" x2="80" y2="320" stroke="currentColor" stroke-opacity=".35" />
+                <text x="78" y="355" fill="currentColor" opacity=".85" font-size="14" text-anchor="middle">Low S</text>
+                <text x="840" y="355" fill="currentColor" opacity=".85" font-size="14" text-anchor="end">High S</text>
+                <text x="52" y="90" fill="currentColor" opacity=".85" font-size="14" text-anchor="middle" transform="rotate(-90 52 90)">Risk intensity</text>
+
+                <!-- regions -->
+                <rect x="110" y="110" width="220" height="180" rx="14" fill="currentColor" opacity=".07" stroke="currentColor" stroke-opacity=".18"/>
+                <rect x="340" y="110" width="240" height="180" rx="14" fill="currentColor" opacity=".10" stroke="currentColor" stroke-opacity=".20"/>
+                <rect x="590" y="110" width="250" height="180" rx="14" fill="currentColor" opacity=".06" stroke="currentColor" stroke-opacity=".18"/>
+
+                <text x="220" y="150" fill="currentColor" font-size="16" font-weight="700">Near KI / Put-like</text>
+                <text x="220" y="176" fill="currentColor" opacity=".85" font-size="14">Δ negative, Γ negative</text>
+                <text x="220" y="200" fill="currentColor" opacity=".85" font-size="14">Vega rises (downside skew)</text>
+                <text x="220" y="224" fill="currentColor" opacity=".85" font-size="14">Crash amplification risk</text>
+
+                <text x="460" y="150" fill="currentColor" font-size="16" font-weight="700">Near ATMF / Barrier zone</text>
+                <text x="460" y="176" fill="currentColor" opacity=".85" font-size="14">Big vanna, big rebalancing</text>
+                <text x="460" y="200" fill="currentColor" opacity=".85" font-size="14">Life-probability sensitive</text>
+                <text x="460" y="224" fill="currentColor" opacity=".85" font-size="14">Gamma can spike</text>
+
+                <text x="715" y="150" fill="currentColor" font-size="16" font-weight="700">Above Strike / Callable</text>
+                <text x="715" y="176" fill="currentColor" opacity=".85" font-size="14">Δ ~ forward-like</text>
+                <text x="715" y="200" fill="currentColor" opacity=".85" font-size="14">Vega collapses (short life)</text>
+                <text x="715" y="224" fill="currentColor" opacity=".85" font-size="14">Mostly delta management</text>
+
+                <!-- markers -->
+                <line x1="310" y1="90" x2="310" y2="330" stroke="currentColor" stroke-opacity=".25" stroke-dasharray="6 6"/>
+                <text x="310" y="85" fill="currentColor" opacity=".85" font-size="13" text-anchor="middle">KI</text>
+
+                <line x1="560" y1="90" x2="560" y2="330" stroke="currentColor" stroke-opacity=".25" stroke-dasharray="6 6"/>
+                <text x="560" y="85" fill="currentColor" opacity=".85" font-size="13" text-anchor="middle">Strike / Call</text>
+              </svg>
+            </div>
+            <small>
+              The key is not “what are the Greeks today?” but “how do they <b>migrate</b> as spot moves?”
+            </small>
+          </div>
+
+          <div class="viz">
+            <h3>Vega Bucketing: When the Product “Shortens”</h3>
+            <div class="svg-wrap">
+              <svg viewBox="0 0 900 420" role="img" aria-label="Vega bucketing diagram">
+                <defs>
+                  <linearGradient id="g2" x1="0" x2="1">
+                    <stop offset="0" stop-color="currentColor" stop-opacity=".10"/>
+                    <stop offset="1" stop-color="currentColor" stop-opacity=".04"/>
+                  </linearGradient>
+                </defs>
+                <rect x="20" y="20" width="860" height="380" rx="16" fill="url(#g2)" stroke="currentColor" stroke-opacity=".18"/>
+
+                <text x="60" y="75" fill="currentColor" font-size="16" font-weight="800">As spot rallies → higher Autocall Prob → Effective maturity shortens</text>
+
+                <!-- timeline -->
+                <line x1="80" y1="150" x2="840" y2="150" stroke="currentColor" stroke-opacity=".35"/>
+                <circle cx="190" cy="150" r="8" fill="currentColor" opacity=".65"/>
+                <circle cx="360" cy="150" r="8" fill="currentColor" opacity=".65"/>
+                <circle cx="530" cy="150" r="8" fill="currentColor" opacity=".65"/>
+                <circle cx="700" cy="150" r="8" fill="currentColor" opacity=".65"/>
+                <text x="190" y="178" fill="currentColor" opacity=".85" font-size="13" text-anchor="middle">Obs 1</text>
+                <text x="360" y="178" fill="currentColor" opacity=".85" font-size="13" text-anchor="middle">Obs 2</text>
+                <text x="530" y="178" fill="currentColor" opacity=".85" font-size="13" text-anchor="middle">Obs 3</text>
+                <text x="700" y="178" fill="currentColor" opacity=".85" font-size="13" text-anchor="middle">Obs 4</text>
+
+                <!-- vega bars -->
+                <rect x="120" y="240" width="160" height="70" rx="10" fill="currentColor" opacity=".10"/>
+                <rect x="310" y="230" width="160" height="80" rx="10" fill="currentColor" opacity=".14"/>
+                <rect x="500" y="210" width="160" height="100" rx="10" fill="currentColor" opacity=".18"/>
+                <rect x="690" y="180" width="160" height="130" rx="10" fill="currentColor" opacity=".22"/>
+
+                <text x="200" y="330" fill="currentColor" opacity=".85" font-size="13" text-anchor="middle">Long-dated</text>
+                <text x="390" y="330" fill="currentColor" opacity=".85" font-size="13" text-anchor="middle">Mid</text>
+                <text x="580" y="330" fill="currentColor" opacity=".85" font-size="13" text-anchor="middle">Short</text>
+                <text x="770" y="330" fill="currentColor" opacity=".85" font-size="13" text-anchor="middle">Front-end</text>
+
+                <text x="60" y="380" fill="currentColor" opacity=".85" font-size="14">
+                  Hedge implication: buy back long-dated vega hedges, sell front-end vega as “life” collapses.
+                </text>
+              </svg>
+            </div>
+            <small>
+              This is why short-dated vols can get “sticky” around popular observation calendars.
+            </small>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <h2>2) Numerical Example (Concrete Parameters)</h2>
+        <p>
+          One-year single-stock autocall, quarterly observation, coupon if alive, knock-in put downside.
+          Parameters below are also what the simulator uses.
+        </p>
+
+        <div class="mono">
+          Notional = 100<br/>
+          Spot S0 = 100<br/>
+          Strike = 100, Autocall barrier = 100 (at obs dates)<br/>
+          Knock-in barrier = 70 (continuous monitoring simplified to daily in sim)<br/>
+          Coupon = 2.0% per quarter (paid if alive and above coupon barrier, simplified to alive & S≥70)<br/>
+          r = 4.0%, q = 1.0%, vol = 28%<br/>
+          Skew proxy: downside vol = vol + 8% when S below KI-zone (simple state skew)
+        </div>
+
+        <p>
+          Two “gotchas” traders learn the hard way:
+        </p>
+        <ul>
+          <li><b>Vanna matters near strike</b>: spot up often means vol down (equity leverage effect). If you’re short vanna, a rally helps twice.</li>
+          <li><b>Rates matter via discounting + life extension</b>: when uncertainty spikes, life can extend and discounting assumptions stop being cosmetic.</li>
+        </ul>
+
+        <div class="hr"></div>
+
+        <h2>3) Simulator (Client-Side, No Server)</h2>
+        <p>
+          This is not a production pricer. It’s a <b>teaching engine</b>:
+          it shows how price and rough Greeks shift as you change spot/vol/rates, and why autocalls “flip personalities”.
+        </p>
+
+        <div class="sim">
+          <div class="sim-grid">
+            <div>
+              <div class="row"><label>Spot (S0)</label><input id="S0" type="range" min="50" max="150" step="1"/><div class="val" id="S0v"></div></div>
+              <div class="row"><label>Vol (σ)</label><input id="VOL" type="range" min="0.10" max="0.70" step="0.01"/><div class="val" id="VOLv"></div></div>
+              <div class="row"><label>Rate (r)</label><input id="R" type="range" min="0.00" max="0.10" step="0.0025"/><div class="val" id="Rv"></div></div>
+              <div class="row"><label>Dividend (q)</label><input id="Q" type="range" min="0.00" max="0.08" step="0.0025"/><div class="val" id="Qv"></div></div>
+              <div class="row"><label>KI Barrier</label><input id="KI" type="range" min="40" max="90" step="1"/><div class="val" id="KIv"></div></div>
+              <div class="row"><label>Coupon / obs</label><input id="C" type="range" min="0.00" max="0.06" step="0.0025"/><div class="val" id="Cv"></div></div>
+              <div class="row"><label>Paths</label><input id="N" type="range" min="200" max="6000" step="200"/><div class="val" id="Nv"></div></div>
+
+              <div class="btns">
+                <a class="btn" href="#" id="runBtn">Run Simulation</a>
+                <a class="btn" href="#" id="resetBtn">Reset</a>
+              </div>
+
+              <div class="kpi">
+                <div class="k"><div class="t">Fair Value (est.)</div><div class="n" id="px">–</div></div>
+                <div class="k"><div class="t">Autocall Prob (est.)</div><div class="n" id="pAC">–</div></div>
+                <div class="k"><div class="t">Delta (rough)</div><div class="n" id="dlt">–</div></div>
+                <div class="k"><div class="t">Vega (rough)</div><div class="n" id="veg">–</div></div>
+              </div>
+
+              <div class="mono" style="margin-top:10px;">
+                Rough Greeks computed via bump-and-reprice (finite difference). Use as intuition, not risk.
+              </div>
+            </div>
+
+            <div>
+              <h3 style="margin:0 0 10px;">Payoff Distribution (simulated)</h3>
+              <canvas id="hist" width="900" height="420"></canvas>
+              <div class="hr"></div>
+              <h3 style="margin:0 0 10px;">Price vs Spot (local curve)</h3>
+              <canvas id="curve" width="900" height="420"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="hr"></div>
+
+        <h2>4) Trader Intuition Example</h2>
+        <p>
+          You’re short an autocall in the barrier zone. Spot rallies + vol softens.
+          PnL improves from:
+        </p>
+        <ul>
+          <li><b>Life collapses</b> (less time for bad things to happen)</li>
+          <li><b>Vanna</b> (spot↑ often implies vol↓, so being short vanna helps)</li>
+          <li><b>Vega bucketing</b> (you buy back long-dated hedges, sell front-end)</li>
+        </ul>
+
+        <p>
+          Flip it: spot drops, vol spikes. Now the product wants to live longer and become put-like.
+          Hedging turns into <b>short convexity management</b>.
+        </p>
+
+        <div class="hr"></div>
+        <a class="btn" href="/" style="margin-top:10px; display:inline-flex;">← Back to home</a>
+      </div>
+    </section>
+  </div>
+
+<script>
+/* =========================
+   Share: use canonical coffee.coffeequant.com URL
+========================= */
+(function(){
+  // IMPORTANT: set this to the final published URL for this article.
+  // If left empty, we fallback to canonical link tag or window.location.href.
+  const ARTICLE_URL = "https://coffee.coffeequant.com/statics/WriteUps/autocall-hedging-deep-dive.html";
+
+  function canonicalUrl(){
+    const link = document.querySelector('link[rel="canonical"]');
+    return (ARTICLE_URL && ARTICLE_URL.startsWith("http")) ? ARTICLE_URL :
+           (link && link.href ? link.href : window.location.href);
+  }
+
+  const url = encodeURIComponent(canonicalUrl());
+  const title = encodeURIComponent(document.title);
+
+  const li = document.getElementById("shareLinkedIn");
+  const x  = document.getElementById("shareX");
+
+  li.href = "https://www.linkedin.com/sharing/share-offsite/?url=" + url;
+  x.href  = "https://twitter.com/intent/tweet?url=" + url + "&text=" + title;
+
+  const hint = document.getElementById("canonicalHint");
+  hint.textContent = "Sharing: " + canonicalUrl().replace(/^https?:\/\//,"");
+})();
+
+/* =========================
+   Simulator: simple autocall Monte Carlo
+   - Not production pricing
+   - Teaching engine
+========================= */
+(function(){
+  // UI elements
+  const el = (id)=>document.getElementById(id);
+  const S0 = el("S0"), VOL = el("VOL"), R = el("R"), Q = el("Q"), KI = el("KI"), C = el("C"), N = el("N");
+  const S0v = el("S0v"), VOLv = el("VOLv"), Rv = el("Rv"), Qv = el("Qv"), KIv = el("KIv"), Cv = el("Cv"), Nv = el("Nv");
+  const px = el("px"), pAC = el("pAC"), dlt = el("dlt"), veg = el("veg");
+
+  // Defaults (match article)
+  function setDefaults(){
+    S0.value = 100;
+    VOL.value = 0.28;
+    R.value = 0.04;
+    Q.value = 0.01;
+    KI.value = 70;
+    C.value = 0.02;
+    N.value = 2400;
+    syncLabels();
+  }
+
+  function fmtPct(x){ return (100*x).toFixed(2) + "%"; }
+  function fmtNum(x){ return x.toLocaleString(undefined, {maximumFractionDigits: 2}); }
+  function syncLabels(){
+    S0v.textContent = (+S0.value).toFixed(0);
+    VOLv.textContent = fmtPct(+VOL.value);
+    Rv.textContent = fmtPct(+R.value);
+    Qv.textContent = fmtPct(+Q.value);
+    KIv.textContent = (+KI.value).toFixed(0);
+    Cv.textContent = fmtPct(+C.value);
+    Nv.textContent = (+N.value).toFixed(0);
+  }
+
+  [S0,VOL,R,Q,KI,C,N].forEach(x=>x.addEventListener("input", syncLabels));
+
+  // RNG (seeded)
+  function mulberry32(a){
+    return function(){
+      let t = a += 0x6D2B79F5;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function randn(rng){
+    // Box-Muller
+    let u = 0, v = 0;
+    while(u === 0) u = rng();
+    while(v === 0) v = rng();
+    return Math.sqrt(-2*Math.log(u)) * Math.cos(2*Math.PI*v);
+  }
+
+  // Autocall payoff model (simplified)
+  // - Quarterly observation (4 obs in 1y)
+  // - If S >= 100 at obs -> autocall: pay Notional + coupon*obsIndex
+  // - If never autocalls:
+  //   - If KI never touched: return Notional + coupons paid on obs where S>=KI (simplified)
+  //   - If KI touched: return Notional * (ST/100)  (worst-case equity-like)
+  function priceAutocall(params){
+    const {
+      s0, vol, r, q, ki, coup, paths, seed
+    } = params;
+
+    const notional = 100;
+    const K = 100;
+    const T = 1.0;
+    const obs = [0.25, 0.50, 0.75, 1.00];
+    const stepsPerYear = 252;
+    const dt = 1/stepsPerYear;
+    const steps = Math.floor(T/dt);
+
+    const rng = mulberry32(seed >>> 0);
+
+    let sumPV = 0;
+    let acCount = 0;
+    let payoffs = [];
+
+    for(let i=0;i<paths;i++){
+      let S = s0;
+      let kiHit = false;
+      let t = 0;
+      let obsIdx = 0;
+      let alive = true;
+      let couponsPaid = 0;
+
+      for(let step=1; step<=steps; step++){
+        t += dt;
+
+        // crude state-dependent skew proxy:
+        // if S is in the danger zone (below ~KI+5), bump vol a bit
+        const localVol = (S < (ki + 5)) ? Math.min(vol + 0.08, 1.5) : vol;
+
+        const z = randn(rng);
+        const drift = (r - q - 0.5*localVol*localVol)*dt;
+        const diff  = localVol*Math.sqrt(dt)*z;
+        S = S * Math.exp(drift + diff);
+
+        if(S <= ki) kiHit = true;
+
+        // observation check (nearest trading day)
+        if(obsIdx < obs.length && t >= obs[obsIdx] - 0.5*dt){
+          // coupon condition: simplified to S >= KI (alive & above KI)
+          if(S >= ki) couponsPaid += coup * notional;
+
+          // autocall if S >= K
+          if(S >= K){
+            const pay = notional + couponsPaid; // include accumulated coupons
+            const pv = pay * Math.exp(-r * obs[obsIdx]);
+            sumPV += pv;
+            payoffs.push(pay);
+            acCount++;
+            alive = false;
+            break;
+          }
+          obsIdx++;
+        }
+      }
+
+      if(alive){
+        // maturity payoff
+        let pay = 0;
+        if(!kiHit){
+          pay = notional + couponsPaid;
+        } else {
+          // KI hit => equity downside (simplified)
+          pay = notional * (S / K);
+          if(pay < 0) pay = 0;
+          // coupons assumed not protected in KI state in this simplification
+        }
+        const pv = pay * Math.exp(-r * T);
+        sumPV += pv;
+        payoffs.push(pay);
+      }
+    }
+
+    const px = sumPV / paths;
+    const pac = acCount / paths;
+    return { px, pac, payoffs };
+  }
+
+  function bumpGreeks(base){
+    // rough delta, vega via bump-and-reprice
+    const bumpS = 0.5;
+    const bumpV = 0.01;
+
+    const upS = priceAutocall({...base, s0: base.s0 + bumpS, seed: base.seed + 7}).px;
+    const dnS = priceAutocall({...base, s0: base.s0 - bumpS, seed: base.seed + 11}).px;
+    const delta = (upS - dnS) / (2*bumpS);
+
+    const upV = priceAutocall({...base, vol: base.vol + bumpV, seed: base.seed + 13}).px;
+    const dnV = priceAutocall({...base, vol: Math.max(0.0001, base.vol - bumpV), seed: base.seed + 17}).px;
+    const vega = (upV - dnV) / (2*bumpV);
+
+    return { delta, vega };
+  }
+
+  // Drawing helpers (no external libs)
+  function drawHist(canvas, data){
+    const ctx = canvas.getContext("2d");
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0,0,W,H);
+
+    if(!data || !data.length) return;
+
+    // bins
+    const bins = 30;
+    let min = Math.min(...data), max = Math.max(...data);
+    if(min === max) { min -= 1; max += 1; }
+    const bw = (max-min)/bins;
+
+    let counts = new Array(bins).fill(0);
+    for(const x of data){
+      let b = Math.floor((x-min)/bw);
+      if(b < 0) b = 0;
+      if(b >= bins) b = bins-1;
+      counts[b]++;
+    }
+    const peak = Math.max(...counts);
+
+    // axes
+    ctx.globalAlpha = 0.25;
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(40, 20, 1, H-60);
+    ctx.fillRect(40, H-40, W-60, 1);
+    ctx.globalAlpha = 1;
+
+    // bars
+    const chartW = W-70, chartH = H-70;
+    for(let i=0;i<bins;i++){
+      const x0 = 45 + i*(chartW/bins);
+      const h = (counts[i]/peak) * chartH;
+      ctx.globalAlpha = 0.18;
+      ctx.fillRect(x0, H-40-h, (chartW/bins)-3, h);
+      ctx.globalAlpha = 1;
+    }
+
+    // labels
+    ctx.globalAlpha = 0.8;
+    ctx.font = "16px ui-sans-serif, system-ui";
+    ctx.fillText("Payoff", 44, 18);
+    ctx.globalAlpha = 0.75;
+    ctx.font = "12px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
+    ctx.fillText("min " + min.toFixed(1), 45, H-18);
+    ctx.fillText("max " + max.toFixed(1), W-140, H-18);
+    ctx.globalAlpha = 1;
+  }
+
+  function drawCurve(canvas, spots, prices){
+    const ctx = canvas.getContext("2d");
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0,0,W,H);
+
+    if(!spots || spots.length<2) return;
+
+    const xmin = Math.min(...spots), xmax = Math.max(...spots);
+    const ymin = Math.min(...prices), ymax = Math.max(...prices);
+
+    const padL=45, padB=40, padT=20, padR=20;
+    const xmap = (x)=> padL + (x-xmin)/(xmax-xmin)*(W-padL-padR);
+    const ymap = (y)=> (H-padB) - (y-ymin)/(ymax-ymin)*(H-padT-padB);
+
+    // axes
+    ctx.globalAlpha = 0.25;
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(padL, padT, 1, H-padT-padB);
+    ctx.fillRect(padL, H-padB, W-padL-padR, 1);
+    ctx.globalAlpha = 1;
+
+    // line
+    ctx.globalAlpha = 0.85;
+    ctx.beginPath();
+    ctx.moveTo(xmap(spots[0]), ymap(prices[0]));
+    for(let i=1;i<spots.length;i++){
+      ctx.lineTo(xmap(spots[i]), ymap(prices[i]));
+    }
+    ctx.strokeStyle = "#fff";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.globalAlpha = 0.8;
+    ctx.font = "16px ui-sans-serif, system-ui";
+    ctx.fillText("Price vs Spot (local)", padL, 18);
+
+    ctx.globalAlpha = 0.75;
+    ctx.font = "12px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
+    ctx.fillText("S: " + xmin.toFixed(0) + " → " + xmax.toFixed(0), padL, H-18);
+    ctx.fillText("Px: " + ymin.toFixed(1) + " → " + ymax.toFixed(1), W-190, H-18);
+    ctx.globalAlpha = 1;
+  }
+
+  async function run(){
+    // base params
+    const base = {
+      s0: +S0.value,
+      vol: +VOL.value,
+      r: +R.value,
+      q: +Q.value,
+      ki: +KI.value,
+      coup: +C.value,
+      paths: +N.value,
+      seed: (Date.now() & 0xffffffff) >>> 0
+    };
+
+    // run base pricing
+    px.textContent = "…";
+    pAC.textContent = "…";
+    dlt.textContent = "…";
+    veg.textContent = "…";
+
+    // allow UI to update
+    await new Promise(r=>setTimeout(r, 15));
+
+    const res = priceAutocall(base);
+    const g = bumpGreeks(base);
+
+    px.textContent  = fmtNum(res.px);
+    pAC.textContent = (100*res.pac).toFixed(1) + "%";
+    dlt.textContent = g.delta.toFixed(3);
+    veg.textContent = g.vega.toFixed(2);
+
+    drawHist(el("hist"), res.payoffs);
+
+    // local curve around spot
+    const spots = [];
+    const prices = [];
+    const sMin = Math.max(40, base.s0 - 30);
+    const sMax = Math.min(160, base.s0 + 30);
+    const grid = 11;
+    for(let i=0;i<grid;i++){
+      const s = sMin + (sMax-sMin)*(i/(grid-1));
+      const r2 = priceAutocall({...base, s0:s, paths: Math.max(400, Math.floor(base.paths/3)), seed: base.seed + i*31}).px;
+      spots.push(s);
+      prices.push(r2);
+    }
+    drawCurve(el("curve"), spots, prices);
+  }
+
+  // Buttons
+  el("runBtn").addEventListener("click", function(e){ e.preventDefault(); run(); });
+  el("resetBtn").addEventListener("click", function(e){ e.preventDefault(); setDefaults(); run(); });
+
+  // init
+  setDefaults();
+  run();
+})();
+</script>
+</body>
+</html>

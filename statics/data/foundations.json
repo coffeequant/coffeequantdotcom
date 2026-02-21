@@ -1,6 +1,16 @@
 {
   "items": [
     {
+      "slug": "autocall-hedging",
+      "title": "Autocall - How to hedge?",
+      "excerpt": "A single-stock autocall is not “short vol” as a lifestyle choice. It’s a delta/gamma/vega rotate as spot moves, time passes, skew breathes, and rates shift discounting",
+      "href": "statics/WriteUps/autocall-hedging-deep-dive.html",
+      "tag": "Greeks",
+      "level": "Foundations",
+      "read": "4 min"
+    },
+ 
+    {
       "slug": "gamma-intuition",
       "title": "Gamma: Why Traders Buy High and Sell Low",
       "excerpt": "Long gamma means buying weakness and selling strength. A clean intuition for volatility harvesting.",
