@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Basket Options & the Correlation Trap | CoffeeQuant</title>
+  <link rel="stylesheet" href="../css/cq.css">
+</head>
+<body class="cq-body">
+<div class="cq-article-wrap">
+
+<h1 class="cq-h1">Basket Options: The Correlation Trap</h1>
+
+---
+
+<h2>🎯 The Problem</h2>
+
+<p>
+Black-Scholes assumes:
+</p>
+
+<p><strong>Everything is lognormal.</strong></p>
+
+<p>
+But for baskets…
+</p>
+
+<p><strong>This breaks.</strong></p>
+
+---
+
+<h2>📊 Why?</h2>
+
+<p>
+Individual stocks → lognormal ✔️
+</p>
+
+<p>
+Basket of stocks → ❌ not lognormal
+</p>
+
+---
+
+<h2>🧠 Intuition</h2>
+
+<p>
+Correlation changes everything.
+</p>
+
+<ul>
+<li>High correlation → basket moves like one asset</li>
+<li>Low correlation → diversification</li>
+</ul>
+
+<p>
+But Black-Scholes ignores this dynamic behavior.
+</p>
+
+---
+
+<h2>⚡ What Traders Actually Price</h2>
+
+<p>
+Not volatility alone…
+</p>
+
+<p><strong>Volatility + Correlation + Dispersion</strong></p>
+
+---
+
+<a class="cq-back" href="/">← Back</a>
+
+</div>
+</body>
+</html>

@@ -433,3 +433,37 @@ hr{
   border-top:1px solid rgba(255,255,255,.10);
   margin: 18px 0;
 }
+
+
+
+.cq-section {
+  margin: 3rem 0;
+}
+
+.cq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.cq-card {
+  text-decoration: none;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cq-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.cq-meta {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+}

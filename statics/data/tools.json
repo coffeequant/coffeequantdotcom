@@ -6,7 +6,7 @@
   "thumb": "statics/img/thumbs/iul.jpeg",
   "tags": ["IUL","VolTarget","Pricing"],
   "link": "statics/Tools/IULLab.html",
-  "premium": true
+  "premium": false
 },
 
     {
@@ -15,7 +15,7 @@
       "link": "statics/Tools/PricingCLI.html",
       "thumb": "statics/img/thumbs/cli.webp",
       "tags": ["Options","Fast"],
-      "premium":true
+      "premium":false
     },
     {
       "title": "Cross Gamma Lab",
@@ -23,7 +23,7 @@
       "thumb": "statics/img/thumbs/crossgamma.webp",
       "link": "statics/Tools/CrossGammaLab.html",
       "tags": ["Correlation","Risk"],
-      "premium": true
+      "premium": false
     },
 
 
@@ -33,7 +33,7 @@
       "link": "statics/Tools/BarrierShiftTool.html",
       "thumb": "statics/img/thumbs/betsizing.webp",
       "tags": ["Exotics","Hedging"],
-      "premium": true
+      "premium": false
     },
      {
       "title": "Structurer CLI",
@@ -41,7 +41,7 @@
       "link": "statics/Tools/CMDNew.html",
       "thumb": "statics/img/thumbs/ai-vs-wallstreet-collage.jpeg",
       "tags": ["Options", "Greeks", "PnL"],
-      "premium": true
+      "premium": false
     }
  ]
 }

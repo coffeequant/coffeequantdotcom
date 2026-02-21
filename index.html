@@ -500,6 +500,17 @@
         </div>
       </section>
 
+	<section id="foundations" class="cq-section">
+  <h2>📘 CQ Foundations</h2>
+  <p class="cq-sub">
+    Intuition-first guides for traders, quants and structured product thinkers.
+  </p>
+
+  <div id="foundations-list" class="cq-grid"></div>
+</section>
+
+
+
     </div>
   </div>
 
@@ -508,6 +519,43 @@
   <script src="statics/js/premium.js"></script>
 
   <!-- PAGE LOGIC -->
+<script>
+async function loadFoundations() {
+  try {
+    const res = await fetch('statics/data/foundations.json');
+    if (!res.ok) throw new Error('Cannot load foundations.json');
+    const data = await res.json();
+
+    const container = document.getElementById('foundations-list');
+    container.innerHTML = '';
+
+    data.items.forEach(item => {
+      const card = document.createElement('a');
+      card.href = item.href;
+      card.className = 'cq-card';
+
+      card.innerHTML = `
+        <div class="cq-card-body">
+          <div class="cq-meta">
+            <span class="cq-tag">${item.tag}</span>
+            <span class="cq-read">${item.read}</span>
+          </div>
+          <h3>${item.title}</h3>
+          <p>${item.excerpt}</p>
+        </div>
+      `;
+
+      container.appendChild(card);
+    });
+
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+loadFoundations();
+</script>
+
   <script>
     const $ = (sel, root=document) => root.querySelector(sel);
 
@@ -653,6 +701,9 @@ async function boot() {
 
     boot();
   </script>
+
+
+
 <script>
 (function () {
   // ✅ Your Apps Script Web App endpoint

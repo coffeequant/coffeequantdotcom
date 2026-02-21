@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "slug": "gamma-intuition",
+      "title": "Gamma: Why Traders Buy High and Sell Low",
+      "excerpt": "Long gamma means buying weakness and selling strength. A clean intuition for volatility harvesting.",
+      "href": "statics/WriteUps/gamma-intuition.html",
+      "tag": "Greeks",
+      "level": "Foundations",
+      "read": "4 min"
+    },
+    {
+      "slug": "risk-neutral-simple",
+      "title": "Risk Neutral Pricing (Without the Confusion)",
+      "excerpt": "Why option pricing uses a fake world — and why that’s perfectly logical.",
+      "href": "statics/WriteUps/risk-neutral-simple.html",
+      "tag": "Pricing",
+      "level": "Foundations",
+      "read": "5 min"
+    },
+    {
+      "slug": "basket-correlation-trap",
+      "title": "Basket Options and the Correlation Trap",
+      "excerpt": "Why baskets break lognormal assumptions and why correlation really matters.",
+      "href": "statics/WriteUps/basket-correlation-trap.html",
+      "tag": "Correlation",
+      "level": "Foundations",
+      "read": "5 min"
+    }
+  ]
+}
