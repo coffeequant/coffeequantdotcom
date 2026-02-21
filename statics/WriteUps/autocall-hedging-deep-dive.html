@@ -302,43 +302,84 @@
           it shows how price and rough Greeks shift as you change spot/vol/rates, and why autocalls “flip personalities”.
         </p>
 
-        <div class="sim">
-          <div class="sim-grid">
-            <div>
-              <div class="row"><label>Spot (S0)</label><input id="S0" type="range" min="50" max="150" step="1"/><div class="val" id="S0v"></div></div>
-              <div class="row"><label>Vol (σ)</label><input id="VOL" type="range" min="0.10" max="0.70" step="0.01"/><div class="val" id="VOLv"></div></div>
-              <div class="row"><label>Rate (r)</label><input id="R" type="range" min="0.00" max="0.10" step="0.0025"/><div class="val" id="Rv"></div></div>
-              <div class="row"><label>Dividend (q)</label><input id="Q" type="range" min="0.00" max="0.08" step="0.0025"/><div class="val" id="Qv"></div></div>
-              <div class="row"><label>KI Barrier</label><input id="KI" type="range" min="40" max="90" step="1"/><div class="val" id="KIv"></div></div>
-              <div class="row"><label>Coupon / obs</label><input id="C" type="range" min="0.00" max="0.06" step="0.0025"/><div class="val" id="Cv"></div></div>
-              <div class="row"><label>Paths</label><input id="N" type="range" min="200" max="6000" step="200"/><div class="val" id="Nv"></div></div>
+<div class="sim" id="simRoot">
+  <div class="sim-grid">
+    <div>
+      <h2 style="margin:0 0 6px;">Autocall Lab</h2>
+      <div class="mono" style="margin:0 0 10px; opacity:.85;">
+        Skew surface drives local vol; Greeks use common-random-number bumps for stability.
+      </div>
 
-              <div class="btns">
-                <a class="btn" href="#" id="runBtn">Run Simulation</a>
-                <a class="btn" href="#" id="resetBtn">Reset</a>
-              </div>
+      <!-- Core product controls -->
+      <div class="row"><label>Spot (S0)</label><input id="S0" type="range" min="50" max="150" step="1"/><div class="val" id="S0v"></div></div>
+      <div class="row"><label>Rate (r)</label><input id="R" type="range" min="0.00" max="0.10" step="0.0025"/><div class="val" id="Rv"></div></div>
+      <div class="row"><label>Dividend (q)</label><input id="Q" type="range" min="0.00" max="0.08" step="0.0025"/><div class="val" id="Qv"></div></div>
+      <div class="row"><label>KI Barrier</label><input id="KI" type="range" min="40" max="90" step="1"/><div class="val" id="KIv"></div></div>
+      <div class="row"><label>Coupon / obs</label><input id="C" type="range" min="0.00" max="0.06" step="0.0025"/><div class="val" id="Cv"></div></div>
+      <div class="row"><label>Paths</label><input id="N" type="range" min="400" max="12000" step="200"/><div class="val" id="Nv"></div></div>
 
-              <div class="kpi">
-                <div class="k"><div class="t">Fair Value (est.)</div><div class="n" id="px">–</div></div>
-                <div class="k"><div class="t">Autocall Prob (est.)</div><div class="n" id="pAC">–</div></div>
-                <div class="k"><div class="t">Delta (rough)</div><div class="n" id="dlt">–</div></div>
-                <div class="k"><div class="t">Vega (rough)</div><div class="n" id="veg">–</div></div>
-              </div>
+      <div class="hr"></div>
 
-              <div class="mono" style="margin-top:10px;">
-                Rough Greeks computed via bump-and-reprice (finite difference). Use as intuition, not risk.
-              </div>
-            </div>
+      <!-- Skew surface controls -->
+      <h3 style="margin:0 0 6px;">Implied Vol Surface (Editable)</h3>
+      <div class="row"><label>ATM vol</label><input id="ATM" type="range" min="0.10" max="0.80" step="0.01"/><div class="val" id="ATMv"></div></div>
+      <div class="row"><label>Skew (slope)</label><input id="SKEW" type="range" min="-1.50" max="0.50" step="0.02"/><div class="val" id="SKEWv"></div></div>
+      <div class="row"><label>Smile (curv)</label><input id="SMILE" type="range" min="0.00" max="1.80" step="0.02"/><div class="val" id="SMILEv"></div></div>
+      <div class="row"><label>Term slope</label><input id="TERM" type="range" min="-0.30" max="0.60" step="0.02"/><div class="val" id="TERMv"></div></div>
 
-            <div>
-              <h3 style="margin:0 0 10px;">Payoff Distribution (simulated)</h3>
-              <canvas id="hist" width="900" height="420"></canvas>
-              <div class="hr"></div>
-              <h3 style="margin:0 0 10px;">Price vs Spot (local curve)</h3>
-              <canvas id="curve" width="900" height="420"></canvas>
-            </div>
-          </div>
+      <div class="row"><label>Slice tenor</label><input id="TENOR" type="range" min="0.10" max="2.00" step="0.05"/><div class="val" id="TENORv"></div></div>
+      <div class="row"><label>Slice moneyness</label><input id="MON" type="range" min="0.60" max="1.40" step="0.02"/><div class="val" id="MONv"></div></div>
+
+      <div class="btns">
+        <a class="btn" href="#" id="runBtn">Run (Price + Greeks)</a>
+        <a class="btn" href="#" id="resetBtn">Reset</a>
+      </div>
+
+      <div class="kpi">
+        <div class="k"><div class="t">Fair Value (est.)</div><div class="n" id="px">–</div></div>
+        <div class="k"><div class="t">Autocall Prob</div><div class="n" id="pAC">–</div></div>
+        <div class="k"><div class="t">Delta</div><div class="n" id="dlt">–</div></div>
+        <div class="k"><div class="t">Gamma</div><div class="n" id="gam">–</div></div>
+        <div class="k"><div class="t">Vega (ATM)</div><div class="n" id="veg">–</div></div>
+        <div class="k"><div class="t">Vanna</div><div class="n" id="van">–</div></div>
+        <div class="k"><div class="t">Vomma</div><div class="n" id="vom">–</div></div>
+        <div class="k"><div class="t">Skew Risk Proxy</div><div class="n" id="skrp">–</div></div>
+      </div>
+
+      <div class="hr"></div>
+      <h3 style="margin:0 0 8px;">Diagnostics</h3>
+      <div class="mono" style="opacity:.85; margin-bottom:8px;">
+        Bars show relative sensitivity at current state (normalized). Mouse-drag the surface to rotate.
+      </div>
+      <div id="diagBars" style="display:grid; gap:10px;"></div>
+    </div>
+
+    <div>
+      <div class="cq-grid" style="grid-template-columns:1fr; gap:14px;">
+        <div class="viz">
+          <h3>3D Implied Vol Surface</h3>
+          <canvas id="surf" width="1100" height="520"></canvas>
+          <small>Axes: moneyness (K/F) × tenor (years) × implied vol.</small>
         </div>
+
+        <div class="viz">
+          <h3>Smile Slice (at selected tenor)</h3>
+          <canvas id="sliceSmile" width="1100" height="360"></canvas>
+        </div>
+
+        <div class="viz">
+          <h3>Term Slice (at selected moneyness)</h3>
+          <canvas id="sliceTerm" width="1100" height="360"></canvas>
+        </div>
+
+        <div class="viz">
+          <h3>Payoff Distribution</h3>
+          <canvas id="hist" width="1100" height="360"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
         <div class="hr"></div>
 
@@ -365,72 +406,51 @@
   </div>
 
 <script>
-/* =========================
-   Share: use canonical coffee.coffeequant.com URL
-========================= */
+/* ============================================================
+   CQX Autocall Lab v2
+   - Editable 3D skew surface (tenor x moneyness x vol)
+   - Common-random-number finite-diff Greeks
+   - Vanna / Vomma diagnostics
+   - No external libs, GitHub Pages safe
+============================================================ */
+
 (function(){
-  // IMPORTANT: set this to the final published URL for this article.
-  // If left empty, we fallback to canonical link tag or window.location.href.
-  const ARTICLE_URL = "https://coffee.coffeequant.com/statics/WriteUps/autocall-hedging-deep-dive.html";
-
-  function canonicalUrl(){
-    const link = document.querySelector('link[rel="canonical"]');
-    return (ARTICLE_URL && ARTICLE_URL.startsWith("http")) ? ARTICLE_URL :
-           (link && link.href ? link.href : window.location.href);
-  }
-
-  const url = encodeURIComponent(canonicalUrl());
-  const title = encodeURIComponent(document.title);
-
-  const li = document.getElementById("shareLinkedIn");
-  const x  = document.getElementById("shareX");
-
-  li.href = "https://www.linkedin.com/sharing/share-offsite/?url=" + url;
-  x.href  = "https://twitter.com/intent/tweet?url=" + url + "&text=" + title;
-
-  const hint = document.getElementById("canonicalHint");
-  hint.textContent = "Sharing: " + canonicalUrl().replace(/^https?:\/\//,"");
-})();
-
-/* =========================
-   Simulator: simple autocall Monte Carlo
-   - Not production pricing
-   - Teaching engine
-========================= */
-(function(){
-  // UI elements
   const el = (id)=>document.getElementById(id);
-  const S0 = el("S0"), VOL = el("VOL"), R = el("R"), Q = el("Q"), KI = el("KI"), C = el("C"), N = el("N");
-  const S0v = el("S0v"), VOLv = el("VOLv"), Rv = el("Rv"), Qv = el("Qv"), KIv = el("KIv"), Cv = el("Cv"), Nv = el("Nv");
-  const px = el("px"), pAC = el("pAC"), dlt = el("dlt"), veg = el("veg");
 
-  // Defaults (match article)
-  function setDefaults(){
-    S0.value = 100;
-    VOL.value = 0.28;
-    R.value = 0.04;
-    Q.value = 0.01;
-    KI.value = 70;
-    C.value = 0.02;
-    N.value = 2400;
-    syncLabels();
-  }
+  // Inputs
+  const S0 = el("S0"), R = el("R"), Q = el("Q"), KI = el("KI"), C = el("C"), N = el("N");
+  const ATM = el("ATM"), SKEW = el("SKEW"), SMILE = el("SMILE"), TERM = el("TERM");
+  const TENOR = el("TENOR"), MON = el("MON");
 
-  function fmtPct(x){ return (100*x).toFixed(2) + "%"; }
-  function fmtNum(x){ return x.toLocaleString(undefined, {maximumFractionDigits: 2}); }
-  function syncLabels(){
-    S0v.textContent = (+S0.value).toFixed(0);
-    VOLv.textContent = fmtPct(+VOL.value);
-    Rv.textContent = fmtPct(+R.value);
-    Qv.textContent = fmtPct(+Q.value);
-    KIv.textContent = (+KI.value).toFixed(0);
-    Cv.textContent = fmtPct(+C.value);
-    Nv.textContent = (+N.value).toFixed(0);
-  }
+  // Labels
+  const lbl = {
+    S0v: el("S0v"), Rv: el("Rv"), Qv: el("Qv"), KIv: el("KIv"), Cv: el("Cv"), Nv: el("Nv"),
+    ATMv: el("ATMv"), SKEWv: el("SKEWv"), SMILEv: el("SMILEv"), TERMv: el("TERMv"),
+    TENORv: el("TENORv"), MONv: el("MONv")
+  };
 
-  [S0,VOL,R,Q,KI,C,N].forEach(x=>x.addEventListener("input", syncLabels));
+  // KPIs
+  const kpi = {
+    px: el("px"), pAC: el("pAC"), dlt: el("dlt"), gam: el("gam"), veg: el("veg"),
+    van: el("van"), vom: el("vom"), skrp: el("skrp")
+  };
 
-  // RNG (seeded)
+  // Canvases
+  const cvSurf = el("surf");
+  const cvSmile = el("sliceSmile");
+  const cvTerm = el("sliceTerm");
+  const cvHist = el("hist");
+
+  const diagBars = el("diagBars");
+
+  // Formatters
+  const fmtPct = (x)=> (100*x).toFixed(2) + "%";
+  const fmtNum = (x)=> x.toLocaleString(undefined, {maximumFractionDigits: 3});
+  const fmtInt = (x)=> x.toLocaleString();
+
+  // -----------------------------
+  // Seeded RNG + normal draws
+  // -----------------------------
   function mulberry32(a){
     return function(){
       let t = a += 0x6D2B79F5;
@@ -439,25 +459,49 @@
       return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
     };
   }
-  function randn(rng){
-    // Box-Muller
-    let u = 0, v = 0;
-    while(u === 0) u = rng();
-    while(v === 0) v = rng();
-    return Math.sqrt(-2*Math.log(u)) * Math.cos(2*Math.PI*v);
+  function randnBM(u1,u2){
+    // u1,u2 in (0,1)
+    return Math.sqrt(-2*Math.log(u1)) * Math.cos(2*Math.PI*u2);
   }
 
-  // Autocall payoff model (simplified)
-  // - Quarterly observation (4 obs in 1y)
-  // - If S >= 100 at obs -> autocall: pay Notional + coupon*obsIndex
-  // - If never autocalls:
-  //   - If KI never touched: return Notional + coupons paid on obs where S>=KI (simplified)
-  //   - If KI touched: return Notional * (ST/100)  (worst-case equity-like)
-  function priceAutocall(params){
-    const {
-      s0, vol, r, q, ki, coup, paths, seed
-    } = params;
+  // ---------------------------------------
+  // Vol surface: sigma(T, m) where m=K/F
+  // Model: vol = ATM*(1 + TERM*log(1+T)) + SKEW*log(m) + SMILE*(log(m))^2
+  // Clamp to sane range.
+  // ---------------------------------------
+  function volSurface(T, m, pars){
+    const atm = pars.atm;
+    const skew = pars.skew;
+    const smile = pars.smile;
+    const term = pars.term;
 
+    const x = Math.log(Math.max(1e-6, m));
+    let v = atm * (1 + term*Math.log(1+T)) + skew*x + smile*(x*x);
+    v = Math.max(0.02, Math.min(1.50, v));
+    return v;
+  }
+
+  // "Skew risk proxy": difference between 25d put vol and 25d call vol at selected tenor
+  function skewProxy(T, pars){
+    // crude: use m=0.9 and m=1.1 as proxies
+    const vp = volSurface(T, 0.90, pars);
+    const vc = volSurface(T, 1.10, pars);
+    return vp - vc;
+  }
+
+  // ---------------------------------------
+  // Autocall payoff model (simplified but stateful)
+  // - Quarterly obs dates
+  // - Autocall if S >= K at obs (K fixed at 100)
+  // - KI monitored daily
+  // - Coupons paid at obs if alive & S >= KI (simplified)
+  // - If no autocall:
+  //     if no KI hit: principal + coupons
+  //     if KI hit: principal * (ST/K)
+  //
+  // IMPORTANT: local vol uses sigma(T_remaining, m=K/S) from surface
+  // ---------------------------------------
+  function priceAutocall(par){
     const notional = 100;
     const K = 100;
     const T = 1.0;
@@ -466,240 +510,621 @@
     const dt = 1/stepsPerYear;
     const steps = Math.floor(T/dt);
 
-    const rng = mulberry32(seed >>> 0);
+    const s0 = par.s0;
+    const r = par.r;
+    const q = par.q;
+    const ki = par.ki;
+    const coup = par.coup;
+    const paths = par.paths;
 
-    let sumPV = 0;
-    let acCount = 0;
-    let payoffs = [];
+    const surfPars = par.surfPars;
+    const seed = par.seed;
 
-    for(let i=0;i<paths;i++){
-      let S = s0;
-      let kiHit = false;
-      let t = 0;
-      let obsIdx = 0;
-      let alive = true;
-      let couponsPaid = 0;
+    // Common random numbers: pre-generate uniforms once for all bumps
+    // dims: [paths][steps][2]
+    const rng = mulberry32(seed>>>0);
 
-      for(let step=1; step<=steps; step++){
-        t += dt;
+    // For speed: store as Float32Array
+    const U1 = new Float32Array(paths*steps);
+    const U2 = new Float32Array(paths*steps);
+    for(let i=0;i<paths*steps;i++){
+      let a = rng(); if(a===0) a = 1e-9;
+      let b = rng(); if(b===0) b = 1e-9;
+      U1[i]=a; U2[i]=b;
+    }
 
-        // crude state-dependent skew proxy:
-        // if S is in the danger zone (below ~KI+5), bump vol a bit
-        const localVol = (S < (ki + 5)) ? Math.min(vol + 0.08, 1.5) : vol;
+    function runOnce(s0Local, surfParsLocal){
+      let sumPV = 0;
+      let acCount = 0;
+      const pay = new Float32Array(paths);
 
-        const z = randn(rng);
-        const drift = (r - q - 0.5*localVol*localVol)*dt;
-        const diff  = localVol*Math.sqrt(dt)*z;
-        S = S * Math.exp(drift + diff);
+      for(let p=0;p<paths;p++){
+        let S = s0Local;
+        let kiHit = false;
+        let t = 0;
+        let obsIdx = 0;
+        let couponsPaid = 0;
+        let alive = true;
 
-        if(S <= ki) kiHit = true;
+        for(let step=1; step<=steps; step++){
+          t += dt;
 
-        // observation check (nearest trading day)
-        if(obsIdx < obs.length && t >= obs[obsIdx] - 0.5*dt){
-          // coupon condition: simplified to S >= KI (alive & above KI)
-          if(S >= ki) couponsPaid += coup * notional;
+          // local moneyness proxy for surface: m = K/S (strike vs spot)
+          // tenor remaining influences term structure
+          const Trem = Math.max(1e-6, T - t);
+          const m = K / Math.max(1e-9, S);
+          const sigma = volSurface(Trem, m, surfParsLocal);
 
-          // autocall if S >= K
-          if(S >= K){
-            const pay = notional + couponsPaid; // include accumulated coupons
-            const pv = pay * Math.exp(-r * obs[obsIdx]);
-            sumPV += pv;
-            payoffs.push(pay);
-            acCount++;
-            alive = false;
-            break;
+          const z = randnBM(U1[p*steps+(step-1)], U2[p*steps+(step-1)]);
+          const drift = (r - q - 0.5*sigma*sigma)*dt;
+          const diff  = sigma*Math.sqrt(dt)*z;
+          S = S * Math.exp(drift + diff);
+
+          if(S <= ki) kiHit = true;
+
+          if(obsIdx < obs.length && t >= obs[obsIdx] - 0.5*dt){
+            if(S >= ki) couponsPaid += coup * notional;
+
+            if(S >= K){
+              const payoff = notional + couponsPaid;
+              const pv = payoff * Math.exp(-r * obs[obsIdx]);
+              sumPV += pv;
+              pay[p] = payoff;
+              acCount++;
+              alive = false;
+              break;
+            }
+            obsIdx++;
           }
-          obsIdx++;
+        }
+
+        if(alive){
+          let payoff = 0;
+          if(!kiHit){
+            payoff = notional + couponsPaid;
+          } else {
+            payoff = notional * (S / K);
+            if(payoff < 0) payoff = 0;
+          }
+          sumPV += payoff * Math.exp(-r*T);
+          pay[p] = payoff;
         }
       }
 
-      if(alive){
-        // maturity payoff
-        let pay = 0;
-        if(!kiHit){
-          pay = notional + couponsPaid;
-        } else {
-          // KI hit => equity downside (simplified)
-          pay = notional * (S / K);
-          if(pay < 0) pay = 0;
-          // coupons assumed not protected in KI state in this simplification
-        }
-        const pv = pay * Math.exp(-r * T);
-        sumPV += pv;
-        payoffs.push(pay);
+      return {
+        px: sumPV/paths,
+        pac: acCount/paths,
+        payoffs: pay
+      };
+    }
+
+    // Base run
+    const base = runOnce(s0, surfPars);
+
+    // Greeks via finite diff with common random numbers
+    // Delta/Gamma w.r.t. S0, Vega/Vanna/Vomma w.r.t. ATM parameter of surface
+    const dS = 0.5;
+    const dATM = 0.01;
+
+    const upS  = runOnce(s0 + dS, surfPars).px;
+    const dnS  = runOnce(s0 - dS, surfPars).px;
+    const delta = (upS - dnS) / (2*dS);
+    const gamma = (upS - 2*base.px + dnS) / (dS*dS);
+
+    const parsUpATM = {...surfPars, atm: surfPars.atm + dATM};
+    const parsDnATM = {...surfPars, atm: Math.max(0.02, surfPars.atm - dATM)};
+    const upV = runOnce(s0, parsUpATM).px;
+    const dnV = runOnce(s0, parsDnATM).px;
+    const vega = (upV - dnV) / (2*dATM);
+    const vomma = (upV - 2*base.px + dnV) / (dATM*dATM);
+
+    // Vanna: cross derivative d²V / dS dATM
+    const upS_upATM = runOnce(s0 + dS, parsUpATM).px;
+    const upS_dnATM = runOnce(s0 + dS, parsDnATM).px;
+    const dnS_upATM = runOnce(s0 - dS, parsUpATM).px;
+    const dnS_dnATM = runOnce(s0 - dS, parsDnATM).px;
+    const vanna = (upS_upATM - upS_dnATM - dnS_upATM + dnS_dnATM) / (4*dS*dATM);
+
+    return {
+      ...base,
+      greeks: { delta, gamma, vega, vanna, vomma },
+      skewProxy: skewProxy(par.sliceTenor, surfPars)
+    };
+  }
+
+  // ---------------------------------------
+  // 3D surface rendering (simple projection)
+  // ---------------------------------------
+  const view = {
+    yaw: -0.8, pitch: 0.55, zoom: 1.15,
+    drag: false, lastX: 0, lastY: 0
+  };
+
+  function project3D(x,y,z, W,H){
+    // rotate around Y (yaw) and X (pitch)
+    const cy = Math.cos(view.yaw), sy = Math.sin(view.yaw);
+    const cx = Math.cos(view.pitch), sx = Math.sin(view.pitch);
+
+    // yaw
+    let x1 = cy*x + sy*z;
+    let z1 = -sy*x + cy*z;
+
+    // pitch
+    let y2 = cx*y - sx*z1;
+    let z2 = sx*y + cx*z1;
+
+    // perspective
+    const f = 420 * view.zoom;
+    const denom = (f + z2);
+    const px = (x1 * f) / denom;
+    const py = (y2 * f) / denom;
+
+    return { X: W/2 + px, Y: H/2 - py, Z: z2 };
+  }
+
+  function drawSurface(ctx, W,H, pars){
+    ctx.clearRect(0,0,W,H);
+
+    // Background glow
+    const bg = ctx.createLinearGradient(0,0,W,H);
+    bg.addColorStop(0, "rgba(0,255,200,0.06)");
+    bg.addColorStop(0.5, "rgba(110,90,255,0.05)");
+    bg.addColorStop(1, "rgba(255,120,0,0.04)");
+    ctx.fillStyle = bg;
+    ctx.fillRect(0,0,W,H);
+
+    // Grid definition
+    const tenors = [];
+    for(let t=0.10; t<=2.00+1e-9; t+=0.15) tenors.push(+t.toFixed(2));
+    const mons = [];
+    for(let m=0.60; m<=1.40+1e-9; m+=0.05) mons.push(+m.toFixed(2));
+
+    // Compute points in model coords:
+    // x=moneyness, y=tenor, z=vol
+    // scale into nicer aspect
+    const pts = [];
+    let zMin= 1e9, zMax=-1e9;
+    for(let i=0;i<tenors.length;i++){
+      pts[i]=[];
+      for(let j=0;j<mons.length;j++){
+        const T = tenors[i];
+        const m = mons[j];
+        const v = volSurface(T, m, pars);
+        zMin = Math.min(zMin, v);
+        zMax = Math.max(zMax, v);
+
+        // model space scaling
+        const x = (m - 1.0) * 420;          // spread moneyness
+        const y = (T - 1.0) * 220;          // tenor
+        const z = (v - 0.25) * 600;         // vol height
+        pts[i][j] = { x,y,z, v, T, m };
       }
     }
 
-    const px = sumPV / paths;
-    const pac = acCount / paths;
-    return { px, pac, payoffs };
-  }
-
-  function bumpGreeks(base){
-    // rough delta, vega via bump-and-reprice
-    const bumpS = 0.5;
-    const bumpV = 0.01;
-
-    const upS = priceAutocall({...base, s0: base.s0 + bumpS, seed: base.seed + 7}).px;
-    const dnS = priceAutocall({...base, s0: base.s0 - bumpS, seed: base.seed + 11}).px;
-    const delta = (upS - dnS) / (2*bumpS);
-
-    const upV = priceAutocall({...base, vol: base.vol + bumpV, seed: base.seed + 13}).px;
-    const dnV = priceAutocall({...base, vol: Math.max(0.0001, base.vol - bumpV), seed: base.seed + 17}).px;
-    const vega = (upV - dnV) / (2*bumpV);
-
-    return { delta, vega };
-  }
-
-  // Drawing helpers (no external libs)
-  function drawHist(canvas, data){
-    const ctx = canvas.getContext("2d");
-    const W = canvas.width, H = canvas.height;
-    ctx.clearRect(0,0,W,H);
-
-    if(!data || !data.length) return;
-
-    // bins
-    const bins = 30;
-    let min = Math.min(...data), max = Math.max(...data);
-    if(min === max) { min -= 1; max += 1; }
-    const bw = (max-min)/bins;
-
-    let counts = new Array(bins).fill(0);
-    for(const x of data){
-      let b = Math.floor((x-min)/bw);
-      if(b < 0) b = 0;
-      if(b >= bins) b = bins-1;
-      counts[b]++;
-    }
-    const peak = Math.max(...counts);
-
-    // axes
-    ctx.globalAlpha = 0.25;
-    ctx.fillStyle = "#fff";
-    ctx.fillRect(40, 20, 1, H-60);
-    ctx.fillRect(40, H-40, W-60, 1);
-    ctx.globalAlpha = 1;
-
-    // bars
-    const chartW = W-70, chartH = H-70;
-    for(let i=0;i<bins;i++){
-      const x0 = 45 + i*(chartW/bins);
-      const h = (counts[i]/peak) * chartH;
-      ctx.globalAlpha = 0.18;
-      ctx.fillRect(x0, H-40-h, (chartW/bins)-3, h);
-      ctx.globalAlpha = 1;
+    // Painter: draw quads back-to-front using avg depth
+    const quads = [];
+    for(let i=0;i<tenors.length-1;i++){
+      for(let j=0;j<mons.length-1;j++){
+        const a=pts[i][j], b=pts[i][j+1], c=pts[i+1][j+1], d=pts[i+1][j];
+        // approximate depth by avg z after rotation: we'll use projected Z
+        quads.push({a,b,c,d});
+      }
     }
 
-    // labels
-    ctx.globalAlpha = 0.8;
-    ctx.font = "16px ui-sans-serif, system-ui";
-    ctx.fillText("Payoff", 44, 18);
-    ctx.globalAlpha = 0.75;
-    ctx.font = "12px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
-    ctx.fillText("min " + min.toFixed(1), 45, H-18);
-    ctx.fillText("max " + max.toFixed(1), W-140, H-18);
-    ctx.globalAlpha = 1;
-  }
+    // Pre-project points used in quads to avoid recompute
+    function P(p){
+      return project3D(p.x, p.y, p.z, W, H);
+    }
 
-  function drawCurve(canvas, spots, prices){
-    const ctx = canvas.getContext("2d");
-    const W = canvas.width, H = canvas.height;
-    ctx.clearRect(0,0,W,H);
+    // Sort by depth
+    quads.sort((q1,q2)=>{
+      const p1 = [P(q1.a),P(q1.b),P(q1.c),P(q1.d)];
+      const p2 = [P(q2.a),P(q2.b),P(q2.c),P(q2.d)];
+      const z1 = (p1[0].Z+p1[1].Z+p1[2].Z+p1[3].Z)/4;
+      const z2 = (p2[0].Z+p2[1].Z+p2[2].Z+p2[3].Z)/4;
+      return z2 - z1;
+    });
 
-    if(!spots || spots.length<2) return;
+    // Draw quads with vibrant gradient mapped to vol level
+    for(const q of quads){
+      const pa=P(q.a), pb=P(q.b), pc=P(q.c), pd=P(q.d);
+      const vAvg = (q.a.v+q.b.v+q.c.v+q.d.v)/4;
+      const t = (vAvg - zMin) / Math.max(1e-9, (zMax - zMin));
 
-    const xmin = Math.min(...spots), xmax = Math.max(...spots);
-    const ymin = Math.min(...prices), ymax = Math.max(...prices);
+      // Color ramp: cyan -> violet -> orange
+      const r = Math.floor(40 + 215*Math.max(0, t-0.55)/0.45);
+      const g = Math.floor(220 - 120*t);
+      const b = Math.floor(220 - 180*Math.max(0, t-0.25)/0.75);
 
-    const padL=45, padB=40, padT=20, padR=20;
-    const xmap = (x)=> padL + (x-xmin)/(xmax-xmin)*(W-padL-padR);
-    const ymap = (y)=> (H-padB) - (y-ymin)/(ymax-ymin)*(H-padT-padB);
+      ctx.beginPath();
+      ctx.moveTo(pa.X, pa.Y);
+      ctx.lineTo(pb.X, pb.Y);
+      ctx.lineTo(pc.X, pc.Y);
+      ctx.lineTo(pd.X, pd.Y);
+      ctx.closePath();
 
-    // axes
-    ctx.globalAlpha = 0.25;
-    ctx.fillStyle = "#fff";
-    ctx.fillRect(padL, padT, 1, H-padT-padB);
-    ctx.fillRect(padL, H-padB, W-padL-padR, 1);
-    ctx.globalAlpha = 1;
+      ctx.fillStyle = `rgba(${r},${g},${b},0.16)`;
+      ctx.fill();
 
-    // line
+      ctx.strokeStyle = `rgba(${r},${g},${b},0.30)`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    // Axes labels
     ctx.globalAlpha = 0.85;
-    ctx.beginPath();
-    ctx.moveTo(xmap(spots[0]), ymap(prices[0]));
-    for(let i=1;i<spots.length;i++){
-      ctx.lineTo(xmap(spots[i]), ymap(prices[i]));
+    ctx.font = "16px ui-sans-serif, system-ui";
+    ctx.fillStyle = "rgba(255,255,255,0.85)";
+    ctx.fillText("Implied Vol Surface", 18, 28);
+
+    ctx.globalAlpha = 0.70;
+    ctx.font = "12px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
+    ctx.fillText("Drag: rotate • Wheel: zoom", 18, 50);
+    ctx.globalAlpha = 1;
+  }
+
+  function attachSurfaceControls(){
+    const ctx = cvSurf.getContext("2d");
+
+    function redraw(){
+      const pars = getSurfPars();
+      drawSurface(ctx, cvSurf.width, cvSurf.height, pars);
+      drawSmileSlice();
+      drawTermSlice();
     }
-    ctx.strokeStyle = "#fff";
-    ctx.lineWidth = 2;
+
+    cvSurf.addEventListener("mousedown", (e)=>{
+      view.drag = true;
+      view.lastX = e.clientX; view.lastY = e.clientY;
+    });
+    window.addEventListener("mouseup", ()=>{ view.drag=false; });
+    window.addEventListener("mousemove", (e)=>{
+      if(!view.drag) return;
+      const dx = e.clientX - view.lastX;
+      const dy = e.clientY - view.lastY;
+      view.lastX = e.clientX; view.lastY = e.clientY;
+      view.yaw   += dx * 0.006;
+      view.pitch += dy * 0.004;
+      view.pitch = Math.max(-1.2, Math.min(1.2, view.pitch));
+      redraw();
+    });
+    cvSurf.addEventListener("wheel", (e)=>{
+      e.preventDefault();
+      const s = (e.deltaY>0) ? 0.95 : 1.05;
+      view.zoom = Math.max(0.65, Math.min(2.2, view.zoom * s));
+      redraw();
+    }, {passive:false});
+
+    return redraw;
+  }
+
+  // ---------------------------------------
+  // Slices rendering
+  // ---------------------------------------
+  function drawAxes(ctx, W,H, title){
+    ctx.clearRect(0,0,W,H);
+    const bg = ctx.createLinearGradient(0,0,W,H);
+    bg.addColorStop(0, "rgba(0,255,200,0.05)");
+    bg.addColorStop(1, "rgba(255,120,0,0.03)");
+    ctx.fillStyle = bg;
+    ctx.fillRect(0,0,W,H);
+
+    ctx.globalAlpha = 0.25;
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(55, 20, 1, H-60);
+    ctx.fillRect(55, H-40, W-75, 1);
+    ctx.globalAlpha = 0.9;
+    ctx.font = "15px ui-sans-serif, system-ui";
+    ctx.fillText(title, 18, 22);
+    ctx.globalAlpha = 1;
+  }
+
+  function drawSmileSlice(){
+    const ctx = cvSmile.getContext("2d");
+    const W = cvSmile.width, H = cvSmile.height;
+    drawAxes(ctx,W,H,"Smile slice (vol vs moneyness)");
+
+    const pars = getSurfPars();
+    const T = +TENOR.value;
+
+    const xs=[], ys=[];
+    for(let m=0.60; m<=1.40+1e-9; m+=0.02){
+      xs.push(m);
+      ys.push(volSurface(T, m, pars));
+    }
+
+    const xmin=Math.min(...xs), xmax=Math.max(...xs);
+    const ymin=Math.min(...ys), ymax=Math.max(...ys);
+    const xmap = (x)=> 55 + (x-xmin)/(xmax-xmin)*(W-85);
+    const ymap = (y)=> (H-40) - (y-ymin)/(ymax-ymin)*(H-70);
+
+    const grad = ctx.createLinearGradient(55, 0, W-30, 0);
+    grad.addColorStop(0, "rgba(0,255,200,0.85)");
+    grad.addColorStop(0.5, "rgba(140,90,255,0.90)");
+    grad.addColorStop(1, "rgba(255,140,0,0.85)");
+
+    ctx.beginPath();
+    ctx.moveTo(xmap(xs[0]), ymap(ys[0]));
+    for(let i=1;i<xs.length;i++) ctx.lineTo(xmap(xs[i]), ymap(ys[i]));
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 3;
+    ctx.globalAlpha = 0.95;
     ctx.stroke();
 
-    ctx.globalAlpha = 0.8;
-    ctx.font = "16px ui-sans-serif, system-ui";
-    ctx.fillText("Price vs Spot (local)", padL, 18);
+    // marker at MON
+    const m0 = +MON.value;
+    const v0 = volSurface(T, m0, pars);
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = "rgba(255,255,255,0.92)";
+    ctx.beginPath(); ctx.arc(xmap(m0), ymap(v0), 5, 0, Math.PI*2); ctx.fill();
 
     ctx.globalAlpha = 0.75;
     ctx.font = "12px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
-    ctx.fillText("S: " + xmin.toFixed(0) + " → " + xmax.toFixed(0), padL, H-18);
-    ctx.fillText("Px: " + ymin.toFixed(1) + " → " + ymax.toFixed(1), W-190, H-18);
+    ctx.fillText("T=" + T.toFixed(2) + "y", 60, H-16);
+    ctx.fillText("m*=" + m0.toFixed(2) + " vol=" + fmtPct(v0), 160, H-16);
     ctx.globalAlpha = 1;
   }
 
+  function drawTermSlice(){
+    const ctx = cvTerm.getContext("2d");
+    const W = cvTerm.width, H = cvTerm.height;
+    drawAxes(ctx,W,H,"Term slice (vol vs tenor)");
+
+    const pars = getSurfPars();
+    const m = +MON.value;
+
+    const xs=[], ys=[];
+    for(let T=0.10; T<=2.00+1e-9; T+=0.05){
+      xs.push(T);
+      ys.push(volSurface(T, m, pars));
+    }
+
+    const xmin=Math.min(...xs), xmax=Math.max(...xs);
+    const ymin=Math.min(...ys), ymax=Math.max(...ys);
+    const xmap = (x)=> 55 + (x-xmin)/(xmax-xmin)*(W-85);
+    const ymap = (y)=> (H-40) - (y-ymin)/(ymax-ymin)*(H-70);
+
+    const grad = ctx.createLinearGradient(55, 0, W-30, 0);
+    grad.addColorStop(0, "rgba(0,255,200,0.85)");
+    grad.addColorStop(0.5, "rgba(140,90,255,0.90)");
+    grad.addColorStop(1, "rgba(255,140,0,0.85)");
+
+    ctx.beginPath();
+    ctx.moveTo(xmap(xs[0]), ymap(ys[0]));
+    for(let i=1;i<xs.length;i++) ctx.lineTo(xmap(xs[i]), ymap(ys[i]));
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 3;
+    ctx.globalAlpha = 0.95;
+    ctx.stroke();
+
+    // marker at TENOR
+    const T0 = +TENOR.value;
+    const v0 = volSurface(T0, m, pars);
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = "rgba(255,255,255,0.92)";
+    ctx.beginPath(); ctx.arc(xmap(T0), ymap(v0), 5, 0, Math.PI*2); ctx.fill();
+
+    ctx.globalAlpha = 0.75;
+    ctx.font = "12px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
+    ctx.fillText("m=" + m.toFixed(2), 60, H-16);
+    ctx.fillText("T*=" + T0.toFixed(2) + " vol=" + fmtPct(v0), 160, H-16);
+    ctx.globalAlpha = 1;
+  }
+
+  // ---------------------------------------
+  // Histogram drawing
+  // ---------------------------------------
+  function drawHist(payoffs){
+    const ctx = cvHist.getContext("2d");
+    const W = cvHist.width, H = cvHist.height;
+    ctx.clearRect(0,0,W,H);
+
+    const bg = ctx.createLinearGradient(0,0,W,H);
+    bg.addColorStop(0, "rgba(0,255,200,0.05)");
+    bg.addColorStop(1, "rgba(255,140,0,0.03)");
+    ctx.fillStyle = bg;
+    ctx.fillRect(0,0,W,H);
+
+    if(!payoffs || payoffs.length===0) return;
+
+    let min=1e9, max=-1e9;
+    for(let i=0;i<payoffs.length;i++){ min=Math.min(min,payoffs[i]); max=Math.max(max,payoffs[i]); }
+    if(min===max){ min-=1; max+=1; }
+
+    const bins=34;
+    const bw=(max-min)/bins;
+    const counts=new Array(bins).fill(0);
+    for(let i=0;i<payoffs.length;i++){
+      let b=Math.floor((payoffs[i]-min)/bw);
+      if(b<0) b=0;
+      if(b>=bins) b=bins-1;
+      counts[b]++;
+    }
+    const peak=Math.max(...counts);
+
+    ctx.globalAlpha=0.25;
+    ctx.fillStyle="#fff";
+    ctx.fillRect(55, 20, 1, H-60);
+    ctx.fillRect(55, H-40, W-85, 1);
+    ctx.globalAlpha=1;
+
+    const grad = ctx.createLinearGradient(55,0,W-30,0);
+    grad.addColorStop(0, "rgba(0,255,200,0.55)");
+    grad.addColorStop(0.5, "rgba(140,90,255,0.60)");
+    grad.addColorStop(1, "rgba(255,140,0,0.55)");
+
+    const chartW=W-95, chartH=H-70;
+    for(let i=0;i<bins;i++){
+      const x0=60 + i*(chartW/bins);
+      const h=(counts[i]/peak)*chartH;
+      ctx.fillStyle=grad;
+      ctx.globalAlpha=0.18 + 0.12*(counts[i]/peak);
+      ctx.fillRect(x0, H-40-h, (chartW/bins)-3, h);
+    }
+    ctx.globalAlpha=0.9;
+    ctx.font="15px ui-sans-serif, system-ui";
+    ctx.fillStyle="rgba(255,255,255,0.90)";
+    ctx.fillText("Payoff distribution (sim)", 18, 22);
+
+    ctx.globalAlpha=0.75;
+    ctx.font="12px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
+    ctx.fillText("min " + min.toFixed(1), 60, H-16);
+    ctx.fillText("max " + max.toFixed(1), W-160, H-16);
+    ctx.globalAlpha=1;
+  }
+
+  // ---------------------------------------
+  // Diagnostics bars UI
+  // ---------------------------------------
+  function renderBars(metrics){
+    // Normalize by max abs
+    const entries = [
+      ["Delta", metrics.delta],
+      ["Gamma", metrics.gamma],
+      ["Vega", metrics.vega],
+      ["Vanna", metrics.vanna],
+      ["Vomma", metrics.vomma]
+    ];
+    const m = Math.max(...entries.map(e=>Math.abs(e[1])), 1e-9);
+
+    diagBars.innerHTML = "";
+    for(const [name,val] of entries){
+      const w = Math.min(1, Math.abs(val)/m);
+      const sign = val>=0 ? "+" : "−";
+      const row = document.createElement("div");
+      row.style.borderRadius="14px";
+      row.style.padding="10px 12px";
+      row.style.background="rgba(255,255,255,0.03)";
+
+      row.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+          <div style="font-weight:900; letter-spacing:.10em; text-transform:uppercase; font-size:12px; opacity:.85;">${name}</div>
+          <div style="font-variant-numeric:tabular-nums; font-weight:950; opacity:.95;">${sign}${Math.abs(val).toFixed(4)}</div>
+        </div>
+        <div style="margin-top:8px; height:10px; border-radius:999px; background:rgba(255,255,255,0.06); overflow:hidden;">
+          <div style="height:100%; width:${(w*100).toFixed(1)}%;
+            background:linear-gradient(90deg, rgba(0,255,200,0.65), rgba(140,90,255,0.70), rgba(255,140,0,0.62));
+            border-radius:999px;"></div>
+        </div>
+      `;
+      diagBars.appendChild(row);
+    }
+  }
+
+  // ---------------------------------------
+  // State getters + label sync
+  // ---------------------------------------
+  function getSurfPars(){
+    return {
+      atm: +ATM.value,
+      skew: +SKEW.value,
+      smile: +SMILE.value,
+      term: +TERM.value
+    };
+  }
+
+  function syncLabels(){
+    lbl.S0v.textContent = (+S0.value).toFixed(0);
+    lbl.Rv.textContent = fmtPct(+R.value);
+    lbl.Qv.textContent = fmtPct(+Q.value);
+    lbl.KIv.textContent = (+KI.value).toFixed(0);
+    lbl.Cv.textContent = fmtPct(+C.value);
+    lbl.Nv.textContent = fmtInt(+N.value);
+
+    lbl.ATMv.textContent = fmtPct(+ATM.value);
+    lbl.SKEWv.textContent = (+SKEW.value).toFixed(2);
+    lbl.SMILEv.textContent = (+SMILE.value).toFixed(2);
+    lbl.TERMv.textContent = (+TERM.value).toFixed(2);
+
+    lbl.TENORv.textContent = (+TENOR.value).toFixed(2) + "y";
+    lbl.MONv.textContent = (+MON.value).toFixed(2);
+  }
+
+  // ---------------------------------------
+  // Defaults
+  // ---------------------------------------
+  function setDefaults(){
+    S0.value = 100;
+    R.value = 0.04;
+    Q.value = 0.01;
+    KI.value = 70;
+    C.value = 0.02;
+    N.value = 3000;
+
+    ATM.value = 0.28;
+    SKEW.value = -0.55;
+    SMILE.value = 0.45;
+    TERM.value = 0.10;
+
+    TENOR.value = 1.00;
+    MON.value = 1.00;
+
+    syncLabels();
+  }
+
+  // ---------------------------------------
+  // Run pricing
+  // ---------------------------------------
   async function run(){
-    // base params
-    const base = {
+    // show placeholders
+    Object.values(kpi).forEach(x=>x.textContent="…");
+
+    // allow UI paint
+    await new Promise(r=>setTimeout(r, 12));
+
+    const surfPars = getSurfPars();
+    const res = priceAutocall({
       s0: +S0.value,
-      vol: +VOL.value,
       r: +R.value,
       q: +Q.value,
       ki: +KI.value,
       coup: +C.value,
       paths: +N.value,
-      seed: (Date.now() & 0xffffffff) >>> 0
-    };
+      seed: (Date.now() & 0xffffffff) >>> 0,
+      surfPars,
+      sliceTenor: +TENOR.value
+    });
 
-    // run base pricing
-    px.textContent = "…";
-    pAC.textContent = "…";
-    dlt.textContent = "…";
-    veg.textContent = "…";
+    // KPIs
+    kpi.px.textContent = fmtNum(res.px);
+    kpi.pAC.textContent = (100*res.pac).toFixed(1) + "%";
+    kpi.dlt.textContent = res.greeks.delta.toFixed(4);
+    kpi.gam.textContent = res.greeks.gamma.toFixed(5);
+    kpi.veg.textContent = res.greeks.vega.toFixed(3);
+    kpi.van.textContent = res.greeks.vanna.toFixed(4);
+    kpi.vom.textContent = res.greeks.vomma.toFixed(3);
+    kpi.skrp.textContent = fmtPct(res.skewProxy);
 
-    // allow UI to update
-    await new Promise(r=>setTimeout(r, 15));
+    renderBars(res.greeks);
+    drawHist(res.payoffs);
 
-    const res = priceAutocall(base);
-    const g = bumpGreeks(base);
-
-    px.textContent  = fmtNum(res.px);
-    pAC.textContent = (100*res.pac).toFixed(1) + "%";
-    dlt.textContent = g.delta.toFixed(3);
-    veg.textContent = g.vega.toFixed(2);
-
-    drawHist(el("hist"), res.payoffs);
-
-    // local curve around spot
-    const spots = [];
-    const prices = [];
-    const sMin = Math.max(40, base.s0 - 30);
-    const sMax = Math.min(160, base.s0 + 30);
-    const grid = 11;
-    for(let i=0;i<grid;i++){
-      const s = sMin + (sMax-sMin)*(i/(grid-1));
-      const r2 = priceAutocall({...base, s0:s, paths: Math.max(400, Math.floor(base.paths/3)), seed: base.seed + i*31}).px;
-      spots.push(s);
-      prices.push(r2);
-    }
-    drawCurve(el("curve"), spots, prices);
+    // redraw surface + slices too (so it feels “alive”)
+    redrawAll();
   }
 
-  // Buttons
-  el("runBtn").addEventListener("click", function(e){ e.preventDefault(); run(); });
-  el("resetBtn").addEventListener("click", function(e){ e.preventDefault(); setDefaults(); run(); });
+  // ---------------------------------------
+  // Surface + slices redraw
+  // ---------------------------------------
+  const redrawSurface = attachSurfaceControls();
+  function redrawAll(){
+    syncLabels();
+    redrawSurface();
+  }
 
-  // init
+  // Hook UI
+  [S0,R,Q,KI,C,N,ATM,SKEW,SMILE,TERM,TENOR,MON].forEach(inp=>{
+    inp.addEventListener("input", ()=>redrawAll());
+  });
+
+  el("runBtn").addEventListener("click", (e)=>{ e.preventDefault(); run(); });
+  el("resetBtn").addEventListener("click", (e)=>{ e.preventDefault(); setDefaults(); redrawAll(); run(); });
+
+  // Init
   setDefaults();
+  redrawAll();
   run();
 })();
 </script>
+
 </body>
 </html>
