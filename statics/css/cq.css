@@ -467,3 +467,66 @@ hr{
   display: flex;
   justify-content: space-between;
 }
+/* Floating headline banner */
+.cq-float-banner{
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 9999;
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+.cq-float-banner__inner{
+  flex: 1;
+  display:flex;
+  align-items:center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(10px);
+  text-decoration:none;
+  color: rgba(255,255,255,.92);
+  box-shadow: 0 18px 60px rgba(0,0,0,.45);
+}
+.cq-float-banner__pill{
+  display:inline-flex;
+  align-items:center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+  background: rgba(255,207,122,.92);
+  color: rgba(0,0,0,.9);
+}
+.cq-float-banner__title{
+  font-weight: 800;
+  letter-spacing: .01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cq-float-banner__cta{
+  opacity:.85;
+  font-weight: 900;
+}
+.cq-float-banner__close{
+  width: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.92);
+  cursor:pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+.cq-float-banner__close:hover{ background: rgba(255,255,255,.12); }
+
+@media (max-width: 720px){
+  .cq-float-banner__cta{ display:none; }
+}

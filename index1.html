@@ -1,15 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-  
-  <link rel="canonical" href="https://coffee.coffeequant.com/" />
-  <meta property="og:site_name" content="CoffeeQuant" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://coffee.coffeequant.com/" />
-  <meta property="og:title" content="CoffeeQuant" />
-  <meta property="og:description" content="Trader-first notes on markets, volatility, and structured products." />
-  <meta property="og:image" content="https://coffee.coffeequant.com/statics/img/coffeequant_coffee.png" />
-<meta charset="utf-8" />
+  <meta charset="utf-8" />
   <title>CoffeeQuant — espresso shots of structured intuition</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -319,90 +311,6 @@
 }
 
 
-
-
-/* ===== Floating banner (banner.json) ===== */
-#cq-latest-banner{
-  position: sticky;
-  top: 10px;
-  z-index: 50;
-  margin: 10px auto 0;
-  max-width: 1160px;
-  padding: 0 16px;
-}
-.cq-banner{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  border-radius: 14px;
-  padding: 10px 12px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(20,20,20,.72);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 10px 30px rgba(0,0,0,.20);
-}
-.cq-banner-left{display:flex;align-items:center;gap:10px;min-width:0;}
-.cq-banner-pill{
-  font-size:12px;
-  font-weight:800;
-  letter-spacing:.08em;
-  text-transform: uppercase;
-  padding: 4px 9px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.10);
-  border: 1px solid rgba(255,255,255,.12);
-}
-.cq-banner-title{
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.25;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 68ch;
-}
-.cq-banner a{ text-decoration:none; }
-.cq-banner-cta{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  font-weight:800;
-  font-size:13px;
-  padding: 8px 10px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.06);
-  transition: transform .12s ease, background .12s ease;
-}
-.cq-banner-cta:hover{ transform: translateY(-1px); background: rgba(255,255,255,.10); }
-@media (max-width: 720px){
-  .cq-banner{flex-direction:column;align-items:stretch;}
-  .cq-banner-title{white-space:normal;max-width:none;}
-  .cq-banner-cta{justify-content:center;}
-}
-
-/* ===== Counter bar one-line ===== */
-.cq-counterbar{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  flex-wrap:wrap;
-  justify-content:center;
-}
-.cq-counterbar .cq-metric{
-  display:inline-flex;
-  align-items:baseline;
-  gap:8px;
-  padding: 8px 10px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.04);
-}
-.cq-counterbar .cq-metric .k{font-weight:800;opacity:.85;}
-.cq-counterbar .cq-metric .v{font-variant-numeric: tabular-nums; font-weight:900;}
-
 </style>
 </head>
 
@@ -422,15 +330,7 @@
 
     <!-- TOP BAR -->
     <header class="cq-topbar">
-      
-  <link rel="canonical" href="https://coffee.coffeequant.com/" />
-  <meta property="og:site_name" content="CoffeeQuant" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://coffee.coffeequant.com/" />
-  <meta property="og:title" content="CoffeeQuant" />
-  <meta property="og:description" content="Trader-first notes on markets, volatility, and structured products." />
-  <meta property="og:image" content="https://coffee.coffeequant.com/statics/img/coffeequant_coffee.png" />
-<div class="cq-brand">
+      <div class="cq-brand">
         <div class="cq-mark">☕</div>
         <div class="cq-titleblock">
           <div class="t1">CoffeeQuant</div>
@@ -822,7 +722,7 @@ async function boot() {
   const COUNTER_API = "https://script.google.com/macros/s/AKfycbwzpejJn6sddqxBGQGp6-ZNCBOTjFH1-Z16kTB-hFD0ea7TVtv5-NV1UR8GgewEfR8s/exec";
 
   // ✅ Share URL (always share homepage, not full deep page)
-  const SHARE_URL = (document.querySelector('link[rel="canonical"]')?.href || window.location.href);
+  const SHARE_URL = "https://coffee.coffeequant.com/";
 
   const fmt = new Intl.NumberFormat("en-US");
 
@@ -950,7 +850,7 @@ async function boot() {
 </script>
 <script>
 (function(){
-  var BANNER_JSON = "statics/data/banner.json";
+  var BANNER_JSON = "/statics/data/banner.json";
   var bannerEl = document.getElementById("cq-latest-banner");
   var linkEl = document.getElementById("cq-latest-link");
   var titleEl = document.getElementById("cq-latest-title");

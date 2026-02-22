@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Oil Is Not About Oil Anymore — CoffeeQuant</title>
+<link rel="stylesheet" href="/statics/css/cq.css">
+
+<style>
+.cqx-chart-box{
+  background:#0f1116;
+  border:1px solid rgba(255,255,255,0.08);
+  padding:20px;
+  border-radius:16px;
+  margin:24px 0;
+}
+.cqx-slider{
+  width:100%;
+}
+.cqx-output{
+  font-weight:800;
+  font-size:20px;
+  margin-top:10px;
+  color:#ffcf7a;
+}
+.cqx-regime{
+  display:flex;
+  gap:12px;
+  margin-top:10px;
+}
+.cqx-regime button{
+  padding:8px 14px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,0.2);
+  background:#1a1f2b;
+  color:white;
+  cursor:pointer;
+}
+.cqx-regime button.active{
+  background:#ffcf7a;
+  color:black;
+}
+</style>
+</head>
+
+<body class="cq-body">
+
+<article class="cq-article">
+
+<h1>Oil Is Not About Oil Anymore — It’s About Optionality</h1>
+
+<p><strong>Brent is up ~18% YTD</strong>. It briefly touched <strong>$72</strong>.  
+Options volumes surged. Tanker rates exploded above <strong>$150k/day</strong>.  
+Inventories fell by roughly <strong>9m barrels</strong> in a single week.</p>
+
+<p>This is not a supply story.  
+It’s a convexity story.</p>
+
+<hr>
+
+<h2>1️⃣ The Setup: Tight vs Surplus</h2>
+
+<p>IEA estimated global production around <strong>108m barrels/day</strong>,  
+nearly <strong>3m barrels/day above consumption</strong> late last year.</p>
+
+<p>On paper, that’s surplus.</p>
+
+<p>Then:</p>
+<ul>
+<li>Kazakhstan export disruptions</li>
+<li>US freeze → inventory collapse</li>
+<li>Iran escalation risk</li>
+</ul>
+
+<p>The market went from pricing surplus… to pricing fragility.</p>
+
+<hr>
+
+<h2>2️⃣ Risk Premium Visualization</h2>
+
+<div class="cqx-chart-box">
+<label>Geopolitical Risk Premium ($/barrel):</label>
+<input type="range" min="0" max="15" value="5" class="cqx-slider" id="riskSlider">
+<div class="cqx-output" id="riskOutput"></div>
+</div>
+
+<script>
+const slider = document.getElementById("riskSlider");
+const output = document.getElementById("riskOutput");
+
+function updateRisk(){
+  const basePrice = 66;   // conservative baseline from article
+  const risk = parseInt(slider.value);
+  const total = basePrice + risk;
+  output.innerHTML = "Implied Brent Price ≈ $" + total + " (" + risk + " premium)";
+}
+slider.oninput = updateRisk;
+updateRisk();
+</script>
+
+<p>Analysts have floated risk premiums of up to <strong>$10</strong>.  
+At $10 premium, oil is no longer about supply — it’s about optionality.</p>
+
+<hr>
+
+<h2>3️⃣ Strait of Hormuz Stress Calculator</h2>
+
+<div class="cqx-chart-box">
+<label>Disruption % of 20% global seaborne flow:</label>
+<input type="range" min="0" max="20" value="5" class="cqx-slider" id="hormuzSlider">
+<div class="cqx-output" id="hormuzOutput"></div>
+</div>
+
+<script>
+const hSlider = document.getElementById("hormuzSlider");
+const hOutput = document.getElementById("hormuzOutput");
+
+function updateHormuz(){
+  const disruption = parseInt(hSlider.value);
+  const globalFlow = 108; // mb/d
+  const impact = globalFlow * (disruption/100) * 0.20;
+  hOutput.innerHTML = "Potential supply shock ≈ " + impact.toFixed(2) + " mb/d";
+}
+hSlider.oninput = updateHormuz;
+updateHormuz();
+</script>
+
+<p>If even 5% of Hormuz flow is disrupted, that’s material relative to a 3mb surplus.</p>
+
+<hr>
+
+<h2>4️⃣ Volatility Is the Real Signal</h2>
+
+<p>Options activity surged. Volatility is at the highest since the last Iran episode.</p>
+
+<p>This means:</p>
+
+<ul>
+<li>Traders are not positioning for gradual drift</li>
+<li>They are positioning for <strong>gap risk</strong></li>
+<li>Calls are being bought not for carry — but for protection</li>
+</ul>
+
+<p>Oil right now trades like a digital with fat tails.</p>
+
+<hr>
+
+<h2>5️⃣ Correlation Regime Screener</h2>
+
+<div class="cqx-chart-box">
+<div class="cqx-regime">
+<button onclick="setRegime('riskOn')" id="riskOnBtn">Risk On</button>
+<button onclick="setRegime('riskOff')" id="riskOffBtn">Risk Off</button>
+</div>
+<div class="cqx-output" id="regimeOutput"></div>
+</div>
+
+<script>
+function setRegime(type){
+  document.getElementById("riskOnBtn").classList.remove("active");
+  document.getElementById("riskOffBtn").classList.remove("active");
+
+  if(type === "riskOn"){
+    document.getElementById("riskOnBtn").classList.add("active");
+    document.getElementById("regimeOutput").innerHTML =
+      "Oil correlates with equities, USD weakens, metals rise.";
+  } else {
+    document.getElementById("riskOffBtn").classList.add("active");
+    document.getElementById("regimeOutput").innerHTML =
+      "Oil spikes with USD strength, equities sell off, vol explodes.";
+  }
+}
+setRegime('riskOff');
+</script>
+
+<hr>
+
+<h2>6️⃣ Why This Matters For Traders</h2>
+
+<p>When:</p>
+
+<ul>
+<li>Index is flat</li>
+<li>Single stocks volatile</li>
+<li>Oil gap risk rising</li>
+</ul>
+
+<p>Correlations compress under stress.</p>
+
+<p>When crisis hits, everything trades like one asset.</p>
+
+<p>Oil is the first tremor.</p>
+
+<hr>
+
+<h2>Conclusion</h2>
+
+<p>This is not a supply story.</p>
+
+<p>This is a convexity regime.</p>
+
+<p>If you’re short oil vol because “there’s surplus”,  
+you are short optionality in a geopolitical market.</p>
+
+<p><strong>Fasten your seatbelt.</strong></p>
+
+</article>
+
+</body>
+</html>
