@@ -1,6 +1,16 @@
 {
   "items": [
     {
+      "date": "2026-02-27",
+      "title": "The AI Tax Hole: When Automation Cuts Jobs, Governments Lose",
+      "href": "statics/WriteUps/ai-tax-hole-rates.html",
+      "link": "statics/WriteUps/ai-tax-hole-rates.html",
+      "tag": "Macro / Convexity",
+      "premium": false,
+      "hero": "statics/img/newarticles/image_new7.jpeg",
+      "excerpt": "[[pill:Macro]] [[pill:Correlation]] [[pill:Convexity]] The scenario nobody is pricing cleanly Markets are busy arguing about AI winners vs AI bubble. The quieter scenario is mor..."
+    },
+    {
       "date": "2026-02-28",
       "title": "Correlation Is the Hidden Lever: Why Calm Index Days Can Still Hurt",
       "href": "statics/WriteUps/correlation-hidden-lever-convexity-simple.html",
