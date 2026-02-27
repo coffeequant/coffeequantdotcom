@@ -1,6 +1,16 @@
 {
   "items": [
     {
+      "date": "2026-02-28",
+      "title": "Correlation Is the Hidden Lever: Why Calm Index Days Can Still Hurt",
+      "href": "statics/WriteUps/correlation-hidden-lever-convexity-simple.html",
+      "link": "statics/WriteUps/correlation-hidden-lever-convexity-simple.html",
+      "tag": "Macro • Correlation • Convexity",
+      "premium": false,
+      "hero": "statics/img/newarticles/image_new1.jpeg",
+      "excerpt": "[[pill:Macro]] [[pill:Correlation]] [[pill:Convexity]] [[pill:Risk]] :::callout info The tape (only the numbers from your note) US PPI: +0.5% (headline), with the core gauge (ex..."
+    },
+    {
       "date": "2026-02-27",
       "title": "The AI Tax Hole: When Automation Cuts Jobs, Governments Lose",
       "href": "statics/WriteUps/ai-tax-hole-rates.html",
@@ -10,16 +20,6 @@
       "thumb": "statics/img/newarticles/image_new5.jpeg",
       "hero": "statics/img/newarticles/image_new7.jpeg",
       "excerpt": "[[pill:Macro]] [[pill:Correlation]] [[pill:Convexity]] The scenario nobody is pricing cleanly Markets are busy arguing about AI winners vs AI bubble. The quieter scenario is mor..."
-    },
-    {
-      "date": "2026-02-28",
-      "title": "Correlation Is the Hidden Lever: Why Calm Index Days Can Still Hurt",
-      "href": "statics/WriteUps/correlation-hidden-lever-convexity-simple.html",
-      "link": "statics/WriteUps/correlation-hidden-lever-convexity-simple.html",
-      "tag": "Macro • Correlation • Convexity",
-      "premium": false,
-      "hero": "statics/img/newarticles/image_new1.jpeg",
-      "excerpt": "[[pill:Macro]] [[pill:Correlation]] [[pill:Convexity]] [[pill:Risk]] :::callout info The tape (only the numbers from your note) US PPI: +0.5% (headline), with the core gauge (ex..."
     },
     {
       "date": "2026-02-27",
