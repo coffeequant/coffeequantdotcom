@@ -406,6 +406,9 @@
 
 /* ================= Correlation Galaxy ================= */
 
+
+
+
 .cq-galaxy-section{
   margin-top: 24px;
   padding: 24px 18px 40px;
@@ -449,6 +452,42 @@
   width:100%;
   height:420px;
   display:block;
+}
+
+
+.cq-regime-toggles{
+  display:flex;
+  gap:8px;
+  margin-left:10px;
+  flex-wrap:wrap;
+}
+
+.cq-toggle{
+  appearance:none;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.20);
+  color: rgba(255,255,255,.85);
+  border-radius: 999px;
+  padding: 8px 10px;
+  font-weight: 800;
+  font-size: 12px;
+  cursor: pointer;
+  transition: transform .12s ease, opacity .12s ease, box-shadow .12s ease;
+}
+
+.cq-toggle:hover{ opacity:.95; transform: translateY(-1px); }
+
+.cq-toggle[aria-pressed="true"]{
+  box-shadow: 0 0 0 9999px rgba(255,255,255,.04) inset, 0 8px 24px rgba(0,0,0,.25);
+  border-color: rgba(255,255,255,.22);
+}
+
+.cq-toggle-war[aria-pressed="true"]{
+  box-shadow: 0 0 0 9999px rgba(255,120,90,.10) inset, 0 10px 26px rgba(0,0,0,.28);
+}
+
+.cq-toggle-ai[aria-pressed="true"]{
+  box-shadow: 0 0 0 9999px rgba(110,200,255,.10) inset, 0 10px 26px rgba(0,0,0,.28);
 }
 
 </style>
@@ -546,22 +585,34 @@
     </section>
 
     <!-- ===================== CQ Correlation Galaxy ===================== -->
+
+
+    <!-- ===================== CQ Correlation Galaxy ===================== -->
 <section id="cq-galaxy" class="cq-galaxy-section">
   <div class="cq-galaxy-header">
     <div>
       <h2>Correlation Galaxy</h2>
       <p>Watch how market structure tightens and loosens as correlation shifts.</p>
     </div>
+
     <div class="cq-galaxy-controls">
-      <label>Correlation Regime</label>
+      <label>Correlation</label>
       <input id="cqCorrSlider" type="range" min="0" max="100" value="40">
       <span id="cqCorrValue">0.40</span>
+
+      <div class="cq-regime-toggles">
+        <button id="cqToggleWar" class="cq-toggle cq-toggle-war" type="button" aria-pressed="false">
+          War regime
+        </button>
+        <button id="cqToggleAI" class="cq-toggle cq-toggle-ai" type="button" aria-pressed="false">
+          AI bubble regime
+        </button>
+      </div>
     </div>
   </div>
 
   <canvas id="cqGalaxyCanvas"></canvas>
 </section>
-
     <!-- CONTENT -->
     <div class="cq-grid">
 
@@ -1065,7 +1116,6 @@ async function boot() {
     });
 })();
 </script>
-
 <script>
 (function(){
 
@@ -1073,8 +1123,8 @@ const canvas = document.getElementById("cqGalaxyCanvas");
 if(!canvas) return;
 
 const ctx = canvas.getContext("2d");
-let W, H;
 
+let W,H;
 function resize(){
   W = canvas.width = canvas.offsetWidth;
   H = canvas.height = canvas.offsetHeight;
@@ -1085,12 +1135,33 @@ resize();
 const slider = document.getElementById("cqCorrSlider");
 const sliderVal = document.getElementById("cqCorrValue");
 
-let corr = slider.value / 100;
+let corr = slider.value/100;
 sliderVal.textContent = corr.toFixed(2);
 
 slider.addEventListener("input", ()=>{
-  corr = slider.value / 100;
+  corr = slider.value/100;
   sliderVal.textContent = corr.toFixed(2);
+});
+
+let warMode = false;
+let aiMode = false;
+
+document.getElementById("cqToggleWar").addEventListener("click", function(){
+  warMode = !warMode;
+  this.setAttribute("aria-pressed", warMode);
+  if(warMode){
+    slider.value = 70;
+    slider.dispatchEvent(new Event("input"));
+  }
+});
+
+document.getElementById("cqToggleAI").addEventListener("click", function(){
+  aiMode = !aiMode;
+  this.setAttribute("aria-pressed", aiMode);
+  if(aiMode){
+    slider.value = 35;
+    slider.dispatchEvent(new Event("input"));
+  }
 });
 
 const N = 22;
@@ -1100,50 +1171,59 @@ for(let i=0;i<N;i++){
   nodes.push({
     x: Math.random()*W,
     y: Math.random()*H,
-    vx: (Math.random()-.5)*0.4,
-    vy: (Math.random()-.5)*0.4,
-    vol: 0.5 + Math.random()*0.5
+    vx:(Math.random()-.5)*0.4,
+    vy:(Math.random()-.5)*0.4
   });
 }
 
 function animate(){
+
   ctx.clearRect(0,0,W,H);
 
-  // Glow background
-  const grad = ctx.createRadialGradient(W/2,H/2,50,W/2,H/2,Math.max(W,H));
-  grad.addColorStop(0,"rgba(255,207,122,.08)");
-  grad.addColorStop(1,"rgba(0,0,0,0)");
-  ctx.fillStyle = grad;
-  ctx.fillRect(0,0,W,H);
-
   nodes.forEach(n=>{
-    // pull toward center when correlation high
-    const cx = W/2;
-    const cy = H/2;
-    n.vx += (cx-n.x)*0.00002*corr;
-    n.vy += (cy-n.y)*0.00002*corr;
+
+    const cx=W/2, cy=H/2;
+    const dx=cx-n.x, dy=cy-n.y;
+
+    let pull = 0.00002*corr*(warMode?2.2:1);
+    let swirl = aiMode?0.0009:0.0003;
+    let jitter = warMode?0.22:0.08;
+
+    n.vx += dx*pull;
+    n.vy += dy*pull;
+
+    n.vx += -dy*swirl;
+    n.vy += dx*swirl;
+
+    n.vx += (Math.random()-.5)*jitter;
+    n.vy += (Math.random()-.5)*jitter;
+
+    n.vx *= .985;
+    n.vy *= .985;
 
     n.x += n.vx;
     n.y += n.vy;
 
-    // boundaries
     if(n.x<0||n.x>W) n.vx*=-1;
     if(n.y<0||n.y>H) n.vy*=-1;
   });
 
-  // draw connections
+  const threshold = 150*(1-corr*.6);
+
   for(let i=0;i<N;i++){
     for(let j=i+1;j<N;j++){
-      const dx = nodes[i].x - nodes[j].x;
-      const dy = nodes[i].y - nodes[j].y;
-      const d = Math.sqrt(dx*dx + dy*dy);
+      const dx=nodes[i].x-nodes[j].x;
+      const dy=nodes[i].y-nodes[j].y;
+      const d=Math.sqrt(dx*dx+dy*dy);
 
-      const threshold = 140 * (1 - corr*0.7);
+      if(d<threshold){
+        const alpha=(1-d/threshold)*0.45*corr;
+        ctx.strokeStyle = warMode
+          ? `rgba(255,120,90,${alpha})`
+          : aiMode
+            ? `rgba(110,200,255,${alpha})`
+            : `rgba(158,231,255,${alpha})`;
 
-      if(d < threshold){
-        const alpha = (1 - d/threshold) * 0.4 * corr;
-        ctx.strokeStyle = `rgba(158,231,255,${alpha})`;
-        ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(nodes[i].x,nodes[i].y);
         ctx.lineTo(nodes[j].x,nodes[j].y);
@@ -1152,11 +1232,14 @@ function animate(){
     }
   }
 
-  // draw nodes
   nodes.forEach(n=>{
     ctx.beginPath();
-    ctx.arc(n.x,n.y,3 + 4*n.vol*corr,0,Math.PI*2);
-    ctx.fillStyle = `rgba(255,207,122,${0.6 + 0.4*corr})`;
+    ctx.arc(n.x,n.y,4,0,Math.PI*2);
+    ctx.fillStyle = warMode
+      ? "rgba(255,207,122,.9)"
+      : aiMode
+        ? "rgba(158,231,255,.9)"
+        : "rgba(255,255,255,.9)";
     ctx.fill();
   });
 
@@ -1167,6 +1250,5 @@ animate();
 
 })();
 </script>
-
 </body>
 </html>
