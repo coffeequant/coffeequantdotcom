@@ -96,192 +96,398 @@ body{overflow-x:hidden;}
       <div class="cq-card-bd">
 <p><span class="cq-pill">Foundations</span> <span class="cq-pill">Oil</span> <span class="cq-pill">Convexity</span> <span class="cq-pill">Dispersion</span></p>
 
-<h2>When war hits the tape, convexity wakes up</h2>
+<div class="cq-callout cq-callout-info"><div class="cq-callout-hd">What you’ll learn (in 3 minutes)</div><div class="cq-callout-bd"><p>- Why <strong>war = convexity</strong> in oil (jumps, not drifts)<br>- Why <strong>correlation regimes</strong> matter more than “bull vs bear”<br>- How <strong>dispersion</strong> lets you trade war without one giant directional bet<br>- Two small widgets: a <strong>dispersion visual</strong> and an <strong>oil convexity<br>payoff simulator</strong></p></div></div>
+<h2>War headlines and oil options: why convexity matters</h2>
 
 <p>The US and Israel have begun striking targets across Iran. Iran has<br>retaliated. Airspace closures across the Gulf. Missile exchanges.<br>Regional escalation risk.</p>
 
-<p>Brent had already rallied nearly 20% year-to-date on tension buildup<br>and touched $73 per barrel before markets closed.</p>
+<p>Brent had already rallied nearly <strong>~20% year-to-date</strong> on tension<br>buildup and touched <strong>~$73/bbl</strong> before markets closed.</p>
 
-<p>When headlines look like this, traders don’t think in straight lines.</p>
+<p>When headlines look like this, markets don’t think in straight lines.</p>
 
-<p>They think in <strong>convexity</strong>.<br><hr><br><h2>What convexity really means in oil</h2></p>
+<p>They think in <strong>tails</strong>.<br>And tails are <strong>convexity</strong>.<br><hr><br><h2>Convexity in oil, explained like a trader</h2></p>
 
 <p>Convexity is simple:</p>
 
 <p>Small moves do little.<br>Large moves change everything.</p>
 
-<p>Oil pricing during peace:<br><ul class="cq-list-bullets"><br><li>Supply steady.</li><br><li>Shipping lanes open.</li><br><li>Spare capacity known.</li><br><li>Volatility moderate.</li><br></ul></p>
+<p>Peace regime (typical oil behavior):<br><ul class="cq-list-bullets"><br><li>Supply steady</li><br><li>Shipping lanes open</li><br><li>Spare capacity “known”</li><br><li>Volatility moderate</li><br></ul></p>
 
-<p>Oil pricing during war:<br><ul class="cq-list-bullets"><br><li>Strait of Hormuz risk.</li><br><li>Infrastructure damage.</li><br><li>Sanctions tighten.</li><br><li>Insurance costs spike.</li><br><li>Retaliation uncertainty.</li><br></ul></p>
+<p>War regime (oil behavior changes):<br><ul class="cq-list-bullets"><br><li>Strait of Hormuz risk</li><br><li>Infrastructure damage risk</li><br><li>Sanctions tighten</li><br><li>Insurance and freight spike</li><br><li>Retaliation timing uncertain</li><br></ul></p>
 
-<p>Oil doesn’t move linearly in war.<br>It jumps.</p>
+<p>Oil in war doesn’t “trend.”<br>It <strong>jumps</strong>.</p>
 
-<p>That jump risk is convex.</p>
+<p>Example intuition (not a forecast, just shape):</p>
 
-<p>Example intuition:</p>
+<p>If oil is <strong>$70</strong>:<br><ul class="cq-list-bullets"><br><li>Calm scenario: <strong>$65–$75</strong></li><br><li>Escalation scenario: <strong>$90–$100+</strong></li><br></ul></p>
 
-<p>If oil is $70:<br><ul class="cq-list-bullets"><br><li>Peace scenario → maybe $65–75 range.</li><br><li>Escalation scenario → $90, $100, maybe higher.</li><br></ul></p>
+<p>Downside is usually more gradual.<br>Upside can gap.</p>
 
-<p>The downside is gradual.<br>The upside can be explosive.</p>
+<p>That asymmetry is convexity.<br><hr><br><h2>Quick visual: oil payoff shape (linear vs convex)</h2></p>
 
-<p>That asymmetry is convexity.<br><hr><br><h2>Why owning “just oil” is not enough</h2></p>
+<section class="cq-card" style="margin-top:14px;">
+  <div class="cq-card-hd">
+    <div class="cq-kicker">Interactive</div>
+    <h2 style="margin:6px 0 0;">Oil convexity payoff simulator</h2>
+  </div>
+  <div class="cq-card-bd">
+    <div class="cq-callout cq-callout-warn">
+      <div class="cq-callout-hd">Why this matters in war</div>
+      <div class="cq-callout-bd">
+        <p>War risk creates <strong>jump scenarios</strong>. A forward makes money linearly. A call makes money slowly at first, then accelerates on big upside, that acceleration is convexity.</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start;">
+      <div style="flex:1 1 320px;min-width:280px;">
+        <label style="display:block;font-weight:800;margin:6px 0;">Spot (S): <span id="cqW_701595141_sT">70</span></label>
+        <input id="cqW_701595141_s" type="range" min="40" max="120" step="0.5" value="70" style="width:100%;">
+        <label style="display:block;font-weight:800;margin:10px 0 6px;">Call strike (K): <span id="cqW_701595141_kT">75</span></label>
+        <input id="cqW_701595141_k" type="range" min="40" max="140" step="0.5" value="75" style="width:100%;">
+        <label style="display:block;font-weight:800;margin:10px 0 6px;">Call premium: <span id="cqW_701595141_premT">2.4</span></label>
+        <input id="cqW_701595141_prem" type="range" min="0" max="12" step="0.1" value="2.4" style="width:100%;">
+        <label style="display:block;font-weight:800;margin:10px 0 6px;">Call-spread upper strike (K2): <span id="cqW_701595141_kuT">90</span></label>
+        <input id="cqW_701595141_ku" type="range" min="45" max="170" step="0.5" value="90" style="width:100%;">
+        <label style="display:block;font-weight:800;margin:10px 0 6px;">Call-spread net premium: <span id="cqW_701595141_premcsT">1.2</span></label>
+        <input id="cqW_701595141_premcs" type="range" min="0" max="10" step="0.1" value="1.2" style="width:100%;">
+      </div>
+      <div style="flex:1 1 360px;min-width:300px;">
+        <canvas id="cqW_701595141_cv" width="560" height="300" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.10);"></canvas>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+          <span class="cq-pill">Forward P&L: <span id="cqW_701595141_pF">–</span></span>
+          <span class="cq-pill">Call P&L: <span id="cqW_701595141_pC">–</span></span>
+          <span class="cq-pill">Call-spread P&L: <span id="cqW_701595141_pCS">–</span></span>
+        </div>
+        <p style="opacity:.85;margin-top:10px;">This is payoff only (not pricing). It’s meant to show <strong>shape</strong>: linear vs convex vs capped convex.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<script>(function(){
+  var s=document.getElementById("cqW_701595141_s");
+  var k=document.getElementById("cqW_701595141_k");
+  var prem=document.getElementById("cqW_701595141_prem");
+  var ku=document.getElementById("cqW_701595141_ku");
+  var premcs=document.getElementById("cqW_701595141_premcs");
+  var sT=document.getElementById("cqW_701595141_sT");
+  var kT=document.getElementById("cqW_701595141_kT");
+  var premT=document.getElementById("cqW_701595141_premT");
+  var kuT=document.getElementById("cqW_701595141_kuT");
+  var premcsT=document.getElementById("cqW_701595141_premcsT");
+  var pF=document.getElementById("cqW_701595141_pF");
+  var pC=document.getElementById("cqW_701595141_pC");
+  var pCS=document.getElementById("cqW_701595141_pCS");
+  var cv=document.getElementById("cqW_701595141_cv");
+  var ctx=cv.getContext("2d");
+  function fmt(x){var s=(Math.round(x<em>100)/100).toFixed(2);return (x>=0?"+":"")+s;}
+  function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+  function callPayoff(ST,K,p){return Math.max(ST-K,0)-p;}
+  function callSpreadPayoff(ST,K1,K2,p){
+    var longC=Math.max(ST-K1,0);
+    var shortC=Math.max(ST-K2,0);
+    return (longC-shortC)-p;
+  }
+  function drawCurve(S0,K0,p0,Ku0,pCS0){
+    var W=cv.width,H=cv.height;
+    ctx.clearRect(0,0,W,H);
+    // axes
+    ctx.strokeStyle="rgba(255,255,255,.20)";
+    ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(40,20);ctx.lineTo(40,H-30);ctx.lineTo(W-20,H-30);ctx.stroke();
+    // x range around S
+    var xmin=clamp(S0-30, 10, 200);
+    var xmax=clamp(S0+60, 20, 260);
+    // compute y-range from payoffs
+    var ys=[];
+    for(var i=0;i<=120;i++){
+      var ST=xmin+(xmax-xmin)</em>i/120;
+      var f=ST-S0;
+      var c=callPayoff(ST,K0,p0);
+      var cs=callSpreadPayoff(ST,K0,Ku0,pCS0);
+      ys.push(f,c,cs);
+    }
+    var yMin=Math.min.apply(null,ys);
+    var yMax=Math.max.apply(null,ys);
+    yMin=Math.min(yMin,-15);
+    yMax=Math.max(yMax, 25);
+    var pad=2;
+    yMin-=pad; yMax+=pad;
+    function xPix(ST){return 40+(W-60)<em>(ST-xmin)/(xmax-xmin);}
+    function yPix(y){return (H-30)-(H-60)</em>(y-yMin)/(yMax-yMin);}
+    // grid
+    ctx.strokeStyle="rgba(255,255,255,.10)";
+    for(var g=0;g<=6;g++){
+      var y=20+g<em>(H-60)/6;
+      ctx.beginPath();ctx.moveTo(40,y);ctx.lineTo(W-20,y);ctx.stroke();
+    }
+    // Forward line
+    ctx.strokeStyle="rgba(255,255,255,.55)";
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    for(var i=0;i<=120;i++){
+      var ST=xmin+(xmax-xmin)</em>i/120;
+      var f=ST-S0;
+      var xp=xPix(ST), yp=yPix(f);
+      if(i===0) ctx.moveTo(xp,yp); else ctx.lineTo(xp,yp);
+    }
+    ctx.stroke();
+    // Call payoff
+    ctx.strokeStyle="rgba(120,255,190,.70)";
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    for(var i=0;i<=120;i++){
+      var ST=xmin+(xmax-xmin)<em>i/120;
+      var c=callPayoff(ST,K0,p0);
+      var xp=xPix(ST), yp=yPix(c);
+      if(i===0) ctx.moveTo(xp,yp); else ctx.lineTo(xp,yp);
+    }
+    ctx.stroke();
+    // Call spread payoff
+    ctx.strokeStyle="rgba(80,140,255,.75)";
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    for(var i=0;i<=120;i++){
+      var ST=xmin+(xmax-xmin)</em>i/120;
+      var cs=callSpreadPayoff(ST,K0,Ku0,pCS0);
+      var xp=xPix(ST), yp=yPix(cs);
+      if(i===0) ctx.moveTo(xp,yp); else ctx.lineTo(xp,yp);
+    }
+    ctx.stroke();
+    // Legend
+    ctx.fillStyle="rgba(255,255,255,.85)";
+    ctx.font="800 12px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+    ctx.fillText("Forward (linear)", 50, 34);
+    ctx.fillText("Call (convex)", 50, 52);
+    ctx.fillText("Call-spread (capped convex)", 50, 70);
+  }
+  function update(){
+    var S0=parseFloat(s.value);
+    var K0=parseFloat(k.value);
+    var p0=parseFloat(prem.value);
+    var Ku0=parseFloat(ku.value);
+    var pCS0=parseFloat(premcs.value);
+    if(Ku0<=K0+0.5){Ku0=K0+0.5; ku.value=Ku0;}
+    sT.textContent=S0.toFixed(1);
+    kT.textContent=K0.toFixed(1);
+    premT.textContent=p0.toFixed(1);
+    kuT.textContent=Ku0.toFixed(1);
+    premcsT.textContent=pCS0.toFixed(1);
+    // “at current spot” P&L snapshot
+    var f=0;
+    var c=callPayoff(S0,K0,p0);
+    var cs=callSpreadPayoff(S0,K0,Ku0,pCS0);
+    pF.textContent=fmt(f);
+    pC.textContent=fmt(c);
+    pCS.textContent=fmt(cs);
+    drawCurve(S0,K0,p0,Ku0,pCS0);
+  }
+  s.addEventListener("input",update);
+  k.addEventListener("input",update);
+  prem.addEventListener("input",update);
+  ku.addEventListener("input",update);
+  premcs.addEventListener("input",update);
+  update();
+})();</script>
+<div class="cq-callout cq-callout-tip"><div class="cq-callout-hd">How to read the simulator</div><div class="cq-callout-bd"><p>- <strong>Forward</strong> = linear. You need direction.<br>- <strong>Call</strong> = convex. You care about tail probability.<br>- <strong>Call spread</strong> = capped convexity. Cleaner risk budget, still “war upside.”</p></div></div>
+<hr>
+<h2>Why “just buying oil” is not risk management</h2>
 
-<p>Many investors respond to war by:<br><ul class="cq-list-bullets"><br><li>Buying oil futures.</li><br><li>Buying energy stocks.</li><br><li>Buying oil calls.</li><br></ul></p>
+<p>Most investors respond to war by:<br><ul class="cq-list-bullets"><br><li>Buying oil futures</li><br><li>Buying energy stocks</li><br><li>Buying oil calls</li><br></ul></p>
 
-<p>That works — but it concentrates risk in one direction.</p>
-
-<p>Here’s the problem:</p>
+<p>That can work. But it concentrates risk in one direction.</p>
 
 <p>If OPEC+ increases supply.<br>If escalation fades.<br>If diplomacy surprises.</p>
 
 <p>Oil can drop sharply and fast.</p>
 
-<p>Pure long-oil positioning is not risk management.<br>It is a directional bet.</p>
+<p>Directional long-oil is a <strong>bet</strong>.<br>War is not directional.<br>War is <strong>distributional</strong>.</p>
 
-<p>War is not directional.<br>War is distributional.</p>
+<p>That’s why the better framework is: <strong>dispersion + correlation regimes</strong>.<br><hr><br><h2>Dispersion: the adult version of “trading war”</h2></p>
 
-<p>And that’s where dispersion comes in.<br><hr><br><h2>Dispersion: the adult way to trade war</h2></p>
+<p>Dispersion is the idea that instead of betting on “the index,” you bet<br>on <strong>differences between components</strong>.</p>
 
-<p>Dispersion is the idea that:</p>
-
-<p>Instead of betting on “the index”,<br>you bet on <strong>differences between components</strong>.</p>
-
-<p>In war environments:</p>
-
-<ul class="cq-list-bullets">
-<li>Oil producers may spike.</li>
-<li>Airlines may fall.</li>
-<li>Defense stocks may rally.</li>
-<li>Tech may wobble.</li>
-<li>Gold may surge.</li>
-<li>Broad indices may move less than individual names.</li>
-</ul>
+<p>In conflict regimes:<br><ul class="cq-list-bullets"><br><li>Oil producers may spike</li><br><li>Airlines may sell off</li><br><li>Defense may rally</li><br><li>Industrials may split (winners vs losers)</li><br><li>Gold may surge</li><br><li>Broad indices can look “sleepy” while single names whip around</li><br></ul></p>
 
 <p>That widening gap between winners and losers is dispersion.</p>
 
-<p>Convexity often appears first in single assets.<br>Correlation rises later.<br><hr><br><h2>Simple example (no formulas)</h2></p>
+<p>A common pattern:<br><ul class="cq-list-bullets"><br><li><strong>Dispersion widens first</strong></li><br><li><strong>Correlation rises later</strong></li><br></ul><br><hr><br><h2>Interactive: correlation vs index vol vs dispersion gap</h2></p>
 
-<p>Imagine this setup:</p>
-
-<p>Oil at $70.<br>Energy stocks up 5%.<br>Airlines down 6%.<br>Index down 1%.</p>
-
-<p>If you:<br><ul class="cq-list-bullets"><br><li>Own energy calls</li><br><li>Own airline puts</li><br><li>Neutralize broad index exposure</li><br></ul></p>
-
-<p>You are trading dispersion.</p>
-
-<p>If war escalates:<br><ul class="cq-list-bullets"><br><li>Energy accelerates.</li><br><li>Airlines deteriorate further.</li><br><li>Your convexity increases.</li><br></ul></p>
-
-<p>If war fades:<br><ul class="cq-list-bullets"><br><li>Both revert.</li><br><li>Your risk is limited by structure.</li><br></ul></p>
-
-<p>You didn’t bet on “market crash”.<br>You bet on <strong>spread widening</strong>.</p>
-
-<p>That’s dispersion.<br><hr><br><h2>Why dispersion is perfect for war regimes</h2></p>
-
-<p>War produces:</p>
-
-<ol class="cq-list-steps">
-<li>Sector divergence.</li>
-<li>Commodity spikes.</li>
-<li>Cross-asset decoupling.</li>
-<li>Uncertain duration.</li>
-</ol>
-
-<p>Dispersion thrives on uncertainty in relative outcomes.</p>
-
-<p>Index options are expensive in war.<br>Single-name convexity is often mispriced early.</p>
-
-<p>By positioning in relative moves, you:</p>
-
-<ul class="cq-list-bullets">
-<li>Reduce pure directional exposure.</li>
-<li>Avoid paying peak index vol.</li>
-<li>Capture convex outcomes where they emerge first.</li>
-</ul>
+<section class="cq-card" style="margin-top:14px;">
+  <div class="cq-card-hd">
+    <div class="cq-kicker">Interactive</div>
+    <h2 style="margin:6px 0 0;">Dispersion: single-stock vol vs index vol</h2>
+  </div>
+  <div class="cq-card-bd">
+    <div class="cq-callout cq-callout-info">
+      <div class="cq-callout-hd">What you’re seeing</div>
+      <div class="cq-callout-bd">
+        <p>War regimes often increase <strong>relative moves</strong> first (dispersion), then <strong>correlation</strong> later. This widget shows how index vol rises as correlation rises, even if single-name vol stays high.</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start;">
+      <div style="flex:1 1 320px;min-width:280px;">
+        <label style="display:block;font-weight:800;margin:6px 0;">Avg single-stock vol (annualized): <span id="cqW_828688590_sv">60</span>%</label>
+        <input id="cqW_828688590_sv_in" type="range" min="20" max="120" step="1" value="60" style="width:100%;">
+        <label style="display:block;font-weight:800;margin:10px 0 6px;">Avg pairwise correlation: <span id="cqW_828688590_rho">0.25</span></label>
+        <input id="cqW_828688590_rho_in" type="range" min="-0.2" max="0.95" step="0.01" value="0.25" style="width:100%;">
+        <label style="display:block;font-weight:800;margin:10px 0 6px;"># names (equal-weight): <span id="cqW_828688590_n">50</span></label>
+        <input id="cqW_828688590_n_in" type="range" min="10" max="200" step="1" value="50" style="width:100%;">
+        <div class="cq-callout cq-callout-tip" style="margin-top:12px;">
+          <div class="cq-callout-hd">Quick reading</div>
+          <div class="cq-callout-bd">
+            <p><strong>Dispersion gap</strong> (rough): avg single-name vol² minus index vol². Bigger gap = better environment for dispersion-type thinking.</p>
+          </div>
+        </div>
+      </div>
+      <div style="flex:1 1 360px;min-width:300px;">
+        <canvas id="cqW_828688590_cv" width="560" height="280" style="width:100%;height:auto;border-radius:14px;border:1px solid rgba(255,255,255,.10);"></canvas>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+          <span class="cq-pill">Index vol: <span id="cqW_828688590_iv">–</span>%</span>
+          <span class="cq-pill">Dispersion gap: <span id="cqW_828688590_gap">–</span></span>
+        </div>
+        <p style="opacity:.85;margin-top:10px;">Model: equal-weight basket, identical vols, constant correlation. Not “truth”, but a clean intuition engine.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<script>(function(){
+  var svIn=document.getElementById("cqW_828688590_sv_in");
+  var rhoIn=document.getElementById("cqW_828688590_rho_in");
+  var nIn=document.getElementById("cqW_828688590_n_in");
+  var svT=document.getElementById("cqW_828688590_sv");
+  var rhoT=document.getElementById("cqW_828688590_rho");
+  var nT=document.getElementById("cqW_828688590_n");
+  var ivT=document.getElementById("cqW_828688590_iv");
+  var gapT=document.getElementById("cqW_828688590_gap");
+  var cv=document.getElementById("cqW_828688590_cv");
+  var ctx=cv.getContext("2d");
+  function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+  function fmt(x,d){var p=Math.pow(10,d||0);return (Math.round(x<em>p)/p).toFixed(d||0);}
+  function indexVol(sigma, rho, n){
+    var s=sigma/100;
+    var v=s</em>s<em>(1/n + ((n-1)/n)</em>rho);
+    return 100<em>Math.sqrt(Math.max(v,0));
+  }
+  function draw(sv,rho,n,iv,gap){
+    var W=cv.width,H=cv.height;
+    ctx.clearRect(0,0,W,H);
+    function line(x1,y1,x2,y2,alpha){
+      ctx.globalAlpha=alpha==null?1:alpha;
+      ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.globalAlpha=1;
+    }
+    ctx.lineWidth=1;
+    ctx.strokeStyle="rgba(255,255,255,.15)";
+    for(var i=0;i<=5;i++){
+      var y=20+i</em>(H-40)/5;
+      line(40,y,W-20,y,1);
+    }
+    for(var j=0;j<=6;j++){
+      var x=40+j<em>(W-60)/6;
+      line(x,20,x,H-20,1);
+    }
+    ctx.fillStyle="rgba(255,255,255,.85)";
+    ctx.font="bold 14px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+    ctx.fillText("Volatility (annualized)", 40, 16);
+    var maxV=clamp(Math.max(sv,iv)+20, 60, 160);
+    var barW=140;
+    var baseY=H-26;
+    var scale=(H-70)/maxV;
+    function bar(x,label,val){
+      var h=val</em>scale;
+      ctx.fillStyle="rgba(255,255,255,.10)";
+      ctx.fillRect(x,baseY-h,barW,h);
+      ctx.strokeStyle="rgba(255,255,255,.18)";
+      ctx.strokeRect(x,baseY-h,barW,h);
+      ctx.fillStyle="rgba(255,255,255,.90)";
+      ctx.font="800 13px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+      ctx.fillText(label, x, baseY+18);
+      ctx.font="700 13px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+      ctx.fillText(fmt(val,1)+"%", x, baseY-h-8);
+    }
+    bar(70, "Avg single-name vol", sv);
+    bar(260, "Implied index vol", iv);
+    // Gap line + label
+    ctx.strokeStyle="rgba(255,255,255,.35)";
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.moveTo(70+barW/2, baseY - sv<em>scale);
+    ctx.lineTo(260+barW/2, baseY - iv</em>scale);
+    ctx.stroke();
+    ctx.fillStyle="rgba(255,255,255,.85)";
+    ctx.font="800 12px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+    ctx.fillText("corr = "+fmt(rho,2)+"  |  n = "+n, 420, 38);
+    ctx.font="700 12px system-ui, -apple-system, Segoe UI, Roboto, Arial";
+    ctx.fillText("dispersion gap ≈ "+gap, 420, 58);
+  }
+  function update(){
+    var sv=parseFloat(svIn.value);
+    var rho=parseFloat(rhoIn.value);
+    var n=parseInt(nIn.value,10);
+    svT.textContent=fmt(sv,0);
+    rhoT.textContent=fmt(rho,2);
+    nT.textContent=n;
+    var iv=indexVol(sv,rho,n);
+    var gap=(sv<em>sv - iv</em>iv);
+    ivT.textContent=fmt(iv,1);
+    gapT.textContent=fmt(gap,0);
+    draw(sv,rho,n,iv,fmt(gap,0));
+  }
+  svIn.addEventListener("input",update);
+  rhoIn.addEventListener("input",update);
+  nIn.addEventListener("input",update);
+  update();
+})();</script>
 <hr>
-<h2>The correlation trap</h2>
+<h2>A simple dispersion example (no formulas)</h2>
 
-<p>Here’s the danger:</p>
+<p>Imagine:<br><ul class="cq-list-bullets"><br><li>Oil at $70</li><br><li>Energy stocks up <strong>+5%</strong></li><br><li>Airlines down <strong>-6%</strong></li><br><li>Index down <strong>-1%</strong></li><br></ul></p>
 
-<p>Early in conflict:<br><ul class="cq-list-bullets"><br><li>Dispersion widens.</li><br><li>Correlation stays moderate.</li><br></ul></p>
+<p>A dispersion-style mindset:<br><ul class="cq-list-bullets"><br><li>Own convexity where the shock hits first (energy)</li><br><li>Own protection where the shock hurts (airlines)</li><br><li>Neutralize broad index exposure (so you’re not “betting the market”)</li><br></ul></p>
 
-<p>If conflict escalates into systemic shock:<br><ul class="cq-list-bullets"><br><li>Correlation spikes.</li><br><li>Everything sells.</li><br><li>Diversification collapses.</li><br></ul></p>
+<p>If war escalates:<br><ul class="cq-list-bullets"><br><li>Energy can accelerate</li><br><li>Airlines can deteriorate</li><br><li>The gap widens (dispersion)</li><br></ul></p>
 
-<p>This is why convexity matters.</p>
+<p>If war fades:<br><ul class="cq-list-bullets"><br><li>Both can revert</li><br><li>Your loss is <strong>structured</strong>, not existential</li><br></ul></p>
 
-<p>Convex dispersion structures are powerful because:</p>
+<p>You didn’t bet on a market crash.<br>You traded <strong>spread widening</strong>.</p>
 
-<p>They make money when spreads widen.<br>They don’t collapse immediately if correlation spikes.<br>They avoid the “all in one trade” trap.<br><hr><br><h2>Oil convexity is not just price — it’s structure</h2></p>
+<p>That’s dispersion.<br><hr><br><h2>The correlation trap (and why professionals care)</h2></p>
 
-<p>War affects:</p>
+<p>Early in conflict:<br><ul class="cq-list-bullets"><br><li>Dispersion widens</li><br><li>Correlation stays moderate</li><br></ul></p>
 
-<ul class="cq-list-bullets">
-<li>Shipping lanes (Hormuz risk).</li>
-<li>Insurance premia.</li>
-<li>Refining margins.</li>
-<li>OPEC+ supply decisions.</li>
-<li>Strategic reserves policy.</li>
-</ul>
+<p>If conflict becomes systemic:<br><ul class="cq-list-bullets"><br><li>Correlation spikes</li><br><li>Everything sells</li><br><li>Diversification collapses</li><br></ul></p>
 
-<p>Oil volatility is not just direction.<br>It is distribution uncertainty.</p>
+<p>This is why you never ignore regime shifts.</p>
 
-<p>Convexity reflects the unknown tail.<br><hr><br><h2>How to think about positioning (intuitively)</h2></p>
+<p>Good dispersion structures don’t pretend correlation can’t spike.<br>They are built so that:<br><ul class="cq-list-bullets"><br><li>you can make money when spreads widen,</li><br><li>and you don’t get instantly destroyed if correlation goes to 1.</li><br></ul></p>
 
-<p>Instead of:</p>
+<p>(That’s the real point of “convex dispersion.”)<br><hr><br><h2>Oil convexity is not just price: it’s plumbing</h2></p>
 
-<p>“I think oil goes to 90.”</p>
+<p>War affects:<br><ul class="cq-list-bullets"><br><li>Shipping lanes (Hormuz risk)</li><br><li>Insurance premia and freight</li><br><li>Refining margins</li><br><li>OPEC+ supply decisions</li><br><li>Strategic reserves policy</li><br></ul></p>
 
-<p>Think:</p>
+<p>So oil “volatility” is not just direction.</p>
 
-<p>“If escalation probability rises from 10% to 25%, how do spreads behave?”</p>
+<p>It’s uncertainty about the distribution.<br>Convexity is the market’s way of pricing the unknown tail.<br><hr><br><h2>Positioning checklist (intuitive)</h2></p>
 
-<p>Instead of:</p>
+<p>Instead of:<br>“I think oil goes to 90.”</p>
 
-<p>“I’ll buy the index.”</p>
+<p>Think:<br>“If escalation probability rises from 10% to 25%, what breaks first?<br>Who benefits first?”</p>
 
-<p>Think:</p>
+<p>Instead of:<br>“I’ll buy the index.”</p>
 
-<p>“Which assets benefit directly? Which suffer directly?”</p>
+<p>Think:<br>“Which assets are directly exposed winners and losers, and how do I<br>avoid paying peak index vol?”</p>
 
-<p>War trading is about:</p>
+<p>War trading is about:<br>1) Relative performance<br>2) Convex asymmetry<br>3) Managing correlation regime risk<br><hr><br><h2>Clean takeaway (bookmark this)</h2></p>
 
-<ol class="cq-list-steps">
-<li>Relative performance.</li>
-<li>Convex asymmetry.</li>
-<li>Managing correlation risk.</li>
-</ol>
-<hr>
-<h2>The elegant structure mindset</h2>
-
-<p>Good war positioning:</p>
-
-<ul class="cq-list-bullets">
-<li>Own convexity in exposed sectors.</li>
-<li>Avoid paying peak volatility in the index.</li>
-<li>Pair winners vs losers.</li>
-<li>Budget downside clearly.</li>
-</ul>
-
-<p>Bad war positioning:</p>
-
-<ul class="cq-list-bullets">
-<li>One big directional oil bet.</li>
-<li>No hedge.</li>
-<li>No awareness of correlation regime shifts.</li>
-</ul>
-<hr>
-<h2>The clean takeaway</h2>
-
-<p>War is not a linear event.<br>It is a probability shock.</p>
+<p>War is not linear. It’s a <strong>probability shock</strong>.</p>
 
 <p>Convexity is how markets price probability jumps.<br>Dispersion is how traders monetize uneven impact.</p>
 
-<p>If escalation spreads:<br>Convex dispersion wins.</p>
+<p>If escalation spreads: convex dispersion can win.<br>If escalation fades: losses are <strong>budgeted</strong>, not catastrophic.</p>
 
-<p>If escalation fades:<br>Losses are structured, not catastrophic.</p>
+<p>Convexity protects. Dispersion refines.</p>
 
-<p>Convexity protects.<br>Dispersion refines.</p>
+<p>That’s why professionals don’t “play war.”<br>They structure it.</p>
 
-<p>That is why professionals don’t “play war”.<br>They structure it.</p>
+<p>Related:<br><ul class="cq-list-bullets"><br><li><a href="/statics/data/daily.json">Daily feed</a></li><br><li>Curios</li><br></ul></p>
         <a class="cq-back" href="/">← Back to home</a>
       </div>
     </section>
