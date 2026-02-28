@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dispersion Trading 101: Correlation, Variance, and the “Index vs Components” Game | CoffeeQuant Foundations</title>
+
+  <!-- CoffeeQuant site CSS (relative from statics/WriteUps/) -->
+  <link rel="stylesheet" href="../css/cq.css" />
+
+  <!-- Minimal page overrides so the article is wide + readable on all layouts -->
+  <style>
+    html,body{width:100%!important;max-width:none!important;margin:0!important;}
+    body{overflow-x:hidden;}
+    .cq-article-wrap{max-width:1120px;margin:0 auto;padding:24px 18px 70px;width:100%;}
+    .cq-topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;
+      padding:12px 14px;border-radius:14px;position:sticky;top:10px;z-index:5;backdrop-filter:blur(8px);}
+    .cq-brand a{text-decoration:none;font-weight:800;letter-spacing:.2px;}
+    .cq-nav a{text-decoration:none;margin-left:12px;font-weight:600;}
+    .cq-kicker{opacity:.8;text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:800;}
+    .cq-h1{margin:10px 0 8px;font-size:34px;line-height:1.12;letter-spacing:-0.02em;}
+    .cq-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px;}
+    .cq-badge{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800;border:1px solid rgba(255,255,255,.12);}
+    .cq-card{margin-top:14px;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.10);}
+    .cq-card-hd{padding:14px 16px;}
+    .cq-card-bd{padding:14px 16px 18px;}
+    .cq-back{display:inline-block;margin-top:18px;text-decoration:none;font-weight:700;}
+
+    /* CQX blocks */
+    .cq-pill{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-weight:900;font-size:12px;
+      border:1px solid rgba(255,255,255,.14);opacity:.95;}
+    .cq-callout{border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:12px 14px;margin:14px 0;}
+    .cq-callout-hd{font-weight:900;margin-bottom:6px;opacity:.95;}
+    .cq-callout-info{box-shadow: inset 0 0 0 9999px rgba(80,140,255,.06);}
+    .cq-callout-warn{box-shadow: inset 0 0 0 9999px rgba(255,170,70,.06);}
+    .cq-callout-tip{box-shadow: inset 0 0 0 9999px rgba(120,255,190,.05);}
+
+    /* Interactive layout */
+    .cq-grid{display:grid;grid-template-columns: 1.25fr .95fr;gap:14px;align-items:start;margin:14px 0;}
+    @media (max-width: 920px){ .cq-grid{grid-template-columns:1fr;} }
+
+    .cq-widget{border:1px solid rgba(255,255,255,.10);border-radius:16px;overflow:hidden;}
+    .cq-widget-hd{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;}
+    .cq-widget-title{font-weight:900;}
+    .cq-widget-bd{padding:12px 14px;}
+    .cq-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+    .cq-controls label{font-size:12px;opacity:.85;font-weight:800;letter-spacing:.02em;}
+    .cq-controls input[type="range"]{width:200px;}
+    .cq-kpi{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+    .cq-kpi .k{padding:8px 10px;border-radius:14px;border:1px solid rgba(255,255,255,.10);font-weight:800;font-size:12px;opacity:.95;}
+    .cq-kpi .k b{font-size:13px;}
+    canvas{width:100%;height:auto;display:block;}
+
+    /* Share */
+    .cq-share{margin-top:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+    .cq-share .share-title{font-weight:900;opacity:.85;}
+    .cq-share a{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;text-decoration:none;font-weight:900;border:1px solid rgba(255,255,255,.12);}
+    .cq-share a:hover{opacity:.92;transform: translateY(-1px);}
+    .cq-ico{width:16px;height:16px;display:inline-block;vertical-align:-3px}
+  </style>
+</head>
+
+<body class="cq-body">
+  <div class="cq-article-wrap">
+    <div class="cq-topbar">
+      <div class="cq-brand"><a href="/"><span aria-hidden="true">☕</span> CoffeeQuant</a></div>
+      <div class="cq-nav">
+        <a href="/#daily">Daily</a>
+        <a href="/#labs">Labs</a>
+        <a href="/#tools">Tools</a>
+        <a href="/#notes">Notes</a>
+        <a href="/#curios">Curios</a>
+        <a href="/#foundations">Foundations</a>
+      </div>
+    </div>
+
+    <div class="cq-share" role="group" aria-label="Share">
+      <div class="share-title">Share this Foundations note</div>
+      <div class="share-buttons">
+        <a id="cqShareLinkedIn" target="_blank" rel="noopener">
+          <svg class="cq-ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5ZM.5 23.5h4V7.98h-4V23.5ZM8 7.98h3.83v2.12h.05c.53-1 1.83-2.12 3.77-2.12 4.03 0 4.78 2.65 4.78 6.1v9.42h-4v-8.35c0-1.99-.04-4.56-2.78-4.56-2.78 0-3.2 2.17-3.2 4.41v8.5H8V7.98Z"/></svg>
+          LinkedIn
+        </a>
+        <a id="cqShareX" target="_blank" rel="noopener">
+          <svg class="cq-ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.9 2H22l-6.8 7.8L23.5 22H17l-5.1-6.6L6.2 22H3.1l7.3-8.4L.5 2H7l4.7 6.1L18.9 2Zm-1.1 18h1.7L6.2 3.9H4.4L17.8 20Z"/></svg>
+          X
+        </a>
+        <a id="cqShareEmail">
+          <svg class="cq-ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2Zm0 4-8 5L4 8V6l8 5 8-5v2Z"/></svg>
+          Email
+        </a>
+      </div>
+    </div>
+
+    <section class="cq-card">
+      <div class="cq-card-hd">
+        <div class="cq-kicker">Foundations • 2-asset intuition • correlation & convexity</div>
+        <h1 class="cq-h1">Dispersion Trading 101: Correlation, Variance, and the “Index vs Components” Game</h1>
+        <div class="cq-meta">
+          <span class="cq-badge">[[pill:Foundations]]</span>
+          <span class="cq-badge">[[pill:Dispersion]]</span>
+          <span class="cq-badge">[[pill:Correlation]]</span>
+          <span class="cq-badge">[[pill:Volatility]]</span>
+        </div>
+      </div>
+
+      <div class="cq-card-bd">
+        <p>
+          Think of a market index as a choir. Each stock is a singer.
+          <b>Index volatility</b> is what you hear from the hallway.
+          <b>Single-name volatility</b> is what you hear when you put your ear to each door.
+        </p>
+
+        <div class="cq-callout cq-callout-info">
+          <div class="cq-callout-hd">The one-line definition</div>
+          <div>
+            <p><b>Dispersion</b> is the wedge between: (1) how wild the singers are individually and (2) how wild the choir sounds together.</p>
+            <p>That wedge is driven largely by <b>correlation</b>.</p>
+          </div>
+        </div>
+
+        <h2>Step 1: Start with two assets (no fancy math yet)</h2>
+        <p>
+          Two assets, A and B. Each day they move up or down.
+          Correlation is simply: <b>do they move together</b> or <b>do they take turns being dramatic</b>?
+        </p>
+
+        <div class="cq-grid">
+          <div class="cq-widget">
+            <div class="cq-widget-hd">
+              <div class="cq-widget-title">1) “Blocks on rails” correlation intuition</div>
+              <div class="cq-controls">
+                <label>ρ (correlation)</label>
+                <input id="rho" type="range" min="-0.95" max="0.95" step="0.01" value="0.40">
+                <span id="rhoVal" class="cq-badge">0.40</span>
+              </div>
+            </div>
+            <div class="cq-widget-bd">
+              <canvas id="rail" width="980" height="360" aria-label="Correlation blocks animation"></canvas>
+              <div class="cq-kpi">
+                <div class="k">Togetherness: <b id="togetherness">Medium</b></div>
+                <div class="k">“Index smoothness”: <b id="smoothness">Moderate</b></div>
+                <div class="k">Dispersion vibe: <b id="dispVibe">Alive</b></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cq-widget">
+            <div class="cq-widget-hd">
+              <div class="cq-widget-title">What you should notice</div>
+            </div>
+            <div class="cq-widget-bd">
+              <ul>
+                <li>When ρ → <b>+1</b>, A and B march together. The “index” (A+B) gets smoother.</li>
+                <li>When ρ → <b>0</b>, they become independent. The index gets less smooth.</li>
+                <li>When ρ → <b>-1</b>, one zigs while the other zags. The index can become <b>very smooth</b> even if each asset is volatile.</li>
+              </ul>
+              <div class="cq-callout cq-callout-tip">
+                <div class="cq-callout-hd">Trader translation</div>
+                <div>
+                  <p><b>Single names can be violent while the index looks sleepy.</b> That’s dispersion-friendly terrain.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Step 2: Make it quantitative (tiny formulas, big intuition)</h2>
+        <p>
+          Suppose A and B have daily volatilities σ<sub>A</sub> and σ<sub>B</sub>.
+          If you build a simple 50/50 “index”, its variance is:
+        </p>
+
+        <div class="cq-callout cq-callout-info">
+          <div class="cq-callout-hd">Basket variance (2 assets)</div>
+          <div>
+            <p style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;">
+              Var(0.5A + 0.5B) = 0.25σA² + 0.25σB² + 0.5ρσAσB
+            </p>
+            <p>
+              The only “new” ingredient versus single names is <b>ρ</b>.
+              Correlation is the glue. More glue → more shared movement → index variance changes.
+            </p>
+          </div>
+        </div>
+
+        <h2>Step 3: What a dispersion trade is (in one picture)</h2>
+        <p>
+          A classic dispersion position (conceptually):
+        </p>
+        <ul>
+          <li><b>Long</b> variance (or options) on A and B (components)</li>
+          <li><b>Short</b> variance (or options) on the index (A+B basket)</li>
+        </ul>
+        <p>
+          You’re betting that “the hallway sound” (index) is <b>too calm</b> relative to “room sounds” (single names), or that correlation will <b>realize lower</b> than what the index is pricing.
+        </p>
+
+        <div class="cq-grid">
+          <div class="cq-widget">
+            <div class="cq-widget-hd">
+              <div class="cq-widget-title">2) Dispersion P&L intuition (variance wedge)</div>
+              <div class="cq-controls">
+                <label>σA</label>
+                <input id="sigA" type="range" min="10" max="80" step="1" value="40">
+                <span id="sigAVal" class="cq-badge">40%</span>
+
+                <label>σB</label>
+                <input id="sigB" type="range" min="10" max="80" step="1" value="35">
+                <span id="sigBVal" class="cq-badge">35%</span>
+
+                <label>ρ</label>
+                <input id="rho2" type="range" min="-0.95" max="0.95" step="0.01" value="0.40">
+                <span id="rho2Val" class="cq-badge">0.40</span>
+              </div>
+            </div>
+            <div class="cq-widget-bd">
+              <canvas id="wedge" width="980" height="360" aria-label="Dispersion wedge visual"></canvas>
+              <div class="cq-kpi">
+                <div class="k">Index σ: <b id="idxSig">–</b></div>
+                <div class="k">Avg single σ: <b id="avgSig">–</b></div>
+                <div class="k">Dispersion wedge: <b id="wedgeVal">–</b></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cq-widget">
+            <div class="cq-widget-hd">
+              <div class="cq-widget-title">How traders “see” it</div>
+            </div>
+            <div class="cq-widget-bd">
+              <p><b>The wedge grows</b> when:</p>
+              <ul>
+                <li>single-name vols rise</li>
+                <li>correlation falls</li>
+                <li>or the index vol fails to keep up</li>
+              </ul>
+              <div class="cq-callout cq-callout-warn">
+                <div class="cq-callout-hd">The correlation jump risk</div>
+                <div>
+                  <p>In a macro panic, correlation can snap higher, and the index can “wake up” fast. Dispersion trades need risk limits.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Step 4: The “3D” view traders love</h2>
+        <p>
+          A neat way to build intuition is to look at <b>index volatility as a surface</b>:
+          as correlation (ρ) changes on one axis, and weight (w) changes on another axis.
+          Even with only two assets, this already explains 80% of real dispersion conversations.
+        </p>
+
+        <div class="cq-grid">
+          <div class="cq-widget">
+            <div class="cq-widget-hd">
+              <div class="cq-widget-title">3) 3D-ish surface: Basket σ(w, ρ)</div>
+              <div class="cq-controls">
+                <label>σA</label>
+                <input id="sigA3" type="range" min="10" max="80" step="1" value="40">
+                <span id="sigA3Val" class="cq-badge">40%</span>
+
+                <label>σB</label>
+                <input id="sigB3" type="range" min="10" max="80" step="1" value="35">
+                <span id="sigB3Val" class="cq-badge">35%</span>
+              </div>
+            </div>
+            <div class="cq-widget-bd">
+              <canvas id="surface" width="980" height="420" aria-label="3D surface projection"></canvas>
+              <div class="cq-callout cq-callout-tip">
+                <div class="cq-callout-hd">How to read this</div>
+                <div>
+                  <p>When ρ rises, basket σ rises for most weights. When one name dominates (w near 0 or 1), correlation matters less.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cq-widget">
+            <div class="cq-widget-hd">
+              <div class="cq-widget-title">From 2 assets to “real” dispersion</div>
+            </div>
+            <div class="cq-widget-bd">
+              <ul>
+                <li>Index variance depends on <b>all pairwise correlations</b>.</li>
+                <li>“Dispersion” in practice often means: <b>long single-name options</b>, <b>short index options</b>, delta-hedged.</li>
+                <li>When the market is calm but stocks whip around (earnings season, AI narrative shifts), dispersion can thrive.</li>
+              </ul>
+              <div class="cq-callout cq-callout-info">
+                <div class="cq-callout-hd">SEO terms people search</div>
+                <div>
+                  <p>dispersion trading, index vs single stock volatility, correlation trading, variance swap dispersion, implied correlation.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h2>Mini checklist: “Is dispersion on?”</h2>
+        <ol>
+          <li>Single names are moving a lot, but the index is stuck in a range.</li>
+          <li>Event risk is name-specific (earnings, regulation, AI winners/losers).</li>
+          <li>Index skew is expensive, but single-name skew is not uniformly expensive.</li>
+          <li>You have a plan for correlation spikes (stop-outs, gamma limits, stress tests).</li>
+        </ol>
+
+        <div class="cq-callout cq-callout-tip">
+          <div class="cq-callout-hd">Takeaway</div>
+          <div>
+            <p>Correlation is not a philosophy. It’s a dial. Dispersion is the business of getting paid when the dial is priced wrong.</p>
+          </div>
+        </div>
+
+        <a class="cq-back" href="/">← Back to home</a>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    (function(){
+      // Share links (works on GitHub Pages)
+      var canonical = window.location.href;
+      var url = encodeURIComponent(canonical);
+      var title = encodeURIComponent(document.title);
+      var li = document.getElementById('cqShareLinkedIn');
+      var xx = document.getElementById('cqShareX');
+      var em = document.getElementById('cqShareEmail');
+      if(li) li.href = 'https://www.linkedin.com/sharing/share-offsite/?url=' + url;
+      if(xx) xx.href = 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title;
+      if(em) em.href = 'mailto:?subject=' + title + '&body=' + encodeURIComponent('Thought you\\'d like this:\\n\\n' + canonical);
+    })();
+  </script>
+
+  <script>
+    // ---------- Helpers ----------
+    function clamp(x,a,b){ return Math.max(a, Math.min(b,x)); }
+    function lerp(a,b,t){ return a + (b-a)*t; }
+    function fmtPct(x){ return (x*100).toFixed(1) + '%'; }
+    function fmtNum(x){ return x.toLocaleString(undefined,{maximumFractionDigits:2}); }
+    function basketSigma(sigA, sigB, rho, w){
+      // sigma of w*A + (1-w)*B, assuming independent normal returns with correlation rho
+      var w2 = w*w, v2 = (1-w)*(1-w);
+      var var_ = w2*sigA*sigA + v2*sigB*sigB + 2*w*(1-w)*rho*sigA*sigB;
+      return Math.sqrt(Math.max(0,var_));
+    }
+
+    // ---------- 1) Blocks on rails ----------
+    (function(){
+      var c = document.getElementById('rail');
+      var ctx = c.getContext('2d');
+      var rho = document.getElementById('rho');
+      var rhoVal = document.getElementById('rhoVal');
+      var togetherness = document.getElementById('togetherness');
+      var smoothness = document.getElementById('smoothness');
+      var dispVibe = document.getElementById('dispVibe');
+
+      var t = 0;
+      function label(){
+        var r = parseFloat(rho.value);
+        rhoVal.textContent = r.toFixed(2);
+        var absr = Math.abs(r);
+        togetherness.textContent = absr>0.75 ? 'High' : (absr>0.35 ? 'Medium' : 'Low');
+        smoothness.textContent = (r>0.6) ? 'Choppy index' : (r<-0.6 ? 'Very smooth index' : 'Moderate');
+        dispVibe.textContent = (r<0.25 && r>-0.25) ? 'Very alive' : (r<-0.6 ? 'Strange but alive' : 'Alive');
+      }
+
+      function draw(){
+        var r = parseFloat(rho.value);
+        ctx.clearRect(0,0,c.width,c.height);
+
+        // background
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = 'rgba(255,255,255,0.02)';
+        ctx.fillRect(0,0,c.width,c.height);
+
+        var midY = c.height/2;
+        var leftX = 90, rightX = c.width-90;
+
+        // rails
+        ctx.strokeStyle = 'rgba(255,255,255,0.10)';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(leftX, midY-70);
+        ctx.lineTo(rightX, midY-70);
+        ctx.moveTo(leftX, midY+70);
+        ctx.lineTo(rightX, midY+70);
+        ctx.stroke();
+
+        // axis labels
+        ctx.fillStyle = 'rgba(255,255,255,0.75)';
+        ctx.font = '800 13px system-ui, -apple-system, Segoe UI, Roboto, Arial';
+        ctx.fillText('Asset A', leftX, midY-90);
+        ctx.fillText('Asset B', leftX, midY+52);
+
+        // correlated motion: we construct two signals with correlation r using a simple mix
+        t += 0.02;
+        var base = Math.sin(t) + 0.6*Math.sin(2.1*t+1.2);
+        var noise = Math.sin(1.7*t+2.2) + 0.5*Math.sin(3.4*t+0.3);
+        var aSig = base;
+        var bSig = r*base + Math.sqrt(Math.max(0,1-r*r))*noise;
+
+        // map signal to position on rail
+        function pos(sig){
+          // sig in ~[-2,2], map to [leftX,rightX]
+          var u = clamp(0.5 + 0.22*sig, 0, 1);
+          return lerp(leftX, rightX, u);
+        }
+
+        var ax = pos(aSig);
+        var bx = pos(bSig);
+
+        // draw blocks
+        function block(x,y,txt){
+          var w = 84, h = 42;
+          ctx.fillStyle = 'rgba(255,255,255,0.08)';
+          ctx.strokeStyle = 'rgba(255,255,255,0.16)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.roundRect(x-w/2, y-h/2, w, h, 12);
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = 'rgba(255,255,255,0.85)';
+          ctx.font = '900 14px system-ui, -apple-system, Segoe UI, Roboto, Arial';
+          ctx.textAlign = 'center';
+          ctx.fillText(txt, x, y+5);
+          ctx.textAlign = 'start';
+        }
+
+        block(ax, midY-70, 'A');
+        block(bx, midY+70, 'B');
+
+        // "index" marker: average position
+        var ix = (ax+bx)/2;
+        ctx.fillStyle = 'rgba(255,255,255,0.10)';
+        ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(ix-40, midY-14, 80, 28, 10);
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = 'rgba(255,255,255,0.82)';
+        ctx.font = '900 12px system-ui, -apple-system, Segoe UI, Roboto, Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Index (A+B)', ix, midY+4);
+        ctx.textAlign = 'start';
+
+        requestAnimationFrame(draw);
+      }
+
+      // polyfill roundRect if missing
+      if(!CanvasRenderingContext2D.prototype.roundRect){
+        CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r){
+          r = Math.min(r, w/2, h/2);
+          this.beginPath();
+          this.moveTo(x+r, y);
+          this.arcTo(x+w, y, x+w, y+h, r);
+          this.arcTo(x+w, y+h, x, y+h, r);
+          this.arcTo(x, y+h, x, y, r);
+          this.arcTo(x, y, x+w, y, r);
+          this.closePath();
+          return this;
+        }
+      }
+
+      rho.addEventListener('input', label);
+      label();
+      draw();
+    })();
+
+    // ---------- 2) Dispersion wedge ----------
+    (function(){
+      var c = document.getElementById('wedge');
+      var ctx = c.getContext('2d');
+      var sigA = document.getElementById('sigA');
+      var sigB = document.getElementById('sigB');
+      var rho2 = document.getElementById('rho2');
+
+      var sigAVal = document.getElementById('sigAVal');
+      var sigBVal = document.getElementById('sigBVal');
+      var rho2Val = document.getElementById('rho2Val');
+
+      var idxSig = document.getElementById('idxSig');
+      var avgSig = document.getElementById('avgSig');
+      var wedgeVal = document.getElementById('wedgeVal');
+
+      function render(){
+        var a = parseFloat(sigA.value)/100;
+        var b = parseFloat(sigB.value)/100;
+        var r = parseFloat(rho2.value);
+
+        sigAVal.textContent = sigA.value + '%';
+        sigBVal.textContent = sigB.value + '%';
+        rho2Val.textContent = r.toFixed(2);
+
+        var w = 0.5;
+        var idx = basketSigma(a,b,r,w);
+        var avg = 0.5*(a+b);
+        var wedge = Math.max(0, avg - idx);
+
+        idxSig.textContent = fmtPct(idx);
+        avgSig.textContent = fmtPct(avg);
+        wedgeVal.textContent = fmtPct(wedge);
+
+        // draw
+        ctx.clearRect(0,0,c.width,c.height);
+        ctx.fillStyle = 'rgba(255,255,255,0.02)';
+        ctx.fillRect(0,0,c.width,c.height);
+
+        // bars
+        var pad = 60;
+        var baseY = c.height - 60;
+        var maxV = Math.max(avg, idx) * 1.25 + 0.02;
+
+        function bar(x, val, label, alpha){
+          var h = (val/maxV)*(c.height-140);
+          ctx.fillStyle = 'rgba(255,255,255,'+alpha+')';
+          ctx.strokeStyle = 'rgba(255,255,255,0.14)';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.roundRect(x-90, baseY-h, 180, h, 16);
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.fillStyle = 'rgba(255,255,255,0.85)';
+          ctx.font = '900 13px system-ui, -apple-system, Segoe UI, Roboto, Arial';
+          ctx.textAlign = 'center';
+          ctx.fillText(label, x, baseY+26);
+
+          ctx.font = '900 14px system-ui, -apple-system, Segoe UI, Roboto, Arial';
+          ctx.fillText(fmtPct(val), x, baseY-h-10);
+          ctx.textAlign = 'start';
+        }
+
+        bar(c.width*0.33, avg, 'Avg single-name σ', 0.12);
+        bar(c.width*0.67, idx, 'Index σ (50/50)', 0.08);
+
+        // wedge annotation
+        ctx.strokeStyle = 'rgba(255,255,255,0.22)';
+        ctx.setLineDash([6,6]);
+        ctx.beginPath();
+        var y1 = baseY - (avg/maxV)*(c.height-140);
+        var y2 = baseY - (idx/maxV)*(c.height-140);
+        ctx.moveTo(c.width*0.50, y1);
+        ctx.lineTo(c.width*0.50, y2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.fillStyle = 'rgba(255,255,255,0.78)';
+        ctx.font = '900 12px system-ui, -apple-system, Segoe UI, Roboto, Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Dispersion wedge', c.width*0.50, (y1+y2)/2 - 10);
+        ctx.textAlign = 'start';
+      }
+
+      // roundRect polyfill already added in first widget
+      sigA.addEventListener('input', render);
+      sigB.addEventListener('input', render);
+      rho2.addEventListener('input', render);
+      render();
+    })();
+
+    // ---------- 3) “3D” surface projection ----------
+    (function(){
+      var c = document.getElementById('surface');
+      var ctx = c.getContext('2d');
+      var sigA3 = document.getElementById('sigA3');
+      var sigB3 = document.getElementById('sigB3');
+      var sigA3Val = document.getElementById('sigA3Val');
+      var sigB3Val = document.getElementById('sigB3Val');
+
+      function render(){
+        var a = parseFloat(sigA3.value)/100;
+        var b = parseFloat(sigB3.value)/100;
+        sigA3Val.textContent = sigA3.value + '%';
+        sigB3Val.textContent = sigB3.value + '%';
+
+        ctx.clearRect(0,0,c.width,c.height);
+        ctx.fillStyle = 'rgba(255,255,255,0.02)';
+        ctx.fillRect(0,0,c.width,c.height);
+
+        // grid params
+        var padL = 70, padR = 30, padT = 40, padB = 70;
+        var W = c.width - padL - padR;
+        var H = c.height - padT - padB;
+
+        // axes: x = rho, y = weight w, z = basket sigma
+        var rhoMin = -0.95, rhoMax = 0.95;
+        var wMin = 0.05, wMax = 0.95;
+
+        // sample
+        var nR = 28, nW = 20;
+        var zMin = 1e9, zMax = -1e9;
+        var grid = [];
+        for(var j=0;j<nW;j++){
+          var w = lerp(wMin,wMax,j/(nW-1));
+          var row = [];
+          for(var i=0;i<nR;i++){
+            var rho = lerp(rhoMin,rhoMax,i/(nR-1));
+            var z = basketSigma(a,b,rho,w);
+            row.push(z);
+            zMin = Math.min(zMin,z);
+            zMax = Math.max(zMax,z);
+          }
+          grid.push(row);
+        }
+        zMax = Math.max(zMax, zMin + 1e-6);
+
+        // simple isometric-ish projection
+        function proj(i,j,z){
+          var x = i/(nR-1);
+          var y = j/(nW-1);
+
+          // base plane coordinates
+          var bx = padL + x*W;
+          var by = padT + (1-y)*H;
+
+          // tilt: move points diagonally and lift by z
+          var tiltX = (y-0.5)*80;
+          var tiltY = (x-0.5)*45;
+          var zn = (z - zMin)/(zMax - zMin);
+          var lift = zn * 120;
+
+          return { x: bx + tiltX, y: by + tiltY - lift, zn: zn };
+        }
+
+        // draw wireframe
+        ctx.lineWidth = 1.5;
+        for(var j=0;j<nW;j++){
+          ctx.beginPath();
+          for(var i=0;i<nR;i++){
+            var z = grid[j][i];
+            var p = proj(i,j,z);
+            if(i===0) ctx.moveTo(p.x,p.y);
+            else ctx.lineTo(p.x,p.y);
+          }
+          ctx.strokeStyle = 'rgba(255,255,255,0.10)';
+          ctx.stroke();
+        }
+        for(var i=0;i<nR;i++){
+          ctx.beginPath();
+          for(var j=0;j<nW;j++){
+            var z = grid[j][i];
+            var p = proj(i,j,z);
+            if(j===0) ctx.moveTo(p.x,p.y);
+            else ctx.lineTo(p.x,p.y);
+          }
+          ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+          ctx.stroke();
+        }
+
+        // highlight a slice at rho=0.4
+        var rhoSlice = 0.40;
+        var iSlice = Math.round((rhoSlice - rhoMin)/(rhoMax-rhoMin)*(nR-1));
+        ctx.beginPath();
+        for(var j=0;j<nW;j++){
+          var z = grid[j][iSlice];
+          var p = proj(iSlice,j,z);
+          if(j===0) ctx.moveTo(p.x,p.y);
+          else ctx.lineTo(p.x,p.y);
+        }
+        ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // labels
+        ctx.fillStyle = 'rgba(255,255,255,0.82)';
+        ctx.font = '900 13px system-ui, -apple-system, Segoe UI, Roboto, Arial';
+        ctx.fillText('ρ (correlation) →', padL, c.height - 30);
+        ctx.fillText('w (weight in A) ↑', 18, padT + 10);
+        ctx.fillText('Basket σ surface', padL, 22);
+
+        // ticks
+        function tick(text, x, y){
+          ctx.fillStyle = 'rgba(255,255,255,0.70)';
+          ctx.font = '800 12px system-ui, -apple-system, Segoe UI, Roboto, Arial';
+          ctx.fillText(text, x, y);
+        }
+        tick('-0.95', padL, c.height-40);
+        tick('0', padL + W/2 - 8, c.height-40);
+        tick('+0.95', padL + W - 38, c.height-40);
+      }
+
+      sigA3.addEventListener('input', render);
+      sigB3.addEventListener('input', render);
+      render();
+    })();
+  </script>
+</body>
+</html>
