@@ -1,11 +1,11 @@
 {
   "items": [
     {
-  "date": "2026-02-28",
+ "slug": "Dispersion Trading",
   "title": "Dispersion Trading 101: Correlation, Variance, and the \u201cIndex vs Components\u201d Game",
   "href": "statics/WriteUps/dispersion-foundations.html",
   "tag": "Foundations / Dispersion",
-  "premium": false,
+  "level": "Foundations",
   "excerpt": "A two-asset, trader-friendly primer on dispersion: how correlation changes index variance, how to visualize the wedge, and how pros think about implied vs realized correlation."
 },
     {
