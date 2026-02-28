@@ -178,7 +178,7 @@ body{overflow-x:hidden;}
   var pCS=document.getElementById("cqW_701595141_pCS");
   var cv=document.getElementById("cqW_701595141_cv");
   var ctx=cv.getContext("2d");
-  function fmt(x){var s=(Math.round(x<em>100)/100).toFixed(2);return (x>=0?"+":"")+s;}
+  function fmt(x){var s=(Math.round(x*100)/100).toFixed(2);return (x>=0?"+":"")+s;}
   function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
   function callPayoff(ST,K,p){return Math.max(ST-K,0)-p;}
   function callSpreadPayoff(ST,K1,K2,p){
@@ -199,7 +199,7 @@ body{overflow-x:hidden;}
     // compute y-range from payoffs
     var ys=[];
     for(var i=0;i<=120;i++){
-      var ST=xmin+(xmax-xmin)</em>i/120;
+      var ST=xmin+(xmax-xmin)*i/120;
       var f=ST-S0;
       var c=callPayoff(ST,K0,p0);
       var cs=callSpreadPayoff(ST,K0,Ku0,pCS0);
@@ -211,12 +211,12 @@ body{overflow-x:hidden;}
     yMax=Math.max(yMax, 25);
     var pad=2;
     yMin-=pad; yMax+=pad;
-    function xPix(ST){return 40+(W-60)<em>(ST-xmin)/(xmax-xmin);}
-    function yPix(y){return (H-30)-(H-60)</em>(y-yMin)/(yMax-yMin);}
+    function xPix(ST){return 40+(W-60)*(ST-xmin)/(xmax-xmin);}
+    function yPix(y){return (H-30)-(H-60)*(y-yMin)/(yMax-yMin);}
     // grid
     ctx.strokeStyle="rgba(255,255,255,.10)";
     for(var g=0;g<=6;g++){
-      var y=20+g<em>(H-60)/6;
+      var y=20+g*(H-60)/6;
       ctx.beginPath();ctx.moveTo(40,y);ctx.lineTo(W-20,y);ctx.stroke();
     }
     // Forward line
@@ -224,7 +224,7 @@ body{overflow-x:hidden;}
     ctx.lineWidth=2;
     ctx.beginPath();
     for(var i=0;i<=120;i++){
-      var ST=xmin+(xmax-xmin)</em>i/120;
+      var ST=xmin+(xmax-xmin)*i/120;
       var f=ST-S0;
       var xp=xPix(ST), yp=yPix(f);
       if(i===0) ctx.moveTo(xp,yp); else ctx.lineTo(xp,yp);
@@ -235,7 +235,7 @@ body{overflow-x:hidden;}
     ctx.lineWidth=2;
     ctx.beginPath();
     for(var i=0;i<=120;i++){
-      var ST=xmin+(xmax-xmin)<em>i/120;
+      var ST=xmin+(xmax-xmin)*i/120;
       var c=callPayoff(ST,K0,p0);
       var xp=xPix(ST), yp=yPix(c);
       if(i===0) ctx.moveTo(xp,yp); else ctx.lineTo(xp,yp);
@@ -246,7 +246,7 @@ body{overflow-x:hidden;}
     ctx.lineWidth=2;
     ctx.beginPath();
     for(var i=0;i<=120;i++){
-      var ST=xmin+(xmax-xmin)</em>i/120;
+      var ST=xmin+(xmax-xmin)*i/120;
       var cs=callSpreadPayoff(ST,K0,Ku0,pCS0);
       var xp=xPix(ST), yp=yPix(cs);
       if(i===0) ctx.moveTo(xp,yp); else ctx.lineTo(xp,yp);
@@ -361,11 +361,11 @@ body{overflow-x:hidden;}
   var cv=document.getElementById("cqW_828688590_cv");
   var ctx=cv.getContext("2d");
   function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
-  function fmt(x,d){var p=Math.pow(10,d||0);return (Math.round(x<em>p)/p).toFixed(d||0);}
+  function fmt(x,d){var p=Math.pow(10,d||0);return (Math.round(x*p)/p).toFixed(d||0);}
   function indexVol(sigma, rho, n){
     var s=sigma/100;
-    var v=s</em>s<em>(1/n + ((n-1)/n)</em>rho);
-    return 100<em>Math.sqrt(Math.max(v,0));
+    var v=s*s*(1/n + ((n-1)/n)*rho);
+    return 100*Math.sqrt(Math.max(v,0));
   }
   function draw(sv,rho,n,iv,gap){
     var W=cv.width,H=cv.height;
@@ -377,11 +377,11 @@ body{overflow-x:hidden;}
     ctx.lineWidth=1;
     ctx.strokeStyle="rgba(255,255,255,.15)";
     for(var i=0;i<=5;i++){
-      var y=20+i</em>(H-40)/5;
+      var y=20+i*(H-40)/5;
       line(40,y,W-20,y,1);
     }
     for(var j=0;j<=6;j++){
-      var x=40+j<em>(W-60)/6;
+      var x=40+j*(W-60)/6;
       line(x,20,x,H-20,1);
     }
     ctx.fillStyle="rgba(255,255,255,.85)";
@@ -392,7 +392,7 @@ body{overflow-x:hidden;}
     var baseY=H-26;
     var scale=(H-70)/maxV;
     function bar(x,label,val){
-      var h=val</em>scale;
+      var h=val*scale;
       ctx.fillStyle="rgba(255,255,255,.10)";
       ctx.fillRect(x,baseY-h,barW,h);
       ctx.strokeStyle="rgba(255,255,255,.18)";
@@ -409,8 +409,8 @@ body{overflow-x:hidden;}
     ctx.strokeStyle="rgba(255,255,255,.35)";
     ctx.lineWidth=2;
     ctx.beginPath();
-    ctx.moveTo(70+barW/2, baseY - sv<em>scale);
-    ctx.lineTo(260+barW/2, baseY - iv</em>scale);
+    ctx.moveTo(70+barW/2, baseY - sv*scale);
+    ctx.lineTo(260+barW/2, baseY - iv*scale);
     ctx.stroke();
     ctx.fillStyle="rgba(255,255,255,.85)";
     ctx.font="800 12px system-ui, -apple-system, Segoe UI, Roboto, Arial";
@@ -426,7 +426,7 @@ body{overflow-x:hidden;}
     rhoT.textContent=fmt(rho,2);
     nT.textContent=n;
     var iv=indexVol(sv,rho,n);
-    var gap=(sv<em>sv - iv</em>iv);
+    var gap=(sv*sv - iv*iv);
     ivT.textContent=fmt(iv,1);
     gapT.textContent=fmt(gap,0);
     draw(sv,rho,n,iv,fmt(gap,0));
