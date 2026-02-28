@@ -403,6 +403,54 @@
 .cq-counterbar .cq-metric .k{font-weight:800;opacity:.85;}
 .cq-counterbar .cq-metric .v{font-variant-numeric: tabular-nums; font-weight:900;}
 
+
+/* ================= Correlation Galaxy ================= */
+
+.cq-galaxy-section{
+  margin-top: 24px;
+  padding: 24px 18px 40px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,.10);
+  background:
+    radial-gradient(1200px 600px at 50% 0%, rgba(255,207,122,.12), transparent 60%),
+    radial-gradient(800px 500px at 80% 20%, rgba(158,231,255,.10), transparent 60%),
+    rgba(0,0,0,.25);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+
+.cq-galaxy-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  margin-bottom:18px;
+}
+
+.cq-galaxy-header h2{
+  margin:0;
+  font-size:20px;
+}
+
+.cq-galaxy-header p{
+  margin:4px 0 0;
+  font-size:13px;
+  color:rgba(255,255,255,.65);
+}
+
+.cq-galaxy-controls{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:12px;
+}
+
+#cqGalaxyCanvas{
+  width:100%;
+  height:420px;
+  display:block;
+}
+
 </style>
 </head>
 
@@ -496,6 +544,23 @@
 
       </div>
     </section>
+
+    <!-- ===================== CQ Correlation Galaxy ===================== -->
+<section id="cq-galaxy" class="cq-galaxy-section">
+  <div class="cq-galaxy-header">
+    <div>
+      <h2>Correlation Galaxy</h2>
+      <p>Watch how market structure tightens and loosens as correlation shifts.</p>
+    </div>
+    <div class="cq-galaxy-controls">
+      <label>Correlation Regime</label>
+      <input id="cqCorrSlider" type="range" min="0" max="100" value="40">
+      <span id="cqCorrValue">0.40</span>
+    </div>
+  </div>
+
+  <canvas id="cqGalaxyCanvas"></canvas>
+</section>
 
     <!-- CONTENT -->
     <div class="cq-grid">
@@ -1000,5 +1065,108 @@ async function boot() {
     });
 })();
 </script>
+
+<script>
+(function(){
+
+const canvas = document.getElementById("cqGalaxyCanvas");
+if(!canvas) return;
+
+const ctx = canvas.getContext("2d");
+let W, H;
+
+function resize(){
+  W = canvas.width = canvas.offsetWidth;
+  H = canvas.height = canvas.offsetHeight;
+}
+window.addEventListener("resize", resize);
+resize();
+
+const slider = document.getElementById("cqCorrSlider");
+const sliderVal = document.getElementById("cqCorrValue");
+
+let corr = slider.value / 100;
+sliderVal.textContent = corr.toFixed(2);
+
+slider.addEventListener("input", ()=>{
+  corr = slider.value / 100;
+  sliderVal.textContent = corr.toFixed(2);
+});
+
+const N = 22;
+const nodes = [];
+
+for(let i=0;i<N;i++){
+  nodes.push({
+    x: Math.random()*W,
+    y: Math.random()*H,
+    vx: (Math.random()-.5)*0.4,
+    vy: (Math.random()-.5)*0.4,
+    vol: 0.5 + Math.random()*0.5
+  });
+}
+
+function animate(){
+  ctx.clearRect(0,0,W,H);
+
+  // Glow background
+  const grad = ctx.createRadialGradient(W/2,H/2,50,W/2,H/2,Math.max(W,H));
+  grad.addColorStop(0,"rgba(255,207,122,.08)");
+  grad.addColorStop(1,"rgba(0,0,0,0)");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,0,W,H);
+
+  nodes.forEach(n=>{
+    // pull toward center when correlation high
+    const cx = W/2;
+    const cy = H/2;
+    n.vx += (cx-n.x)*0.00002*corr;
+    n.vy += (cy-n.y)*0.00002*corr;
+
+    n.x += n.vx;
+    n.y += n.vy;
+
+    // boundaries
+    if(n.x<0||n.x>W) n.vx*=-1;
+    if(n.y<0||n.y>H) n.vy*=-1;
+  });
+
+  // draw connections
+  for(let i=0;i<N;i++){
+    for(let j=i+1;j<N;j++){
+      const dx = nodes[i].x - nodes[j].x;
+      const dy = nodes[i].y - nodes[j].y;
+      const d = Math.sqrt(dx*dx + dy*dy);
+
+      const threshold = 140 * (1 - corr*0.7);
+
+      if(d < threshold){
+        const alpha = (1 - d/threshold) * 0.4 * corr;
+        ctx.strokeStyle = `rgba(158,231,255,${alpha})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(nodes[i].x,nodes[i].y);
+        ctx.lineTo(nodes[j].x,nodes[j].y);
+        ctx.stroke();
+      }
+    }
+  }
+
+  // draw nodes
+  nodes.forEach(n=>{
+    ctx.beginPath();
+    ctx.arc(n.x,n.y,3 + 4*n.vol*corr,0,Math.PI*2);
+    ctx.fillStyle = `rgba(255,207,122,${0.6 + 0.4*corr})`;
+    ctx.fill();
+  });
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+})();
+</script>
+
 </body>
 </html>
