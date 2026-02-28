@@ -1116,6 +1116,7 @@ async function boot() {
     });
 })();
 </script>
+
 <script>
 (function(){
 
@@ -1135,12 +1136,14 @@ resize();
 const slider = document.getElementById("cqCorrSlider");
 const sliderVal = document.getElementById("cqCorrValue");
 
-let corr = slider.value/100;
-sliderVal.textContent = corr.toFixed(2);
+let baseCorr = slider.value/100;
+let corr = baseCorr;
+
+sliderVal.textContent = baseCorr.toFixed(2);
 
 slider.addEventListener("input", ()=>{
-  corr = slider.value/100;
-  sliderVal.textContent = corr.toFixed(2);
+  baseCorr = slider.value/100;
+  sliderVal.textContent = baseCorr.toFixed(2);
 });
 
 let warMode = false;
@@ -1150,7 +1153,7 @@ document.getElementById("cqToggleWar").addEventListener("click", function(){
   warMode = !warMode;
   this.setAttribute("aria-pressed", warMode);
   if(warMode){
-    slider.value = 70;
+    slider.value = 75;
     slider.dispatchEvent(new Event("input"));
   }
 });
@@ -1164,7 +1167,7 @@ document.getElementById("cqToggleAI").addEventListener("click", function(){
   }
 });
 
-const N = 22;
+const N = 24;
 const nodes = [];
 
 for(let i=0;i<N;i++){
@@ -1176,18 +1179,33 @@ for(let i=0;i<N;i++){
   });
 }
 
+let shockTimer = 0;
+
 function animate(){
 
   ctx.clearRect(0,0,W,H);
 
-  nodes.forEach(n=>{
+  // ---- Dramatic background pulse in war ----
+  if(warMode){
+    const pulse = 0.08 + Math.sin(Date.now()*0.004)*0.04;
+    ctx.fillStyle = `rgba(120,20,20,${pulse})`;
+    ctx.fillRect(0,0,W,H);
+  }
 
+  // ---- Temporary correlation spike (panic snap) ----
+  if(warMode){
+    corr = baseCorr + 0.15*Math.sin(Date.now()*0.002);
+  } else {
+    corr = baseCorr;
+  }
+
+  nodes.forEach(n=>{
     const cx=W/2, cy=H/2;
     const dx=cx-n.x, dy=cy-n.y;
 
-    let pull = 0.00002*corr*(warMode?2.2:1);
+    let pull = 0.00002*corr*(warMode?3:1);
     let swirl = aiMode?0.0009:0.0003;
-    let jitter = warMode?0.22:0.08;
+    let jitter = warMode?0.35:0.08;
 
     n.vx += dx*pull;
     n.vy += dy*pull;
@@ -1217,12 +1235,14 @@ function animate(){
       const d=Math.sqrt(dx*dx+dy*dy);
 
       if(d<threshold){
-        const alpha=(1-d/threshold)*0.45*corr;
+        const alpha=(1-d/threshold)*0.55*corr;
         ctx.strokeStyle = warMode
-          ? `rgba(255,120,90,${alpha})`
+          ? `rgba(255,80,50,${alpha})`
           : aiMode
             ? `rgba(110,200,255,${alpha})`
             : `rgba(158,231,255,${alpha})`;
+
+        ctx.lineWidth = warMode ? 1.6 : 1.0;
 
         ctx.beginPath();
         ctx.moveTo(nodes[i].x,nodes[i].y);
@@ -1234,14 +1254,30 @@ function animate(){
 
   nodes.forEach(n=>{
     ctx.beginPath();
-    ctx.arc(n.x,n.y,4,0,Math.PI*2);
+    ctx.arc(n.x,n.y, warMode?5:4, 0, Math.PI*2);
     ctx.fillStyle = warMode
-      ? "rgba(255,207,122,.9)"
+      ? "rgba(255,180,120,.95)"
       : aiMode
         ? "rgba(158,231,255,.9)"
         : "rgba(255,255,255,.9)";
     ctx.fill();
   });
+
+  // ---- Shockwave effect ----
+  if(warMode){
+    shockTimer += 1;
+    if(shockTimer % 120 === 0){
+      ctx.beginPath();
+      ctx.arc(W/2, H/2, 10, 0, Math.PI*2);
+    }
+
+    const r = (shockTimer % 180) * 4;
+    ctx.beginPath();
+    ctx.arc(W/2, H/2, r, 0, Math.PI*2);
+    ctx.strokeStyle = `rgba(255,120,90,${0.15 - r/1200})`;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
 
   requestAnimationFrame(animate);
 }
