@@ -490,6 +490,21 @@
   box-shadow: 0 0 0 9999px rgba(110,200,255,.10) inset, 0 10px 26px rgba(0,0,0,.28);
 }
 
+  .cq-macro-strip{
+  display:flex;
+  gap:14px;
+  margin:12px 0 6px;
+}
+
+.cq-metric{
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.35);
+  font-weight:800;
+  font-size:14px;
+  backdrop-filter:blur(6px);
+}
 </style>
 </head>
 
@@ -610,6 +625,14 @@
       </div>
     </div>
   </div>
+<div class="cq-macro-strip">
+  <div class="cq-metric">
+    🛢 Oil: <span id="cqOil">70.00</span>
+  </div>
+  <div class="cq-metric">
+    📈 VIX: <span id="cqVix">18.0</span>
+  </div>
+</div>
 
   <canvas id="cqGalaxyCanvas"></canvas>
 </section>
@@ -1116,7 +1139,6 @@ async function boot() {
     });
 })();
 </script>
-
 <script>
 (function(){
 
@@ -1167,6 +1189,19 @@ document.getElementById("cqToggleAI").addEventListener("click", function(){
   }
 });
 
+/* ---- Oil & VIX Simulation ---- */
+
+let oil = 70;
+let vix = 18;
+
+const oilEl = document.getElementById("cqOil");
+const vixEl = document.getElementById("cqVix");
+
+function updateMacro(){
+  oilEl.textContent = oil.toFixed(2);
+  vixEl.textContent = vix.toFixed(1);
+}
+
 const N = 24;
 const nodes = [];
 
@@ -1185,14 +1220,12 @@ function animate(){
 
   ctx.clearRect(0,0,W,H);
 
-  // ---- Dramatic background pulse in war ----
   if(warMode){
     const pulse = 0.08 + Math.sin(Date.now()*0.004)*0.04;
     ctx.fillStyle = `rgba(120,20,20,${pulse})`;
     ctx.fillRect(0,0,W,H);
   }
 
-  // ---- Temporary correlation spike (panic snap) ----
   if(warMode){
     corr = baseCorr + 0.15*Math.sin(Date.now()*0.002);
   } else {
@@ -1263,28 +1296,49 @@ function animate(){
     ctx.fill();
   });
 
-  // ---- Shockwave effect ----
+  /* ---- Shockwave + Oil/VIX Jump ---- */
+
   if(warMode){
-    shockTimer += 1;
-    if(shockTimer % 120 === 0){
-      ctx.beginPath();
-      ctx.arc(W/2, H/2, 10, 0, Math.PI*2);
+    shockTimer++;
+
+    if(shockTimer % 180 === 0){
+
+      // Oil gap
+      const jump = 2 + Math.random()*3;
+      oil += jump;
+
+      // VIX spike
+      vix += 5 + Math.random()*4;
     }
 
-    const r = (shockTimer % 180) * 4;
+    const r = (shockTimer % 180) * 3;
     ctx.beginPath();
     ctx.arc(W/2, H/2, r, 0, Math.PI*2);
-    ctx.strokeStyle = `rgba(255,120,90,${0.15 - r/1200})`;
+    ctx.strokeStyle = `rgba(255,120,90,${0.18 - r/900})`;
     ctx.lineWidth = 2;
     ctx.stroke();
   }
 
+  /* ---- Decay Mechanics ---- */
+
+  if(!warMode){
+    oil += (70 - oil)*0.01;
+    vix += (18 - vix)*0.02;
+  } else {
+    oil += 0.02; // drift up in war
+    vix *= 0.995; // spike then fade
+  }
+
+  updateMacro();
+
   requestAnimationFrame(animate);
 }
 
+updateMacro();
 animate();
 
 })();
 </script>
+
 </body>
 </html>
