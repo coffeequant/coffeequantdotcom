@@ -2,6 +2,16 @@
   "items": [
     {
       "date": "2026-02-28",
+      "title": "War, Oil and Convexity: Why Dispersion Is the Smart Way to",
+      "href": "statics/WriteUps/war-oil-convexity-dispersion-foundations.html",
+      "link": "statics/WriteUps/war-oil-convexity-dispersion-foundations.html",
+      "tag": "Foundations / Convexity",
+      "premium": false,
+      "hero": "statics/img/newarticles/images.png",
+      "excerpt": "[[pill:Foundations]] [[pill:Oil]] [[pill:Convexity]] [[pill:Dispersion]] When war hits the tape, convexity wakes up The US and Israel have begun striking targets across Iran. Ir..."
+    },
+    {
+      "date": "2026-02-28",
       "title": "Correlation Is the Hidden Lever: Why Calm Index Days Can Still Hurt",
       "href": "statics/WriteUps/correlation-hidden-lever-convexity-simple.html",
       "link": "statics/WriteUps/correlation-hidden-lever-convexity-simple.html",
