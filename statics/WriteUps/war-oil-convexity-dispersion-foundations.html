@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="canonical" href="https://coffee.coffeequant.com/statics/WriteUps/war-oil-convexity-dispersion-foundations.html">
+  <meta property="og:site_name" content="CoffeeQuant">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="War, Oil and Convexity: Why Dispersion Is the Smart Way to">
+  <meta property="og:description" content="US and Israel strike Iran. Oil spikes. But the real trade">
+  <meta property="og:url" content="https://coffee.coffeequant.com/statics/WriteUps/war-oil-convexity-dispersion-foundations.html">
+  <meta property="og:image" content="https://coffee.coffeequant.com/statics/img/newarticles/images.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://coffee.coffeequant.com/statics/img/newarticles/images.png">
+  <meta name="twitter:title" content="War, Oil and Convexity: Why Dispersion Is the Smart Way to">
+  <meta name="twitter:description" content="US and Israel strike Iran. Oil spikes. But the real trade">
+  <title>War, Oil and Convexity: Why Dispersion Is the Smart Way to | CoffeeQuant</title>
+  <link rel="stylesheet" href="../css/cq.css" />
+  <style>
+html,body{width:100%!important;max-width:none!important;margin:0!important;}
+body{overflow-x:hidden;}
+.cq-body{display:block!important;width:100%!important;max-width:none!important;}
+.cq-article-wrap{max-width:1120px;margin:0 auto;padding:24px 18px 70px;width:100%;}
+.cq-topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 14px;border-radius:14px;position:sticky;top:10px;z-index:5;backdrop-filter:blur(8px);}
+.cq-brand a{text-decoration:none;font-weight:800;letter-spacing:.2px;}
+.cq-nav a{text-decoration:none;margin-left:12px;font-weight:600;}
+.cq-hero{margin-top:16px;border-radius:18px;overflow:hidden;}
+.cq-hero-img{width:100%;height:auto;display:block;}
+.cq-kicker{opacity:.8;text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:800;}
+.cq-h1{margin:10px 0 8px;font-size:34px;line-height:1.12;letter-spacing:-0.02em;}
+.cq-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px;}
+.cq-badge{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700;}
+.cq-card{margin-top:14px;border-radius:18px;overflow:hidden;}
+.cq-card-hd{padding:14px 16px;}
+.cq-card-bd{padding:14px 16px 18px;}
+.cq-share{margin-top:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.cq-share .share-title{font-weight:800;opacity:.85;}
+.cq-share a{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;text-decoration:none;font-weight:800;}
+.cq-share a:hover{opacity:.9;}
+.cq-share .s-li,.cq-share .s-x,.cq-share .s-em{border:1px solid rgba(255,255,255,.12);}
+.cq-pill{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-weight:800;font-size:12px;
+  border:1px solid rgba(255,255,255,.14);opacity:.95;}
+.cq-callout{border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:12px 14px;margin:14px 0;}
+.cq-callout-hd{font-weight:900;margin-bottom:6px;opacity:.95;}
+.cq-callout-bd p{margin:8px 0;}
+.cq-callout-info{box-shadow: inset 0 0 0 9999px rgba(80,140,255,.06);}
+.cq-callout-warn{box-shadow: inset 0 0 0 9999px rgba(255,170,70,.06);}
+.cq-callout-tip{box-shadow: inset 0 0 0 9999px rgba(120,255,190,.05);}
+.cq-thumb{display:flex;gap:12px;align-items:flex-start;margin:16px 0;}
+.cq-thumb-right{flex-direction:row-reverse;}
+.cq-thumb-img{flex:0 0 220px;max-width:220px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.10);}
+.cq-thumb-img img{width:100%;height:auto;display:block;}
+.cq-thumb-txt{flex:1 1 auto;min-width:0;}
+.cq-figure{margin:16px 0;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.10);}
+.cq-img{width:100%;height:auto;display:block;}
+.cq-caption{padding:10px 12px;font-size:12px;opacity:.85;border-top:1px solid rgba(255,255,255,.08);}
+.cq-list-bullets{padding-left:20px;}
+.cq-list-steps{padding-left:22px;}
+.cq-back{display:inline-block;margin-top:18px;text-decoration:none;font-weight:700;}
+  </style>
+</head>
+<body class="cq-body">
+  <div class="cq-article-wrap">
+    <div class="cq-topbar">
+      <div class="cq-brand"><a href="/"><span aria-hidden="true">☕</span> CoffeeQuant</a></div>
+      <div class="cq-nav">
+        <a href="/#daily">Daily</a>
+        <a href="/#labs">Labs</a>
+        <a href="/#tools">Tools</a>
+        <a href="/#notes">Notes</a>
+        <a href="/#curios">Curios</a>
+      </div>
+    </div>
+    <div class="cq-share" role="group" aria-label="Share">
+      <div class="share-title">Share this article</div>
+      <div class="share-buttons">
+        <a id="cqShareLinkedIn" class="s-li" target="_blank" rel="noopener">LinkedIn</a>
+        <a id="cqShareX" class="s-x" target="_blank" rel="noopener">X</a>
+        <a id="cqShareEmail" class="s-em">Email</a>
+      </div>
+    </div>
+    <section class="cq-hero">
+      <img class="cq-hero-img" src="/statics/img/newarticles/images.png" alt="CoffeeQuant header" />
+    </section>
+    <section class="cq-card">
+      <div class="cq-card-hd">
+        <div class="cq-kicker">Foundations / Convexity • 2026-02-28</div>
+        <h1 class="cq-h1">War, Oil and Convexity: Why Dispersion Is the Smart Way to</h1>
+        <div class="cq-meta">
+
+        </div>
+      </div>
+      <div class="cq-card-bd">
+<p><span class="cq-pill">Foundations</span> <span class="cq-pill">Oil</span> <span class="cq-pill">Convexity</span> <span class="cq-pill">Dispersion</span></p>
+
+<h2>When war hits the tape, convexity wakes up</h2>
+
+<p>The US and Israel have begun striking targets across Iran. Iran has<br>retaliated. Airspace closures across the Gulf. Missile exchanges.<br>Regional escalation risk.</p>
+
+<p>Brent had already rallied nearly 20% year-to-date on tension buildup<br>and touched $73 per barrel before markets closed.</p>
+
+<p>When headlines look like this, traders don’t think in straight lines.</p>
+
+<p>They think in <strong>convexity</strong>.<br><hr><br><h2>What convexity really means in oil</h2></p>
+
+<p>Convexity is simple:</p>
+
+<p>Small moves do little.<br>Large moves change everything.</p>
+
+<p>Oil pricing during peace:<br><ul class="cq-list-bullets"><br><li>Supply steady.</li><br><li>Shipping lanes open.</li><br><li>Spare capacity known.</li><br><li>Volatility moderate.</li><br></ul></p>
+
+<p>Oil pricing during war:<br><ul class="cq-list-bullets"><br><li>Strait of Hormuz risk.</li><br><li>Infrastructure damage.</li><br><li>Sanctions tighten.</li><br><li>Insurance costs spike.</li><br><li>Retaliation uncertainty.</li><br></ul></p>
+
+<p>Oil doesn’t move linearly in war.<br>It jumps.</p>
+
+<p>That jump risk is convex.</p>
+
+<p>Example intuition:</p>
+
+<p>If oil is $70:<br><ul class="cq-list-bullets"><br><li>Peace scenario → maybe $65–75 range.</li><br><li>Escalation scenario → $90, $100, maybe higher.</li><br></ul></p>
+
+<p>The downside is gradual.<br>The upside can be explosive.</p>
+
+<p>That asymmetry is convexity.<br><hr><br><h2>Why owning “just oil” is not enough</h2></p>
+
+<p>Many investors respond to war by:<br><ul class="cq-list-bullets"><br><li>Buying oil futures.</li><br><li>Buying energy stocks.</li><br><li>Buying oil calls.</li><br></ul></p>
+
+<p>That works — but it concentrates risk in one direction.</p>
+
+<p>Here’s the problem:</p>
+
+<p>If OPEC+ increases supply.<br>If escalation fades.<br>If diplomacy surprises.</p>
+
+<p>Oil can drop sharply and fast.</p>
+
+<p>Pure long-oil positioning is not risk management.<br>It is a directional bet.</p>
+
+<p>War is not directional.<br>War is distributional.</p>
+
+<p>And that’s where dispersion comes in.<br><hr><br><h2>Dispersion: the adult way to trade war</h2></p>
+
+<p>Dispersion is the idea that:</p>
+
+<p>Instead of betting on “the index”,<br>you bet on <strong>differences between components</strong>.</p>
+
+<p>In war environments:</p>
+
+<ul class="cq-list-bullets">
+<li>Oil producers may spike.</li>
+<li>Airlines may fall.</li>
+<li>Defense stocks may rally.</li>
+<li>Tech may wobble.</li>
+<li>Gold may surge.</li>
+<li>Broad indices may move less than individual names.</li>
+</ul>
+
+<p>That widening gap between winners and losers is dispersion.</p>
+
+<p>Convexity often appears first in single assets.<br>Correlation rises later.<br><hr><br><h2>Simple example (no formulas)</h2></p>
+
+<p>Imagine this setup:</p>
+
+<p>Oil at $70.<br>Energy stocks up 5%.<br>Airlines down 6%.<br>Index down 1%.</p>
+
+<p>If you:<br><ul class="cq-list-bullets"><br><li>Own energy calls</li><br><li>Own airline puts</li><br><li>Neutralize broad index exposure</li><br></ul></p>
+
+<p>You are trading dispersion.</p>
+
+<p>If war escalates:<br><ul class="cq-list-bullets"><br><li>Energy accelerates.</li><br><li>Airlines deteriorate further.</li><br><li>Your convexity increases.</li><br></ul></p>
+
+<p>If war fades:<br><ul class="cq-list-bullets"><br><li>Both revert.</li><br><li>Your risk is limited by structure.</li><br></ul></p>
+
+<p>You didn’t bet on “market crash”.<br>You bet on <strong>spread widening</strong>.</p>
+
+<p>That’s dispersion.<br><hr><br><h2>Why dispersion is perfect for war regimes</h2></p>
+
+<p>War produces:</p>
+
+<ol class="cq-list-steps">
+<li>Sector divergence.</li>
+<li>Commodity spikes.</li>
+<li>Cross-asset decoupling.</li>
+<li>Uncertain duration.</li>
+</ol>
+
+<p>Dispersion thrives on uncertainty in relative outcomes.</p>
+
+<p>Index options are expensive in war.<br>Single-name convexity is often mispriced early.</p>
+
+<p>By positioning in relative moves, you:</p>
+
+<ul class="cq-list-bullets">
+<li>Reduce pure directional exposure.</li>
+<li>Avoid paying peak index vol.</li>
+<li>Capture convex outcomes where they emerge first.</li>
+</ul>
+<hr>
+<h2>The correlation trap</h2>
+
+<p>Here’s the danger:</p>
+
+<p>Early in conflict:<br><ul class="cq-list-bullets"><br><li>Dispersion widens.</li><br><li>Correlation stays moderate.</li><br></ul></p>
+
+<p>If conflict escalates into systemic shock:<br><ul class="cq-list-bullets"><br><li>Correlation spikes.</li><br><li>Everything sells.</li><br><li>Diversification collapses.</li><br></ul></p>
+
+<p>This is why convexity matters.</p>
+
+<p>Convex dispersion structures are powerful because:</p>
+
+<p>They make money when spreads widen.<br>They don’t collapse immediately if correlation spikes.<br>They avoid the “all in one trade” trap.<br><hr><br><h2>Oil convexity is not just price — it’s structure</h2></p>
+
+<p>War affects:</p>
+
+<ul class="cq-list-bullets">
+<li>Shipping lanes (Hormuz risk).</li>
+<li>Insurance premia.</li>
+<li>Refining margins.</li>
+<li>OPEC+ supply decisions.</li>
+<li>Strategic reserves policy.</li>
+</ul>
+
+<p>Oil volatility is not just direction.<br>It is distribution uncertainty.</p>
+
+<p>Convexity reflects the unknown tail.<br><hr><br><h2>How to think about positioning (intuitively)</h2></p>
+
+<p>Instead of:</p>
+
+<p>“I think oil goes to 90.”</p>
+
+<p>Think:</p>
+
+<p>“If escalation probability rises from 10% to 25%, how do spreads behave?”</p>
+
+<p>Instead of:</p>
+
+<p>“I’ll buy the index.”</p>
+
+<p>Think:</p>
+
+<p>“Which assets benefit directly? Which suffer directly?”</p>
+
+<p>War trading is about:</p>
+
+<ol class="cq-list-steps">
+<li>Relative performance.</li>
+<li>Convex asymmetry.</li>
+<li>Managing correlation risk.</li>
+</ol>
+<hr>
+<h2>The elegant structure mindset</h2>
+
+<p>Good war positioning:</p>
+
+<ul class="cq-list-bullets">
+<li>Own convexity in exposed sectors.</li>
+<li>Avoid paying peak volatility in the index.</li>
+<li>Pair winners vs losers.</li>
+<li>Budget downside clearly.</li>
+</ul>
+
+<p>Bad war positioning:</p>
+
+<ul class="cq-list-bullets">
+<li>One big directional oil bet.</li>
+<li>No hedge.</li>
+<li>No awareness of correlation regime shifts.</li>
+</ul>
+<hr>
+<h2>The clean takeaway</h2>
+
+<p>War is not a linear event.<br>It is a probability shock.</p>
+
+<p>Convexity is how markets price probability jumps.<br>Dispersion is how traders monetize uneven impact.</p>
+
+<p>If escalation spreads:<br>Convex dispersion wins.</p>
+
+<p>If escalation fades:<br>Losses are structured, not catastrophic.</p>
+
+<p>Convexity protects.<br>Dispersion refines.</p>
+
+<p>That is why professionals don’t “play war”.<br>They structure it.</p>
+        <a class="cq-back" href="/">← Back to home</a>
+      </div>
+    </section>
+  </div>
+<script>
+(function(){
+  var canonicalEl = document.querySelector('link[rel="canonical"]');
+  var canonical = canonicalEl ? canonicalEl.href : window.location.href;
+  var url = encodeURIComponent(canonical);
+  var title = encodeURIComponent(document.title);
+  var li = document.getElementById('cqShareLinkedIn');
+  var xx = document.getElementById('cqShareX');
+  var em = document.getElementById('cqShareEmail');
+  if(li) li.href = 'https://www.linkedin.com/sharing/share-offsite/?url=' + url;
+  if(xx) xx.href = 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title;
+  if(em) em.href = 'mailto:?subject=' + title + '&body=' + encodeURIComponent('Thought you\'d like this:\n\n' + canonical);
+})();
+</script>
+</body>
+</html>
