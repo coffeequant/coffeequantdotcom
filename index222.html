@@ -490,129 +490,57 @@
   box-shadow: 0 0 0 9999px rgba(110,200,255,.10) inset, 0 10px 26px rgba(0,0,0,.28);
 }
 
-</style>
-
-<style>
-/* === CoffeeQuant Floating Contact Bubble === */
-#cqContactFab{
-  position:fixed; right:18px; bottom:18px;
-  width:54px; height:54px; border-radius:999px;
-  display:flex; align-items:center; justify-content:center;
-  cursor:pointer; user-select:none;
-  background: radial-gradient(120% 120% at 30% 20%, rgba(255,255,255,.22), rgba(255,255,255,0) 55%),
-              linear-gradient(135deg, rgba(70,140,255,.95), rgba(255,105,180,.85));
-  border:1px solid rgba(255,255,255,.22);
-  box-shadow: 0 14px 40px rgba(0,0,0,.35);
-  z-index:9999;
-  transform: translateZ(0);
-}
-#cqContactFab:hover{ transform: translateY(-2px) scale(1.02); }
-#cqContactFab:active{ transform: translateY(0px) scale(.99); }
-#cqContactFab .cqIcon{ font-size:22px; filter: drop-shadow(0 2px 10px rgba(0,0,0,.25)); }
-#cqContactFab::after{
-  content:""; position:absolute; inset:-10px; border-radius:999px;
-  background: radial-gradient(closest-side, rgba(70,140,255,.25), rgba(255,105,180,.12), rgba(0,0,0,0));
-  animation: cqPulse 2.8s ease-in-out infinite;
-  z-index:-1;
-}
-@keyframes cqPulse{
-  0%{ transform:scale(.82); opacity:.35; }
-  45%{ transform:scale(1.08); opacity:.55; }
-  100%{ transform:scale(1.18); opacity:0; }
+  .cq-macro-strip{
+  display:flex;
+  gap:14px;
+  margin:12px 0 6px;
 }
 
-#cqContactPanel{
-  position:fixed; right:18px; bottom:84px;
-  width:min(360px, calc(100vw - 36px));
+.cq-metric{
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.35);
+  font-weight:800;
+  font-size:14px;
+  backdrop-filter:blur(6px);
+}
+
+
+  /* ================= Contact Strip ================= */
+
+.cq-contact-strip{
+  margin-top:18px;
+  padding:14px 18px;
   border-radius:16px;
-  border:1px solid rgba(255,255,255,.16);
-  background: rgba(15,18,28,.72);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 18px 60px rgba(0,0,0,.45);
-  z-index:9999;
-  overflow:hidden;
-  display:none;
+  border:1px solid rgba(255,255,255,.12);
+  background:
+    linear-gradient(135deg, rgba(255,207,122,.10), rgba(158,231,255,.08)),
+    rgba(0,0,0,.25);
+  backdrop-filter:blur(10px);
 }
-#cqContactPanel[data-open="true"]{ display:block; animation: cqPop .18s ease-out; }
-@keyframes cqPop{ from{ transform: translateY(8px); opacity:0; } to{ transform: translateY(0); opacity:1; } }
 
-#cqContactPanel .cqHdr{
-  display:flex; align-items:center; justify-content:space-between;
-  padding:12px 14px;
-  border-bottom:1px solid rgba(255,255,255,.10);
+.cq-contact-inner{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
 }
-#cqContactPanel .cqHdr .cqTitle{ font-weight:900; letter-spacing:.2px; }
-#cqContactPanel .cqHdr button{
-  border:0; background:transparent; color:inherit;
-  font-size:20px; cursor:pointer; opacity:.75;
-}
-#cqContactPanel .cqHdr button:hover{ opacity:1; transform: scale(1.05); }
 
-#cqContactPanel .cqBody{ padding:12px 14px 14px; }
-#cqContactPanel .cqBody p{ margin:0 0 10px; opacity:.9; line-height:1.35; }
-#cqContactPanel .cqRow{
-  display:flex; align-items:center; justify-content:space-between;
-  gap:10px;
-  padding:10px 10px;
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:12px;
-  margin-top:10px;
+.cq-contact-text{
+  font-size:14px;
+  font-weight:600;
+  color:rgba(255,255,255,.85);
 }
-#cqContactPanel .cqEmail{
-  text-decoration:none; font-weight:800;
-  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-}
-#cqContactPanel .cqBtns{ display:flex; gap:8px; align-items:center; }
-#cqContactPanel .cqBtn{
-  border:1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.06);
-  color: inherit;
-  border-radius:999px;
-  padding:7px 10px;
+
+.cq-contact-text a{
+  color:#ffcf7a;
+  text-decoration:none;
   font-weight:800;
-  cursor:pointer;
-}
-#cqContactPanel .cqBtn:hover{ background: rgba(255,255,255,.10); }
-#cqContactPanel .cqHint{
-  margin-top:10px;
-  font-size:12px;
-  opacity:.75;
-}
-#cqContactToast{
-  position:fixed; right:18px; bottom:150px;
-  padding:10px 12px;
-  border-radius:999px;
-  background: rgba(0,0,0,.65);
-  border:1px solid rgba(255,255,255,.14);
-  color:#fff;
-  font-weight:800;
-  box-shadow: 0 12px 40px rgba(0,0,0,.35);
-  display:none;
-  z-index:10000;
-}
-#cqContactToast[data-show="true"]{ display:block; animation: cqToast .22s ease-out; }
-@keyframes cqToast{ from{ transform: translateY(6px); opacity:0; } to{ transform: translateY(0); opacity:1; } }
-
-/* Respect reduced motion */
-@media (prefers-reduced-motion: reduce){
-  #cqContactFab::after{ animation:none; }
-  #cqContactPanel[data-open="true"]{ animation:none; }
-  #cqContactToast[data-show="true"]{ animation:none; }
 }
 
-  .cq-toggle.is-on {
-  box-shadow: 0 0 0 1px rgba(255,255,255,.18) inset, 0 10px 30px rgba(120,180,255,.12);
-  transform: translateY(-1px);
-}
-
-.cq-flare {
-  animation: cqFlare 600ms ease-out 1;
-}
-
-@keyframes cqFlare {
-  0%   { transform: translateY(0) scale(1); filter: brightness(1); }
-  40%  { transform: translateY(-1px) scale(1.06); filter: brightness(1.35); }
-  100% { transform: translateY(0) scale(1); filter: brightness(1); }
+.cq-contact-text a:hover{
+  text-decoration:underline;
 }
 </style>
 </head>
@@ -707,39 +635,58 @@
 
       </div>
     </section>
+    <!-- ================= Contact Strip ================= -->
+<section class="cq-contact-strip">
+  <div class="cq-contact-inner">
+    <div class="cq-contact-text">
+      <strong>Questions? Ideas? War trades? AI regime debates?</strong>
+      <span>
+        Reach out at
+        <a href="mailto:coffee@coffeequant.com">coffee@coffeequant.com</a>
+        or
+        <a href="mailto:ai@coffeequant.com">ai@coffeequant.com</a>
+      </span>
+    </div>
+  </div>
+</section>
 
     <!-- ===================== CQ Correlation Galaxy ===================== -->
-<!-- ===================== CQ Correlation Galaxy ===================== -->
-<section id="cq-galaxy" class="cq-galaxy-section" aria-label="Correlation Galaxy">
+
+
+    <!-- ===================== CQ Correlation Galaxy ===================== -->
+<section id="cq-galaxy" class="cq-galaxy-section">
   <div class="cq-galaxy-header">
     <div>
       <h2>Correlation Galaxy</h2>
-      <p>Two knobs, one intuition: when correlation rises, everything drifts together. When it falls, dispersion blooms.</p>
+      <p>Watch how market structure tightens and loosens as correlation shifts.</p>
     </div>
 
     <div class="cq-galaxy-controls">
-      <label for="cqCorrSlider">Correlation regime</label>
-      <div class="cq-galaxy-row">
-        <input id="cqCorrSlider" type="range" min="0" max="100" value="40" aria-label="Correlation slider">
-        <span id="cqCorrValue">0.40</span>
-      </div>
+      <label>Correlation</label>
+      <input id="cqCorrSlider" type="range" min="0" max="100" value="40">
+      <span id="cqCorrValue">0.40</span>
 
-      <div class="cq-regime-toggles" role="group" aria-label="Regimes">
-        <button id="cqToggleWar" class="cq-toggle" type="button" aria-pressed="false">War regime</button>
-        <button id="cqToggleAI" class="cq-toggle" type="button" aria-pressed="false">AI bubble regime</button>
-        <button id="cqShockBtn" class="cq-toggle cq-toggle-accent" type="button">Shockwave</button>
-      </div>
-
-      <div class="cq-flare-row" aria-label="Live proxies">
-        <div class="cq-metric"><span>Oil</span><strong id="cqOilPrice">$70.0</strong></div>
-        <div class="cq-metric"><span>VIX proxy</span><strong id="cqVixProxy">18</strong></div>
+      <div class="cq-regime-toggles">
+        <button id="cqToggleWar" class="cq-toggle cq-toggle-war" type="button" aria-pressed="false">
+          War regime
+        </button>
+        <button id="cqToggleAI" class="cq-toggle cq-toggle-ai" type="button" aria-pressed="false">
+          AI bubble regime
+        </button>
       </div>
     </div>
   </div>
+<div class="cq-macro-strip">
+  <div class="cq-metric">
+    🛢 Oil: <span id="cqOil">70.00</span>
+  </div>
+  <div class="cq-metric">
+    📈 VIX: <span id="cqVix">18.0</span>
+  </div>
+</div>
 
   <canvas id="cqGalaxyCanvas"></canvas>
 </section>
-
     <!-- CONTENT -->
     <div class="cq-grid">
 
@@ -1243,384 +1190,204 @@ async function boot() {
     });
 })();
 </script>
-
 <script>
 (function(){
-  const canvas = document.getElementById('cqGalaxyCanvas');
-  if (!canvas) return;
 
-  const ctx = canvas.getContext('2d', { alpha: true });
-  const slider = document.getElementById('cqCorrSlider');
-  const corrLabel = document.getElementById('cqCorrValue');
-  const btnWar = document.getElementById('cqToggleWar');
-  const btnAI = document.getElementById('cqToggleAI');
-  const btnShock = document.getElementById('cqShockBtn');
-  const oilEl = document.getElementById('cqOilPrice');
-  const vixEl = document.getElementById('cqVixProxy');
+const canvas = document.getElementById("cqGalaxyCanvas");
+if(!canvas) return;
 
-  // ----- state
-  let corr = 0.40;          // 0..1
-  let warMode = false;
-  let aiMode = false;
+const ctx = canvas.getContext("2d");
 
-  let oil = 70.0;
-  let vix = 18;
+let W,H;
+function resize(){
+  W = canvas.width = canvas.offsetWidth;
+  H = canvas.height = canvas.offsetHeight;
+}
+window.addEventListener("resize", resize);
+resize();
 
-  let shock = 0;            // 0..1 intensity
-  let shockT = 0;
+const slider = document.getElementById("cqCorrSlider");
+const sliderVal = document.getElementById("cqCorrValue");
 
-  // ----- sizing
-  function resize(){
-    const section = canvas.closest('#cq-galaxy');
-    const w = section ? section.clientWidth : window.innerWidth;
-    const h = Math.max(340, Math.min(520, Math.round(w * 0.38)));
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
+let baseCorr = slider.value/100;
+let corr = baseCorr;
 
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
-    canvas.width = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+sliderVal.textContent = baseCorr.toFixed(2);
+
+slider.addEventListener("input", ()=>{
+  baseCorr = slider.value/100;
+  sliderVal.textContent = baseCorr.toFixed(2);
+});
+
+let warMode = false;
+let aiMode = false;
+
+document.getElementById("cqToggleWar").addEventListener("click", function(){
+  warMode = !warMode;
+  this.setAttribute("aria-pressed", warMode);
+  if(warMode){
+    slider.value = 75;
+    slider.dispatchEvent(new Event("input"));
   }
-  window.addEventListener('resize', resize, { passive: true });
-  resize();
+});
 
-  // ----- particles
-  const N = 60;
-  const nodes = Array.from({length:N}, () => ({
-    x: Math.random(),
-    y: Math.random(),
-    vx: (Math.random() - 0.5) * 0.03,
-    vy: (Math.random() - 0.5) * 0.03,
-    phase: Math.random() * Math.PI * 2
-  }));
-
-  // ----- UI (bind ONCE, not per frame)
-  function setCorrFromSlider(){
-    const v = Number(slider?.value ?? 40);
-    corr = Math.max(0, Math.min(1, v / 100));
-    if (corrLabel) corrLabel.textContent = corr.toFixed(2);
+document.getElementById("cqToggleAI").addEventListener("click", function(){
+  aiMode = !aiMode;
+  this.setAttribute("aria-pressed", aiMode);
+  if(aiMode){
+    slider.value = 35;
+    slider.dispatchEvent(new Event("input"));
   }
-  if (slider){
-    slider.addEventListener('input', setCorrFromSlider, { passive: true });
-    setCorrFromSlider();
-  }
+});
 
-  function setPressed(btn, on){
-    if (!btn) return;
-    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-    btn.classList.toggle('is-on', !!on);
-  }
+/* ---- Oil & VIX Simulation ---- */
 
-  function applyRegime(){
-    // War: higher corr + higher vol proxy.
-    // AI: lower corr but more idiosyncratic jitter.
-    if (warMode){
-      corr = Math.max(corr, 0.70);
-      if (slider) slider.value = Math.round(corr * 100);
-      if (corrLabel) corrLabel.textContent = corr.toFixed(2);
-      vix = Math.max(vix, 26);
-      oil = Math.max(oil, 74);
-    }
-    if (aiMode){
-      corr = Math.min(corr, 0.35);
-      if (slider) slider.value = Math.round(corr * 100);
-      if (corrLabel) corrLabel.textContent = corr.toFixed(2);
-      vix = Math.max(vix, 22);
-    }
-  }
+let oil = 70;
+let vix = 18;
 
-  function triggerShock(intensity){
-    shock = Math.max(shock, Math.max(0, Math.min(1, intensity)));
-    shockT = 0;
+const oilEl = document.getElementById("cqOil");
+const vixEl = document.getElementById("cqVix");
 
-    oil = oil + (4 + 8 * intensity);
-    vix = Math.round(vix + (6 + 10 * intensity));
+function updateMacro(){
+  oilEl.textContent = oil.toFixed(2);
+  vixEl.textContent = vix.toFixed(1);
+}
 
-    if (oilEl) oilEl.classList.add('cq-flare');
-    if (vixEl) vixEl.classList.add('cq-flare');
-    window.setTimeout(() => {
-      if (oilEl) oilEl.classList.remove('cq-flare');
-      if (vixEl) vixEl.classList.remove('cq-flare');
-    }, 600);
+const N = 24;
+const nodes = [];
+
+for(let i=0;i<N;i++){
+  nodes.push({
+    x: Math.random()*W,
+    y: Math.random()*H,
+    vx:(Math.random()-.5)*0.4,
+    vy:(Math.random()-.5)*0.4
+  });
+}
+
+let shockTimer = 0;
+
+function animate(){
+
+  ctx.clearRect(0,0,W,H);
+
+  if(warMode){
+    const pulse = 0.08 + Math.sin(Date.now()*0.004)*0.04;
+    ctx.fillStyle = `rgba(120,20,20,${pulse})`;
+    ctx.fillRect(0,0,W,H);
   }
 
-  if (btnWar){
-    btnWar.addEventListener('click', () => {
-      warMode = !warMode;
-      setPressed(btnWar, warMode);
-      if (warMode){ aiMode = false; setPressed(btnAI, false); triggerShock(0.9); }
-      applyRegime();
-    });
+  if(warMode){
+    corr = baseCorr + 0.15*Math.sin(Date.now()*0.002);
+  } else {
+    corr = baseCorr;
   }
 
-  if (btnAI){
-    btnAI.addEventListener('click', () => {
-      aiMode = !aiMode;
-      setPressed(btnAI, aiMode);
-      if (aiMode){ warMode = false; setPressed(btnWar, false); triggerShock(0.55); }
-      applyRegime();
-    });
-  }
+  nodes.forEach(n=>{
+    const cx=W/2, cy=H/2;
+    const dx=cx-n.x, dy=cy-n.y;
 
-  if (btnShock){
-    btnShock.addEventListener('click', () => triggerShock(warMode ? 1.0 : 0.7));
-  }
+    let pull = 0.00002*corr*(warMode?3:1);
+    let swirl = aiMode?0.0009:0.0003;
+    let jitter = warMode?0.35:0.08;
 
-  function lerp(a,b,t){ return a + (b-a)*t; }
+    n.vx += dx*pull;
+    n.vy += dy*pull;
 
-  function drawBackground(w, h){
-    const grad = ctx.createRadialGradient(w*0.5, h*0.45, 20, w*0.5, h*0.5, Math.max(w,h)*0.7);
-    grad.addColorStop(0, 'rgba(120,180,255,0.10)');
-    grad.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0,0,w,h);
-  }
+    n.vx += -dy*swirl;
+    n.vy += dx*swirl;
 
-  // ----- animation loop (stable speed)
-  let last = performance.now();
-  function tick(now){
-    const w = canvas.clientWidth;
-    const h = canvas.clientHeight;
+    n.vx += (Math.random()-.5)*jitter;
+    n.vy += (Math.random()-.5)*jitter;
 
-    let dt = (now - last) / 1000;
-    last = now;
-    dt = Math.max(0.0, Math.min(0.05, dt)); // cap dt (tab switching protection)
+    n.vx *= .985;
+    n.vy *= .985;
 
-    ctx.clearRect(0,0,w,h);
-    drawBackground(w,h);
+    n.x += n.vx;
+    n.y += n.vy;
 
-    const commonAngle = now * 0.00012;
-    const commonX = Math.cos(commonAngle) * 0.020;
-    const commonY = Math.sin(commonAngle) * 0.018;
+    if(n.x<0||n.x>W) n.vx*=-1;
+    if(n.y<0||n.y>H) n.vy*=-1;
+  });
 
-    const idioBoost = aiMode ? 1.35 : 1.0;
+  const threshold = 150*(1-corr*.6);
 
-    // shock ring
-    if (shock > 0.001){
-      shockT += dt;
-      const r = shockT * 240;
-      ctx.strokeStyle = `rgba(255,255,255,${0.12*shock})`;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.arc(w*0.5, h*0.55, r, 0, Math.PI*2);
-      ctx.stroke();
-      shock = lerp(shock, 0, dt * 0.9);
-    }
+  for(let i=0;i<N;i++){
+    for(let j=i+1;j<N;j++){
+      const dx=nodes[i].x-nodes[j].x;
+      const dy=nodes[i].y-nodes[j].y;
+      const d=Math.sqrt(dx*dx+dy*dy);
 
-    // update nodes
-    for (const p of nodes){
-      p.phase += dt * 0.9;
-      const jx = Math.cos(p.phase*1.7) * 0.008 * idioBoost;
-      const jy = Math.sin(p.phase*1.4) * 0.008 * idioBoost;
+      if(d<threshold){
+        const alpha=(1-d/threshold)*0.55*corr;
+        ctx.strokeStyle = warMode
+          ? `rgba(255,80,50,${alpha})`
+          : aiMode
+            ? `rgba(110,200,255,${alpha})`
+            : `rgba(158,231,255,${alpha})`;
 
-      const vx = lerp(p.vx + jx, commonX, corr);
-      const vy = lerp(p.vy + jy, commonY, corr);
+        ctx.lineWidth = warMode ? 1.6 : 1.0;
 
-      p.x += vx * dt;
-      p.y += vy * dt;
-
-      if (p.x < -0.05) p.x = 1.05;
-      if (p.x > 1.05)  p.x = -0.05;
-      if (p.y < -0.05) p.y = 1.05;
-      if (p.y > 1.05)  p.y = -0.05;
-    }
-
-    // links
-    const maxDist = lerp(0.10, 0.18, corr);
-    for (let i=0;i<nodes.length;i++){
-      for (let j=i+1;j<nodes.length;j++){
-        const a = nodes[i], b = nodes[j];
-        const dx = a.x - b.x, dy = a.y - b.y;
-        const d = Math.hypot(dx,dy);
-        if (d < maxDist){
-          const alpha = (1 - d/maxDist) * (0.15 + 0.25*corr);
-          ctx.strokeStyle = `rgba(160,210,255,${alpha})`;
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(a.x*w, a.y*h);
-          ctx.lineTo(b.x*w, b.y*h);
-          ctx.stroke();
-        }
+        ctx.beginPath();
+        ctx.moveTo(nodes[i].x,nodes[i].y);
+        ctx.lineTo(nodes[j].x,nodes[j].y);
+        ctx.stroke();
       }
     }
+  }
 
-    // points
-    for (const p of nodes){
-      ctx.fillStyle = warMode ? 'rgba(255,190,120,0.95)' : 'rgba(180,230,255,0.95)';
-      ctx.beginPath();
-      ctx.arc(p.x*w, p.y*h, 2.2, 0, Math.PI*2);
-      ctx.fill();
+  nodes.forEach(n=>{
+    ctx.beginPath();
+    ctx.arc(n.x,n.y, warMode?5:4, 0, Math.PI*2);
+    ctx.fillStyle = warMode
+      ? "rgba(255,180,120,.95)"
+      : aiMode
+        ? "rgba(158,231,255,.9)"
+        : "rgba(255,255,255,.9)";
+    ctx.fill();
+  });
+
+  /* ---- Shockwave + Oil/VIX Jump ---- */
+
+  if(warMode){
+    shockTimer++;
+
+    if(shockTimer % 180 === 0){
+
+      // Oil gap
+      const jump = 2 + Math.random()*3;
+      oil += jump;
+
+      // VIX spike
+      vix += 5 + Math.random()*4;
     }
 
-    // proxies (mean-reverting)
-    oil = lerp(oil, warMode ? 78 : 70, dt*0.25);
-    vix = Math.round(lerp(vix, warMode ? 26 : (aiMode ? 22 : 18), dt*0.22));
-    if (oilEl) oilEl.textContent = '$' + oil.toFixed(1);
-    if (vixEl) vixEl.textContent = String(vix);
-
-    requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-})();
-</script>
-
-
-<!-- === Floating Contact Bubble (CoffeeQuant) === -->
-<div id="cqContactToast" role="status" aria-live="polite"></div>
-
-<div id="cqContactFab" aria-label="Contact CoffeeQuant" role="button" tabindex="0" title="Contact CoffeeQuant">
-  <span class="cqIcon" aria-hidden="true">✉️</span>
-</div>
-
-<div id="cqContactPanel" aria-label="Contact panel" data-open="false">
-  <div class="cqHdr">
-    <div class="cqTitle">Contact CoffeeQuant</div>
-    <button type="button" id="cqContactClose" aria-label="Close">×</button>
-  </div>
-  <div class="cqBody">
-    <p>Queries, suggestions, collaborations, bug reports: drop a note.</p>
-
-    <div class="cqRow">
-      <a class="cqEmail" id="cqEmailCoffee" href="#" data-u="coffee" data-d="coffeequant.com">coffee [at] coffeequant [dot] com</a>
-      <div class="cqBtns">
-        <button class="cqBtn" type="button" data-copy="coffee">Copy</button>
-        <button class="cqBtn" type="button" data-mail="coffee">Email</button>
-      </div>
-    </div>
-
-    <div class="cqRow">
-      <a class="cqEmail" id="cqEmailAI" href="#" data-u="ai" data-d="coffeequant.com">ai [at] coffeequant [dot] com</a>
-      <div class="cqBtns">
-        <button class="cqBtn" type="button" data-copy="ai">Copy</button>
-        <button class="cqBtn" type="button" data-mail="ai">Email</button>
-      </div>
-    </div>
-
-    <div class="cqHint">Tip: “Copy” avoids spam bots. “Email” opens your mail client.</div>
-  </div>
-</div>
-
-<script>
-(function(){
-  function $(sel){ return document.querySelector(sel); }
-  function $all(sel){ return Array.from(document.querySelectorAll(sel)); }
-
-  var fab = $("#cqContactFab");
-  var panel = $("#cqContactPanel");
-  var closeBtn = $("#cqContactClose");
-  var toast = $("#cqContactToast");
-
-  function buildEmail(el){
-    var u = el.getAttribute("data-u") || "";
-    var d = el.getAttribute("data-d") || "";
-    return (u && d) ? (u + "@" + d) : "";
+    const r = (shockTimer % 180) * 3;
+    ctx.beginPath();
+    ctx.arc(W/2, H/2, r, 0, Math.PI*2);
+    ctx.strokeStyle = `rgba(255,120,90,${0.18 - r/900})`;
+    ctx.lineWidth = 2;
+    ctx.stroke();
   }
 
-  // Anti-spam: render emails only via JS (still visible to humans, harder for dumb scrapers)
-  ["#cqEmailCoffee", "#cqEmailAI"].forEach(function(sel){
-    var el = $(sel);
-    if(!el) return;
-    var email = buildEmail(el);
-    if(!email) return;
-    el.textContent = email;
-    el.href = "mailto:" + email;
-  });
+  /* ---- Decay Mechanics ---- */
 
-  function showToast(msg){
-    if(!toast) return;
-    toast.textContent = msg;
-    toast.setAttribute("data-show","true");
-    window.clearTimeout(showToast._t);
-    showToast._t = window.setTimeout(function(){
-      toast.setAttribute("data-show","false");
-    }, 1400);
+  if(!warMode){
+    oil += (70 - oil)*0.01;
+    vix += (18 - vix)*0.02;
+  } else {
+    oil += 0.02; // drift up in war
+    vix *= 0.995; // spike then fade
   }
 
-  function openPanel(){
-    if(!panel) return;
-    panel.setAttribute("data-open","true");
-  }
-  function closePanel(){
-    if(!panel) return;
-    panel.setAttribute("data-open","false");
-  }
-  function togglePanel(){
-    if(!panel) return;
-    var open = panel.getAttribute("data-open") === "true";
-    panel.setAttribute("data-open", open ? "false" : "true");
-  }
+  updateMacro();
 
-  function handleCopy(which){
-    var el = which === "ai" ? $("#cqEmailAI") : $("#cqEmailCoffee");
-    if(!el) return;
-    var email = buildEmail(el);
-    if(!email) return;
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(email).then(function(){
-        showToast("Copied: " + email);
-      }).catch(function(){
-        fallbackCopy(email);
-      });
-    } else {
-      fallbackCopy(email);
-    }
-  }
+  requestAnimationFrame(animate);
+}
 
-  function fallbackCopy(text){
-    var ta = document.createElement("textarea");
-    ta.value = text;
-    ta.setAttribute("readonly","");
-    ta.style.position = "fixed";
-    ta.style.top = "-1000px";
-    document.body.appendChild(ta);
-    ta.select();
-    try{ document.execCommand("copy"); showToast("Copied: " + text); }
-    catch(e){ showToast("Copy failed"); }
-    document.body.removeChild(ta);
-  }
+updateMacro();
+animate();
 
-  function handleMail(which){
-    var el = which === "ai" ? $("#cqEmailAI") : $("#cqEmailCoffee");
-    if(!el) return;
-    var email = buildEmail(el);
-    if(!email) return;
-    window.location.href = "mailto:" + email + "?subject=" + encodeURIComponent("CoffeeQuant: hello");
-  }
-
-  // Events
-  if(fab){
-    fab.addEventListener("click", togglePanel);
-    fab.addEventListener("keydown", function(e){
-      if(e.key === "Enter" || e.key === " "){ e.preventDefault(); togglePanel(); }
-    });
-  }
-  if(closeBtn) closeBtn.addEventListener("click", closePanel);
-
-  // Copy + Email buttons
-  $all('#cqContactPanel [data-copy]').forEach(function(btn){
-    btn.addEventListener("click", function(){
-      handleCopy(btn.getAttribute("data-copy"));
-    });
-  });
-  $all('#cqContactPanel [data-mail]').forEach(function(btn){
-    btn.addEventListener("click", function(){
-      handleMail(btn.getAttribute("data-mail"));
-    });
-  });
-
-  // Click outside to close
-  document.addEventListener("click", function(e){
-    if(!panel || panel.getAttribute("data-open") !== "true") return;
-    var t = e.target;
-    if(panel.contains(t) || (fab && fab.contains(t))) return;
-    closePanel();
-  });
-
-  // Esc to close
-  document.addEventListener("keydown", function(e){
-    if(e.key === "Escape") closePanel();
-  });
 })();
 </script>
 
