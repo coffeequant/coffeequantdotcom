@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="canonical" href="https://coffee.coffeequant.com/statics/WriteUps/war-risk-reprices-convexity-correlation.html">
+  <meta property="og:site_name" content="CoffeeQuant">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="War Risk Reprices the Curve: Oil Convexity, Gas Shock, and the">
+  <meta property="og:description" content="The market isn’t “risk-on vs risk-off” anymore. War risk is">
+  <meta property="og:url" content="https://coffee.coffeequant.com/statics/WriteUps/war-risk-reprices-convexity-correlation.html">
+  <meta property="og:image" content="https://coffee.coffeequant.com/statics/img/newarticles/images.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://coffee.coffeequant.com/statics/img/newarticles/images.png">
+  <meta name="twitter:title" content="War Risk Reprices the Curve: Oil Convexity, Gas Shock, and the">
+  <meta name="twitter:description" content="The market isn’t “risk-on vs risk-off” anymore. War risk is">
+  <title>War Risk Reprices the Curve: Oil Convexity, Gas Shock, and the | CoffeeQuant</title>
+  <link rel="stylesheet" href="../css/cq.css" />
+  <style>
+html,body{width:100%!important;max-width:none!important;margin:0!important;}
+body{overflow-x:hidden;}
+.cq-body{display:block!important;width:100%!important;max-width:none!important;}
+.cq-article-wrap{max-width:1120px;margin:0 auto;padding:24px 18px 70px;width:100%;}
+.cq-topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:12px 14px;border-radius:14px;position:sticky;top:10px;z-index:5;backdrop-filter:blur(8px);}
+.cq-brand a{text-decoration:none;font-weight:800;letter-spacing:.2px;}
+.cq-nav a{text-decoration:none;margin-left:12px;font-weight:600;}
+.cq-hero{margin-top:16px;border-radius:18px;overflow:hidden;}
+.cq-hero-img{width:100%;height:auto;display:block;}
+.cq-kicker{opacity:.8;text-transform:uppercase;letter-spacing:.14em;font-size:12px;font-weight:800;}
+.cq-h1{margin:10px 0 8px;font-size:34px;line-height:1.12;letter-spacing:-0.02em;}
+.cq-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px;}
+.cq-badge{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700;}
+.cq-card{margin-top:14px;border-radius:18px;overflow:hidden;}
+.cq-card-hd{padding:14px 16px;}
+.cq-card-bd{padding:14px 16px 18px;}
+.cq-share{margin-top:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.cq-share .share-title{font-weight:800;opacity:.85;}
+.cq-share a{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;text-decoration:none;font-weight:800;}
+.cq-share a:hover{opacity:.9;}
+.cq-share .s-li,.cq-share .s-x,.cq-share .s-em{border:1px solid rgba(255,255,255,.12);}
+.cq-pill{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-weight:800;font-size:12px;
+  border:1px solid rgba(255,255,255,.14);opacity:.95;}
+.cq-callout{border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:12px 14px;margin:14px 0;}
+.cq-callout-hd{font-weight:900;margin-bottom:6px;opacity:.95;}
+.cq-callout-bd p{margin:8px 0;}
+.cq-callout-info{box-shadow: inset 0 0 0 9999px rgba(80,140,255,.06);}
+.cq-callout-warn{box-shadow: inset 0 0 0 9999px rgba(255,170,70,.06);}
+.cq-callout-tip{box-shadow: inset 0 0 0 9999px rgba(120,255,190,.05);}
+.cq-thumb{display:flex;gap:12px;align-items:flex-start;margin:16px 0;}
+.cq-thumb-right{flex-direction:row-reverse;}
+.cq-thumb-img{flex:0 0 220px;max-width:220px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.10);}
+.cq-thumb-img img{width:100%;height:auto;display:block;}
+.cq-thumb-txt{flex:1 1 auto;min-width:0;}
+.cq-figure{margin:16px 0;border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.10);}
+.cq-img{width:100%;height:auto;display:block;}
+.cq-caption{padding:10px 12px;font-size:12px;opacity:.85;border-top:1px solid rgba(255,255,255,.08);}
+.cq-list-bullets{padding-left:20px;}
+.cq-list-steps{padding-left:22px;}
+.cq-back{display:inline-block;margin-top:18px;text-decoration:none;font-weight:700;}
+  </style>
+</head>
+<body class="cq-body">
+  <div class="cq-article-wrap">
+    <div class="cq-topbar">
+      <div class="cq-brand"><a href="/"><span aria-hidden="true">☕</span> CoffeeQuant</a></div>
+      <div class="cq-nav">
+        <a href="/#daily">Daily</a>
+        <a href="/#labs">Labs</a>
+        <a href="/#tools">Tools</a>
+        <a href="/#notes">Notes</a>
+        <a href="/#curios">Curios</a>
+      </div>
+    </div>
+    <div class="cq-share" role="group" aria-label="Share">
+      <div class="share-title">Share this article</div>
+      <div class="share-buttons">
+        <a id="cqShareLinkedIn" class="s-li" target="_blank" rel="noopener">LinkedIn</a>
+        <a id="cqShareX" class="s-x" target="_blank" rel="noopener">X</a>
+        <a id="cqShareEmail" class="s-em">Email</a>
+      </div>
+    </div>
+    <section class="cq-hero">
+      <img class="cq-hero-img" src="/statics/img/newarticles/images.png" alt="CoffeeQuant header" />
+    </section>
+    <section class="cq-card">
+      <div class="cq-card-hd">
+        <div class="cq-kicker">Daily / Macro • 2026-03-03</div>
+        <h1 class="cq-h1">War Risk Reprices the Curve: Oil Convexity, Gas Shock, and the</h1>
+        <div class="cq-meta">
+
+        </div>
+      </div>
+      <div class="cq-card-bd">
+<p><span class="cq-pill">Macro</span> <span class="cq-pill">Oil</span> <span class="cq-pill">Convexity</span> <span class="cq-pill">Correlation</span></p>
+
+<h2>The tape: one headline, three prices</h2>
+
+<p>War headlines hit and the market instantly asks three questions:</p>
+
+<p>1) <strong>How big is the oil tail?</strong><br>2) <strong>Is gas a second-order bomb?</strong><br>3) <strong>Do correlations stay “local”… or go “global”?</strong></p>
+
+<p>Over the weekend, crude didn’t tiptoe. It <strong>jumped</strong>: Brent and WTI posted<br>roughly <strong>~9% intraday gains</strong> after the US and Israel strikes on Iran were<br>reported. That’s not a “view.” That’s the market buying tail insurance in<br>real time.</p>
+
+<div class="cq-callout cq-callout-info"><div class="cq-callout-hd">Why this is convexity (in one sentence)</div><div class="cq-callout-bd"><p>Oil doesn’t reprice like a stock. In war regimes, <strong>probabilities change<br>discontinuously</strong>, so <strong>prices gap</strong> instead of trending.</p></div></div>
+<h2>Convexity, in trader-English</h2>
+
+<p>If Brent is ~78, the distribution is not “77–79 with some noise.”</p>
+
+<p>It becomes:<br><ul class="cq-list-bullets"><br><li><strong>Base case:</strong> shipping slows, premiums widen, oil drifts higher.</li><br><li><strong>Bad case:</strong> chokepoint risk (Hormuz) turns into a logistics problem.</li><br><li><strong>Ugly case:</strong> insurance + routing + availability all jump together.</li><br></ul></p>
+
+<p>That’s why <strong>VLCC rates</strong> are the real tell. One widely-circulated print:<br>supertanker earnings to haul ME crude to China surged to <strong>~$424k/day</strong> at<br>the peak. Even if you haircut the number, the direction is the point: <strong>war<br>risk monetizes through freight + insurance before it fully shows up in<br>spot.</strong></p>
+
+<h2>Gas: the “quiet” convexity</h2>
+
+<p>If oil is the headline, <strong>LNG is the fragility</strong>.</p>
+
+<p>European gas closed <strong>~39% higher</strong> after reports that Qatar suspended LNG<br>output (exactly the kind of “single point of failure” the market hates).</p>
+
+<p>That’s an important convexity lesson:</p>
+
+<ul class="cq-list-bullets">
+<li>Oil can be buffered by spare capacity and inventory narratives.</li>
+<li>LNG disruptions can feel binary because infrastructure and routing are</li>
+</ul>
+less flexible.
+
+<h2>Correlation creep: first dispersion, then “everything sells”</h2>
+
+<p>Early in geopolitical shocks you often get <strong>dispersion</strong>:<br><ul class="cq-list-bullets"><br><li>energy up</li><br><li>airlines down</li><br><li>defense up</li><br><li>consumer discretionary wobbles</li><br></ul></p>
+
+<p>Index looks “fine,” but single names are violent.</p>
+
+<p>Later, if stress becomes systemic, correlation tightens. The same story<br>repeats:<br><ul class="cq-list-bullets"><br><li>first: “this is sector-specific”</li><br><li>then: “this is funding-specific”</li><br><li>finally: “sell what you can”</li><br></ul></p>
+
+<p>That’s why the <strong>best war trade isn’t just direction</strong>. It’s owning<br><strong>convexity where it’s underpaid</strong>, while keeping a plan for correlation<br>going to 1.</p>
+
+<div class="cq-callout cq-callout-warn"><div class="cq-callout-hd">The usual trap</div><div class="cq-callout-bd"><p>People buy index puts <em>after</em> the war premium is already in the screen.<br>You pay peak vol… for protection you needed earlier.</p></div></div>
+<h2>A clean positioning checklist (no heroics)</h2>
+
+<p><strong>1) If you must be long energy:</strong> prefer structures that survive chop<br>Example idea (conceptual): call spreads or call + put financed collars, so<br>you don’t donate premium if the headline fades.</p>
+
+<p><strong>2) Watch freight / gas as “regime indicators”</strong><br>If freight and gas keep screaming, the oil tail is not done.</p>
+
+<p><strong>3) Assume correlation can snap higher</strong><br>Any book that is “cute dispersion” without a correlation plan is one Friday<br>away from pain.</p>
+
+<h2>One more wrinkle: AI supply chain risk is now macro</h2>
+
+<p>While markets are already juggling war risk, AI supply chains remain a<br>policy variable. The US has approved sales of Nvidia’s <strong>H200</strong> AI chips to<br>China under new conditions, keeping chips policy in play even as<br>geopolitics heats up. [oai_citation:0‡AP News](<br>https://apnews.com/article/a34e9e21bdc132f32cc9a448f3026da4?utm_source=chatgpt.com<br>)</p>
+
+<p>You don’t need to be dramatic about it. Just note: <strong>policy volatility is<br>now part of the vol surface</strong>.</p>
+
+<h2>CQ punchline</h2>
+
+<p>War regimes do one thing consistently:</p>
+
+<p>They turn “volatility” into <strong>convexity</strong><br>and turn “diversification” into <strong>a timing problem</strong>.</p>
+
+<p>Trade the tails with a plan, not with vibes.</p>
+        <a class="cq-back" href="/">← Back to home</a>
+      </div>
+    </section>
+  </div>
+<script>
+(function(){
+  var canonicalEl = document.querySelector('link[rel="canonical"]');
+  var canonical = canonicalEl ? canonicalEl.href : window.location.href;
+  var url = encodeURIComponent(canonical);
+  var title = encodeURIComponent(document.title);
+  var li = document.getElementById('cqShareLinkedIn');
+  var xx = document.getElementById('cqShareX');
+  var em = document.getElementById('cqShareEmail');
+  if(li) li.href = 'https://www.linkedin.com/sharing/share-offsite/?url=' + url;
+  if(xx) xx.href = 'https://twitter.com/intent/tweet?url=' + url + '&text=' + title;
+  if(em) em.href = 'mailto:?subject=' + title + '&body=' + encodeURIComponent('Thought you\'d like this:\n\n' + canonical);
+})();
+</script>
+</body>
+</html>
