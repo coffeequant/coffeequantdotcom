@@ -1,18 +1,26 @@
 {
   "items": [
-
-
-	  {
-  "date": "2026-03-01",
-  "title": "Hong Kong Says “Bring It On”: Capital Flows and Contingency Plans",
-  "href": "statics/WriteUps/hong-kong-bring-it-on-capital-flows-haven-bid.html",
-  "link": "statics/WriteUps/hong-kong-bring-it-on-capital-flows-haven-bid.html",
-  "tag": "Foundations / Macro",
-  "premium": false,
-  "hero":"statics/img/newarticles/image_new5.jpeg",
-  "thumb": "statics/img/newarticles/image_new4.jpeg",
-  "excerpt": "Not a war trade. A flow trade. What to watch at the Monday open: oil structure, vol divergence, HKD band pressure, and HSI vs A50 relative behavior."
-},
+    {
+      "date": "2026-03-03",
+      "title": "War Risk Reprices the Curve: Oil Convexity, Gas Shock, and the",
+      "href": "statics/WriteUps/war-risk-reprices-convexity-correlation.html",
+      "link": "statics/WriteUps/war-risk-reprices-convexity-correlation.html",
+      "tag": "Daily / Macro",
+      "premium": false,
+      "hero": "statics/img/newarticles/images.png",
+      "excerpt": "[[pill:Macro]] [[pill:Oil]] [[pill:Convexity]] [[pill:Correlation]] The tape: one headline, three prices War headlines hit and the market instantly asks three questions: 1) How ..."
+    },
+    {
+      "date": "2026-03-01",
+      "title": "Hong Kong Says “Bring It On”: Capital Flows and Contingency Plans",
+      "href": "statics/WriteUps/hong-kong-bring-it-on-capital-flows-haven-bid.html",
+      "link": "statics/WriteUps/hong-kong-bring-it-on-capital-flows-haven-bid.html",
+      "tag": "Foundations / Macro",
+      "premium": false,
+      "hero": "statics/img/newarticles/image_new5.jpeg",
+      "thumb": "statics/img/newarticles/image_new4.jpeg",
+      "excerpt": "Not a war trade. A flow trade. What to watch at the Monday open: oil structure, vol divergence, HKD band pressure, and HSI vs A50 relative behavior."
+    },
     {
       "date": "2026-02-28",
       "title": "War, Oil and Convexity: Why Dispersion Is the Smart Way to",
