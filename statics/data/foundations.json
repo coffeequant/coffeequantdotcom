@@ -1,27 +1,26 @@
 {
   "items": [
     {
- "slug": "Dispersion Trading",
-  "title": "Dispersion Trading 101: Correlation, Variance, and the \u201cIndex vs Components\u201d Game",
-  "href": "statics/WriteUps/dispersion-foundations.html",
-  "tag": "Foundations / Dispersion",
-  "level": "Foundations",
-  "excerpt": "A two-asset, trader-friendly primer on dispersion: how correlation changes index variance, how to visualize the wedge, and how pros think about implied vs realized correlation."
-},
+      "slug": "dispersion-trading-101",
+      "title": "Dispersion Trading 101: Correlation, Variance, and the “Index vs Components” Game",
+      "href": "statics/WriteUps/dispersion-foundations.html",
+      "tag": "Foundations / Dispersion",
+      "level": "Foundations",
+      "excerpt": "A two-asset, trader-friendly primer on dispersion: how correlation changes index variance, how to visualize the wedge, and how pros think about implied vs realized correlation."
+    },
     {
       "slug": "autocall-hedging",
-      "title": "Autocall - How to hedge?",
-      "excerpt": "A single-stock autocall is not “short vol” as a lifestyle choice. It’s a delta/gamma/vega rotate as spot moves, time passes, skew breathes, and rates shift discounting",
+      "title": "Autocall Hedging: A Practical Framework",
+      "excerpt": "A single-stock autocall is not a static short-vol trade. It rotates across delta, gamma, and vega as spot moves, time decays, skew shifts, and rates reprice discounting.",
       "href": "statics/WriteUps/autocall-hedging-deep-dive.html",
       "tag": "Greeks",
       "level": "Foundations",
       "read": "4 min"
     },
- 
     {
       "slug": "gamma-intuition",
       "title": "Gamma: Why Traders Buy High and Sell Low",
-      "excerpt": "Long gamma means buying weakness and selling strength. A clean intuition for volatility harvesting.",
+      "excerpt": "Long gamma often means buying weakness and selling strength. A clean intuition for dynamic hedging and volatility harvesting.",
       "href": "statics/WriteUps/gamma-intuition.html",
       "tag": "Greeks",
       "level": "Foundations",
@@ -30,7 +29,7 @@
     {
       "slug": "risk-neutral-simple",
       "title": "Risk Neutral Pricing (Without the Confusion)",
-      "excerpt": "Why option pricing uses a fake world — and why that’s perfectly logical.",
+      "excerpt": "Why option pricing is built in a risk-neutral measure and why that framework remains operationally correct.",
       "href": "statics/WriteUps/risk-neutral-simple.html",
       "tag": "Pricing",
       "level": "Foundations",
@@ -39,7 +38,7 @@
     {
       "slug": "basket-correlation-trap",
       "title": "Basket Options and the Correlation Trap",
-      "excerpt": "Why baskets break lognormal assumptions and why correlation really matters.",
+      "excerpt": "Why basket structures challenge simple lognormal assumptions and why correlation sits at the center of pricing and risk.",
       "href": "statics/WriteUps/basket-correlation-trap.html",
       "tag": "Correlation",
       "level": "Foundations",
