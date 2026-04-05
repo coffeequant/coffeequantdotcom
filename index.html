@@ -1,24 +1,70 @@
 <!doctype html>
 <html lang="en">
 <head>
-  
+  <meta charset="utf-8" />
+  <title>CoffeeQuant — Macro, Volatility, and Structured Product Intelligence</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="CoffeeQuant publishes daily trader-first insights on macro, rates, volatility, dispersion, and structured products, with practical tools and interactive labs for desks and portfolio teams." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="theme-color" content="#0c0c0f" />
+
   <link rel="canonical" href="https://coffee.coffeequant.com/" />
+  <link rel="preload" as="image" href="statics/img/hero/hero-01.webp" />
   <meta property="og:site_name" content="CoffeeQuant" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://coffee.coffeequant.com/" />
-  <meta property="og:title" content="CoffeeQuant" />
-  <meta property="og:description" content="Trader-first notes on markets, volatility, and structured products." />
-  <meta property="og:image" content="https://coffee.coffeequant.com/statics/img/coffeequant_coffee.png" />
-<meta charset="utf-8" />
-  <title>CoffeeQuant — espresso shots of structured intuition</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-<meta property="og:title" content="CoffeeQuant – Macro & Volatility Intelligence (AI)">
-<meta property="og:description" content="Macro, rates, vol and QIS insights for traders and portfolio managers.">
-<meta property="og:image" content="https://coffee.coffeequant.com/statics/img/hero/hero-01.webp">
-<meta property="og:url" content="https://coffee.coffeequant.com">
-<meta property="og:type" content="website">
+  <meta property="og:title" content="CoffeeQuant — Macro & Volatility Intelligence" />
+  <meta property="og:description" content="Daily market intelligence, structured product notes, practical quant tools, and interactive labs for traders and portfolio managers." />
+  <meta property="og:image" content="https://coffee.coffeequant.com/statics/img/hero/hero-01.webp" />
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="CoffeeQuant — Macro & Volatility Intelligence" />
+<meta name="twitter:description" content="Daily macro and volatility insights, structured product analysis, and practical quant tools." />
+<meta name="twitter:image" content="https://coffee.coffeequant.com/statics/img/hero/hero-01.webp" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "name": "CoffeeQuant",
+      "url": "https://coffee.coffeequant.com/",
+      "logo": "https://coffee.coffeequant.com/statics/img/thumbs/logo.webp",
+      "email": "coffee@coffeequant.com",
+      "sameAs": [
+        "https://www.linkedin.com/"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "name": "CoffeeQuant",
+      "url": "https://coffee.coffeequant.com/",
+      "description": "Trader-first macro and volatility intelligence with structured product explainers and quant tools."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is CoffeeQuant and who is it for?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "CoffeeQuant is a market-intelligence site for traders, quants, structurers, and portfolio managers focused on macro, volatility, and structured products."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How often is CoffeeQuant updated?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "CoffeeQuant is designed for daily updates with recurring deep dives and continuously refreshed archive content."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
 
 
   <!-- Main site CSS -->
@@ -520,10 +566,57 @@
 .cq-hk-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
 .cq-hk-title{margin:0;font-size:17px}
 .cq-hk-metrics{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.cq-chip{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.18);font-size:12px;font-weight:700}
-.cq-note-filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.cq-note-filter{appearance:none;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04);color:var(--cq-ink);padding:7px 10px;border-radius:999px;font-weight:700;font-size:12px;cursor:pointer}
-.cq-note-filter[aria-pressed="true"]{background:rgba(255,207,122,.20);border-color:rgba(255,207,122,.44)}
+    .cq-chip{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.18);font-size:12px;font-weight:700}
+    .cq-note-filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .cq-note-filter{appearance:none;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04);color:var(--cq-ink);padding:7px 10px;border-radius:999px;font-weight:700;font-size:12px;cursor:pointer}
+    .cq-note-filter[aria-pressed="true"]{background:rgba(255,207,122,.20);border-color:rgba(255,207,122,.44)}
+
+/* SEO content hub */
+.cq-pillars{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap:12px;
+}
+.cq-pillar{
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.03);
+  padding:14px;
+}
+.cq-pillar h3{margin:0 0 8px;font-size:15px}
+.cq-pillar p{margin:0 0 10px;color:var(--cq-dim);font-size:13px;line-height:1.45}
+.cq-pillar a{color:var(--cq-accent2);text-decoration:none;font-size:12px;font-weight:700}
+.cq-pillar a:hover{text-decoration:underline}
+.cq-trust-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin-top:12px;
+}
+.cq-trust{
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(0,0,0,.16);
+  padding:10px;
+}
+.cq-trust .k{display:block;color:var(--cq-dim);font-size:11px}
+.cq-trust .v{display:block;font-weight:800;margin-top:4px}
+.cq-faq details{
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:12px;
+  padding:10px 12px;
+  background:rgba(255,255,255,.03);
+}
+.cq-faq details + details{margin-top:8px}
+.cq-faq summary{cursor:pointer;font-weight:700}
+.cq-faq p{margin:8px 0 0;color:var(--cq-dim)}
+@media (max-width: 980px){
+  .cq-pillars{grid-template-columns:1fr}
+  .cq-trust-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width: 620px){
+  .cq-trust-grid{grid-template-columns:1fr}
+}
 
 </style>
 
@@ -668,14 +761,6 @@
 
     <!-- TOP BAR -->
     <header class="cq-topbar">
-      
-  <link rel="canonical" href="https://coffee.coffeequant.com/" />
-  <meta property="og:site_name" content="CoffeeQuant" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://coffee.coffeequant.com/" />
-  <meta property="og:title" content="CoffeeQuant" />
-  <meta property="og:description" content="Trader-first notes on markets, volatility, and structured products." />
-  <meta property="og:image" content="https://coffee.coffeequant.com/statics/img/coffeequant_coffee.png" />
 <div class="cq-brand">
         <div class="cq-mark">☕</div>
         <div class="cq-titleblock">
@@ -740,6 +825,38 @@
           </div>
         </div>
 
+      </div>
+    </section>
+
+    <main id="main-content">
+
+    <section id="strategy" class="cq-section" aria-label="Content pillars and editorial strategy">
+      <div class="cq-section-head">
+        <h2>Search-Optimized Content Engine</h2>
+        <div class="cq-muted">Built for discoverability, authority, and return visits</div>
+      </div>
+      <div class="cq-pillars">
+        <article class="cq-pillar">
+          <h3>Macro + Volatility Playbooks</h3>
+          <p>Own high-intent queries around rates volatility, convexity, dispersion, and hedging frameworks with practical market examples.</p>
+          <a href="#notes">Explore market notes →</a>
+        </article>
+        <article class="cq-pillar">
+          <h3>Structured Product Explainers</h3>
+          <p>Publish evergreen explainers for autocallables, repacks, PRDCs, worst-of, and barrier dynamics to capture long-tail SEO traffic.</p>
+          <a href="#foundations">Read foundations →</a>
+        </article>
+        <article class="cq-pillar">
+          <h3>Interactive Quant Labs</h3>
+          <p>Turn core concepts into interactive simulations and calculators so readers stay longer and share tools inside desk chats.</p>
+          <a href="#labs">Open labs →</a>
+        </article>
+      </div>
+      <div class="cq-trust-grid" aria-label="Editorial and platform standards">
+        <div class="cq-trust"><span class="k">Publishing cadence</span><span class="v">Daily macro brief + weekly deep dives</span></div>
+        <div class="cq-trust"><span class="k">Content model</span><span class="v">Pillar → cluster → update workflow</span></div>
+        <div class="cq-trust"><span class="k">Technical hygiene</span><span class="v">Fresh sitemap, robots, and schema metadata</span></div>
+        <div class="cq-trust"><span class="k">Retention loop</span><span class="v">Linked notes, tools, and archive recirculation</span></div>
       </div>
     </section>
 
@@ -925,7 +1042,26 @@
       <div id="foundations-list" class="cq-cards"></div>
     </section>
 
+    <section id="faq" class="cq-section cq-faq">
+      <div class="cq-section-head">
+        <h2>FAQ: Quant Notes, Tools, and Market Coverage</h2>
+        <div class="cq-muted">Answers that also help search engines understand page intent</div>
+      </div>
+      <details>
+        <summary>What is CoffeeQuant and who is it for?</summary>
+        <p>CoffeeQuant is a market-intelligence site for traders, quants, structurers, and PMs who need concise, practical insight on macro, volatility, and structured products.</p>
+      </details>
+      <details>
+        <summary>How often is CoffeeQuant updated?</summary>
+        <p>The site is optimized for daily updates through fresh notes and recurring deep dives, with archive and foundations sections for evergreen discoverability.</p>
+      </details>
+      <details>
+        <summary>What can I use from CoffeeQuant immediately?</summary>
+        <p>Use the Daily section for fast positioning context, Labs for intuition-building simulations, and Tools for desk-ready utilities.</p>
+      </details>
+    </section>
 
+    </main>
 
     </div>
   </div>
@@ -1010,8 +1146,9 @@ loadFoundations();
         ? `<div class="cq-badge ${locked ? "locked" : ""}">${locked ? "Premium 🔒" : "Premium ✓"}</div>`
         : `<div class="cq-badge" style="background:rgba(255,255,255,.90);">${kind}</div>`;
 
+      const thumbAlt = (it.title || kind || "CoffeeQuant content").replace(/"/g, "&quot;");
       const thumb = it.thumb
-        ? `<img src="${it.thumb}" alt="">`
+        ? `<img src="${it.thumb}" alt="${thumbAlt}" loading="lazy" decoding="async">`
         : "";
 
       return `
