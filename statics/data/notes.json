@@ -3,7 +3,7 @@
 
     {
       "title": "Gold, AI, and the Reinvention of Yield — 2026 Outlook",
-      "deck": "What PB/HNI will actually buy, how wrappers evolve, and where QIS fits.",
+      "deck": "How private-bank demand is shifting, how wrappers are evolving, and where QIS solutions can still create differentiated yield.",
       "link": "statics/WriteUps/Gold_AI_Yield_2026.html",
       "thumb": "statics/img/thumbs/gold-ai-2026.png",
       "tags": ["Metals","AI","Wrappers","QIS"],
@@ -12,7 +12,7 @@
 
     {
       "title": "Risk-Neutral Probability",
-      "deck": "Turning messy market odds into fair pricing odds.",
+      "deck": "A practitioner’s bridge from market-implied probabilities to clean no-arbitrage pricing intuition.",
       "link": "statics/WriteUps/RiskNeutral.html",
       "thumb": "statics/img/thumbs/cli.webp",
       "tags": ["Options","Pricing"],
@@ -20,7 +20,7 @@
     },
      {
       "title": "Worst-of Put: Cross Gamma in Real Life",
-      "deck": "Why short worst-of means you’re secretly short correlation, and why the hedge snaps.",
+      "deck": "Why short worst-of exposure is structurally short correlation, and why hedges become discontinuous in stressed tapes.",
       "link": "statics/WriteUps/WOP.html",
       "thumb": "statics/img/thumbs/worstof.webp",
       "tags": ["Cross gamma", "Correlation", "Exotics"],
@@ -28,7 +28,7 @@
     },
     {
       "title": "Barrier Shift Intuition",
-      "deck": "Why barrier traders quietly move the barrier before quoting you.",
+      "deck": "Why barrier levels are often shifted before quoting — and what that means for fair value versus executable price.",
       "link": "statics/WriteUps/BarrierShift.html",
       "thumb": "statics/img/thumbs/cube.webp",
       "tags": ["Exotics","Hedging"],
@@ -36,7 +36,7 @@
     },
     {
       "title": "Cross Gamma / PRDC",
-      "deck": "When FX and rates both punch you at the same time.",
+      "deck": "How PRDC books can be hit simultaneously by rates and FX moves, creating nonlinear cross-gamma risk.",
       "link": "statics/WriteUps/CrossGammaPRDC.html",
       "thumb": "statics/img/thumbs/lehman.webp",
       "tags": ["Rates","Convexity","Correlation"],
@@ -44,7 +44,7 @@
     },
     {
       "title": "Lehman Swap Spreads",
-      "deck": "Curve inversion, callable notes, and accidental short gamma.",
+      "deck": "A historical post-mortem on curve inversion, callable supply, and the buildup of accidental short-gamma positioning.",
       "link": "statics/WriteUps/OldLehmanStory.html",
       "thumb": "statics/img/thumbs/dice.webp",
       "tags": ["Credit","History"],
@@ -52,4 +52,3 @@
     }
   ]
 }
-

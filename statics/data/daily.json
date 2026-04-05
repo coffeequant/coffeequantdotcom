@@ -2,13 +2,13 @@
   "items": [
     {
       "date": "2026-03-04",
-      "title": "Inside Structured ETFs: Seeding, 2x Leverage Mechanics, and the",
+      "title": "Inside Structured ETFs: Seeding, 2x Leverage Mechanics, and Crash-Put Convexity",
       "href": "statics/WriteUps/structured-etfs-seeding-leverage-crash-put.html",
       "link": "statics/WriteUps/structured-etfs-seeding-leverage-crash-put.html",
       "tag": "Daily / Structured Products",
       "premium": false,
       "hero": "statics/img/newarticles/images.png",
-      "excerpt": "[[pill:Hong Kong]] [[pill:ETF]] [[pill:Leverage]] [[pill:Derivatives]] Hong Kong’s structured ETF boom Hong Kong has quietly become one of the most active markets globally for s..."
+      "excerpt": "A desk-level walkthrough of how leveraged structured ETFs are seeded, hedged, and stress-tested, with a practical view on the hidden convexity from crash-put overlays."
     }
   ]
 }
