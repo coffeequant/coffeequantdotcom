@@ -1,37 +1,74 @@
 {
   "items": [
-
     {
-      "title": "Gold, AI, and the Reinvention of Yield — 2026 Outlook",
+      "title": "Geopolitics, Capital Flows, and the New HK Structured Product Playbook",
+      "deck": "Why geopolitics is now a first-order input for Hong Kong structured issuance, and how to design for regime shifts.",
+      "link": "statics/WriteUps/GeoPolitics_HK_Structured_2026.html",
+      "thumb": "statics/img/thumbs/lehman.webp",
+      "tags": [
+        "Geopolitics",
+        "Hong Kong",
+        "Structured Products"
+      ],
+      "date": "2026-04-05"
+    },
+    {
+      "title": "HK Structured Products in 2026: A Practical Playbook",
+      "deck": "A desk-level framework for autocalls, barriers, and reinvestment discipline in the current Hong Kong market environment.",
+      "link": "statics/WriteUps/HK_Structured_Products_2026_Playbook.html",
+      "thumb": "statics/img/thumbs/worstof.webp",
+      "tags": [
+        "Hong Kong",
+        "Autocall",
+        "Risk Management"
+      ],
+      "date": "2026-04-05"
+    },
+    {
+      "title": "Gold, AI, and the Reinvention of Yield \u2014 2026 Outlook",
       "deck": "How private-bank demand is shifting, how wrappers are evolving, and where QIS solutions can still create differentiated yield.",
       "link": "statics/WriteUps/Gold_AI_Yield_2026.html",
       "thumb": "statics/img/thumbs/gold-ai-2026.png",
-      "tags": ["Metals","AI","Wrappers","QIS"],
+      "tags": [
+        "Metals",
+        "AI",
+        "Wrappers",
+        "QIS"
+      ],
       "date": "2025-11-08"
     },
-
     {
       "title": "Risk-Neutral Probability",
-      "deck": "A practitioner’s bridge from market-implied probabilities to clean no-arbitrage pricing intuition.",
+      "deck": "A practitioner\u2019s bridge from market-implied probabilities to clean no-arbitrage pricing intuition.",
       "link": "statics/WriteUps/RiskNeutral.html",
       "thumb": "statics/img/thumbs/cli.webp",
-      "tags": ["Options","Pricing"],
+      "tags": [
+        "Options",
+        "Pricing"
+      ],
       "date": "2025-10-24"
     },
-     {
+    {
       "title": "Worst-of Put: Cross Gamma in Real Life",
       "deck": "Why short worst-of exposure is structurally short correlation, and why hedges become discontinuous in stressed tapes.",
       "link": "statics/WriteUps/WOP.html",
       "thumb": "statics/img/thumbs/worstof.webp",
-      "tags": ["Cross gamma", "Correlation", "Exotics"],
+      "tags": [
+        "Cross gamma",
+        "Correlation",
+        "Exotics"
+      ],
       "date": "2025-10-26"
     },
     {
       "title": "Barrier Shift Intuition",
-      "deck": "Why barrier levels are often shifted before quoting — and what that means for fair value versus executable price.",
+      "deck": "Why barrier levels are often shifted before quoting \u2014 and what that means for fair value versus executable price.",
       "link": "statics/WriteUps/BarrierShift.html",
       "thumb": "statics/img/thumbs/cube.webp",
-      "tags": ["Exotics","Hedging"],
+      "tags": [
+        "Exotics",
+        "Hedging"
+      ],
       "date": "2025-10-22"
     },
     {
@@ -39,7 +76,11 @@
       "deck": "How PRDC books can be hit simultaneously by rates and FX moves, creating nonlinear cross-gamma risk.",
       "link": "statics/WriteUps/CrossGammaPRDC.html",
       "thumb": "statics/img/thumbs/lehman.webp",
-      "tags": ["Rates","Convexity","Correlation"],
+      "tags": [
+        "Rates",
+        "Convexity",
+        "Correlation"
+      ],
       "date": "2025-10-21"
     },
     {
@@ -47,7 +88,10 @@
       "deck": "A historical post-mortem on curve inversion, callable supply, and the buildup of accidental short-gamma positioning.",
       "link": "statics/WriteUps/OldLehmanStory.html",
       "thumb": "statics/img/thumbs/dice.webp",
-      "tags": ["Credit","History"],
+      "tags": [
+        "Credit",
+        "History"
+      ],
       "date": "2019-03-05"
     }
   ]

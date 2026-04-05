@@ -514,6 +514,17 @@
   box-shadow: 0 0 0 9999px rgba(110,200,255,.10) inset, 0 10px 26px rgba(0,0,0,.28);
 }
 
+
+/* ---- HK Lens ---- */
+.cq-hk-lens{margin:14px 0 4px;padding:14px;border:1px solid rgba(255,255,255,.12);border-radius:16px;background:linear-gradient(135deg,rgba(45,212,191,.08),rgba(59,130,246,.10));}
+.cq-hk-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.cq-hk-title{margin:0;font-size:17px}
+.cq-hk-metrics{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.cq-chip{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.18);font-size:12px;font-weight:700}
+.cq-note-filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.cq-note-filter{appearance:none;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04);color:var(--cq-ink);padding:7px 10px;border-radius:999px;font-weight:700;font-size:12px;cursor:pointer}
+.cq-note-filter[aria-pressed="true"]{background:rgba(255,207,122,.20);border-color:rgba(255,207,122,.44)}
+
 </style>
 
 <style>
@@ -807,6 +818,23 @@
 	</div>
 </section>
 
+
+
+<section class="cq-hk-lens" id="hkLens" aria-label="Hong Kong market lens">
+  <div class="cq-hk-top">
+    <div>
+      <h2 class="cq-hk-title">🇭🇰 CoffeeQuant Hong Kong Lens</h2>
+      <div class="cq-muted">Closer tracking of local flow, payoff design, and geopolitical sensitivity.</div>
+    </div>
+    <a class="cq-btn" href="#notes">Open HK notes</a>
+  </div>
+  <div class="cq-hk-metrics">
+    <span class="cq-chip"><strong>Focus</strong> HSI / HSCEI flow</span>
+    <span class="cq-chip"><strong>Desk bias</strong> short-tenor autocallables</span>
+    <span class="cq-chip"><strong>Priority</strong> reinvestment discipline</span>
+  </div>
+</section>
+
 <section id="daily" class="cq-section">
         <div class="cq-section-head">
           <h2>Daily</h2>
@@ -845,6 +873,14 @@
           <h2>Notes</h2>
           <div class="cq-muted">longer reads, trader-grade framing</div>
         </div>
+
+        <div class="cq-note-filters" id="noteFilters">
+          <button class="cq-note-filter" data-filter="all" aria-pressed="true">All Views</button>
+          <button class="cq-note-filter" data-filter="hong kong" aria-pressed="false">Hong Kong</button>
+          <button class="cq-note-filter" data-filter="geopolitics" aria-pressed="false">Geopolitics</button>
+          <button class="cq-note-filter" data-filter="structured" aria-pressed="false">Structured Products</button>
+        </div>
+
         <div id="notesSlot" class="cq-cards">
           <div class="cq-muted">Loading notes…</div>
         </div>
@@ -1040,6 +1076,28 @@ async function boot() {
       renderCards($("#toolsSlot"), tools?.items, "Tool", 6);
       renderCards($("#notesSlot"), notes?.items, "Note", 6);
 
+      // Notes filters for CoffeeQuant views
+      const noteButtons = Array.from(document.querySelectorAll("#noteFilters .cq-note-filter"));
+      function drawNotes(filter = "all") {
+        const items = notes?.items || [];
+        if (filter === "all") {
+          renderCards($("#notesSlot"), items, "Note", 6);
+          return;
+        }
+        const filtered = items.filter(it => {
+          const hay = [it.title || "", it.deck || "", ...(Array.isArray(it.tags) ? it.tags : [])].join(" ").toLowerCase();
+          return hay.includes(filter);
+        });
+        renderCards($("#notesSlot"), filtered, "Note", 6);
+      }
+      noteButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          noteButtons.forEach(b => b.setAttribute("aria-pressed", String(b === btn)));
+          drawNotes(btn.dataset.filter || "all");
+        });
+      });
+      drawNotes("all");
+
       // Curios as cards (small)
       renderCards($("#curiosSlot"), curios?.items, "Curio", 6);
 
@@ -1076,7 +1134,7 @@ async function boot() {
         // re-render sections so premium locks update
         renderCards($("#labsSlot"), labs?.items, "Lab", 6);
         renderCards($("#toolsSlot"), tools?.items, "Tool", 6);
-        renderCards($("#notesSlot"), notes?.items, "Note", 6);
+        drawNotes(document.querySelector("#noteFilters .cq-note-filter[aria-pressed=\"true\"]")?.dataset.filter || "all");
         renderCards($("#curiosSlot"), curios?.items, "Curio", 6);
         drawArchive($("#archiveQuery").value);
       });

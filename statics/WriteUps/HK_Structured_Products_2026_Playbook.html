@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>HK Structured Products in 2026: A Practical Playbook</title>
+  <link rel="stylesheet" href="../css/cq.css"/>
+  <link rel="stylesheet" href="/statics/css/writeups-rehaul.css" />
+  <style>
+    .cq-article{max-width:920px;margin:0 auto;padding:1rem 1.2rem 3rem}
+    .hero{border:1px solid var(--line);border-radius:16px;padding:1rem;background:linear-gradient(135deg,rgba(52,211,153,.16),rgba(59,130,246,.14));}
+    .box{border:1px solid var(--line);border-radius:12px;padding:.8rem 1rem;background:var(--card);margin:.8rem 0}
+    .mono{font-family:var(--font-mono)}
+  </style>
+</head>
+<body>
+  <article class="cq-article">
+    <section class="hero">
+      <p>CoffeeQuant Practical Note • April 2026</p>
+      <h1>HK Structured Products in 2026: A Practical Playbook</h1>
+      <p>A desk-level framework for producing repeatable, risk-aware issuance while Hong Kong structured flows continue to scale.</p>
+    </section>
+
+    <h2>Current demand shape</h2>
+    <p>Clients want three things at the same time: visible income, manageable downside, and short commitment. This is why HK issuance is skewing toward callable and buffered structures with transparent scenarios.</p>
+
+    <div class="box">
+      <h3>Recommended base template (private bank flow)</h3>
+      <ul>
+        <li><strong>Underlying:</strong> diversified HSI/HSCEI basket</li>
+        <li><strong>Tenor:</strong> 9-12 months</li>
+        <li><strong>Observation:</strong> monthly autocall</li>
+        <li><strong>Protection:</strong> soft barrier with clear knock-in narrative</li>
+        <li><strong>Reinvestment:</strong> predefined roll decision at call/maturity</li>
+      </ul>
+    </div>
+
+    <h2>Why this works in the current environment</h2>
+    <ul>
+      <li><strong>Rate uncertainty:</strong> shorter maturity contains mark-to-market pain.</li>
+      <li><strong>Geopolitical shocks:</strong> barrier distance and sector balance limit left-tail concentration.</li>
+      <li><strong>Distribution reality:</strong> relationship managers can explain outcomes in under 90 seconds.</li>
+    </ul>
+
+    <h2>Risk controls that should be non-negotiable</h2>
+    <ol>
+      <li>Show stress P&amp;L for gap-down opens, not just close-to-close paths.</li>
+      <li>Cap worst-of concentration in correlated sectors.</li>
+      <li>Track secondary liquidity assumptions as a first-class risk metric.</li>
+      <li>Separate coupon marketing from true expected return in client docs.</li>
+    </ol>
+
+    <div class="box">
+      <h3>Implementation checklist</h3>
+      <p class="mono">Termsheet clarity → Hedge feasibility → Client suitability mapping → Reinvestment protocol.</p>
+    </div>
+
+    <p><strong>CoffeeQuant conclusion:</strong> the winners in Hong Kong will be platforms that systematize product quality. In this phase, consistency beats novelty.</p>
+  </article>
+</body>
+</html>
