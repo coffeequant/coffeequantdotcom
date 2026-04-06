@@ -237,11 +237,21 @@
     }
     .cq-thumb {
       height: 110px;
-      background: linear-gradient(135deg, rgba(255,207,122,.18), rgba(158,231,255,.10));
+      background:
+        linear-gradient(135deg, rgba(10,10,10,.20), rgba(10,10,10,.45)),
+        url("statics/images/coffee.jpeg") center/cover no-repeat;
       border-bottom: 1px solid rgba(255,255,255,.10);
       position: relative;
     }
-    .cq-thumb img { width:100%; height:100%; object-fit:cover; display:block; opacity:.92; }
+    .cq-thumb img {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center;
+      display:block;
+      opacity:.98;
+      transform: scale(1.01);
+    }
     .cq-thumb .cq-badge {
       position:absolute; top:10px; left:10px;
       padding: 6px 9px; border-radius: 999px;

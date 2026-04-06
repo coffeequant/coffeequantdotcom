@@ -4,7 +4,7 @@
       "title": "Gold vs \u201cDigital Gold\u201d",
       "deck": "Correlation, quanto forward drift, and a simple gold\u2013BTC barbell you can play with.",
       "link": "statics/WriteUps/BTCvsGold.html",
-      "thumb": "statics/img/article-themes/11-gold-vs-btc.svg",
+      "thumb": "statics/images/coffeequiz.jpeg",
       "tags": [
         "Gold",
         "BTC",
@@ -16,7 +16,7 @@
       "title": "Random Walk Lab",
       "deck": "Simulate price paths with drift and vol. See possible futures.",
       "link": "statics/Tools/RandomWalkLab.html",
-      "thumb": "statics/img/article-themes/16-monte-carlo-paths.svg",
+      "thumb": "statics/img/thumbs/money.jpg",
       "tags": [
         "GBM",
         "Monte Carlo"
@@ -26,7 +26,7 @@
       "title": "Dice Lab",
       "deck": "Roll n dice, repeat k rounds, keep the best \u2018worst roll\u2019. Distribution explorer.",
       "link": "statics/Tools/DiceLab.html",
-      "thumb": "statics/img/article-themes/17-probability-intuition.svg",
+      "thumb": "statics/images/coffee.jpeg",
       "tags": [
         "Probability",
         "Intuition"
@@ -36,7 +36,7 @@
       "title": "Kelly Bet Size Helper",
       "deck": "How big should I go on a trade with edge? Full/Half Kelly sizing.",
       "link": "statics/Tools/KellyTool.html",
-      "thumb": "statics/img/article-themes/19-options-greeks.svg",
+      "thumb": "statics/img/thumbs/money.jpg",
       "tags": [
         "Risk",
         "Sizing"

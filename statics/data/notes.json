@@ -4,7 +4,7 @@
       "title": "Geopolitics, Capital Flows, and the New HK Structured Product Playbook",
       "deck": "Why geopolitics is now a first-order input for Hong Kong structured issuance, and how to design for regime shifts.",
       "link": "statics/WriteUps/GeoPolitics_HK_Structured_2026.html",
-      "thumb": "statics/img/article-themes/12-hong-kong-capital-flows.svg",
+      "thumb": "statics/images/coffeequiz.jpeg",
       "tags": [
         "Geopolitics",
         "Hong Kong",
@@ -16,7 +16,7 @@
       "title": "HK Structured Products in 2026: A Practical Playbook",
       "deck": "A desk-level framework for autocalls, barriers, and reinvestment discipline in the current Hong Kong market environment.",
       "link": "statics/WriteUps/HK_Structured_Products_2026_Playbook.html",
-      "thumb": "statics/img/article-themes/05-autocall-hedging.svg",
+      "thumb": "statics/img/thumbs/money.jpg",
       "tags": [
         "Hong Kong",
         "Autocall",
@@ -28,7 +28,7 @@
       "title": "Gold, AI, and the Reinvention of Yield \u2014 2026 Outlook",
       "deck": "How private-bank demand is shifting, how wrappers are evolving, and where QIS solutions can still create differentiated yield.",
       "link": "statics/WriteUps/Gold_AI_Yield_2026.html",
-      "thumb": "statics/img/article-themes/15-yield-engineering.svg",
+      "thumb": "statics/images/coffee.jpeg",
       "tags": [
         "Metals",
         "AI",
@@ -41,7 +41,7 @@
       "title": "Risk-Neutral Probability",
       "deck": "A practitioner\u2019s bridge from market-implied probabilities to clean no-arbitrage pricing intuition.",
       "link": "statics/WriteUps/RiskNeutral.html",
-      "thumb": "statics/img/article-themes/08-risk-neutral-measure.svg",
+      "thumb": "statics/img/thumbs/money.jpg",
       "tags": [
         "Options",
         "Pricing"
@@ -52,7 +52,7 @@
       "title": "Worst-of Put: Cross Gamma in Real Life",
       "deck": "Why short worst-of exposure is structurally short correlation, and why hedges become discontinuous in stressed tapes.",
       "link": "statics/WriteUps/WOP.html",
-      "thumb": "statics/img/article-themes/09-cross-gamma-stress.svg",
+      "thumb": "statics/images/coffeequiz.jpeg",
       "tags": [
         "Cross gamma",
         "Correlation",
@@ -64,7 +64,7 @@
       "title": "Barrier Shift Intuition",
       "deck": "Why barrier levels are often shifted before quoting \u2014 and what that means for fair value versus executable price.",
       "link": "statics/WriteUps/BarrierShift.html",
-      "thumb": "statics/img/article-themes/06-barrier-risk-zones.svg",
+      "thumb": "statics/images/coffee.jpeg",
       "tags": [
         "Exotics",
         "Hedging"
@@ -75,7 +75,7 @@
       "title": "Cross Gamma / PRDC",
       "deck": "How PRDC books can be hit simultaneously by rates and FX moves, creating nonlinear cross-gamma risk.",
       "link": "statics/WriteUps/CrossGammaPRDC.html",
-      "thumb": "statics/img/article-themes/09-cross-gamma-stress.svg",
+      "thumb": "statics/img/thumbs/money.jpg",
       "tags": [
         "Rates",
         "Convexity",
@@ -87,7 +87,7 @@
       "title": "Lehman Swap Spreads",
       "deck": "A historical post-mortem on curve inversion, callable supply, and the buildup of accidental short-gamma positioning.",
       "link": "statics/WriteUps/OldLehmanStory.html",
-      "thumb": "statics/img/article-themes/22-credit-history-lessons.svg",
+      "thumb": "statics/images/coffeequiz.jpeg",
       "tags": [
         "Credit",
         "History"
