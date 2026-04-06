@@ -3,7 +3,7 @@
     {
       "title": "IUL Vol-Target Builder",
       "deck": "Price annual crediting on a vol-target excess-return index. Caps, floors, participation, distribution.",
-      "thumb": "statics/img/article-themes/15-yield-engineering.svg",
+      "thumb": "statics/img/thumbs/money.jpg",
       "tags": [
         "IUL",
         "VolTarget",
@@ -16,7 +16,7 @@
       "title": "Pricing CLI",
       "deck": "Terminal-style calculator: Black\u2013Scholes, Greeks, IV, Kelly\u2026",
       "link": "statics/Tools/PricingCLI.html",
-      "thumb": "statics/img/article-themes/18-pricing-cli-terminal.svg",
+      "thumb": "statics/images/coffee.jpeg",
       "tags": [
         "Options",
         "Fast"
@@ -26,7 +26,7 @@
     {
       "title": "Cross Gamma Lab",
       "deck": "Worst-of put stress map. Watch correlation turn into pain.",
-      "thumb": "statics/img/article-themes/09-cross-gamma-stress.svg",
+      "thumb": "statics/img/thumbs/money.jpg",
       "link": "statics/Tools/CrossGammaLab.html",
       "tags": [
         "Correlation",
@@ -38,7 +38,7 @@
       "title": "Barrier Shift Estimator",
       "deck": "How far do I move the barrier so I don't bleed my fee in hedge panic.",
       "link": "statics/Tools/BarrierShiftTool.html",
-      "thumb": "statics/img/article-themes/06-barrier-risk-zones.svg",
+      "thumb": "statics/images/coffeequiz.jpeg",
       "tags": [
         "Exotics",
         "Hedging"
@@ -49,7 +49,7 @@
       "title": "Structurer CLI",
       "deck": "Black\u2013Scholes, IV, Kelly, quick PnL shocks \u2014 in a browser terminal.",
       "link": "statics/Tools/CMDNew.html",
-      "thumb": "statics/img/article-themes/14-quant-research-desk.svg",
+      "thumb": "statics/img/thumbs/money.jpg",
       "tags": [
         "Options",
         "Greeks",
