@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "title": "Rates-vol still rich vs macro uncertainty",
+      "summary": "Front-end rates vol remains elevated versus realized growth shock dispersion. Favor selective short-vol carry only with hard event stops.",
+      "tags": ["Rates", "Volatility", "Carry"],
+      "date": "2026-04-06"
+    },
+    {
+      "title": "Dispersion remains a cleaner expression than index delta",
+      "summary": "Single-name idiosyncratic dispersion is still outpacing index-level moves. Prefer relative-value books over outright beta risk.",
+      "tags": ["Dispersion", "Equities", "Relative Value"],
+      "date": "2026-04-06"
+    },
+    {
+      "title": "HK autocallables: reinvestment discipline over coupon chasing",
+      "summary": "In short-tenor wrapper flow, barrier management and reinvestment path-dependency dominate headline coupon optics.",
+      "tags": ["Hong Kong", "Autocall", "Risk Management"],
+      "date": "2026-04-05"
+    }
+  ]
+}
