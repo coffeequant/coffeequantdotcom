@@ -1,0 +1,244 @@
+{
+  "items": [
+    {
+      "id": "cq-theme-01",
+      "src": "statics/img/article-themes/01-macro-rates-regime.svg",
+      "theme": "macro rates regime",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-02",
+      "src": "statics/img/article-themes/02-ai-infrastructure-markets.svg",
+      "theme": "ai infrastructure markets",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-03",
+      "src": "statics/img/article-themes/03-volatility-surface.svg",
+      "theme": "volatility surface",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-04",
+      "src": "statics/img/article-themes/04-correlation-network.svg",
+      "theme": "correlation network",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-05",
+      "src": "statics/img/article-themes/05-autocall-hedging.svg",
+      "theme": "autocall hedging",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-06",
+      "src": "statics/img/article-themes/06-barrier-risk-zones.svg",
+      "theme": "barrier risk zones",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-07",
+      "src": "statics/img/article-themes/07-dispersion-trading.svg",
+      "theme": "dispersion trading",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-08",
+      "src": "statics/img/article-themes/08-risk-neutral-measure.svg",
+      "theme": "risk neutral measure",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-09",
+      "src": "statics/img/article-themes/09-cross-gamma-stress.svg",
+      "theme": "cross gamma stress",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-10",
+      "src": "statics/img/article-themes/10-structured-etf-mechanics.svg",
+      "theme": "structured etf mechanics",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-11",
+      "src": "statics/img/article-themes/11-gold-vs-btc.svg",
+      "theme": "gold vs btc",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-12",
+      "src": "statics/img/article-themes/12-hong-kong-capital-flows.svg",
+      "theme": "hong kong capital flows",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-13",
+      "src": "statics/img/article-themes/13-geopolitics-macro.svg",
+      "theme": "geopolitics macro",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-14",
+      "src": "statics/img/article-themes/14-quant-research-desk.svg",
+      "theme": "quant research desk",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-15",
+      "src": "statics/img/article-themes/15-yield-engineering.svg",
+      "theme": "yield engineering",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-16",
+      "src": "statics/img/article-themes/16-monte-carlo-paths.svg",
+      "theme": "monte carlo paths",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-17",
+      "src": "statics/img/article-themes/17-probability-intuition.svg",
+      "theme": "probability intuition",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-18",
+      "src": "statics/img/article-themes/18-pricing-cli-terminal.svg",
+      "theme": "pricing cli terminal",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-19",
+      "src": "statics/img/article-themes/19-options-greeks.svg",
+      "theme": "options greeks",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-20",
+      "src": "statics/img/article-themes/20-tail-hedge-convexity.svg",
+      "theme": "tail hedge convexity",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-21",
+      "src": "statics/img/article-themes/21-liquidity-regime-shift.svg",
+      "theme": "liquidity regime shift",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-22",
+      "src": "statics/img/article-themes/22-credit-history-lessons.svg",
+      "theme": "credit history lessons",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-23",
+      "src": "statics/img/article-themes/23-stochastic-volatility.svg",
+      "theme": "stochastic volatility",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    },
+    {
+      "id": "cq-theme-24",
+      "src": "statics/img/article-themes/24-premium-insights.svg",
+      "theme": "premium insights",
+      "recommendedFor": [
+        "daily macro notes",
+        "quant explainers",
+        "tools and labs cards"
+      ]
+    }
+  ]
+}

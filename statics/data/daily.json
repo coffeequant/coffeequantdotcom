@@ -7,8 +7,9 @@
       "link": "statics/WriteUps/structured-etfs-seeding-leverage-crash-put.html",
       "tag": "Daily / Structured Products",
       "premium": false,
-      "hero": "statics/img/newarticles/images.png",
-      "excerpt": "A desk-level walkthrough of how leveraged structured ETFs are seeded, hedged, and stress-tested, with a practical view on the hidden convexity from crash-put overlays."
+      "hero": "statics/img/article-themes/10-structured-etf-mechanics.svg",
+      "excerpt": "A desk-level walkthrough of how leveraged structured ETFs are seeded, hedged, and stress-tested, with a practical view on the hidden convexity from crash-put overlays.",
+      "thumb": "statics/img/article-themes/10-structured-etf-mechanics.svg"
     }
   ]
 }

@@ -1,35 +1,46 @@
 {
   "items": [
-
-{
-  "title": "Gold vs “Digital Gold”",
-  "deck": "Correlation, quanto forward drift, and a simple gold–BTC barbell you can play with.",
-  "link": "statics/WriteUps/BTCvsGold.html",
-  "thumb": "statics/img/thumbs/gold.jpeg",
-  "tags": ["Gold", "BTC", "Quanto", "Correlation"]
-},
-
-   {
+    {
+      "title": "Gold vs \u201cDigital Gold\u201d",
+      "deck": "Correlation, quanto forward drift, and a simple gold\u2013BTC barbell you can play with.",
+      "link": "statics/WriteUps/BTCvsGold.html",
+      "thumb": "statics/img/article-themes/11-gold-vs-btc.svg",
+      "tags": [
+        "Gold",
+        "BTC",
+        "Quanto",
+        "Correlation"
+      ]
+    },
+    {
       "title": "Random Walk Lab",
       "deck": "Simulate price paths with drift and vol. See possible futures.",
       "link": "statics/Tools/RandomWalkLab.html",
-      "thumb": "statics/img/thumbs/randomwalk.webp",
-      "tags": ["GBM","Monte Carlo"]
+      "thumb": "statics/img/article-themes/16-monte-carlo-paths.svg",
+      "tags": [
+        "GBM",
+        "Monte Carlo"
+      ]
     },
     {
       "title": "Dice Lab",
-      "deck": "Roll n dice, repeat k rounds, keep the best ‘worst roll’. Distribution explorer.",
+      "deck": "Roll n dice, repeat k rounds, keep the best \u2018worst roll\u2019. Distribution explorer.",
       "link": "statics/Tools/DiceLab.html",
-      "thumb": "statics/img/thumbs/dice.webp",
-      "tags": ["Probability","Intuition"]
+      "thumb": "statics/img/article-themes/17-probability-intuition.svg",
+      "tags": [
+        "Probability",
+        "Intuition"
+      ]
     },
-   {
+    {
       "title": "Kelly Bet Size Helper",
       "deck": "How big should I go on a trade with edge? Full/Half Kelly sizing.",
       "link": "statics/Tools/KellyTool.html",
-      "thumb": "statics/img/thumbs/betsizing.webp",
-      "tags": ["Risk","Sizing"]
+      "thumb": "statics/img/article-themes/19-options-greeks.svg",
+      "tags": [
+        "Risk",
+        "Sizing"
+      ]
     }
   ]
 }
-      

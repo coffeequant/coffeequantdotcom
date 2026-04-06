@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="hong kong capital flows">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="55%" stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="#38BDF8"/>
+    </linearGradient>
+    <radialGradient id="r" cx="85%" cy="20%" r="60%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#ffffff" stroke-opacity="0.08"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="900" fill="url(#g)"/>
+  <rect width="1600" height="900" fill="url(#grid)"/>
+  <circle cx="1320" cy="160" r="380" fill="url(#r)"/>
+  <g stroke="#ffffff" stroke-opacity="0.22" fill="none">
+    <path d="M0 556 C 300 452, 560 688, 860 520 C 1120 394, 1380 642, 1600 516" stroke-width="3"/>
+    <path d="M0 688 C 280 542, 540 792, 820 652 C 1080 536, 1380 734, 1600 648" stroke-width="2"/>
+  </g>
+  <g fill="#ffffff" fill-opacity="0.9" font-family="Inter,Segoe UI,Arial,sans-serif">
+    <text x="90" y="700" font-size="42" font-weight="600">CoffeeQuant Visual Theme 12</text>
+    <text x="90" y="750" font-size="24" fill-opacity="0.75">Hong Kong Capital Flows</text>
+  </g>
+</svg>
