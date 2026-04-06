@@ -1,6 +1,28 @@
 {
   "items": [
     {
+      "date": "2026-04-06",
+      "title": "Macro Open: When Correlation Regimes Shift, Keep Dispersion Optionality",
+      "href": "statics/WriteUps/dispersion-foundations.html",
+      "link": "statics/WriteUps/dispersion-foundations.html",
+      "tag": "Daily / Macro + Vol",
+      "premium": false,
+      "hero": "statics/img/article-themes/07-dispersion-trading.svg",
+      "excerpt": "A trader-first morning setup for balancing index direction with dispersion optionality as macro correlations reprice.",
+      "thumb": "statics/img/article-themes/07-dispersion-trading.svg"
+    },
+    {
+      "date": "2026-04-05",
+      "title": "Geopolitics, Capital Flows, and the New HK Structured Product Playbook",
+      "href": "statics/WriteUps/GeoPolitics_HK_Structured_2026.html",
+      "link": "statics/WriteUps/GeoPolitics_HK_Structured_2026.html",
+      "tag": "Daily / Hong Kong",
+      "premium": false,
+      "hero": "statics/img/article-themes/12-hong-kong-capital-flows.svg",
+      "excerpt": "How geopolitical sensitivity is feeding into issuance design, hedge behavior, and reinvestment decisions in HK wrappers.",
+      "thumb": "statics/img/article-themes/12-hong-kong-capital-flows.svg"
+    },
+    {
       "date": "2026-03-04",
       "title": "Inside Structured ETFs: Seeding, 2x Leverage Mechanics, and Crash-Put Convexity",
       "href": "statics/WriteUps/structured-etfs-seeding-leverage-crash-put.html",
@@ -8,7 +30,7 @@
       "tag": "Daily / Structured Products",
       "premium": false,
       "hero": "statics/img/article-themes/10-structured-etf-mechanics.svg",
-      "excerpt": "A desk-level walkthrough of how leveraged structured ETFs are seeded, hedged, and stress-tested, with a practical view on the hidden convexity from crash-put overlays.",
+      "excerpt": "A desk-level walkthrough of how leveraged structured ETFs are seeded, hedged, and stress-tested, with a practical view on hidden crash-put convexity.",
       "thumb": "statics/img/article-themes/10-structured-etf-mechanics.svg"
     }
   ]

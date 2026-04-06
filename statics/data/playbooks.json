@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "title": "US CPI Playbook",
+      "deck": "Scenario tree for upside/downside inflation surprise, with rates-vol and equity-vol hedge templates.",
+      "link": "statics/WriteUps/RiskNeutral.html",
+      "thumb": "statics/img/article-themes/08-risk-neutral-measure.svg",
+      "tags": ["US Macro", "CPI", "Rates Vol"],
+      "date": "2026-04-06",
+      "premium": false
+    },
+    {
+      "title": "FOMC Convexity Checklist",
+      "deck": "Pre/post meeting checklist for skew, gamma rollover, and path-dependent positioning into policy guidance.",
+      "link": "statics/WriteUps/CrossGammaPRDC.html",
+      "thumb": "statics/img/article-themes/09-cross-gamma-stress.svg",
+      "tags": ["FOMC", "Convexity", "Skew"],
+      "date": "2026-04-06",
+      "premium": false
+    },
+    {
+      "title": "China-HK Flow Shock Map",
+      "deck": "Guide for handling geopolitical headline shocks across HK index correlation and structured wrapper reinvestment risk.",
+      "link": "statics/WriteUps/GeoPolitics_HK_Structured_2026.html",
+      "thumb": "statics/img/article-themes/12-hong-kong-capital-flows.svg",
+      "tags": ["China", "Hong Kong", "Geopolitics"],
+      "date": "2026-04-05",
+      "premium": false
+    }
+  ]
+}

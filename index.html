@@ -577,6 +577,30 @@
   grid-template-columns: repeat(3, minmax(0,1fr));
   gap:12px;
 }
+.cq-desk-grid{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap:12px;
+}
+.cq-desk-card{
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.03);
+  padding:14px;
+}
+.cq-desk-card h3{margin:0 0 8px;font-size:15px}
+.cq-desk-card p{margin:0;color:var(--cq-dim);font-size:13px;line-height:1.45}
+.cq-desk-chiprow{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px}
+.cq-health{
+  margin-top:12px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(0,0,0,.14);
+  padding:10px 12px;
+  font-size:12px;
+  color:var(--cq-dim);
+}
+.cq-health strong{color:var(--cq-ink)}
 .cq-pillar{
   border-radius:14px;
   border:1px solid rgba(255,255,255,.12);
@@ -611,6 +635,7 @@
 .cq-faq summary{cursor:pointer;font-weight:700}
 .cq-faq p{margin:8px 0 0;color:var(--cq-dim)}
 @media (max-width: 980px){
+  .cq-desk-grid{grid-template-columns:1fr}
   .cq-pillars{grid-template-columns:1fr}
   .cq-trust-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
@@ -770,6 +795,8 @@
       </div>
 
       <nav class="cq-nav" aria-label="Main">
+        <a href="#signals">Signals</a>
+        <a href="#playbooks">Playbooks</a>
         <a href="#daily">Daily</a>
         <a href="#labs">Labs</a>
         <a href="#tools">Tools</a>
@@ -817,9 +844,9 @@
               <div class="v" id="premiumStatus">Checking…</div>
             </div>
             <div class="cq-micro">
-              <div class="k">Quick jump</div>
+              <div class="k">Data freshness</div>
               <div class="v" style="font-weight:600;">
-                <a href="#archive" style="color:var(--cq-accent); text-decoration:none;">Latest archive drops →</a>
+                <span id="dataFreshness">Checking…</span>
               </div>
             </div>
           </div>
@@ -857,6 +884,29 @@
         <div class="cq-trust"><span class="k">Content model</span><span class="v">Pillar → cluster → update workflow</span></div>
         <div class="cq-trust"><span class="k">Technical hygiene</span><span class="v">Fresh sitemap, robots, and schema metadata</span></div>
         <div class="cq-trust"><span class="k">Retention loop</span><span class="v">Linked notes, tools, and archive recirculation</span></div>
+      </div>
+    </section>
+
+    <section id="signals" class="cq-section" aria-label="Desk signal board">
+      <div class="cq-section-head">
+        <h2>Desk Signal Board</h2>
+        <div class="cq-muted">Regime context → trade expression → risk trigger</div>
+      </div>
+      <div id="signalsSlot" class="cq-desk-grid">
+        <div class="cq-muted">Loading signals…</div>
+      </div>
+    </section>
+
+    <section id="playbooks" class="cq-section" aria-label="Event playbooks">
+      <div class="cq-section-head">
+        <h2>Event Playbooks</h2>
+        <div class="cq-muted">Pre-event scenarios and hedge templates</div>
+      </div>
+      <div id="playbooksSlot" class="cq-cards">
+        <div class="cq-muted">Loading playbooks…</div>
+      </div>
+      <div class="cq-health">
+        Coverage status: <strong id="coverageStamp">syncing…</strong>
       </div>
     </section>
 
@@ -1179,6 +1229,34 @@ loadFoundations();
       slot.innerHTML = xs.map(it => cardHTML(it, kind)).join("");
     }
 
+    function renderSignalCards(slot, items, limit=3) {
+      const xs = (items || []).slice(0, limit);
+      if (!xs.length) {
+        slot.innerHTML = `<div class="cq-muted">No signals yet.</div>`;
+        return;
+      }
+      slot.innerHTML = xs.map(it => {
+        const chips = Array.isArray(it.tags) ? it.tags.map(t => `<span class="cq-tag">${t}</span>`).join("") : "";
+        return `
+          <article class="cq-desk-card">
+            <h3>${it.title || "Signal"}</h3>
+            <p>${it.summary || ""}</p>
+            <div class="cq-desk-chiprow">${chips}</div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function latestDate(items) {
+      let best = null;
+      for (const it of (items || [])) {
+        const d = parseDateISO(it.date);
+        if (!d) continue;
+        if (!best || d.getTime() > best.getTime()) best = d;
+      }
+      return best;
+    }
+
     // Most recent item (<= today) else newest
     function pickMostRecent(items) {
       const xs = (items || []).slice();
@@ -1208,10 +1286,26 @@ async function boot() {
       const tools = await loadJSON("statics/data/tools.json").catch(() => null);
       const notes = await loadJSON("statics/data/notes.json").catch(() => null);
       const curios = await loadJSON("statics/data/curios.json").catch(() => null);
+      const signals = await loadJSON("statics/data/signals.json").catch(() => null);
+      const playbooks = await loadJSON("statics/data/playbooks.json").catch(() => null);
 
       renderCards($("#labsSlot"), labs?.items, "Lab", 6);
       renderCards($("#toolsSlot"), tools?.items, "Tool", 6);
       renderCards($("#notesSlot"), notes?.items, "Note", 6);
+      renderSignalCards($("#signalsSlot"), signals?.items, 3);
+      renderCards($("#playbooksSlot"), playbooks?.items, "Playbook", 3);
+
+      const freshest = [
+        latestDate(daily?.items),
+        latestDate(notes?.items),
+        latestDate(playbooks?.items)
+      ].filter(Boolean).sort((a,b) => b.getTime() - a.getTime())[0];
+      $("#dataFreshness").textContent = freshest
+        ? `${freshest.toLocaleDateString(undefined, { month:"short", day:"2-digit", year:"numeric" })} refresh`
+        : "No dated updates";
+      $("#coverageStamp").textContent = freshest
+        ? `Macro + structured coverage updated through ${freshest.toLocaleDateString(undefined, { month:"short", day:"2-digit", year:"numeric" })}`
+        : "Coverage pending";
 
       // Notes filters for CoffeeQuant views
       const noteButtons = Array.from(document.querySelectorAll("#noteFilters .cq-note-filter"));
@@ -1271,6 +1365,8 @@ async function boot() {
         // re-render sections so premium locks update
         renderCards($("#labsSlot"), labs?.items, "Lab", 6);
         renderCards($("#toolsSlot"), tools?.items, "Tool", 6);
+        renderSignalCards($("#signalsSlot"), signals?.items, 3);
+        renderCards($("#playbooksSlot"), playbooks?.items, "Playbook", 3);
         drawNotes(document.querySelector("#noteFilters .cq-note-filter[aria-pressed=\"true\"]")?.dataset.filter || "all");
         renderCards($("#curiosSlot"), curios?.items, "Curio", 6);
         drawArchive($("#archiveQuery").value);
