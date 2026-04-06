@@ -2,11 +2,13 @@
   "items": [
     {
       "slug": "dispersion-trading-101",
-      "title": "Dispersion Trading 101: Correlation, Variance, and the “Index vs Components” Game",
+      "title": "Dispersion Trading 101: Correlation, Variance, and the \u201cIndex vs Components\u201d Game",
       "href": "statics/WriteUps/dispersion-foundations.html",
       "tag": "Foundations / Dispersion",
       "level": "Foundations",
-      "excerpt": "A two-asset, trader-friendly primer on dispersion: how correlation changes index variance, how to visualize the wedge, and how pros think about implied vs realized correlation."
+      "excerpt": "A two-asset, trader-friendly primer on dispersion: how correlation changes index variance, how to visualize the wedge, and how pros think about implied vs realized correlation.",
+      "thumb": "statics/img/article-themes/07-dispersion-trading.svg",
+      "read": "5 min"
     },
     {
       "slug": "autocall-hedging",
@@ -15,7 +17,8 @@
       "href": "statics/WriteUps/autocall-hedging-deep-dive.html",
       "tag": "Greeks",
       "level": "Foundations",
-      "read": "4 min"
+      "read": "4 min",
+      "thumb": "statics/img/article-themes/05-autocall-hedging.svg"
     },
     {
       "slug": "gamma-intuition",
@@ -24,7 +27,8 @@
       "href": "statics/WriteUps/gamma-intuition.html",
       "tag": "Greeks",
       "level": "Foundations",
-      "read": "4 min"
+      "read": "4 min",
+      "thumb": "statics/img/article-themes/19-options-greeks.svg"
     },
     {
       "slug": "risk-neutral-simple",
@@ -33,7 +37,8 @@
       "href": "statics/WriteUps/risk-neutral-simple.html",
       "tag": "Pricing",
       "level": "Foundations",
-      "read": "5 min"
+      "read": "5 min",
+      "thumb": "statics/img/article-themes/08-risk-neutral-measure.svg"
     },
     {
       "slug": "basket-correlation-trap",
@@ -42,7 +47,8 @@
       "href": "statics/WriteUps/basket-correlation-trap.html",
       "tag": "Correlation",
       "level": "Foundations",
-      "read": "5 min"
+      "read": "5 min",
+      "thumb": "statics/img/article-themes/04-correlation-network.svg"
     }
   ]
 }

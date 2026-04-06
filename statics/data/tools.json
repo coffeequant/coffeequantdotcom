@@ -1,48 +1,61 @@
 {
   "items": [
-	  {
-  "title": "IUL Vol-Target Builder",
-  "deck": "Price annual crediting on a vol-target excess-return index. Caps, floors, participation, distribution.",
-  "thumb": "statics/img/thumbs/iul.jpeg",
-  "tags": ["IUL","VolTarget","Pricing"],
-  "link": "statics/Tools/IULLab.html",
-  "premium": false
-},
-
+    {
+      "title": "IUL Vol-Target Builder",
+      "deck": "Price annual crediting on a vol-target excess-return index. Caps, floors, participation, distribution.",
+      "thumb": "statics/img/article-themes/15-yield-engineering.svg",
+      "tags": [
+        "IUL",
+        "VolTarget",
+        "Pricing"
+      ],
+      "link": "statics/Tools/IULLab.html",
+      "premium": false
+    },
     {
       "title": "Pricing CLI",
-      "deck": "Terminal-style calculator: Black–Scholes, Greeks, IV, Kelly…",
+      "deck": "Terminal-style calculator: Black\u2013Scholes, Greeks, IV, Kelly\u2026",
       "link": "statics/Tools/PricingCLI.html",
-      "thumb": "statics/img/thumbs/cli.webp",
-      "tags": ["Options","Fast"],
-      "premium":false
+      "thumb": "statics/img/article-themes/18-pricing-cli-terminal.svg",
+      "tags": [
+        "Options",
+        "Fast"
+      ],
+      "premium": false
     },
     {
       "title": "Cross Gamma Lab",
       "deck": "Worst-of put stress map. Watch correlation turn into pain.",
-      "thumb": "statics/img/thumbs/crossgamma.webp",
+      "thumb": "statics/img/article-themes/09-cross-gamma-stress.svg",
       "link": "statics/Tools/CrossGammaLab.html",
-      "tags": ["Correlation","Risk"],
+      "tags": [
+        "Correlation",
+        "Risk"
+      ],
       "premium": false
     },
-
-
-   {
+    {
       "title": "Barrier Shift Estimator",
       "deck": "How far do I move the barrier so I don't bleed my fee in hedge panic.",
       "link": "statics/Tools/BarrierShiftTool.html",
-      "thumb": "statics/img/thumbs/betsizing.webp",
-      "tags": ["Exotics","Hedging"],
+      "thumb": "statics/img/article-themes/06-barrier-risk-zones.svg",
+      "tags": [
+        "Exotics",
+        "Hedging"
+      ],
       "premium": false
     },
-     {
+    {
       "title": "Structurer CLI",
-      "deck": "Black–Scholes, IV, Kelly, quick PnL shocks — in a browser terminal.",
+      "deck": "Black\u2013Scholes, IV, Kelly, quick PnL shocks \u2014 in a browser terminal.",
       "link": "statics/Tools/CMDNew.html",
-      "thumb": "statics/img/thumbs/ai-vs-wallstreet-collage.jpeg",
-      "tags": ["Options", "Greeks", "PnL"],
+      "thumb": "statics/img/article-themes/14-quant-research-desk.svg",
+      "tags": [
+        "Options",
+        "Greeks",
+        "PnL"
+      ],
       "premium": false
     }
- ]
+  ]
 }
-
