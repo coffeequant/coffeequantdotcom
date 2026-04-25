@@ -1,12 +1,12 @@
 {
   "items": [
     {
-      "title": "US CPI Playbook",
-      "deck": "Scenario tree for upside/downside inflation surprise, with rates-vol and equity-vol hedge templates.",
+      "title": "Risk-Neutral Probability",
+      "deck": "A practitioner’s bridge from market-implied probabilities to clean no-arbitrage pricing intuition.",
       "link": "statics/WriteUps/RiskNeutral.html",
       "thumb": "statics/img/article-themes/08-risk-neutral-measure.svg",
-      "tags": ["US Macro", "CPI", "Rates Vol"],
-      "date": "2026-04-06",
+      "tags": ["Options", "Pricing"],
+      "date": "2025-10-24",
       "premium": false
     },
     {
